@@ -11,6 +11,8 @@ import Security
 import UIKit
 import AVFoundation
 import CryptoSwift
+import AWSCore
+import AWSS3
 
 // Returns UIImage corresponding to input string
 func findImage(instrument: [String]) -> UIImage {
@@ -215,14 +217,14 @@ func importTracks(tracks: [Track], navigationController: UINavigationController?
 
 // Download from S3 bucket
 func download(key: String, url: NSURL, bucket: String) {
-    /*let request: AWSS3TransferManagerDownloadRequest = AWSS3TransferManagerDownloadRequest.new()
+    let request: AWSS3TransferManagerDownloadRequest = AWSS3TransferManagerDownloadRequest.new()
     request.bucket = bucket
     request.key = key
     request.downloadingFileURL = url
     let transferManager: AWSS3TransferManager = AWSS3TransferManager.defaultS3TransferManager()
     
-    transferManager.download(request).continueWithExecutor(BFExecutor.mainThreadExecutor(), withBlock: {
-        (task: BFTask!) -> BFTask! in
+    transferManager.download(request).continueWithBlock() {
+        (task: AWSTask!) -> AnyObject! in
         if (task.error != nil) {
             if task.error.domain == AWSS3TransferManagerErrorDomain {
                 Debug.printl("Download Error: \(task.error)", sender: "helpers")
@@ -237,19 +239,19 @@ func download(key: String, url: NSURL, bucket: String) {
             return task
         }
         return nil
-    })*/
+    }
 }
 
 // Upload to S3 bucket
 func upload(key: String, url: NSURL, bucket: String) {
-    /*let request: AWSS3TransferManagerUploadRequest = AWSS3TransferManagerUploadRequest.new()
+    let request: AWSS3TransferManagerUploadRequest = AWSS3TransferManagerUploadRequest.new()
     request.bucket = bucket
     request.key = key
     request.body = url
     let transferManager: AWSS3TransferManager = AWSS3TransferManager.defaultS3TransferManager()
 
-    transferManager.upload(request).continueWithExecutor(BFExecutor.mainThreadExecutor(), withBlock: {
-        (task: BFTask!) -> BFTask! in
+    transferManager.upload(request).continueWithBlock() {
+        (task: AWSTask!) -> AnyObject! in
         if (task.error != nil) {
             if task.error.domain == AWSS3TransferManagerErrorDomain {
                 Debug.printl("Upload Error: \(task.error)", sender: "helpers")
@@ -264,7 +266,7 @@ func upload(key: String, url: NSURL, bucket: String) {
             Debug.printl(uploadOutput, sender: "helpers")
         }
         return nil
-    })*/
+    }
 }
 
 // Returns directory to application's documents

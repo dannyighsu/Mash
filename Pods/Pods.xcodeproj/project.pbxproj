@@ -151,6 +151,8 @@
 		36F4A789DD10D53FDA466A81 /* AWSUICKeyChainStore.h in Headers */ = {isa = PBXBuildFile; fileRef = B99D04A7B739539C865009C7 /* AWSUICKeyChainStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		375C30CEE518F710AF72AF4D /* AWSModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AEB598C2E6D2BCA2E53160B /* AWSModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3793EA9E9E5FB5F8EBC19B34 /* Pods-Mash-FBSDKCoreKit-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5111ACB2D748CC091C0F5535 /* Pods-Mash-FBSDKCoreKit-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37F5FB0F1B3E0E2100605C0B /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F5FB0E1B3E0E2100605C0B /* sqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37F5FB101B3E0E2B00605C0B /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F5FB0E1B3E0E2100605C0B /* sqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		38393BEA9B4E15F2557D1E28 /* AWSFMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 68E036AA2B36CB499FB3057B /* AWSFMDatabasePool.m */; };
 		388FAD07D451E4D4CD374D26 /* Pods-Mash-AWSCognito-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D218522D43477184D38D939D /* Pods-Mash-AWSCognito-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		38B9807E39BDD57ED7AA55D4 /* AWSSQSModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 41E0C2A815013A38D0A7DA4F /* AWSSQSModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1208,6 +1210,7 @@
 		367A83271AF92AB5FC75EE4F /* IQKeyboardReturnKeyHandler.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = IQKeyboardReturnKeyHandler.m; path = IQKeyBoardManager/IQKeyboardReturnKeyHandler.m; sourceTree = "<group>"; };
 		36D92771101B2E9D9019FD26 /* AWSCloudWatchModel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AWSCloudWatchModel.m; path = AWSCloudWatch/AWSCloudWatchModel.m; sourceTree = "<group>"; };
 		3710C66DEDC4008C4A47054B /* GTMGarbageCollection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GTMGarbageCollection.h; path = "google-plus-ios-sdk-1.7.1/GoogleOpenSource.framework/Versions/A/Headers/GTMGarbageCollection.h"; sourceTree = "<group>"; };
+		37F5FB0E1B3E0E2100605C0B /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		37FA349487B6D8803E743264 /* AWSSTSResources.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AWSSTSResources.h; path = AWSCore/STS/AWSSTSResources.h; sourceTree = "<group>"; };
 		3880A82E3BDB74B13F6EF3E6 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		388255416D2987CB9830AFC3 /* AWSCognitoService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AWSCognitoService.m; path = Cognito/AWSCognitoService.m; sourceTree = "<group>"; };
@@ -3099,6 +3102,7 @@
 		CB46E307BF3372197C47C5BA /* AWSCore */ = {
 			isa = PBXGroup;
 			children = (
+				37F5FB0E1B3E0E2100605C0B /* sqlite3.h */,
 				F85916F01BE2D62254066681 /* AWSBolts.h */,
 				236EFDA76AE0D564E63136CD /* AWSBolts.m */,
 				602B3760457F3738BEE1DE10 /* AWSCategory.h */,
@@ -3810,6 +3814,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37F5FB0F1B3E0E2100605C0B /* sqlite3.h in Headers */,
 				1C36C4F2337EA2C1D2E9E854 /* Pods-Mash-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4000,6 +4005,7 @@
 				AD028FCCAC77729B773B878E /* AWSSTSModel.h in Headers */,
 				CEF6852BC809ABEF967F4B12 /* AWSSTSResources.h in Headers */,
 				55EA64A2CFE8921F394DCBD2 /* AWSSTSService.h in Headers */,
+				37F5FB101B3E0E2B00605C0B /* sqlite3.h in Headers */,
 				8CB6D4042B6132858830E70A /* AWSSerialization.h in Headers */,
 				C2B68B5359F34FA985DE4B95 /* AWSService.h in Headers */,
 				BC88CA2F58DF8EB1C31ECFFA /* AWSServiceEnum.h in Headers */,
