@@ -1,6 +1,7 @@
 #import <UIKit/UIKit.h>
 
 #import "AWSCore.h"
+#import "metamacros.h"
 #import "AWSCredentialsProvider.h"
 #import "AWSIdentityProvider.h"
 #import "AWSSignature.h"

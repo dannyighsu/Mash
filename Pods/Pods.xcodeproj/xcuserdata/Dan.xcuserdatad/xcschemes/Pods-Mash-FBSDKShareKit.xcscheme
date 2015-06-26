@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F9EE8603CFCBA59834652FAA"
+               BlueprintIdentifier = "EB08220860D48F00F5E9DC29"
                BuildableName = "FBSDKShareKit.framework"
                BlueprintName = "Pods-Mash-FBSDKShareKit"
                ReferencedContainer = "container:Pods.xcodeproj">

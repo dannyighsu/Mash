@@ -6,6 +6,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'Mash' do
+    pod 'SQLite.swift', git: 'https://github.com/stephencelis/SQLite.swift.git'
     pod 'EZAudio', '~> 0.0.6'
     pod 'IQKeyboardManager'
     pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :branch => "master"

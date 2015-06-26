@@ -14,6 +14,7 @@
 		373F0F011B3DEFC500DE92AB /* tick.caf in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFA1B3DEFC500DE92AB /* tick.caf */; };
 		373F0F021B3DEFC500DE92AB /* tock.caf in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFB1B3DEFC500DE92AB /* tock.caf */; };
 		373F0F031B3DEFC500DE92AB /* Violins 1.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */; };
+		375C5B901B3E0B3200F01A7E /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 375C5B8F1B3E0B3200F01A7E /* metamacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37A3C2CA1B3CC00600F77F2A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A3C2C91B3CC00600F77F2A /* AppDelegate.swift */; };
 		37A3C2CF1B3CC00600F77F2A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37A3C2CD1B3CC00600F77F2A /* Main.storyboard */; };
 		37A3C2D11B3CC00600F77F2A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37A3C2D01B3CC00600F77F2A /* Images.xcassets */; };
@@ -86,6 +87,7 @@
 		373F0EFA1B3DEFC500DE92AB /* tick.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = tick.caf; sourceTree = "<group>"; };
 		373F0EFB1B3DEFC500DE92AB /* tock.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = tock.caf; sourceTree = "<group>"; };
 		373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Violins 1.aif"; sourceTree = "<group>"; };
+		375C5B8F1B3E0B3200F01A7E /* metamacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = metamacros.h; path = Pods/AWSCore/AWSCore/metamacros.h; sourceTree = "<group>"; };
 		37A3C2C41B3CC00600F77F2A /* Mash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37A3C2C81B3CC00600F77F2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37A3C2C91B3CC00600F77F2A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 		37A3C2BB1B3CC00600F77F2A = {
 			isa = PBXGroup;
 			children = (
+				375C5B8F1B3E0B3200F01A7E /* metamacros.h */,
 				37A3C2C61B3CC00600F77F2A /* Mash */,
 				37A3C2DC1B3CC00600F77F2A /* MashTests */,
 				37A3C2C51B3CC00600F77F2A /* Products */,
@@ -342,6 +345,17 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		373F0F061B3E0A6900DE92AB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				375C5B901B3E0B3200F01A7E /* metamacros.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
 		37A3C2C31B3CC00600F77F2A /* Mash */ = {
 			isa = PBXNativeTarget;
@@ -353,6 +367,7 @@
 				37A3C2C21B3CC00600F77F2A /* Resources */,
 				9EF959724F37EC28A5723B2B /* Embed Pods Frameworks */,
 				5971647D680A39E7A81B0F88 /* Copy Pods Resources */,
+				373F0F061B3E0A6900DE92AB /* Headers */,
 			);
 			buildRules = (
 			);
@@ -684,6 +699,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Mash/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -711,6 +727,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Mash/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
