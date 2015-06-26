@@ -1,0 +1,126 @@
+PODS:
+  - AWSAutoScaling (2.2.0):
+    - AWSCore (= 2.2.0)
+  - AWSCloudWatch (2.2.0):
+    - AWSCore (= 2.2.0)
+  - AWSCognito (2.2.0):
+    - AWSCore (= 2.2.0)
+  - AWSCore (2.2.0)
+  - AWSDynamoDB (2.2.0):
+    - AWSCore (= 2.2.0)
+  - AWSEC2 (2.2.0):
+    - AWSCore (= 2.2.0)
+  - AWSElasticLoadBalancing (2.2.0):
+    - AWSCore (= 2.2.0)
+  - AWSKinesis (2.2.0):
+    - AWSCore (= 2.2.0)
+  - AWSLambda (2.2.0):
+    - AWSCore (= 2.2.0)
+  - AWSMachineLearning (2.2.0):
+    - AWSCore (= 2.2.0)
+  - AWSS3 (2.2.0):
+    - AWSCore (= 2.2.0)
+  - AWSSES (2.2.0):
+    - AWSCore (= 2.2.0)
+  - AWSSimpleDB (2.2.0):
+    - AWSCore (= 2.2.0)
+  - AWSSNS (2.2.0):
+    - AWSCore (= 2.2.0)
+  - AWSSQS (2.2.0):
+    - AWSCore (= 2.2.0)
+  - Bolts (1.2.0):
+    - Bolts/AppLinks (= 1.2.0)
+    - Bolts/Tasks (= 1.2.0)
+  - Bolts/AppLinks (1.2.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.2.0)
+  - CryptoSwift (0.0.11)
+  - EZAudio (0.0.6)
+  - FBSDKCoreKit (4.3.0):
+    - Bolts (~> 1.1)
+    - FBSDKCoreKit/arc (= 4.3.0)
+    - FBSDKCoreKit/no-arc (= 4.3.0)
+  - FBSDKCoreKit/arc (4.3.0):
+    - Bolts (~> 1.1)
+  - FBSDKCoreKit/no-arc (4.3.0):
+    - Bolts (~> 1.1)
+    - FBSDKCoreKit/arc
+  - FBSDKLoginKit (4.3.0):
+    - FBSDKCoreKit
+  - FBSDKShareKit (4.3.0):
+    - FBSDKCoreKit
+  - FMDB (2.5):
+    - FMDB/standard (= 2.5)
+  - FMDB/common (2.5)
+  - FMDB/standard (2.5):
+    - FMDB/common
+  - google-plus-ios-sdk (1.7.1)
+  - IQKeyboardManager (3.2.4)
+
+DEPENDENCIES:
+  - AWSAutoScaling
+  - AWSCloudWatch
+  - AWSCognito
+  - AWSCore
+  - AWSDynamoDB
+  - AWSEC2
+  - AWSElasticLoadBalancing
+  - AWSKinesis
+  - AWSLambda
+  - AWSMachineLearning
+  - AWSS3
+  - AWSSES
+  - AWSSimpleDB
+  - AWSSNS
+  - AWSSQS
+  - CryptoSwift (from `https://github.com/krzyzanowskim/CryptoSwift`, branch `master`)
+  - EZAudio (~> 0.0.6)
+  - FBSDKCoreKit
+  - FBSDKLoginKit
+  - FBSDKShareKit
+  - FMDB (from `https://github.com/robertmryan/fmdb.git`)
+  - google-plus-ios-sdk
+  - IQKeyboardManager
+
+EXTERNAL SOURCES:
+  CryptoSwift:
+    :branch: master
+    :git: https://github.com/krzyzanowskim/CryptoSwift
+  FMDB:
+    :git: https://github.com/robertmryan/fmdb.git
+
+CHECKOUT OPTIONS:
+  CryptoSwift:
+    :commit: f146411a7c28824d244d9d766d9d85212ddc72bb
+    :git: https://github.com/krzyzanowskim/CryptoSwift
+  FMDB:
+    :commit: b45874924a0b8240abf3f7715af57fc5158616c0
+    :git: https://github.com/robertmryan/fmdb.git
+
+SPEC CHECKSUMS:
+  AWSAutoScaling: f3da5982444dee41391a1cb0c1b9664d504c55b1
+  AWSCloudWatch: e35b6040087e15010d6957986aecbfd949b508fb
+  AWSCognito: d351a9e42e23747bb7e5bae37c62af38008d2bd0
+  AWSCore: 36712cbe827a50b81f1660349e0c202339797f23
+  AWSDynamoDB: d22680504585e4c7a344e3490459bcfd2972c41c
+  AWSEC2: cdee0bead09d5cb6a4619756010de1c3e12f7c18
+  AWSElasticLoadBalancing: bf299b22243ae46dcf58a207f41a0d66dc8a0e16
+  AWSKinesis: c06624c3e5dc542ca47128e5a008544b3d20e20a
+  AWSLambda: 6905d2128545689478514d6cbb31adbe6c7b24d8
+  AWSMachineLearning: 2f680b120dd5859765b88369947a223eb1863824
+  AWSS3: 5efcdff6010353fe53ef065be7760d60419c65b1
+  AWSSES: 84045d8e09afc7ca688d73aa77dd5badb1ff1317
+  AWSSimpleDB: f2b3e0cf1c5a8e6ddc7b921b6844fe17dd4489f9
+  AWSSNS: aec37737c542007a0f45017886b263d39ce2e0a9
+  AWSSQS: 08f547b79e13d68b18d4af230f78f109fb6d36c7
+  Bolts: d176cb1e0012175589e389a9db49b85e27787576
+  CryptoSwift: 0ab68b71eaff076bddb1de4e5ac9f85f61c023e2
+  EZAudio: feb8e1c3ec17d8933bc2efc66b59ead1f2e79e54
+  FBSDKCoreKit: a3a60225a84abeace291d0fe71cae29a627382c2
+  FBSDKLoginKit: 6bc2f8f2628c3b6d2e346762fff8cb55cfd3a58d
+  FBSDKShareKit: 15806d69714de39d5dff2c84645f4cde23f5876e
+  FMDB: 8e59e93d20d76d0b135db26ecc83ae88d016076d
+  google-plus-ios-sdk: 47adbe03ea904bdb7aa1c0eca282a23c4686e1bc
+  IQKeyboardManager: 555b1231fefafb21b19278d7cca72986a27b748b
+
+COCOAPODS: 0.37.2

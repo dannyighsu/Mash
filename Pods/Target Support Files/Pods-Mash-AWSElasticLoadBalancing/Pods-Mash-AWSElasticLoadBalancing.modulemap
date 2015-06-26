@@ -1,0 +1,6 @@
+framework module AWSElasticLoadBalancing {
+  umbrella header "Pods-Mash-AWSElasticLoadBalancing-umbrella.h"
+
+  export *
+  module * { export * }
+}

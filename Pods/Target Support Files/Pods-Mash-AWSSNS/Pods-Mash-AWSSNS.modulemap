@@ -1,0 +1,6 @@
+framework module AWSSNS {
+  umbrella header "Pods-Mash-AWSSNS-umbrella.h"
+
+  export *
+  module * { export * }
+}

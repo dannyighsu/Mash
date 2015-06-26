@@ -1,0 +1,6 @@
+framework module AWSEC2 {
+  umbrella header "Pods-Mash-AWSEC2-umbrella.h"
+
+  export *
+  module * { export * }
+}
