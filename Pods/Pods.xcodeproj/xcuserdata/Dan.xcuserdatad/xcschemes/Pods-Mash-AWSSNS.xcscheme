@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0C5B93298082094CFD144141"
+               BlueprintIdentifier = "515671B0F8930B9D1A3AE0D9"
                BuildableName = "AWSSNS.framework"
                BlueprintName = "Pods-Mash-AWSSNS"
                ReferencedContainer = "container:Pods.xcodeproj">

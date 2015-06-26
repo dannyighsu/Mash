@@ -51,11 +51,6 @@ PODS:
     - FBSDKCoreKit
   - google-plus-ios-sdk (1.7.1)
   - IQKeyboardManager (3.2.4)
-  - SQLite.swift (0.1.0.pre):
-    - SQLite.swift/Library (= 0.1.0.pre)
-  - SQLite.swift/Core (0.1.0.pre)
-  - SQLite.swift/Library (0.1.0.pre):
-    - SQLite.swift/Core
 
 DEPENDENCIES:
   - AWSAutoScaling
@@ -80,22 +75,16 @@ DEPENDENCIES:
   - FBSDKShareKit
   - google-plus-ios-sdk
   - IQKeyboardManager
-  - SQLite.swift (from `https://github.com/stephencelis/SQLite.swift.git`)
 
 EXTERNAL SOURCES:
   CryptoSwift:
     :branch: master
     :git: https://github.com/krzyzanowskim/CryptoSwift
-  SQLite.swift:
-    :git: https://github.com/stephencelis/SQLite.swift.git
 
 CHECKOUT OPTIONS:
   CryptoSwift:
     :commit: f146411a7c28824d244d9d766d9d85212ddc72bb
     :git: https://github.com/krzyzanowskim/CryptoSwift
-  SQLite.swift:
-    :commit: fde8c3391b265eb34b6407e3665160fb981b6857
-    :git: https://github.com/stephencelis/SQLite.swift.git
 
 SPEC CHECKSUMS:
   AWSAutoScaling: f3da5982444dee41391a1cb0c1b9664d504c55b1
@@ -121,6 +110,5 @@ SPEC CHECKSUMS:
   FBSDKShareKit: 15806d69714de39d5dff2c84645f4cde23f5876e
   google-plus-ios-sdk: 47adbe03ea904bdb7aa1c0eca282a23c4686e1bc
   IQKeyboardManager: 555b1231fefafb21b19278d7cca72986a27b748b
-  SQLite.swift: 6e05cc2b8efb0e91911e9cfb93551dd682b25843
 
 COCOAPODS: 0.37.2
