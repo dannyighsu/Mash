@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDelegate {
     
@@ -62,9 +64,9 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         }
     }
     
-    func finishedWithAuth(auth: GTMOAuth2Authentication!, error: NSError!) {
+    /* func finishedWithAuth(auth: GTMOAuth2Authentication!, error: NSError!) {
         Debug.printl("Received error \(error) and authentication \(auth)", sender: self)
-    }
+    }*/
     
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
         Debug.printl("Received error \(error) and result \(result)", sender: self)
