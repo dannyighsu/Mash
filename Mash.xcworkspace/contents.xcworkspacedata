@@ -5,9 +5,6 @@
       location = "group:Mash.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Mash/External/Squeal/Squeal.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>

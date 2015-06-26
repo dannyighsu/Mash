@@ -215,7 +215,7 @@ func importTracks(tracks: [Track], navigationController: UINavigationController?
 
 // Download from S3 bucket
 func download(key: String, url: NSURL, bucket: String) {
-    let request: AWSS3TransferManagerDownloadRequest = AWSS3TransferManagerDownloadRequest.new()
+    /*let request: AWSS3TransferManagerDownloadRequest = AWSS3TransferManagerDownloadRequest.new()
     request.bucket = bucket
     request.key = key
     request.downloadingFileURL = url
@@ -237,12 +237,12 @@ func download(key: String, url: NSURL, bucket: String) {
             return task
         }
         return nil
-    })
+    })*/
 }
 
 // Upload to S3 bucket
 func upload(key: String, url: NSURL, bucket: String) {
-    let request: AWSS3TransferManagerUploadRequest = AWSS3TransferManagerUploadRequest.new()
+    /*let request: AWSS3TransferManagerUploadRequest = AWSS3TransferManagerUploadRequest.new()
     request.bucket = bucket
     request.key = key
     request.body = url
@@ -264,7 +264,7 @@ func upload(key: String, url: NSURL, bucket: String) {
             Debug.printl(uploadOutput, sender: "helpers")
         }
         return nil
-    })
+    })*/
 }
 
 // Returns directory to application's documents

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B6BF0309DEF3374D74DE50A7"
+               BlueprintIdentifier = "D7B69B1C7923F7098ECFB192"
                BuildableName = "AWSSimpleDB.framework"
                BlueprintName = "Pods-Mash-AWSSimpleDB"
                ReferencedContainer = "container:Pods.xcodeproj">

@@ -49,11 +49,6 @@ PODS:
     - FBSDKCoreKit
   - FBSDKShareKit (4.3.0):
     - FBSDKCoreKit
-  - FMDB (2.5):
-    - FMDB/standard (= 2.5)
-  - FMDB/common (2.5)
-  - FMDB/standard (2.5):
-    - FMDB/common
   - google-plus-ios-sdk (1.7.1)
   - IQKeyboardManager (3.2.4)
 
@@ -78,7 +73,6 @@ DEPENDENCIES:
   - FBSDKCoreKit
   - FBSDKLoginKit
   - FBSDKShareKit
-  - FMDB (from `https://github.com/robertmryan/fmdb.git`)
   - google-plus-ios-sdk
   - IQKeyboardManager
 
@@ -86,16 +80,11 @@ EXTERNAL SOURCES:
   CryptoSwift:
     :branch: master
     :git: https://github.com/krzyzanowskim/CryptoSwift
-  FMDB:
-    :git: https://github.com/robertmryan/fmdb.git
 
 CHECKOUT OPTIONS:
   CryptoSwift:
     :commit: f146411a7c28824d244d9d766d9d85212ddc72bb
     :git: https://github.com/krzyzanowskim/CryptoSwift
-  FMDB:
-    :commit: b45874924a0b8240abf3f7715af57fc5158616c0
-    :git: https://github.com/robertmryan/fmdb.git
 
 SPEC CHECKSUMS:
   AWSAutoScaling: f3da5982444dee41391a1cb0c1b9664d504c55b1
@@ -119,7 +108,6 @@ SPEC CHECKSUMS:
   FBSDKCoreKit: a3a60225a84abeace291d0fe71cae29a627382c2
   FBSDKLoginKit: 6bc2f8f2628c3b6d2e346762fff8cb55cfd3a58d
   FBSDKShareKit: 15806d69714de39d5dff2c84645f4cde23f5876e
-  FMDB: 8e59e93d20d76d0b135db26ecc83ae88d016076d
   google-plus-ios-sdk: 47adbe03ea904bdb7aa1c0eca282a23c4686e1bc
   IQKeyboardManager: 555b1231fefafb21b19278d7cca72986a27b748b
 

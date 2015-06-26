@@ -69,7 +69,6 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework 'FBSDKCoreKit.framework'
   install_framework 'FBSDKLoginKit.framework'
   install_framework 'FBSDKShareKit.framework'
-  install_framework 'FMDB.framework'
   install_framework 'IQKeyboardManager.framework'
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
@@ -94,6 +93,5 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework 'FBSDKCoreKit.framework'
   install_framework 'FBSDKLoginKit.framework'
   install_framework 'FBSDKShareKit.framework'
-  install_framework 'FMDB.framework'
   install_framework 'IQKeyboardManager.framework'
 fi

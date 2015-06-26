@@ -328,7 +328,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func delete() {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let username = current_user.username
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/delete/users")!)
+        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/delete/user")!)
         var params = ["username": username!, "password_hash": passwordHash] as Dictionary
         httpDelete(params, request) {
             (data, statusCode, error) -> Void in
