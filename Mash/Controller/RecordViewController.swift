@@ -90,7 +90,6 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
 
             self.recording = true
             self.startTimer()
-            self.record()
         } else {
             self.metronome?.toggleMetronome(nil)
             self.micButton.layer.removeAllAnimations()
@@ -246,6 +245,7 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
         if self.timeLabel.text!.toInt() > 1 {
             self.timeLabel.text = String(self.timeLabel.text!.toInt()! - 1)
         } else {
+            self.record()
             self.micButton.hidden = false
             UIView.animateWithDuration(0.3, animations: { self.timeLabel.alpha = 0; self.micButton.alpha = 1 }) {
                 (finished: Bool) in

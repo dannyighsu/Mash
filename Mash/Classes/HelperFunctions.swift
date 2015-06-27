@@ -204,6 +204,10 @@ func importTracks(tracks: [Track], navigationController: UINavigationController?
     if (project!.data.count != project!.audioPlayers.count) {
         for (var i = project!.audioPlayers.count; i < project!.data.count; i++) {
             var error: NSError? = nil
+            while !NSFileManager.defaultManager().fileExistsAtPath(project!.data[i].trackURL) {
+                Debug.printnl("waiting...")
+                NSThread.sleepForTimeInterval(0.5)
+            }
             let player = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: project!.data[i].trackURL), error: &error)
             if player == nil {
                 Debug.printl("Error playing file: \(error)", sender: "helpers")

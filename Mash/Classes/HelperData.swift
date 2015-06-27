@@ -53,7 +53,6 @@ let HTTP_SERVER_ERROR = 500
 
 // Designates instrument families that have corresponding UIImages
 var instrumentArray: [String: [String]] = [
-    "": [""],
     "Vocals": ["", "Beatboxing", "Male", "Female"],
     "Brass": ["", "French Horn", "Trombone", "Trumpet", "Tuba"],
     "Woodwinds": ["", "Saxophone", "Flute", "Piccolo", "Oboe", "English Horn", "Bassoon", "Clarinet", "Harmonia", "Accordians"],
@@ -67,7 +66,6 @@ var instrumentArray: [String: [String]] = [
 
 // Lists all genres
 var genreArray: [String: [String]] = [
-    "": [""],
     "Blues": ["", "Blues Rock", "Acoustic Blues", "Classic Blues"],
     "Country": ["", "Bluegrass", "Country Folk", "Country_Rock", "Cowboy"],
     "EDM/Electronic": ["", "House", "Trance", "Trap", "Electro", "Hard Style", "Ambient", "Dub Step", "Electronica", "Experimental"],
