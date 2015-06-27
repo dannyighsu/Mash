@@ -184,7 +184,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         exportSession?.exportAsynchronouslyWithCompletionHandler() {
             if exportSession?.status == AVAssetExportSessionStatus.Completed {
                 Debug.printl("File export of track \(name) completed", sender: self)
-                self.uploadAction(newTrack, name: name)
+                self.uploadAction(newTrack, name: name + ".m4a")
             } else if exportSession?.status == AVAssetExportSessionStatus.Failed {
                 Debug.printl("File export failed.", sender: self)
             } else {

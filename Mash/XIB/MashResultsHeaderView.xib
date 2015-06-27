@@ -7,7 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="XFl-4y-Kzu" customClass="MashResultsHeaderView" customModule="Mash_iOS" customModuleProvider="target">
+        <view contentMode="scaleToFill" id="XFl-4y-Kzu" customClass="MashResultsHeaderView" customModule="Mash" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
@@ -34,24 +34,15 @@
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
-                        <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Play" translatesAutoresizingMaskIntoConstraints="NO" id="woD-4P-c4t">
-                            <rect key="frame" x="0.0" y="22" width="25" height="25"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="25" id="6s7-Ot-XAJ"/>
-                            </constraints>
-                        </imageView>
                     </subviews>
                     <color key="backgroundColor" red="0.24882192459999999" green="0.24882192459999999" blue="0.24882192459999999" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="f8q-yR-gug" firstAttribute="top" secondItem="oho-lN-jt8" secondAttribute="top" constant="20" id="9z5-DI-mvT"/>
                         <constraint firstAttribute="bottom" secondItem="f8q-yR-gug" secondAttribute="bottom" id="BCP-qT-RqP"/>
                         <constraint firstItem="f8q-yR-gug" firstAttribute="trailing" secondItem="oho-lN-jt8" secondAttribute="trailingMargin" id="JP6-hi-6CB"/>
-                        <constraint firstItem="woD-4P-c4t" firstAttribute="top" secondItem="oho-lN-jt8" secondAttribute="top" constant="22" id="Mof-bL-HrW"/>
-                        <constraint firstAttribute="bottom" secondItem="woD-4P-c4t" secondAttribute="bottom" constant="3" id="PC9-wm-202"/>
                         <constraint firstItem="uXT-Tf-E2n" firstAttribute="bottom" secondItem="oho-lN-jt8" secondAttribute="bottomMargin" id="Sch-dV-yJF"/>
                         <constraint firstItem="uXT-Tf-E2n" firstAttribute="top" secondItem="oho-lN-jt8" secondAttribute="top" constant="21" id="YLd-vA-ViW"/>
                         <constraint firstItem="uXT-Tf-E2n" firstAttribute="centerX" secondItem="oho-lN-jt8" secondAttribute="centerX" id="h7d-IZ-Pqx"/>
-                        <constraint firstItem="woD-4P-c4t" firstAttribute="leading" secondItem="oho-lN-jt8" secondAttribute="leading" id="oVa-Rw-D6R"/>
                     </constraints>
                 </view>
             </subviews>
@@ -63,14 +54,10 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="doneButton" destination="f8q-yR-gug" id="dcY-di-iex"/>
-                <outlet property="playButton" destination="woD-4P-c4t" id="A0c-qt-Jd4"/>
+                <outlet property="cancelButton" destination="f8q-yR-gug" id="Xa4-NS-plv"/>
                 <outlet property="titleLabel" destination="uXT-Tf-E2n" id="10H-5v-G3a"/>
             </connections>
             <point key="canvasLocation" x="346" y="129"/>
         </view>
     </objects>
-    <resources>
-        <image name="Play" width="626" height="626"/>
-    </resources>
 </document>

@@ -58,11 +58,8 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         return cell
     }
     
-    // Upload file to bucket, then post information to server
+    // Download mash files
     func downloadAction(instrument: [String]) {
-        // Bucket upload
-        var urlString = self.recording
-        download(urlString!.titleText, filePathURL(self.recording!.titleText + ".aif"), track_bucket)
         
         // Post data to server
         let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
@@ -84,7 +81,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     return
                 } else if statusCode == HTTP_WRONG_MEDIA {
                     return
-                } else if statusCode == HTTP_SUCCESS {
+                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
                     var error: NSError? = nil
                     var response: AnyObject? = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error)
                     dispatch_async(dispatch_get_main_queue()) {

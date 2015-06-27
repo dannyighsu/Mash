@@ -15,6 +15,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var instrumentsCollection: UICollectionView!
     @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var doneButton: UIButton!
     var recording: EZAudioFile? = nil
     var bpm: Int? = nil
@@ -32,6 +33,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         // self.instrumentsCollection.allowsMultipleSelection = true // uncheck for multi instr
         
         self.doneButton.addTarget(self, action: "checkInput:", forControlEvents: UIControlEvents.TouchDown)
+        self.cancelButton.addTarget(self, action: "cancel:", forControlEvents: UIControlEvents.TouchDown)
         
         self.audioPlayer = AVAudioPlayer(contentsOfURL: recording!.url(), error: nil)
     }
@@ -161,6 +163,10 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         taggingController.time = self.timeSignature!
         taggingController.bpm = String(self.bpm!)
 
+    }
+    
+    func cancel(sender: AnyObject?) {
+        self.navigationController?.popViewControllerAnimated(true)
     }
 
 }

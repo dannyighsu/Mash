@@ -11,8 +11,7 @@ import UIKit
 
 class MashResultsHeaderView: UITableViewHeaderFooterView {
     
-    @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var playButton: UIImageView!
+    @IBOutlet weak var cancelButton: UIButton!
     
 }

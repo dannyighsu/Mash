@@ -31,7 +31,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         let profile = UINib(nibName: "MashResultsHeaderView", bundle: nil)
         self.trackTable.registerNib(profile, forHeaderFooterViewReuseIdentifier: "MashResultsHeaderView")
         
-        //self.audioPlayers.append(AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: self.recording!.trackURL), error: nil))
+        self.audioPlayers.append(AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: self.recording!.trackURL), error: nil))
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -50,8 +50,11 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         track.title.text = track.titleText
         track.userLabel.text = track.userText
         track.bpm = trackData.bpm
-        track.trackURL = filePathString(track.titleText + ".aif")
-        download(track.titleText + ".aif", NSURL(fileURLWithPath: track.trackURL)!, track_bucket)
+        track.format = trackData.format
+        track.trackURL = filePathString(track.titleText + track.format)
+        println("track title:" + track.titleText + track.format)
+        println("track url:" + track.trackURL)
+        download(track.titleText + track.format, NSURL(fileURLWithPath: track.trackURL)!, track_bucket)
         
         track.imageView?.image = findImage(self.results[indexPath.row].instruments)
         let doneTap = UITapGestureRecognizer(target: self, action: "done:")
@@ -92,7 +95,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header = view as! MashResultsHeaderView
-        header.doneButton.addTarget(self, action: "cancel:", forControlEvents: UIControlEvents.TouchDown)
+        header.cancelButton.addTarget(self, action: "cancel:", forControlEvents: UIControlEvents.TouchDown)
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -102,7 +105,9 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     
     func playTracks(track: Track) {
         let header = self.trackTable.headerViewForSection(0) as! MashResultsHeaderView
-        header.playButton.image = UIImage(named: "Play_2")
+        if self.audioPlayers.count < 1 {
+            return
+        }
         if self.audioPlayers[0].playing {
             self.stopPlaying(nil)
         }
@@ -121,7 +126,6 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
             self.audioPlayers[i].stop()
             self.audioPlayers[i].currentTime = 0
             let header = self.trackTable.headerViewForSection(0) as! MashResultsHeaderView
-            header.playButton.image = UIImage(named: "Play")
         }
     }
     
