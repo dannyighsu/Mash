@@ -65,4 +65,3 @@
 
 FOUNDATION_EXPORT double AWSCoreVersionNumber;
 FOUNDATION_EXPORT const unsigned char AWSCoreVersionString[];
-

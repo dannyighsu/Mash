@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>B285917D-A762-4342-ACE0-064F0F5D1950</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Mash</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>628A08A62B93682AEA971F3DC54914A9CA563F2E</key>
+		<string>https://github.com/dannyighsu/Mash.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Mash.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>628A08A62B93682AEA971F3DC54914A9CA563F2E</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/dannyighsu/Mash.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>628A08A62B93682AEA971F3DC54914A9CA563F2E</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>628A08A62B93682AEA971F3DC54914A9CA563F2E</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Mash</string>
+		</dict>
+	</array>
+</dict>
+</plist>

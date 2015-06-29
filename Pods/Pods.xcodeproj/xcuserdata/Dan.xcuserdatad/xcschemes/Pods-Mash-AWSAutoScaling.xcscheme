@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3B1B7FB3CD3C1602A7FC1FB8"
+               BlueprintIdentifier = "D8B5372B9332B857CAABD6A8"
                BuildableName = "AWSAutoScaling.framework"
                BlueprintName = "Pods-Mash-AWSAutoScaling"
                ReferencedContainer = "container:Pods.xcodeproj">
