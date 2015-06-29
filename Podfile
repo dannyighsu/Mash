@@ -16,20 +16,7 @@ target 'Mash' do
     #AWS Pods
     source 'https://github.com/CocoaPods/Specs.git'
     pod 'AWSCore'
-    pod 'AWSAutoScaling'
-    pod 'AWSCloudWatch'
-    pod 'AWSDynamoDB'
-    pod 'AWSEC2'
-    pod 'AWSElasticLoadBalancing'
-    pod 'AWSKinesis'
-    pod 'AWSLambda'
-    pod 'AWSMachineLearning'
     pod 'AWSS3'
-    pod 'AWSSES'
-    pod 'AWSSimpleDB'
-    pod 'AWSSNS'
-    pod 'AWSSQS'
-    pod 'AWSCognito'
 end
 
 target 'MashTests' do

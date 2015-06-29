@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "07405109983F8DF70D4E10AA"
+               BlueprintIdentifier = "D578F383AEB679380F4FF998"
                BuildableName = "CryptoSwift.framework"
                BlueprintName = "Pods-Mash-CryptoSwift"
                ReferencedContainer = "container:Pods.xcodeproj">

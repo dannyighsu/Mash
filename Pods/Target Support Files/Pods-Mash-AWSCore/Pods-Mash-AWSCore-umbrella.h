@@ -13,12 +13,12 @@
 #import "AWSCognitoIdentityModel.h"
 #import "AWSCognitoIdentityResources.h"
 #import "AWSCognitoIdentityService.h"
-#import "AWSFMDatabase.h"
-#import "AWSFMDatabaseAdditions.h"
-#import "AWSFMDatabasePool.h"
-#import "AWSFMDatabaseQueue.h"
-#import "AWSFMDB.h"
-#import "AWSFMResultSet.h"
+//#import "AWSFMDatabase.h"
+//#import "AWSFMDatabaseAdditions.h"
+//#import "AWSFMDatabasePool.h"
+//#import "AWSFMDatabaseQueue.h"
+//#import "AWSFMDB.h"
+//#import "AWSFMResultSet.h"
 #import "AWSGZIP.h"
 #import "AWSMantle.h"
 #import "AWSMTLJSONAdapter.h"
@@ -65,3 +65,4 @@
 
 FOUNDATION_EXPORT double AWSCoreVersionNumber;
 FOUNDATION_EXPORT const unsigned char AWSCoreVersionString[];
+

@@ -1,6 +1,0 @@
-framework module AWSCloudWatch {
-  umbrella header "Pods-Mash-AWSCloudWatch-umbrella.h"
-
-  export *
-  module * { export * }
-}

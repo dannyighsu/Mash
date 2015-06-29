@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E9D6B9B44A66F6C10FF23FB4"
+               BlueprintIdentifier = "01D1D943BCD7EBE5975ECA57"
                BuildableName = "AWSCore.framework"
                BlueprintName = "Pods-Mash-AWSCore"
                ReferencedContainer = "container:Pods.xcodeproj">

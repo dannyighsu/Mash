@@ -1,6 +1,0 @@
-framework module AWSLambda {
-  umbrella header "Pods-Mash-AWSLambda-umbrella.h"
-
-  export *
-  module * { export * }
-}

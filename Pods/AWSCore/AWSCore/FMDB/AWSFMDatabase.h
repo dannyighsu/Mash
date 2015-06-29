@@ -1,5 +1,4 @@
 #import <Foundation/Foundation.h>
-#import "sqlite3.h"
 #import "AWSFMResultSet.h"
 #import "AWSFMDatabasePool.h"
 

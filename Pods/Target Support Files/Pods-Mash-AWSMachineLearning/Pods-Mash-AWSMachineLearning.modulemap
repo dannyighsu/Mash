@@ -1,6 +1,0 @@
-framework module AWSMachineLearning {
-  umbrella header "Pods-Mash-AWSMachineLearning-umbrella.h"
-
-  export *
-  module * { export * }
-}

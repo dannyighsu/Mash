@@ -1,6 +1,0 @@
-framework module AWSSimpleDB {
-  umbrella header "Pods-Mash-AWSSimpleDB-umbrella.h"
-
-  export *
-  module * { export * }
-}
