@@ -14,12 +14,23 @@ class NavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationBar.backgroundColor = darkGray()
+        UINavigationBar.appearance().barTintColor = darkGray()
+        UINavigationBar.appearance().translucent = false
+        UINavigationBar.appearance().tintColor = offWhite()
+        //self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: self, action: "back:")
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         self.hidesBarsOnSwipe = true
+    }
+    
+    func back(sender: AnyObject?) {
+        self.popViewControllerAnimated(true)
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
     }
     
 }

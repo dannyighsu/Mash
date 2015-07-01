@@ -120,7 +120,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         current_user.tracks = String(data["track_count"] as! Int)
                         current_user.user_description = data["description"] as? String
                         current_user.userid = data["id"] as? Int
-                        self!.getUsersFollowing()
                         self!.completeLogin(username, password: password)
                     }
                 } else {
@@ -183,6 +182,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.saveLoginItems()
             }
         }
+        self.getUsersFollowing()
 
         Debug.printl("Successful login - pushing tab bar controller onto navigation controller", sender: self)
         let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController
