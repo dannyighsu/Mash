@@ -14,7 +14,7 @@ class NavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationBar.backgroundColor = offWhite()
+        self.navigationBar.backgroundColor = darkGray()
     }
     
     override func viewDidAppear(animated: Bool) {

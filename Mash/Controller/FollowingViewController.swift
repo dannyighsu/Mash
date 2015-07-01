@@ -26,7 +26,8 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
         self.getUserFollowing(self.user, type: self.type!)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         self.navigationController?.navigationBarHidden = false
     }
     
@@ -37,10 +38,10 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.username = follower.username
         cell.altname = follower.altname
         cell.profile_pic_link = follower.profile_pic_link
-        cell.imageView?.image = follower.profile_pic()
-        cell.imageView?.layer.cornerRadius = cell.imageView!.frame.size.width / 2
-        cell.imageView?.layer.borderWidth = 1.0
-        cell.imageView?.layer.masksToBounds = true
+        cell.profilePicture?.image = follower.profile_pic()
+        cell.profilePicture?.layer.cornerRadius = cell.imageView!.frame.size.width / 2
+        cell.profilePicture?.layer.borderWidth = 1.0
+        cell.profilePicture?.layer.masksToBounds = true
         var following: Bool = false
         for u in user_following {
             if u.username! == follower.username! {
@@ -55,6 +56,11 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchDown)
         }
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.getUser(tableView.cellForRowAtIndexPath(indexPath) as! User)
+        tableView.cellForRowAtIndexPath(indexPath)!.selected = false
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -72,13 +78,23 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         self.navigationController?.navigationBarHidden = true
     }
-    
+
     func follow(sender: UIButton) {
-        followUser(sender.superview!.superview as! User, self)
+        followUser(getUserCell(sender), self)
     }
     
     func unfollow(sender: UIButton) {
-        unfollowUser(sender.superview!.superview as! User, self)
+        unfollowUser(getUserCell(sender), self)
+    }
+    
+    func getUserCell(input: UIButton) -> User {
+        if input.superview as? User != nil {
+            return input.superview as! User
+        } else if input.superview!.superview as? User != nil {
+            return input.superview!.superview as! User
+        } else {
+            return input.superview!.superview!.superview as! User
+        }
     }
     
     func getUserFollowing(user: User, type: String) {
@@ -111,6 +127,51 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                             self.data.append(follower)
                         }
                         self.users.reloadData()
+                    }
+                } else if statusCode == HTTP_SERVER_ERROR {
+                    Debug.printl("Internal server error.", sender: self)
+                } else {
+                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
+                }
+            }
+        }
+    }
+    
+    // Make get request for user and instantiate dashboard
+    func getUser(input: User) {
+        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
+        let username = current_user.username
+        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/user")!)
+        var params = ["username": username!, "password_hash": passwordHash, "userid": "\(current_user.userid!)", "query_name": input.username!] as Dictionary
+        println(current_user.userid)
+        httpPost(params, request) {
+            (data, statusCode, error) -> Void in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: self)
+            } else {
+                // Check status codes
+                if statusCode == HTTP_ERROR {
+                    Debug.printl("HTTP Error: \(error)", sender: self)
+                } else if statusCode == HTTP_WRONG_MEDIA {
+                    
+                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        var error: NSError? = nil
+                        var data = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary
+                        
+                        var dict = data["user"] as! NSDictionary
+                        input.username = dict["username"] as? String
+                        input.altname = dict["display_name"] as? String
+                        input.banner_pic_link = dict["banner_pic_link"] as? String
+                        input.profile_pic_link = dict["profile_pic_link"] as? String
+                        input.user_description = dict["description"] as? String
+                        input.followers = String(dict["followers"] as! Int)
+                        input.following = String(dict["following"] as! Int)
+                        input.tracks = String(dict["track_count"] as! Int)
+                        
+                        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("DashboardController") as! DashboardController
+                        controller.user = input
+                        self.navigationController?.pushViewController(controller, animated: true)
                     }
                 } else if statusCode == HTTP_SERVER_ERROR {
                     Debug.printl("Internal server error.", sender: self)

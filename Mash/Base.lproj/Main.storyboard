@@ -949,7 +949,6 @@
         <!--Direct Upload View Controller-->
         <scene sceneID="JUR-mo-bo1">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="A1P-gW-XA4" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="DirectUploadViewController" id="cmv-Ng-Mbb" customClass="DirectUploadViewController" customModule="Mash" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ob4-dm-SsB"/>
@@ -1056,6 +1055,7 @@
                         <outlet property="uploadButton" destination="TFV-H4-1iw" id="eFo-gY-eZJ"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="A1P-gW-XA4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-736" y="1865"/>
         </scene>

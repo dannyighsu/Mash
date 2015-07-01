@@ -91,6 +91,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             player.volume = 0.0
             track.speakerImage.image = UIImage(named: "speaker_2")
         }
+        tableView.cellForRowAtIndexPath(indexPath)?.selected = false
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

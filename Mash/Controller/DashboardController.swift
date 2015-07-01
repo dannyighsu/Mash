@@ -34,10 +34,13 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
     }
     
-    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBarHidden = true
+        if self.user != current_user {
+            self.navigationController?.navigationBarHidden = false
+        } else {
+            self.navigationController?.navigationBarHidden = true
+        }
         self.retrieveTracks()
     }
     
@@ -157,6 +160,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if self.user != current_user {
+            return
+        }
         if editingStyle == UITableViewCellEditingStyle.Delete {
             self.deleteTrack(self.data[indexPath.row], indexPath: indexPath)
         }
@@ -346,11 +352,13 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func follow(sender: UIButton) {
-        
+        println(sender.superview)
+        println(sender.superview!.superview)
+        followUser(sender.superview!.superview as! User, self)
     }
     
     func unfollow(sender: UIButton) {
-        
+        followUser(sender.superview!.superview as! User, self)
     }
     
     // Push direct upload page up
@@ -400,6 +408,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         NSUserDefaults.standardUserDefaults().removeObjectForKey("username")
         Debug.printl("User has successfully logged out - popping to root view controller.", sender: self)
         self.navigationController?.popToRootViewControllerAnimated(true)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        super.prepareForSegue(segue, sender: sender)
+        self.navigationController?.navigationBarHidden = true
     }
 
 }
