@@ -79,43 +79,70 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
 
     func searchTextFilter(searchText: String) {
-        let results = self.searchItems.filter({(track: String) -> Bool in
+        /*let results = self.searchItems.filter({(track: String) -> Bool in
             let match = track.rangeOfString(searchText)
             return match != nil
         })
         for (var i = 0; i < results.count; i++) {
             self.searchResults.append(Track(frame: CGRectZero, instruments: ["multiple"], titleText: results[i]))
-        }
-        /*let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+        }*/
+        let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve?username=\(username)&password_hash=\(passwordHash)&song_name=harp")!)
-        httpGet(request) {
+        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/search/recording")!)
+        var params = ["username": username, "password_hash": passwordHash, "song_name": searchText] as Dictionary
+        httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
-                Debug.printl("Error: \(error)")
+                Debug.printl("Error: \(error)", sender: self)
                 return
             } else {
                 // Check status codes
                 if statusCode == HTTP_ERROR {
-                    Debug.printl("Error: \(error)")
+                    Debug.printl("Error: \(error)", sender: self)
                     return
                 } else if statusCode == HTTP_WRONG_MEDIA {
                     return
                 } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    Debug.printl("Data: \(data)")
+                    var error: NSError? = nil
+                    var response: AnyObject? = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error)
+                    self.updateResults(response as! NSDictionary)
                     return
                 } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)")
+                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
                     return
                 }
             }
-        }*/
+        }
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         let searchString = self.searchController?.searchBar.text
         self.searchTextFilter(searchString!)
-        self.tableView.reloadData()
+    }
+    
+    func updateResults(data: NSDictionary) {
+        self.searchResults = []
+        var tracks = data["recordings"] as! NSArray
+        for t in tracks {
+            var dict = t as! NSDictionary
+            var instruments = dict["instrument"] as! NSArray
+            var url = (dict["song_name"] as! String) + (dict["format"] as! String)
+            url = filePathString(url)
+            var track = Track(frame: CGRectZero, instruments: [instruments[0] as! String], titleText: dict["song_name"] as! String, bpm: 120, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            self.searchResults.append(track)
+        }
+        dispatch_async(dispatch_get_main_queue()) {
+            self.tableView.reloadData()
+        }
+        /*var users = data["user"] as! NSArray
+        for u in users {
+            var dict = u as! NSDictionary
+            var user = User(username: data["username"] as? String, altname: data["display_name"] as? String, profile_pic_link: data["profile_pic_link"] as? String, banner_pic_link: data["banner_pic_link"] as? String, followers: String(data["followers"] as! Int), following: String(data["following"] as! Int), tracks: String(data["tracks"] as! Int), description: data["description"] as? String)
+            self.searchResults.append(user)
+        }
+        dispatch_async(dispatch_get_main_queue()) {
+            self.tableView.reloadData()
+        }*/
     }
     
     func addTrack(sender: AnyObject?) {

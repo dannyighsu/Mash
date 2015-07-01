@@ -91,7 +91,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
         var instrumentString = String(stringInterpolationSegment: self.instruments)
         instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
-        var params: [String: String] = ["username": username, "password_hash": passwordHash, "song_name": self.titleTextField.text, "bpm": "0", "bar": "0", "key": "0", "instrument": instrumentString, "family": "", "genre": "", "subgenre": "", "feel": "0", "effects": "", "theme": "", "solo": "0", "format": ".m4a"]
+        var params: [String: String] = ["username": username, "password_hash": passwordHash, "name": self.titleTextField.text, "bpm": "0", "bar": "0", "key": "0", "instrument": instrumentString, "family": "", "genre": "", "subgenre": "", "feel": "0", "solo": "0", "format": ".m4a"]
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {

@@ -20,6 +20,8 @@
 		37A3C2D11B3CC00600F77F2A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37A3C2D01B3CC00600F77F2A /* Images.xcassets */; };
 		37A3C2D41B3CC00600F77F2A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37A3C2D21B3CC00600F77F2A /* LaunchScreen.xib */; };
 		37A3C2E01B3CC00600F77F2A /* MashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A3C2DF1B3CC00600F77F2A /* MashTests.swift */; };
+		37DE77251B436F4A00952987 /* User.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37DE77241B436F4A00952987 /* User.xib */; };
+		37DE77271B4370B200952987 /* FollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DE77261B4370B200952987 /* FollowingViewController.swift */; };
 		37E799A51B3CC1C600D2E54D /* DashboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799871B3CC1C600D2E54D /* DashboardController.swift */; };
 		37E799A61B3CC1C600D2E54D /* DirectUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799881B3CC1C600D2E54D /* DirectUploadViewController.swift */; };
 		37E799A71B3CC1C600D2E54D /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799891B3CC1C600D2E54D /* EntryViewController.swift */; };
@@ -98,6 +100,8 @@
 		37A3C2D91B3CC00600F77F2A /* MashTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MashTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		37A3C2DE1B3CC00600F77F2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37A3C2DF1B3CC00600F77F2A /* MashTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MashTests.swift; sourceTree = "<group>"; };
+		37DE77241B436F4A00952987 /* User.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = User.xib; sourceTree = "<group>"; };
+		37DE77261B4370B200952987 /* FollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowingViewController.swift; sourceTree = "<group>"; };
 		37E799851B3CC12D00D2E54D /* Mash-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mash-Bridging-Header.h"; sourceTree = "<group>"; };
 		37E799871B3CC1C600D2E54D /* DashboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardController.swift; sourceTree = "<group>"; };
 		37E799881B3CC1C600D2E54D /* DirectUploadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectUploadViewController.swift; sourceTree = "<group>"; };
@@ -274,6 +278,7 @@
 				37E799A21B3CC1C600D2E54D /* TabBarController.swift */,
 				37E799A31B3CC1C600D2E54D /* TaggingViewController.swift */,
 				37E799A41B3CC1C600D2E54D /* UploadViewController.swift */,
+				37DE77261B4370B200952987 /* FollowingViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -314,6 +319,7 @@
 				37E799D61B3CC1D000D2E54D /* ProjectHeaderView.xib */,
 				37E799D71B3CC1D000D2E54D /* ProjectTrack.xib */,
 				37E799D81B3CC1D000D2E54D /* Track.xib */,
+				37DE77241B436F4A00952987 /* User.xib */,
 			);
 			path = XIB;
 			sourceTree = "<group>";
@@ -453,6 +459,7 @@
 				37A3C2D41B3CC00600F77F2A /* LaunchScreen.xib in Resources */,
 				37E799EC1B3CC1D000D2E54D /* InstrumentCell.xib in Resources */,
 				37E799F21B3CC1D000D2E54D /* Track.xib in Resources */,
+				37DE77251B436F4A00952987 /* User.xib in Resources */,
 				373F0F011B3DEFC500DE92AB /* tick.caf in Resources */,
 				37A3C2D11B3CC00600F77F2A /* Images.xcassets in Resources */,
 				373F0EFF1B3DEFC500DE92AB /* Harp.aif in Resources */,
@@ -532,6 +539,7 @@
 				37E799E21B3CC1D000D2E54D /* Metronome.swift in Sources */,
 				37E799AB1B3CC1C600D2E54D /* LoginViewController.swift in Sources */,
 				37E799B41B3CC1C600D2E54D /* ProjectPreferencesViewController.swift in Sources */,
+				37DE77271B4370B200952987 /* FollowingViewController.swift in Sources */,
 				37E799DB1B3CC1D000D2E54D /* HelperData.swift in Sources */,
 				37E799E51B3CC1D000D2E54D /* ProjectTrack.swift in Sources */,
 				37E799AE1B3CC1C600D2E54D /* NavigationController.swift in Sources */,

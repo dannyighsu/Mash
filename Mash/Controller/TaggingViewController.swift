@@ -147,7 +147,13 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let username = current_user.username
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/update/recording")!)
-        var params = ["username": username!, "password_hash": passwordHash, "new_bpm": self.tempoField.text!, "new_key": self.keyField.text!, "new_instrument": self.instrumentField.text!, "new_genre": self.genreField.text!, "new_subgenre": self.subgenreField.text!] as Dictionary
+        var time = split(self.timeField.text!) {$0 == "/"}
+        if count(time[1]) == 1 {
+            time[1] = "0" + time[1]
+        }
+        var timeString = time[0] + time[1]
+        println(timeString)
+        var params = ["username": username!, "password_hash": passwordHash, "new_bar": timeString, "new_bpm": self.tempoField.text!, "new_key": self.keyField.text!, "new_instrument": self.instrumentField.text!, "new_genre": self.genreField.text!, "new_subgenre": self.subgenreField.text!] as Dictionary
         httpPatch(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {

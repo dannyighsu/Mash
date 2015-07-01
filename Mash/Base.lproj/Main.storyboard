@@ -949,6 +949,7 @@
         <!--Direct Upload View Controller-->
         <scene sceneID="JUR-mo-bo1">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="A1P-gW-XA4" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="DirectUploadViewController" id="cmv-Ng-Mbb" customClass="DirectUploadViewController" customModule="Mash" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ob4-dm-SsB"/>
@@ -1055,9 +1056,41 @@
                         <outlet property="uploadButton" destination="TFV-H4-1iw" id="eFo-gY-eZJ"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="A1P-gW-XA4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="44" y="1865"/>
+            <point key="canvasLocation" x="-736" y="1865"/>
+        </scene>
+        <!--Following View Controller-->
+        <scene sceneID="4id-Se-zyg">
+            <objects>
+                <viewController storyboardIdentifier="FollowingViewController" id="KHN-aH-mTw" customClass="FollowingViewController" customModule="Mash" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="fqg-jF-ZRK"/>
+                        <viewControllerLayoutGuide type="bottom" id="FAD-FI-8Na"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="o60-wj-58q">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="mkM-wI-UeN">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="mkM-wI-UeN" firstAttribute="leading" secondItem="o60-wj-58q" secondAttribute="leading" id="DNU-t9-BI8"/>
+                            <constraint firstAttribute="trailing" secondItem="mkM-wI-UeN" secondAttribute="trailing" id="NdA-Ky-WTa"/>
+                            <constraint firstItem="mkM-wI-UeN" firstAttribute="bottom" secondItem="FAD-FI-8Na" secondAttribute="top" id="TZJ-k2-ae0"/>
+                            <constraint firstItem="mkM-wI-UeN" firstAttribute="top" secondItem="o60-wj-58q" secondAttribute="top" id="eR7-1R-mvu"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="users" destination="mkM-wI-UeN" id="9OX-0B-col"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Eiw-Il-Zc1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="34" y="1865"/>
         </scene>
         <!--Dashboard-->
         <scene sceneID="Ve9-CY-Hut">

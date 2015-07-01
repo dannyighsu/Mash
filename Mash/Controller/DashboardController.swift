@@ -17,7 +17,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
     var audioPlayer:AVAudioPlayer = AVAudioPlayer()
-    var user: String = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+    var user: User = current_user
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +31,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let track = UINib(nibName: "Track", bundle: nil)
         self.tracks.registerNib(track, forCellReuseIdentifier: "Track")
         
-        // Populate tracks
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
     }
     
@@ -70,7 +69,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header = view as! Profile
         
-        header.editButton.addTarget(self, action: "goToSettings:", forControlEvents: UIControlEvents.TouchDown)
         
         header.profilePic.contentMode = UIViewContentMode.ScaleAspectFit
         header.profilePic.layer.cornerRadius = header.profilePic.frame.size.width / 2
@@ -82,21 +80,42 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         header.trackCount.layer.borderWidth = 0.2
         header.descriptionLabel.layer.borderWidth = 0.2
         
-        if self.user != NSUserDefaults.standardUserDefaults().valueForKey("username") as! String {
-            header.editButton.titleLabel!.text = "Follow"
-            header.editButton.backgroundColor = lightBlue()
+        if self.user.username != current_user.username {
+            
+            var following: Bool = false
+            for u in user_following {
+                if u.username! == self.user.username! {
+                    following = true
+                }
+            }
+            if following {
+                header.editButton.titleLabel!.text = "Unfollow"
+                header.editButton.backgroundColor = lightGray()
+                header.editButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchDown)
+            } else {
+                header.editButton.titleLabel!.text = "Follow"
+                header.editButton.backgroundColor = lightBlue()
+                header.editButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchDown)
+            }
+        } else {
+            header.editButton.addTarget(self, action: "goToSettings:", forControlEvents: UIControlEvents.TouchDown)
         }
-
-        header.username.text = current_user.display_name()
-        header.bannerImage.image = current_user.banner_pic()
-        header.profilePic.image = current_user.profile_pic()
-        var followers = NSMutableAttributedString(string: "  \(current_user.followers!)\n  FOLLOWERS")
+        
+        let tap1 = UITapGestureRecognizer(target: self, action: "goToFollowers:")
+        header.followerCount.addGestureRecognizer(tap1)
+        let tap2 = UITapGestureRecognizer(target: self, action: "goToFollowing:")
+        header.followingCount.addGestureRecognizer(tap2)
+        
+        header.username.text = self.user.display_name()
+        header.bannerImage.image = self.user.banner_pic()
+        header.profilePic.image = self.user.profile_pic()
+        var followers = NSMutableAttributedString(string: "  \(self.user.followers!)\n  FOLLOWERS")
         header.followerCount.attributedText = followers
-        var following = NSMutableAttributedString(string: "  \(current_user.following!)\n  FOLLOWING")
+        var following = NSMutableAttributedString(string: "  \(self.user.following!)\n  FOLLOWING")
         header.followingCount.attributedText = following
-        var tracks = NSMutableAttributedString(string: "  \(current_user.tracks!)\n  TRACKS")
+        var tracks = NSMutableAttributedString(string: "  \(self.user.tracks!)\n  TRACKS")
         header.trackCount.attributedText = tracks
-        header.descriptionLabel.text = "  \(current_user.description!)"
+        header.descriptionLabel.text = "  \(self.user.user_description!)"
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -154,7 +173,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/search/recording")!)
-        var params = ["username": username, "password_hash": passwordHash, "query_name": self.user] as Dictionary
+        var params = ["username": username, "password_hash": passwordHash, "query_name": self.user.username!] as Dictionary
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -310,6 +329,26 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let settings = self.storyboard?.instantiateViewControllerWithIdentifier("SettingsViewController") as! SettingsViewController
         settings.profile = self
         self.navigationController?.pushViewController(settings, animated: true)
+    }
+    
+    func goToFollowers(sender: AnyObject?) {
+        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("FollowingViewController") as! FollowingViewController
+        controller.data = getUserFollowers(self.user)
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func goToFollowing(sender: AnyObject?) {
+        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("FollowingViewController") as! FollowingViewController
+        controller.data = getUserFollowing(self.user)
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func follow(sender: UIButton) {
+        
+    }
+    
+    func unfollow(sender: UIButton) {
+        
     }
     
     // Push direct upload page up

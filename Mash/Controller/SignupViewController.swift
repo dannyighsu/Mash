@@ -84,6 +84,8 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         } else if ((count(self.usernameField.text!) > 40 || (count(self.passwordField.text!) > 40))) {
             self.raiseAlert("Username and Password must be less than 40 characters long.")
             return
+        } else if self.usernameField.text!.rangeOfString(" ") != nil {
+            self.raiseAlert("Username cannot contain spaces.")
         }
 
         var error: NSError? = nil
