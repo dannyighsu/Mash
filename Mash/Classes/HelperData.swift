@@ -13,7 +13,6 @@ import UIKit
 let db: String = "http://localhost:5010"
 var keychainWrapper:KeychainWrapper = KeychainWrapper()
 var current_user = User()
-var user_followers: [User] = []
 var user_following: [User] = []
 let track_bucket: String = "mash1-tracks"
 let profile_bucket: String = "mash-profile-pic"
@@ -21,22 +20,22 @@ let banner_bucket: String = "mash-banner"
 
 // Returns light blue
 func lightBlue() -> UIColor {
-    return UIColor(red: 70, green: 202, blue: 229, alpha: 1.0)
+    return UIColor(red: (70/255), green: (202/255), blue: (229/255), alpha: 1.0)
 }
 
 // Returns light gray
 func lightGray() -> UIColor {
-    return UIColor(red: 154, green: 154, blue: 154, alpha: 1.0)
+    return UIColor(red: (154/255), green: (154/255), blue: (154/255), alpha: 1.0)
 }
 
 // Returns dark gray
 func darkGray() -> UIColor {
-    return UIColor(red: 54, green: 54, blue: 54, alpha: 1.0)
+    return UIColor(red: (54/255), green: (54/255), blue: (54/255), alpha: 1.0)
 }
 
 // Returns off white
 func offWhite() -> UIColor {
-    return UIColor(red: 240, green: 240, blue: 240, alpha: 1.0)
+    return UIColor(red: (240/255), green: (240/255), blue: (240/255), alpha: 1.0)
 }
 
 // Designates all keys

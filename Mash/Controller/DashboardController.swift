@@ -333,13 +333,15 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func goToFollowers(sender: AnyObject?) {
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("FollowingViewController") as! FollowingViewController
-        controller.data = getUserFollowers(self.user)
+        controller.user = self.user
+        controller.type = "followers"
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
     func goToFollowing(sender: AnyObject?) {
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("FollowingViewController") as! FollowingViewController
-        controller.data = getUserFollowing(self.user)
+        controller.user = self.user
+        controller.type = "following"
         self.navigationController?.pushViewController(controller, animated: true)
     }
     

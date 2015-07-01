@@ -22,6 +22,7 @@ class User: UITableViewCell {
     var following: String? = nil
     var tracks: String? = nil
     var user_description: String? = nil
+    var userid: Int? = nil
     
     convenience init() {
         self.init(frame: CGRectZero)
@@ -58,6 +59,7 @@ class User: UITableViewCell {
         if self.profile_pic_link == nil {
             return UIImage(named: "no_profile_pic")!
         } else if count(self.profile_pic_link!) != 0 {
+            // Replace this once photo upload/download is implemented
             return UIImage(contentsOfFile: self.profile_pic_link!)!
         } else {
             return UIImage(named: "no_profile_pic")!
@@ -76,26 +78,70 @@ class User: UITableViewCell {
 }
 
 // User-related Helper Functions
-func follow(user: User) {
-    
-}
-
-func unfollow(user: User) {
-    
-}
-
-func getUserFollowers(user: User) -> [User] {
-    var result: [User] = []
-    if user == current_user {
-        result = user_followers
+func followUser(user: User, controller: UIViewController) {
+    let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
+    let username = current_user.username
+    var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/user/follow")!)
+    var params = ["username": username!, "password_hash": passwordHash, "following_name": user.username!] as Dictionary
+    httpPost(params, request) {
+        (data, statusCode, error) -> Void in
+        if error != nil {
+            Debug.printl("Error: \(error)", sender: "helper")
+        } else {
+            // Check status codes
+            if statusCode == HTTP_ERROR {
+                Debug.printl("HTTP Error: \(error)", sender: "helper")
+            } else if statusCode == HTTP_WRONG_MEDIA {
+                
+            } else if statusCode == HTTP_SUCCESS {
+                dispatch_async(dispatch_get_main_queue()) {
+                    user_following.append(user)
+                    user.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
+                    user.followButton.backgroundColor = lightGray()
+                    user.followButton.removeTarget(controller, action: "follow:", forControlEvents: UIControlEvents.TouchDown)
+                    user.followButton.addTarget(controller, action: "unfollow:", forControlEvents: UIControlEvents.TouchDown)
+                }
+            } else if statusCode == HTTP_SERVER_ERROR {
+                Debug.printl("Internal server error.", sender: "helper")
+            } else {
+                Debug.printl("Unrecognized status code from server: \(statusCode)", sender: "helper")
+            }
+        }
     }
-    return result
 }
 
-func getUserFollowing(user:User) -> [User] {
-    var result: [User] = []
-    if user == current_user {
-        result = user_following
+func unfollowUser(user: User, controller: UIViewController) {
+    let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
+    let username = current_user.username
+    var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/user/unfollow")!)
+    var params = ["username": username!, "password_hash": passwordHash, "following_name": user.username!] as Dictionary
+    httpPost(params, request) {
+        (data, statusCode, error) -> Void in
+        if error != nil {
+            Debug.printl("Error: \(error)", sender: "helper")
+        } else {
+            // Check status codes
+            if statusCode == HTTP_ERROR {
+                Debug.printl("HTTP Error: \(error)", sender: "helper")
+            } else if statusCode == HTTP_WRONG_MEDIA {
+                
+            } else if statusCode == HTTP_SUCCESS {
+                dispatch_async(dispatch_get_main_queue()) {
+                    for (var i = 0; i < user_following.count; i++) {
+                        if user_following[i].username == user.username {
+                            user_following.removeAtIndex(i)
+                        }
+                    }
+                    user.followButton.setTitle("Follow", forState: UIControlState.Normal)
+                    user.followButton.backgroundColor = lightBlue()
+                    user.followButton.removeTarget(controller, action: "unfollow:", forControlEvents: UIControlEvents.TouchDown)
+                    user.followButton.addTarget(controller, action: "follow:", forControlEvents: UIControlEvents.TouchDown)
+                }
+            } else if statusCode == HTTP_SERVER_ERROR {
+                Debug.printl("Internal server error.", sender: "helper")
+            } else {
+                Debug.printl("Unrecognized status code from server: \(statusCode)", sender: "helper")
+            }
+        }
     }
-    return result
 }

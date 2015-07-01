@@ -119,13 +119,56 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         current_user.following = String(data["following_count"] as! Int)
                         current_user.tracks = String(data["track_count"] as! Int)
                         current_user.user_description = data["description"] as? String
-                        // Insert data["followers"] into user_followers and so on
+                        current_user.userid = data["id"] as? Int
                         
+                        self!.getUsersFollowing()
                         self!.completeLogin(username, password: password)
                     }
                 } else {
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
                     return
+                }
+            }
+        }
+    }
+    
+    func getUsersFollowing() {
+        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
+        let username = current_user.username
+        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/user/following")!)
+        var params = ["username": username!, "password_hash": passwordHash, "query_name": current_user.username!] as Dictionary
+        var result: [User] = []
+        httpPost(params, request) {
+            (data, statusCode, error) -> Void in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: "user")
+            } else {
+                // Check status codes
+                if statusCode == HTTP_ERROR {
+                    Debug.printl("HTTP Error: \(error)", sender: "user")
+                } else if statusCode == HTTP_WRONG_MEDIA {
+                    
+                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        var error: NSError? = nil
+                        var data = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary
+                        
+                        var users = data["following"] as! NSArray
+                        var result: [User] = []
+                        for u in users {
+                            var dict = u as! NSDictionary
+                            var user = User()
+                            user.username = dict["username"] as? String
+                            user.altname = dict["display_name"] as? String
+                            user.profile_pic_link = dict["profile_pic_link"] as? String
+                            result.append(user)
+                        }
+                        user_following = result
+                    }
+                } else if statusCode == HTTP_SERVER_ERROR {
+                    Debug.printl("Internal server error.", sender: "user")
+                } else {
+                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: "user")
                 }
             }
         }
