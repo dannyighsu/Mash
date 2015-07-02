@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 // Helper objects
-let db: String = "http://localhost:5010"
+let db: String = "http://54.152.179.223:5010"
 var keychainWrapper:KeychainWrapper = KeychainWrapper()
 var current_user = User()
 var user_following: [User] = []
