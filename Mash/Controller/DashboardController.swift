@@ -37,11 +37,17 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         if self.user != current_user {
-            self.navigationController?.navigationBarHidden = false
+            self.parentViewController?.navigationItem.setHidesBackButton(false, animated: false)
+            self.navigationItem.title = self.user.display_name()
         } else {
-            self.navigationController?.navigationBarHidden = true
+            self.parentViewController?.navigationItem.title = self.user.display_name()
         }
         self.retrieveTracks()
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        super.prepareForSegue(segue, sender: sender)
+        self.parentViewController?.navigationItem.setHidesBackButton(true, animated: false)
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -109,7 +115,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let tap2 = UITapGestureRecognizer(target: self, action: "goToFollowing:")
         header.followingCount.addGestureRecognizer(tap2)
         
-        header.username.text = self.user.display_name()
         header.bannerImage.image = self.user.banner_pic()
         header.profilePic.image = self.user.profile_pic()
         var followers = NSMutableAttributedString(string: "  \(self.user.followers!)\n  FOLLOWERS")
@@ -132,7 +137,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 295.0
+        return 240.0
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -408,11 +413,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         NSUserDefaults.standardUserDefaults().removeObjectForKey("username")
         Debug.printl("User has successfully logged out - popping to root view controller.", sender: self)
         self.navigationController?.popToRootViewControllerAnimated(true)
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        super.prepareForSegue(segue, sender: sender)
-        self.navigationController?.navigationBarHidden = true
     }
 
 }

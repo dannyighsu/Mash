@@ -26,6 +26,10 @@ class ProjectPreferencesViewController: UIViewController, UITableViewDelegate, U
         self.navigationController?.navigationBarHidden = false
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        super.prepareForSegue(segue, sender: sender)
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }

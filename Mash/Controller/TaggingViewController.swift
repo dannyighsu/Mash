@@ -55,6 +55,16 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         self.timeField.text = self.time
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBarHidden = true
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        super.prepareForSegue(segue, sender: sender)
+        self.navigationController?.navigationBarHidden = false
+    }
+    
     func finish() {
         let tabBarController = self.navigationController?.viewControllers[1] as! UITabBarController
         let project = tabBarController.viewControllers![getTabBarController("project")] as! ProjectViewController

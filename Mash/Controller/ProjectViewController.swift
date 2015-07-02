@@ -15,6 +15,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
     var audioPlayers: [AVAudioPlayer] = []
+    var header: UITableViewHeaderFooterView? = nil
+    var tap: UITapGestureRecognizer? = nil
+    var toolsShowing: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,15 +31,21 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tracks.registerNib(nib, forCellReuseIdentifier: "ProjectTrack")
         let header = UINib(nibName: "ProjectHeaderView", bundle: nil)
         self.tracks.registerNib(header, forHeaderFooterViewReuseIdentifier: "ProjectHeaderView")
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
     }
     
     override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(true)
-        self.navigationController?.navigationBarHidden = true
+        super.viewWillAppear(animated)
+        self.parentViewController?.navigationItem.title = "Your Project"
         if self.tracks != nil {
             self.tracks.reloadData()
         }
+        self.tap = UITapGestureRecognizer(target: self, action: "showTools:")
+        self.navigationController?.navigationBar.addGestureRecognizer(tap!)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.navigationBar.removeGestureRecognizer(tap!)
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -61,20 +70,22 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         header.playButton.contentMode = UIViewContentMode.ScaleAspectFit
         let tap = UITapGestureRecognizer(target: self, action: "playTracks:")
         header.playButton.addGestureRecognizer(tap)
-        header.optionsButton.addTarget(self, action: "showTools:", forControlEvents: UIControlEvents.TouchDown)
+        header.optionsButton.addTarget(self, action: "showPreferences:", forControlEvents: UIControlEvents.TouchDown)
     }
 
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("ProjectHeaderView") as! ProjectHeaderView
+        self.header = header
+        self.header?.hidden = true
         return header
-    }
-
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60.0
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 75.0
+    }
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0.1
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -261,7 +272,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
 
     // Raise Alert for New Project
     func confirmNewProject() {
-        let alert = UIAlertView(title: "Create a New Project?", message: "Your Will Lose Any Unsaved Changes", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "OK")
+        let alert = UIAlertView(title: "Create a New Project?", message: "You Will Lose Any Unsaved Changes", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "OK")
         alert.show()
     }
     
@@ -279,8 +290,24 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func showTools(sender: AnyObject?) {
-        // Show tools screen
-        Debug.printl("Showing tools", sender: self)
+        if !self.toolsShowing {
+            Debug.printl("Showing tools", sender: self)
+            self.header?.hidden = false
+            UIView.animateWithDuration(0.3, animations: { self.header!.frame.size.height = 60 }) {
+                (finished: Bool) in
+                self.toolsShowing = true
+            }
+        } else {
+            Debug.printl("Hiding tools", sender: self)
+            UIView.animateWithDuration(0.3, animations: { self.header!.frame.size.height = 0 }) {
+                (finished: Bool) in
+                self.header?.hidden = true
+                self.toolsShowing = false
+            }
+        }
+    }
+    
+    func showPreferences(sender: AnyObject?) {
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("ProjectPreferencesViewController") as! ProjectPreferencesViewController
         controller.projectView = self
         self.navigationController?.pushViewController(controller, animated: true)

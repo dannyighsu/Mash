@@ -187,7 +187,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         Debug.printl("Successful login - pushing tab bar controller onto navigation controller", sender: self)
         let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController
         self.navigationController?.pushViewController(tabbarcontroller, animated: false)
-        self.navigationController?.navigationBarHidden = true
     }
 
     func raiseAlert(input: String) {

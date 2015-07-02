@@ -29,6 +29,10 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         self.cancelButton.addTarget(self, action: "cancel:", forControlEvents: UIControlEvents.TouchDown)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        self.navigationItem.title = "Mash an Instrument"
+    }
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return instrumentArray.count
     }

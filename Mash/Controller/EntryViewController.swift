@@ -26,7 +26,6 @@ class EntryViewController: UIViewController {
         if let background = UIImage(named: "concert") {
             self.view.backgroundColor = UIColor(patternImage: background)
         }
-        self.navigationController?.navigationBarHidden = true
         self.facebookButton.imageView?.image = UIImage(named: "fb_logo_invert")
         self.facebookButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
         self.facebookButton.addTarget(self, action: "facebookLogin:", forControlEvents: UIControlEvents.TouchDown)

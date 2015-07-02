@@ -17,7 +17,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationController?.navigationBarHidden = false
         self.settingsTable.delegate = self
         self.settingsTable.dataSource = self
     }

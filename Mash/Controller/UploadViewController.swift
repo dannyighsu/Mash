@@ -38,6 +38,16 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.audioPlayer = AVAudioPlayer(contentsOfURL: recording!.url(), error: nil)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBarHidden = true
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        super.prepareForSegue(segue, sender: sender)
+        self.navigationController?.navigationBarHidden = false
+    }
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return instrumentArray.count
     }

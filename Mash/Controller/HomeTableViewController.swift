@@ -25,8 +25,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         // Home cell and header registration
         let nib = UINib(nibName: "HomeCell", bundle: nil)
         self.activityFeed.registerNib(nib, forCellReuseIdentifier: "HomeCell")
-        let header = UINib(nibName: "HomeHeaderView", bundle: nil)
-        self.activityFeed.registerNib(header, forHeaderFooterViewReuseIdentifier: "HomeHeaderView")
 
         // Pull to refresh
         /*self.refreshControl = UIRefreshControl()
@@ -37,17 +35,19 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.retrieveTracks()
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = self.activityFeed.dequeueReusableHeaderFooterViewWithIdentifier("HomeHeaderView") as! HomeHeaderView
-        return header
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.parentViewController?.navigationItem.title = "Mash"
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60.0
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "goToSearch:")
     }
     
-    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        let header = view as! HomeHeaderView
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.parentViewController?.navigationItem.rightBarButtonItem = nil
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -105,7 +105,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func goToSearch(sender: AnyObject?) {
         Debug.printl("Going to Search", sender: self)
         let search = self.storyboard?.instantiateViewControllerWithIdentifier("SearchViewController") as! SearchViewController
-        self.navigationController?.pushViewController(search, animated: true)
+        self.navigationController?.pushViewController(search, animated: false)
     }
 
     func retrieveTracks() {

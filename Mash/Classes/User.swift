@@ -81,7 +81,7 @@ class User: UITableViewCell {
 func followUser(user: User, controller: UIViewController) {
     let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
     let username = current_user.username
-    var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/user/follow")!)
+    var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/follow/user")!)
     var params = ["username": username!, "password_hash": passwordHash, "following_name": user.username!] as Dictionary
     httpPost(params, request) {
         (data, statusCode, error) -> Void in
@@ -113,7 +113,7 @@ func followUser(user: User, controller: UIViewController) {
 func unfollowUser(user: User, controller: UIViewController) {
     let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
     let username = current_user.username
-    var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/user/unfollow")!)
+    var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/unfollow/user")!)
     var params = ["username": username!, "password_hash": passwordHash, "following_name": user.username!] as Dictionary
     httpPost(params, request) {
         (data, statusCode, error) -> Void in

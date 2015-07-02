@@ -135,7 +135,6 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         Debug.printl("Successful registration - pushing tab bar controller onto navigation controller", sender: self)
         let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController
         self.navigationController?.pushViewController(tabbarcontroller, animated: true)
-        self.navigationController?.navigationBarHidden = true
     }
     
     func saveLoginItems() {

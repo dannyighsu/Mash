@@ -21,8 +21,8 @@ class ExploreViewController: UIViewController, UITableViewDelegate, UITableViewD
         // Register track cells for initial search display
         let track = UINib(nibName: "Track", bundle: nil)
         self.exploreDisplay.registerNib(track, forCellReuseIdentifier: "Track")
-        let header = UINib(nibName: "ExploreHeaderView", bundle: nil)
-        self.exploreDisplay.registerNib(header, forHeaderFooterViewReuseIdentifier: "HeaderView")
+        /*let header = UINib(nibName: "ExploreHeaderView", bundle: nil)
+        self.exploreDisplay.registerNib(header, forHeaderFooterViewReuseIdentifier: "HeaderView")*/
 
         // Set exploreDisplay properties
         self.exploreDisplay.delegate = self
@@ -30,6 +30,24 @@ class ExploreViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.exploreDisplay.rowHeight = 75.0
         
         self.retrieveDisplayResults()
+        
+        // Temporary
+        self.exploreDisplay.hidden = true
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.parentViewController?.navigationItem.title = "Explore"
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "goToSearch:")
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.parentViewController?.navigationItem.rightBarButtonItem = nil
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -56,7 +74,7 @@ class ExploreViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    /*func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.exploreDisplay.dequeueReusableHeaderFooterViewWithIdentifier("HeaderView") as! ExploreHeaderView
         return header
     }
@@ -70,14 +88,10 @@ class ExploreViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 60.0
-    }
+    }*/
     
     func retrieveDisplayResults() {
-        self.exploreDisplayResults.append(Track(frame: CGRectZero, instruments: ["sample"], titleText: "Harp", bpm: 120, trackURL: "Harp", user: "Danny", format: ".m4a"))
-        self.exploreDisplayResults.append(Track(frame: CGRectZero, instruments: ["drums"], titleText: "Spacious Set", bpm: 120, trackURL: "Spacious Set", user: "Danny", format: ".m4a"))
-        self.exploreDisplayResults.append(Track(frame: CGRectZero, instruments: ["strings"], titleText: "Basses Legato", bpm: 120, trackURL: "Basses Legato", user: "Danny", format: ".m4a"))
-        self.exploreDisplayResults.append(Track(frame: CGRectZero, instruments: ["vocals"], titleText: "Female Chorus", bpm: 120, trackURL: "Female Chorus", user: "Danny", format: ".m4a"))
-        self.exploreDisplayResults.append(Track(frame: CGRectZero, instruments: ["strings"], titleText: "Violins", bpm: 120, trackURL: "Violins 1", user: "Danny", format: ".m4a"))
+        
     }
     
     // Add selected track to project

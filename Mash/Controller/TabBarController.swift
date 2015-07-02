@@ -16,6 +16,8 @@ class TabBarController: UITabBarController {
         
         self.navigationController?.hidesBarsWhenKeyboardAppears = false
         self.navigationController?.hidesBarsOnSwipe = false
+        self.navigationItem.setHidesBackButton(true, animated: false)
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
     }
     
 }

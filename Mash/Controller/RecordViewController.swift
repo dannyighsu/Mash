@@ -25,10 +25,10 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
     var recording: Bool = false
     var eof: Bool = false
     var metronome: Metronome? = nil
-    var metronomeDimensions = 128
     var microphone: EZMicrophone? = nil
     var audioFile: EZAudioFile? = nil
     var recorder: EZRecorder? = nil
+    var toolsShowing: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +37,9 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
         self.metronomeView.addSubview(metronome)
         self.metronome = metronome
         metronome.frame = self.metronomeView.frame
+        
+        let tools = UITapGestureRecognizer(target: self, action: "showTools:")
+        self.navigationController?.navigationBar.addGestureRecognizer(tools)
         
         let tap = UITapGestureRecognizer(target: self, action: "resignKeyboard:")
         self.view.addGestureRecognizer(tap)
@@ -61,6 +64,17 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
         self.clearButton.addTarget(self, action: "reset:", forControlEvents: UIControlEvents.TouchDown)
         self.playButton.addTarget(self, action: "playRecording:", forControlEvents: UIControlEvents.TouchDown)
         self.saveButton.addTarget(self, action: "saveRecording:", forControlEvents: UIControlEvents.TouchDown)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.parentViewController?.navigationItem.title = "Record"
+        self.metronomeView.frame.size.height = 0.1
+        self.metronomeView.hidden = true
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
     }
     
     func toggleMicrophone(sender: AnyObject?) {
@@ -139,9 +153,6 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
 
     func playRecording(sender: AnyObject?) {
         if !EZOutput.sharedOutput().isPlaying() {
-            if self.eof {
-                self.audioFile?.seekToFrame(0)
-            }
             EZOutput.sharedOutput().outputDataSource = self
             EZOutput.sharedOutput().startPlayback()
             self.audioPlot?.hidden = false
@@ -152,6 +163,7 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
         } else {
             EZOutput.sharedOutput().outputDataSource = nil
             EZOutput.sharedOutput().stopPlayback()
+            self.audioFile?.seekToFrame(0)
             self.micButton.hidden = false
             UIView.animateWithDuration(0.3, animations: { self.audioPlot.alpha = 0; self.micButton.alpha = 1 }) {
                 (finished: Bool) in
@@ -251,6 +263,24 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
                 (finished: Bool) in
                 self.timeLabel.hidden = true
                 sender.invalidate()
+            }
+        }
+    }
+    
+    func showTools(sender: AnyObject?) {
+        if !self.toolsShowing {
+            Debug.printl("Showing tools", sender: self)
+            self.metronomeView.hidden = false
+            UIView.animateWithDuration(0.3, animations: { self.metronomeView.frame.size.height = 75 }) {
+                (finished: Bool) in
+                self.toolsShowing = true
+            }
+        } else {
+            Debug.printl("Hiding tools", sender: self)
+            UIView.animateWithDuration(0.3, animations: { self.metronomeView.frame.size.height = 0 }) {
+                (finished: Bool) in
+                self.metronomeView.hidden = true
+                self.toolsShowing = false
             }
         }
     }

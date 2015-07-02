@@ -11,7 +11,6 @@ import UIKit
 
 class Profile: UITableViewHeaderFooterView {
 
-    @IBOutlet weak var username: UILabel!
     @IBOutlet weak var profilePic: UIImageView!
     @IBOutlet weak var trackCount: UILabel!
     @IBOutlet weak var followingCount: UILabel!

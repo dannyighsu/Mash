@@ -20,7 +20,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uHW-dX-4b7" customClass="EZAudioPlotGL">
-                                <rect key="frame" x="0.0" y="60" width="600" height="491"/>
+                                <rect key="frame" x="0.0" y="75" width="600" height="476"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap To Begin Recording" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gBW-XB-ijb">
                                 <rect key="frame" x="177" y="386" width="246" height="21"/>
@@ -33,10 +33,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W9u-gi-Gao">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="75"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="FWB-LZ-xBa"/>
+                                    <constraint firstAttribute="height" constant="75" id="FWB-LZ-xBa"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pyt-h7-bCI">
@@ -412,7 +412,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2Ag-Hh-tkf">
-                                <rect key="frame" x="0.0" y="-20" width="600" height="571"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
                         </subviews>
@@ -420,7 +420,7 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="2Ag-Hh-tkf" secondAttribute="trailing" id="30x-70-Wxs"/>
                             <constraint firstItem="2Ag-Hh-tkf" firstAttribute="bottom" secondItem="Kwc-Cd-HIg" secondAttribute="top" constant="49" id="VLN-hd-l5y"/>
-                            <constraint firstItem="2Ag-Hh-tkf" firstAttribute="top" secondItem="6sY-8T-WA7" secondAttribute="top" constant="-20" id="ftp-QU-yv1"/>
+                            <constraint firstItem="2Ag-Hh-tkf" firstAttribute="top" secondItem="6sY-8T-WA7" secondAttribute="top" id="ftp-QU-yv1"/>
                             <constraint firstItem="2Ag-Hh-tkf" firstAttribute="top" secondItem="6sY-8T-WA7" secondAttribute="topMargin" id="jJz-Gu-8y8"/>
                             <constraint firstItem="2Ag-Hh-tkf" firstAttribute="leading" secondItem="6sY-8T-WA7" secondAttribute="leading" id="kVd-FM-R8v"/>
                             <constraint firstAttribute="bottom" secondItem="2Ag-Hh-tkf" secondAttribute="bottom" constant="49" id="rZd-bz-5cJ"/>
@@ -453,43 +453,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DJU-7A-k5B">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mash an Instrument" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="njj-7n-MSq">
-                                        <rect key="frame" x="190" y="21" width="220" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="220" id="KyP-Nw-dRm"/>
-                                            <constraint firstAttribute="height" constant="21" id="y1y-fh-UXS"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="20"/>
-                                        <color key="textColor" red="0.39019490010000002" green="0.87672093529999995" blue="1" alpha="1" colorSpace="deviceRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1g4-B6-8So">
-                                        <rect key="frame" x="8" y="21" width="59" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="59" id="Oqy-dg-1Xq"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="15"/>
-                                        <state key="normal" title="Cancel">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="0.24882192459999999" green="0.24882192459999999" blue="0.24882192459999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstItem="njj-7n-MSq" firstAttribute="top" secondItem="1g4-B6-8So" secondAttribute="top" id="Xa8-6F-AoD"/>
-                                    <constraint firstItem="1g4-B6-8So" firstAttribute="top" secondItem="DJU-7A-k5B" secondAttribute="top" constant="21" id="YjL-oF-bbB"/>
-                                    <constraint firstItem="1g4-B6-8So" firstAttribute="leading" secondItem="DJU-7A-k5B" secondAttribute="leadingMargin" id="cDb-1k-2jR"/>
-                                    <constraint firstAttribute="bottom" secondItem="1g4-B6-8So" secondAttribute="bottom" constant="-1" id="czm-YL-TvC"/>
-                                    <constraint firstItem="njj-7n-MSq" firstAttribute="centerX" secondItem="DJU-7A-k5B" secondAttribute="centerX" id="ozU-G2-fWl"/>
-                                    <constraint firstItem="njj-7n-MSq" firstAttribute="bottom" secondItem="DJU-7A-k5B" secondAttribute="bottomMargin" id="rDg-de-udg"/>
-                                </constraints>
-                            </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="JDj-zV-IxQ">
-                                <rect key="frame" x="0.0" y="50" width="600" height="550"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="d8B-Yh-2P2">
                                     <size key="itemSize" width="150" height="150"/>
@@ -503,16 +468,12 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="JDj-zV-IxQ" firstAttribute="bottom" secondItem="Bzg-9S-iEf" secondAttribute="top" id="BhC-Qr-ZsT"/>
-                            <constraint firstAttribute="trailing" secondItem="DJU-7A-k5B" secondAttribute="trailing" id="Gb8-EQ-jzJ"/>
                             <constraint firstItem="JDj-zV-IxQ" firstAttribute="leading" secondItem="yxp-zb-EFJ" secondAttribute="leading" id="Lhv-Du-iLG"/>
-                            <constraint firstItem="DJU-7A-k5B" firstAttribute="top" secondItem="yxp-zb-EFJ" secondAttribute="top" id="R5A-L5-Xka"/>
-                            <constraint firstItem="JDj-zV-IxQ" firstAttribute="trailing" secondItem="DJU-7A-k5B" secondAttribute="trailing" id="VAc-YB-bjM"/>
-                            <constraint firstItem="JDj-zV-IxQ" firstAttribute="leading" secondItem="DJU-7A-k5B" secondAttribute="leading" id="WmD-25-dDM"/>
-                            <constraint firstItem="JDj-zV-IxQ" firstAttribute="top" secondItem="DJU-7A-k5B" secondAttribute="bottom" id="brV-xQ-JYn"/>
+                            <constraint firstAttribute="trailing" secondItem="JDj-zV-IxQ" secondAttribute="trailing" id="SiX-5B-Vfr"/>
+                            <constraint firstItem="JDj-zV-IxQ" firstAttribute="top" secondItem="yxp-zb-EFJ" secondAttribute="top" id="rYE-hS-yez"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="cancelButton" destination="1g4-B6-8So" id="OOn-aL-NYF"/>
                         <outlet property="instrumentsCollection" destination="JDj-zV-IxQ" id="32H-cE-3OP"/>
                     </connections>
                 </viewController>
