@@ -12,9 +12,7 @@ import AVFoundation
 
 class MashViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAlertViewDelegate {
     
-    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var instrumentsCollection: UICollectionView!
-    @IBOutlet weak var cancelButton: UIButton!
     var recording: Track? = nil
     var bpm: Int? = nil
     var instruments: [String] = []
@@ -26,11 +24,17 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         self.instrumentsCollection.dataSource = self
         let cell = UINib(nibName: "InstrumentCell", bundle: nil)
         self.instrumentsCollection.registerNib(cell, forCellWithReuseIdentifier: "InstrumentCell")
-        self.cancelButton.addTarget(self, action: "cancel:", forControlEvents: UIControlEvents.TouchDown)
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         self.navigationItem.title = "Mash an Instrument"
+        self.navigationItem.setHidesBackButton(false, animated: false)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationItem.setHidesBackButton(true, animated: false)
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -40,7 +44,8 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
         self.instruments.append(cell.instrument)
-        cell.layer.borderColor = UIColor.whiteColor().CGColor
+        cell.layer.borderColor = darkGray().CGColor
+        cell.layer.backgroundColor = lightGray().CGColor
         cell.layer.borderWidth = 1.0
         self.downloadAction([cell.instrument])
     }
@@ -72,7 +77,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
         
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/mash")!)
-        var params: [String: String] = ["username": username, "password_hash": passwordHash, "instrument": instrumentString]
+        var params: [String: String] = ["username": username, "password_hash": passwordHash, "family": "{\(instrumentString)}"]
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -108,8 +113,18 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         for t in tracks {
             var dict = t as! NSDictionary
             var instruments = dict["instrument"] as! NSArray
+            var instrument = ""
+            if instruments.count != 0 {
+                instrument = instruments[0] as! String
+            }
             var url = (dict["song_name"] as! String) + (dict["format"] as! String)
-            var track = Track(frame: CGRectZero, instruments: [instruments[0] as! String], titleText: dict["song_name"] as! String, bpm: 120, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            var track = Track(frame: CGRectZero, instruments: [instrument], titleText: dict["song_name"] as! String, bpm: 120, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            var families = dict["family"] as! NSArray
+            var family = ""
+            if families.count != 0 {
+                family = families[0] as! String
+            }
+            track.instrumentFamilies = [family]
             controller.results.append(track)
         }
         var index = 0

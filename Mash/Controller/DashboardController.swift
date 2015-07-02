@@ -70,7 +70,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             track.userLabel.text = track.userText
             track.instruments = self.data[index].instruments
             track.trackURL = self.data[index].trackURL
-            track.instrumentImage.image = findImage(track.instruments)
+            track.instrumentImage.image = findImage(track.instrumentFamilies)
             track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
         }
     }
@@ -220,9 +220,19 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         for t in tracks {
             var dict = t as! NSDictionary
             var instruments = dict["instrument"] as! NSArray
+            var instrument = ""
+            if instruments.count != 0 {
+                instrument = instruments[0] as! String
+            }
             var url = (dict["song_name"] as! String) + (dict["format"] as! String)
             url = filePathString(url)
-            var track = Track(frame: CGRectZero, instruments: [instruments[0] as! String], titleText: dict["song_name"] as! String, bpm: 120, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            var track = Track(frame: CGRectZero, instruments: [instrument], titleText: dict["song_name"] as! String, bpm: 120, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            var families = dict["family"] as! NSArray
+            var family = ""
+            if families.count != 0 {
+                family = families[0] as! String
+            }
+            track.instrumentFamilies = [family]
             self.data.append(track)
         }
         dispatch_async(dispatch_get_main_queue()) {
