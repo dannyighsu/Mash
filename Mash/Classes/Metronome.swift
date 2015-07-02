@@ -89,6 +89,7 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
             picker.backgroundColor = UIColor.whiteColor()
             textField.inputView = picker
             textField.inputAccessoryView = picker
+            textField.inputView?.frame.origin.y += textField.inputView!.frame.size.height / 2
         }
     }
 
