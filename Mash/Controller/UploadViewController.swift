@@ -55,7 +55,8 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
         self.instruments.append(cell.instrument)
-        cell.layer.borderColor = UIColor.whiteColor().CGColor
+        cell.layer.borderColor = darkGray().CGColor
+        cell.layer.backgroundColor = lightGray().CGColor
         cell.layer.borderWidth = 1.0
     }
     
@@ -93,7 +94,6 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     func uploadAction() {
         // Bucket upload
         var urlString = self.recording?.url()
-        upload(self.titleTextField.text + ".m4a", urlString!, track_bucket)
         
         // Post data to server
         let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
@@ -101,7 +101,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
         var instrumentString = String(stringInterpolationSegment: self.instruments)
         instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
-        var params: [String: String] = ["username": username, "password_hash": passwordHash, "name": self.titleTextField.text, "bpm": "0", "bar": "0", "key": "0", "instrument": instrumentString, "family": "", "genre": "", "subgenre": "", "feel": "0", "solo": "0", "format": ".m4a"]
+        var params: [String: String] = ["username": username, "password_hash": passwordHash, "name": self.titleTextField.text, "bpm": "0", "bar": "0", "key": "0", "family": "{\(instrumentString)}", "instrument": "{}", "genre": "{}", "subgenre": "{}", "feel": "0", "solo": "0", "format": ".m4a"]
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -116,6 +116,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                     return
                 } else if statusCode == HTTP_SUCCESS {
                     dispatch_async(dispatch_get_main_queue()) {
+                        upload(self.titleTextField.text + ".m4a", urlString!, track_bucket)
                         self.finish()
                     }
                     Debug.printl("Data: \(data)", sender: self)

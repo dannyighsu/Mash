@@ -60,7 +60,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         let cell = tableView.dequeueReusableCellWithIdentifier("ProjectTrack") as! ProjectTrack
         let trackData = self.data[indexPath.row]
         cell.trackTitle.text = trackData.titleText
-        cell.instrumentImage.image = findImage(self.data[indexPath.row].instruments)
+        cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
         cell.track = trackData
         return cell
     }

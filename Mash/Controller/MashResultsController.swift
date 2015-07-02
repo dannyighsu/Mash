@@ -34,6 +34,16 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         self.audioPlayers.append(AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: self.recording!.trackURL), error: nil))
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBarHidden = true
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.navigationBarHidden = false
+    }
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -52,11 +62,9 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         track.bpm = trackData.bpm
         track.format = trackData.format
         track.trackURL = filePathString(track.titleText + track.format)
-        println("track title:" + track.titleText + track.format)
-        println("track url:" + track.trackURL)
         download(track.titleText + track.format, NSURL(fileURLWithPath: track.trackURL)!, track_bucket)
         
-        track.imageView?.image = findImage(self.results[indexPath.row].instruments)
+        track.imageView?.image = findImage(self.results[indexPath.row].instrumentFamilies)
         let doneTap = UITapGestureRecognizer(target: self, action: "done:")
         track.addButton.addGestureRecognizer(doneTap)
     }
