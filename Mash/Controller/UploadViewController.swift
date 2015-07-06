@@ -43,8 +43,8 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.navigationController?.navigationBarHidden = true
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        super.prepareForSegue(segue, sender: sender)
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
         self.navigationController?.navigationBarHidden = false
     }
     
@@ -116,7 +116,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                     return
                 } else if statusCode == HTTP_SUCCESS {
                     dispatch_async(dispatch_get_main_queue()) {
-                        upload(self.titleTextField.text + ".m4a", urlString!, track_bucket)
+                        upload("\(current_user.username!)~~\(self.titleTextField.text).m4a", urlString!, track_bucket)
                         self.finish()
                     }
                     Debug.printl("Data: \(data)", sender: self)
@@ -130,7 +130,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func checkForDuplicate(username: String, passwordHash: String) {
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/search/recording")!)
+        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
         var params: [String: String] = ["username": username, "password_hash": passwordHash, "query_name": username, "song_name": self.titleTextField.text]
         httpPost(params,request) {
             (data, statusCode, error) -> Void in

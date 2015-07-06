@@ -118,7 +118,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 instrument = instruments[0] as! String
             }
             var url = (dict["song_name"] as! String) + (dict["format"] as! String)
-            var track = Track(frame: CGRectZero, instruments: [instrument], titleText: dict["song_name"] as! String, bpm: 120, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            var track = Track(frame: CGRectZero, instruments: [instrument], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
             var families = dict["family"] as! NSArray
             var family = ""
             if families.count != 0 {

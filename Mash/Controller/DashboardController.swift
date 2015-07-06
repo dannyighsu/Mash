@@ -16,7 +16,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
-    var audioPlayer:AVAudioPlayer = AVAudioPlayer()
+    var audioPlayer:AVAudioPlayer? = nil
     var user: User = current_user
     
     override func viewDidLoad() {
@@ -45,11 +45,14 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         self.retrieveTracks()
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        super.prepareForSegue(segue, sender: sender)
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        if self.audioPlayer != nil {
+            self.audioPlayer!.stop()
+        }
         self.parentViewController?.navigationItem.setHidesBackButton(true, animated: false)
     }
-    
+
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -147,7 +150,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
         
-        download(track.titleText + track.format, filePathURL(track.titleText + track.format), track_bucket)
+        download("\(self.user.username!)~~\(track.titleText)\(track.format)", filePathURL(track.titleText + track.format), track_bucket)
         
         while !NSFileManager.defaultManager().fileExistsAtPath(filePathString(track.titleText + track.format)) {
             Debug.printnl("waiting...")
@@ -156,7 +159,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         NSThread.sleepForTimeInterval(0.5)
         
         self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(track.titleText + track.format), error: nil)
-        self.audioPlayer.play()
+        self.audioPlayer!.play()
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
         Debug.printl("Playing track \(track.titleText)", sender: self)
     }
     
@@ -174,8 +178,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     func stopPlaying() {
-        if self.audioPlayer.playing {
-            self.audioPlayer.stop()
+        if self.audioPlayer!.playing {
+            self.audioPlayer!.stop()
         }
     }
 
@@ -183,7 +187,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func retrieveTracks() {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/search/recording")!)
+        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
         var params = ["username": username, "password_hash": passwordHash, "query_name": self.user.username!] as Dictionary
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
@@ -226,7 +230,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             }
             var url = (dict["song_name"] as! String) + (dict["format"] as! String)
             url = filePathString(url)
-            var track = Track(frame: CGRectZero, instruments: [instrument], titleText: dict["song_name"] as! String, bpm: 120, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            var track = Track(frame: CGRectZero, instruments: [instrument], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
             var families = dict["family"] as! NSArray
             var family = ""
             if families.count != 0 {

@@ -75,6 +75,7 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+        self.stopRecording()
     }
     
     func toggleMicrophone(sender: AnyObject?) {

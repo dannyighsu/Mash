@@ -27,7 +27,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TcW-94-A6x">
                                 <rect key="frame" x="56" y="3" width="100" height="21"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="qj4-II-JgN"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="qj4-II-JgN"/>
                                     <constraint firstAttribute="width" constant="200" id="raw-oz-Orj"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="20"/>

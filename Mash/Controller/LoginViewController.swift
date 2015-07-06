@@ -150,7 +150,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     dispatch_async(dispatch_get_main_queue()) {
                         var error: NSError? = nil
                         var data = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary
-                        
+                                                
                         var users = data["following"] as! NSArray
                         var result: [User] = []
                         for u in users {
