@@ -192,7 +192,7 @@ func importTracks(tracks: [Track], navigationController: UINavigationController?
     
     for track in tracks {
         var URL = filePathURL(track.titleText + track.format)
-        download(track.titleText + track.format, URL, track_bucket)
+        download("\(current_user.username!)~~\(track.titleText).\(track.format)", URL, track_bucket)
         track.trackURL = filePathString(track.titleText + track.format)
         Debug.printl("Adding track with \(track.instruments), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
         project?.data.append(track)

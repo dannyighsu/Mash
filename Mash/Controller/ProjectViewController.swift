@@ -46,6 +46,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.navigationBar.removeGestureRecognizer(tap!)
+        self.stopPlaying()
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -208,7 +209,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func uploadAction(url: String, name: String) {
-        upload(name, NSURL(fileURLWithPath: url)!, track_bucket)
+        upload("\(current_user.username!)~~\(name).m4a", NSURL(fileURLWithPath: url)!, track_bucket)
         
         // Post data to server
         let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String

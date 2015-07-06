@@ -62,8 +62,8 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         track.bpm = trackData.bpm
         track.format = trackData.format
         track.trackURL = filePathString(track.titleText + track.format)
-        download(track.titleText + track.format, NSURL(fileURLWithPath: track.trackURL)!, track_bucket)
-        
+        download("\(track.userText)~~\(track.titleText).\(track.format)", NSURL(fileURLWithPath: track.trackURL)!, track_bucket)
+
         track.imageView?.image = findImage(self.results[indexPath.row].instrumentFamilies)
         let doneTap = UITapGestureRecognizer(target: self, action: "done:")
         track.addButton.addGestureRecognizer(doneTap)

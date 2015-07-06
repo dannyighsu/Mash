@@ -45,11 +45,12 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         self.retrieveTracks()
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        super.prepareForSegue(segue, sender: sender)
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.audioPlayer.stop()
         self.parentViewController?.navigationItem.setHidesBackButton(true, animated: false)
     }
-    
+
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -147,7 +148,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
         
-        download(track.titleText + track.format, filePathURL(track.titleText + track.format), track_bucket)
+        download("\(self.user.username!)~~\(track.titleText).\(track.format)", filePathURL(track.titleText + track.format), track_bucket)
         
         while !NSFileManager.defaultManager().fileExistsAtPath(filePathString(track.titleText + track.format)) {
             Debug.printnl("waiting...")
@@ -157,6 +158,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         
         self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(track.titleText + track.format), error: nil)
         self.audioPlayer.play()
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
         Debug.printl("Playing track \(track.titleText)", sender: self)
     }
     
@@ -183,7 +185,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func retrieveTracks() {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/search/recording")!)
+        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
         var params = ["username": username, "password_hash": passwordHash, "query_name": self.user.username!] as Dictionary
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
