@@ -39,6 +39,17 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         self.usernameField.becomeFirstResponder()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Sign Up", style: UIBarButtonItemStyle.Plain, target: self, action: "signUpgAction:"), animated: false)
+        self.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationItem.setRightBarButtonItem(nil, animated: false)
+    }
+    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField.text.isEmpty {
             Debug.printl("Text field is empty", sender: self)

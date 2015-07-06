@@ -371,8 +371,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func follow(sender: UIButton) {
-        println(sender.superview)
-        println(sender.superview!.superview)
         followUser(sender.superview!.superview as! User, self)
     }
     
