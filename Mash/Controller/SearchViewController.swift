@@ -66,6 +66,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         track.title.text = searchResults[index].titleText
         track.userText = searchResults[index].userText
         track.userLabel.text = track.userText
+        track.format = searchResults[index].format
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
