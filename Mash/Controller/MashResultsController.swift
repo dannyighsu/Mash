@@ -14,10 +14,10 @@ import EZAudio
 class MashResultsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate {
     
     @IBOutlet weak var trackTable: UITableView!
-
     var results: [Track] = []
     var recording: Track? = nil
     var audioPlayers: [AVAudioPlayer] = []
+    var downloadedTracks: Set<Int> = Set<Int>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,11 +62,13 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         track.bpm = trackData.bpm
         track.format = trackData.format
         track.trackURL = filePathString(track.titleText + track.format)
-        download("\(track.userText)~~\(track.titleText).\(track.format)", NSURL(fileURLWithPath: track.trackURL)!, track_bucket)
+        if !contains(self.downloadedTracks, indexPath.row)  {
+            download("\(track.userText)~~\(track.titleText)\(track.format)", NSURL(fileURLWithPath: track.trackURL)!, track_bucket)
+            self.downloadedTracks.insert(indexPath.row)
+        }
 
         track.imageView?.image = findImage(self.results[indexPath.row].instrumentFamilies)
-        let doneTap = UITapGestureRecognizer(target: self, action: "done:")
-        track.addButton.addGestureRecognizer(doneTap)
+        track.addButton.addTarget(self, action: "done:", forControlEvents: UIControlEvents.TouchDown)
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -141,17 +143,11 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         self.navigationController?.popViewControllerAnimated(true)
     }
     
-    func done(sender: AnyObject?) {
-        if self.trackTable.indexPathForSelectedRow() == nil {
-            let alert = UIAlertView(title: "Error", message: "Please select a track.", delegate: self, cancelButtonTitle: "OK")
-            alert.show()
-            return
-        } else {
-            let track = self.results[self.trackTable.indexPathForSelectedRow()!.row]
-            let project = returnProjectView(self.navigationController!) as ProjectViewController!
-            importTracks([track], self.navigationController, self.storyboard)
-            self.navigationController?.popViewControllerAnimated(true)
-        }
+    func done(sender: UIButton) {
+        var track = sender.superview?.superview?.superview as! Track
+        let project = returnProjectView(self.navigationController!) as ProjectViewController!
+        importTracks([track], self.navigationController, self.storyboard)
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
 }

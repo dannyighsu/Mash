@@ -14,10 +14,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
    
     var searchResults: [Track] = []
     var searchController: UISearchController?
-    var audioPlayer: AVAudioPlayer = AVAudioPlayer()
-    
-    // Array for Testing Purposes
-    var searchItems: [String] = ["T", "Th", "The", "Thes", "These", "TheSe", "THESE", "ab", "abc", "abcd"]
+    var audioPlayer: AVAudioPlayer? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +43,10 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.audioPlayer.stop()
+        if self.audioPlayer != nil {
+            self.audioPlayer!.stop()
+        }
+        self.navigationController?.navigationBarHidden = false
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -61,11 +61,11 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         track.instruments = self.searchResults[index].instruments
         track.trackURL = self.searchResults[index].trackURL
         track.instrumentImage.image = findImage(track.instruments)
-        let tap = UITapGestureRecognizer(target: self, action: "addTrack:")
-        track.addButton.addGestureRecognizer(tap)
+        track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
         track.titleText = searchResults[index].titleText
         track.title.text = searchResults[index].titleText
         track.userText = searchResults[index].userText
+        track.userLabel.text = track.userText
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -78,9 +78,13 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.audioPlayer.stop()
+        if self.audioPlayer != nil {
+            self.audioPlayer!.stop()
+        }
         var track = tableView.cellForRowAtIndexPath(indexPath) as! Track
-        download("\(track.userText)~~\(track.trackURL).\(track.format)", NSURL(fileURLWithPath: track.trackURL)!, track_bucket)
+        println("download key: \(track.userText)~~\(track.titleText)\(track.format)")
+        println("url:\(track.trackURL)")
+        download("\(track.userText)~~\(track.titleText)\(track.format)", NSURL(fileURLWithPath: track.trackURL)!, track_bucket)
         while !NSFileManager.defaultManager().fileExistsAtPath(track.trackURL) {
             Debug.printnl("waiting...")
             NSThread.sleepForTimeInterval(0.5)
@@ -88,7 +92,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         NSThread.sleepForTimeInterval(0.5)
         
         self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
-        self.audioPlayer.play()
+        self.audioPlayer!.play()
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         Debug.printl("Playing track \(track.titleText)", sender: self)
     }
@@ -156,7 +160,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             }
             var url = (dict["song_name"] as! String) + (dict["format"] as! String)
             url = filePathString(url)
-            var track = Track(frame: CGRectZero, instruments: [instrument], titleText: dict["song_name"] as! String, bpm: 120, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            var track = Track(frame: CGRectZero, instruments: [instrument], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
             self.searchResults.append(track)
         }
         dispatch_async(dispatch_get_main_queue()) {
@@ -173,8 +177,9 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         }*/
     }
     
-    func addTrack(sender: AnyObject?) {
-        
+    func addTrack(sender: UIButton) {
+        var track = sender.superview?.superview?.superview as! Track
+        importTracks([track], self.navigationController, self.storyboard)
     }
     
     func back(sender: AnyObject?) {

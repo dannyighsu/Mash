@@ -25,12 +25,23 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         // Set up table options
         self.tracks.delegate = self
         self.tracks.dataSource = self
+        self.tracks.backgroundColor = offWhite()
+        self.tracks.separatorStyle = .None
 
         // Register nibs
         let nib = UINib(nibName: "ProjectTrack", bundle: nil)
         self.tracks.registerNib(nib, forCellReuseIdentifier: "ProjectTrack")
-        let header = UINib(nibName: "ProjectHeaderView", bundle: nil)
-        self.tracks.registerNib(header, forHeaderFooterViewReuseIdentifier: "ProjectHeaderView")
+        let header = UINib(nibName: "ProjectTools", bundle: nil)
+        self.tracks.registerNib(header, forHeaderFooterViewReuseIdentifier: "ProjectTools")
+        let player = UINib(nibName: "ProjectPlayer", bundle: nil)
+        self.tracks.registerNib(player, forCellReuseIdentifier: "ProjectPlayer")
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        self.parentViewController?.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Tools", style: UIBarButtonItemStyle.Plain, target: self, action: "showTools:"), animated: false)
+        self.parentViewController?.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -46,43 +57,60 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.navigationBar.removeGestureRecognizer(tap!)
+        self.parentViewController?.navigationItem.setRightBarButtonItem(nil, animated: false)
         self.stopPlaying()
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.data.count
+        if section == 0 {
+            return self.data.count
+        } else {
+            return 1
+        }
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ProjectTrack") as! ProjectTrack
-        let trackData = self.data[indexPath.row]
-        cell.trackTitle.text = trackData.titleText
-        cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
-        cell.track = trackData
-        return cell
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCellWithIdentifier("ProjectTrack") as! ProjectTrack
+            let trackData = self.data[indexPath.row]
+            cell.trackTitle.text = trackData.titleText
+            cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
+            cell.track = trackData
+            cell.backgroundColor = lightGray()
+            return cell
+        } else {
+            let player = tableView.dequeueReusableCellWithIdentifier("ProjectPlayer") as! ProjectPlayer
+            let tap = UITapGestureRecognizer(target: self, action: "playTracks:")
+            player.playButton.addGestureRecognizer(tap)
+            player.addButton.addTarget(self, action: "addTracks:", forControlEvents: UIControlEvents.TouchDown)
+            player.backgroundColor = darkGray()
+            player.selectionStyle = UITableViewCellSelectionStyle.None
+            return player
+        }
     }
 
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        let header = view as! ProjectHeaderView
-        header.playButton.contentMode = UIViewContentMode.ScaleAspectFit
-        let tap = UITapGestureRecognizer(target: self, action: "playTracks:")
-        header.playButton.addGestureRecognizer(tap)
+        let header = view as! ProjectTools
         header.optionsButton.addTarget(self, action: "showPreferences:", forControlEvents: UIControlEvents.TouchDown)
     }
 
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("ProjectHeaderView") as! ProjectHeaderView
+        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("ProjectTools") as! ProjectTools
         self.header = header
         self.header?.hidden = true
         return header
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 75.0
+        if indexPath.section == 0 {
+            return 75.0
+        } else {
+            return 60.0
+        }
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -90,18 +118,20 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let trackNumber = indexPath.row
-        if trackNumber >= self.audioPlayers.count {
-            return
-        }
-        let player = self.audioPlayers[trackNumber]
-        let track = self.tracks.cellForRowAtIndexPath(indexPath) as! ProjectTrack
-        if player.volume == 0.0 {
-            player.volume = 1.0
-            track.speakerImage.image = UIImage(named: "speaker")
-        } else {
-            player.volume = 0.0
-            track.speakerImage.image = UIImage(named: "speaker_2")
+        if indexPath.section == 0 {
+            let trackNumber = indexPath.row
+            if trackNumber >= self.audioPlayers.count {
+                return
+            }
+            let player = self.audioPlayers[trackNumber]
+            let track = self.tracks.cellForRowAtIndexPath(indexPath) as! ProjectTrack
+            if player.volume == 0.0 {
+                player.volume = 1.0
+                track.speakerImage.image = UIImage(named: "speaker")
+            } else {
+                player.volume = 0.0
+                track.speakerImage.image = UIImage(named: "speaker_2")
+            }
         }
         tableView.cellForRowAtIndexPath(indexPath)?.selected = false
     }
@@ -133,6 +163,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func playTracks(sender: AnyObject?) {
+        if self.audioPlayers.count == 0 {
+            return
+        }
         if (self.audioPlayers.count > 0 && self.audioPlayers[0].playing) {
             self.stopPlaying()
             return
@@ -140,8 +173,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         for (var i = 0; i < self.audioPlayers.count; i++) {
             self.audioPlayers[i].play()
         }
-        let header = self.tracks.headerViewForSection(0) as! ProjectHeaderView
-        header.playButton.image = UIImage(named: "Play_2")
+        let player = self.tracks.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 1)) as! ProjectPlayer
+        player.playButton.image = UIImage(named: "Play_2")
     }
     
     func stopPlaying() {
@@ -149,9 +182,10 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             self.audioPlayers[i].stop()
             self.audioPlayers[i].currentTime = 0
         }
-        if (self.tracks != nil && self.tracks.headerViewForSection(0) != nil) {
-            let header = self.tracks.headerViewForSection(0) as! ProjectHeaderView
-            header.playButton.image = UIImage(named: "Play")
+        var index = NSIndexPath(forRow: 0, inSection: 1)
+        if (self.tracks != nil && self.tracks.cellForRowAtIndexPath(index) != nil) {
+            let player = self.tracks.cellForRowAtIndexPath(index) as! ProjectPlayer
+            player.playButton.image = UIImage(named: "Play")
         }
     }
     
