@@ -41,6 +41,12 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.searchController?.searchBar.setShowsCancelButton(true, animated: true)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationItem.setHidesBackButton(true, animated: false)
+        
+    }
+    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         if self.audioPlayer != nil {
@@ -181,6 +187,9 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     func addTrack(sender: UIButton) {
         var track = sender.superview?.superview?.superview as! Track
         importTracks([track], self.navigationController, self.storyboard)
+        let tabBarController = self.navigationController?.viewControllers[2] as! TabBarController
+        tabBarController.selectedIndex = getTabBarController("project")
+        self.back(nil)
     }
     
     func back(sender: AnyObject?) {
