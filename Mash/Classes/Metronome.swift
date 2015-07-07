@@ -16,6 +16,7 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
     @IBOutlet weak var tempoField: UITextField!
     @IBOutlet weak var timeSigField: UITextField!
 
+    var recordController: RecordViewController?
     var duration: CGFloat
     var soundPlayerThread: NSThread?
     var tickPlayer: AVAudioPlayer
@@ -32,6 +33,7 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
         self.beat = 0
         self.isPlaying = false
         self.muted = false
+        self.recordController = nil
         
         var tickURL = NSBundle.mainBundle().URLForResource("tick", withExtension: ".caf")
         var tockURL = NSBundle.mainBundle().URLForResource("tock", withExtension: ".caf")
@@ -47,9 +49,11 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
         super.init(coder: aDecoder)
     }
     
-    class func createView() -> Metronome {
+    // Create a metronome with recordController
+    class func createView(recordController: RecordViewController) -> Metronome {
         var view = NSBundle.mainBundle().loadNibNamed("Metronome", owner: nil, options: nil)
         let metronome = view[0] as! Metronome
+        metronome.recordController = recordController
         metronome.startButton.addTarget(metronome, action: "toggleMetronome:", forControlEvents: UIControlEvents.TouchDown)
         metronome.tempoField.keyboardType = UIKeyboardType.NumberPad
         metronome.tempoField.delegate = metronome
@@ -168,6 +172,7 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
     }
     
     func playSound() {
+        self.recordController?.tick()
         if self.beat == 0 {
             self.tickPlayer.play()
             self.beat += 1

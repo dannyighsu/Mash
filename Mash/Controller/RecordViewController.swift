@@ -33,7 +33,7 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        var metronome = Metronome.createView()
+        var metronome = Metronome.createView(self)
         self.metronomeView.addSubview(metronome)
         self.metronome = metronome
         metronome.frame = self.metronomeView.frame
@@ -57,7 +57,6 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
         self.audioPlot?.shouldFill = true
         self.audioPlot?.shouldMirror = true
         self.audioPlot?.gain = 2.0
-        self.timeLabel.text = String(self.metronome!.timeSignature[0])
         self.microphone = EZMicrophone(microphoneDelegate: self)
         
         self.micButton.addTarget(self, action: "toggleMicrophone:", forControlEvents: UIControlEvents.TouchDown)
@@ -82,7 +81,7 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
         if !recording {
             self.metronome?.toggleMetronome(nil)
             
-            self.timeLabel.text = String(self.metronome!.timeSignature[0])
+            self.timeLabel.text = String(self.metronome!.timeSignature[0] + 1)
             self.timeLabel.hidden = false
             UIView.animateWithDuration(0.3, animations: { self.micButton.alpha = 0; self.timeLabel.alpha = 1 }) {
                 (success: Bool) in
@@ -104,7 +103,6 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
             }
 
             self.recording = true
-            self.startTimer()
         } else {
             self.metronome?.toggleMetronome(nil)
             self.micButton.layer.removeAllAnimations()
@@ -250,22 +248,27 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
         }
     }
     
-    func startTimer() {
+    /*func startTimer() {
         var timer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(self.metronome!.duration), target: self, selector: "tick:", userInfo: nil, repeats: true)
-    }
+    }*/
     
-    func tick(sender: NSTimer) {
-        if self.timeLabel.text!.toInt() > 1 {
-            self.timeLabel.text = String(self.timeLabel.text!.toInt()! - 1)
-        } else {
-            self.record()
-            self.micButton.hidden = false
-            UIView.animateWithDuration(0.3, animations: { self.timeLabel.alpha = 0; self.micButton.alpha = 1 }) {
-                (finished: Bool) in
-                self.timeLabel.hidden = true
-                sender.invalidate()
+    func tick() {
+        dispatch_async(dispatch_get_main_queue()) {
+            println(self.timeLabel.text)
+            if self.timeLabel.text!.toInt() > 1 {
+                self.timeLabel.text = String(self.timeLabel.text!.toInt()! - 1)
+            } else if self.timeLabel.text!.toInt() == 1 {
+                self.record()
+                self.micButton.hidden = false
+                UIView.animateWithDuration(0.3, animations: { self.micButton.alpha = 1 }) {
+                    (finished: Bool) in
+                    self.timeLabel.hidden = true
+                }
+                self.timeLabel.alpha = 0
+                self.timeLabel.text = "0"
             }
         }
+        
     }
     
     func showTools(sender: AnyObject?) {
