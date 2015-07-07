@@ -25,8 +25,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap To Begin Recording" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gBW-XB-ijb">
                                 <rect key="frame" x="177" y="386" width="246" height="21"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="246" id="3lK-b4-X7G"/>
-                                    <constraint firstAttribute="height" constant="21" id="JRo-PO-OVW"/>
+                                    <constraint firstAttribute="width" constant="246" id="fia-Xk-w62"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="20"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -35,14 +34,11 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W9u-gi-Gao">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="75"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="deviceRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="75" id="FWB-LZ-xBa"/>
-                                </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pyt-h7-bCI">
                                 <rect key="frame" x="277" y="382" width="46" height="27"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="46" id="2eF-fe-RIq"/>
+                                    <constraint firstAttribute="width" constant="46" id="pyy-Od-rbs"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="15"/>
                                 <state key="normal" title="Play">
@@ -61,7 +57,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="chx-4q-lfk">
                                 <rect key="frame" x="275" y="452" width="50" height="27"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="50" id="Umn-ip-gqV"/>
+                                    <constraint firstAttribute="width" constant="50" id="EQ1-uO-phY"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="15"/>
                                 <state key="normal" title="Save">
@@ -72,8 +68,8 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C9V-OH-ME6">
                                 <rect key="frame" x="251" y="246" width="98" height="107"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="98" id="Xxa-nG-I7R"/>
-                                    <constraint firstAttribute="height" constant="107" id="tPG-l4-etc"/>
+                                    <constraint firstAttribute="height" constant="107" id="LGI-ph-M4W"/>
+                                    <constraint firstAttribute="width" constant="98" id="hmt-HG-HJb"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="100"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -89,27 +85,29 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="uHW-dX-4b7" firstAttribute="top" secondItem="W9u-gi-Gao" secondAttribute="bottom" id="0Vd-bM-WHr"/>
-                            <constraint firstItem="uHW-dX-4b7" firstAttribute="bottom" secondItem="YoD-I0-uUW" secondAttribute="top" id="0Z2-82-XM9"/>
-                            <constraint firstItem="pyt-h7-bCI" firstAttribute="top" secondItem="C9V-OH-ME6" secondAttribute="bottom" constant="29" id="0ei-KA-Ac5"/>
-                            <constraint firstItem="vsf-OS-WDi" firstAttribute="leading" secondItem="pyt-h7-bCI" secondAttribute="leading" id="3Vu-Mw-ahv"/>
-                            <constraint firstItem="W9u-gi-Gao" firstAttribute="centerX" secondItem="3xf-Jk-EAW" secondAttribute="centerX" id="5bO-sa-V6i"/>
-                            <constraint firstItem="pyt-h7-bCI" firstAttribute="top" secondItem="3xf-Jk-EAW" secondAttribute="bottom" constant="18" id="6SZ-Gg-fiI"/>
-                            <constraint firstItem="vsf-OS-WDi" firstAttribute="top" secondItem="pyt-h7-bCI" secondAttribute="bottom" constant="8" symbolic="YES" id="8BM-V4-bdm"/>
-                            <constraint firstItem="vsf-OS-WDi" firstAttribute="trailing" secondItem="pyt-h7-bCI" secondAttribute="trailing" id="Duh-6U-UsG"/>
-                            <constraint firstItem="pyt-h7-bCI" firstAttribute="centerX" secondItem="gBW-XB-ijb" secondAttribute="centerX" id="FZa-4N-K5b"/>
-                            <constraint firstItem="3xf-Jk-EAW" firstAttribute="centerX" secondItem="gBW-XB-ijb" secondAttribute="centerX" id="Kgq-qU-uPV"/>
-                            <constraint firstItem="W9u-gi-Gao" firstAttribute="leading" secondItem="8U0-My-QrZ" secondAttribute="leading" id="LG1-If-rnP"/>
-                            <constraint firstItem="3xf-Jk-EAW" firstAttribute="centerY" secondItem="8U0-My-QrZ" secondAttribute="centerY" id="LdN-5B-2U0"/>
-                            <constraint firstItem="W9u-gi-Gao" firstAttribute="top" secondItem="8U0-My-QrZ" secondAttribute="top" id="OhU-Ez-baQ"/>
-                            <constraint firstItem="gBW-XB-ijb" firstAttribute="centerX" secondItem="8U0-My-QrZ" secondAttribute="centerX" id="QXu-cB-J6f"/>
-                            <constraint firstItem="gBW-XB-ijb" firstAttribute="top" secondItem="3xf-Jk-EAW" secondAttribute="bottom" constant="22" id="XL0-Jd-fw1"/>
-                            <constraint firstItem="uHW-dX-4b7" firstAttribute="trailing" secondItem="W9u-gi-Gao" secondAttribute="trailing" id="YbC-oI-KcZ"/>
-                            <constraint firstItem="C9V-OH-ME6" firstAttribute="centerX" secondItem="3xf-Jk-EAW" secondAttribute="centerX" id="ZIV-75-JJW"/>
-                            <constraint firstItem="chx-4q-lfk" firstAttribute="centerX" secondItem="vsf-OS-WDi" secondAttribute="centerX" id="kuo-nu-W8R"/>
-                            <constraint firstItem="uHW-dX-4b7" firstAttribute="leading" secondItem="W9u-gi-Gao" secondAttribute="leading" id="vIP-L5-qwq"/>
+                            <constraint firstItem="vsf-OS-WDi" firstAttribute="leading" secondItem="pyt-h7-bCI" secondAttribute="leading" id="0k2-5c-lNf"/>
+                            <constraint firstItem="3xf-Jk-EAW" firstAttribute="centerX" secondItem="C9V-OH-ME6" secondAttribute="centerX" id="4xR-hZ-3jk"/>
+                            <constraint firstItem="uHW-dX-4b7" firstAttribute="bottom" secondItem="YoD-I0-uUW" secondAttribute="top" id="5N3-74-JWy"/>
+                            <constraint firstItem="pyt-h7-bCI" firstAttribute="top" secondItem="C9V-OH-ME6" secondAttribute="bottom" constant="29" id="5ea-cP-sMF"/>
+                            <constraint firstItem="W9u-gi-Gao" firstAttribute="leading" secondItem="8U0-My-QrZ" secondAttribute="leading" id="7et-VP-GUl"/>
+                            <constraint firstItem="C9V-OH-ME6" firstAttribute="centerX" secondItem="W9u-gi-Gao" secondAttribute="centerX" id="Dzl-tE-rTj"/>
+                            <constraint firstItem="uHW-dX-4b7" firstAttribute="leading" secondItem="W9u-gi-Gao" secondAttribute="leading" id="Fug-3t-L00"/>
+                            <constraint firstItem="vsf-OS-WDi" firstAttribute="centerX" secondItem="chx-4q-lfk" secondAttribute="centerX" id="Gy8-WY-HLy"/>
+                            <constraint firstAttribute="trailing" secondItem="W9u-gi-Gao" secondAttribute="trailing" id="O2z-y5-GGU"/>
+                            <constraint firstItem="pyt-h7-bCI" firstAttribute="centerX" secondItem="gBW-XB-ijb" secondAttribute="centerX" id="QQs-Dn-LoI"/>
+                            <constraint firstItem="uHW-dX-4b7" firstAttribute="top" secondItem="W9u-gi-Gao" secondAttribute="bottom" id="Sf5-b5-cQ8"/>
+                            <constraint firstItem="W9u-gi-Gao" firstAttribute="trailing" secondItem="uHW-dX-4b7" secondAttribute="trailing" id="Sra-34-e0S"/>
+                            <constraint firstItem="gBW-XB-ijb" firstAttribute="centerX" secondItem="C9V-OH-ME6" secondAttribute="centerX" id="TCJ-uT-MJ9"/>
+                            <constraint firstItem="gBW-XB-ijb" firstAttribute="top" secondItem="3xf-Jk-EAW" secondAttribute="bottom" constant="22" id="UmI-EU-1nU"/>
+                            <constraint firstItem="vsf-OS-WDi" firstAttribute="top" secondItem="gBW-XB-ijb" secondAttribute="bottom" constant="10" id="UpJ-fY-Tfl"/>
+                            <constraint firstItem="vsf-OS-WDi" firstAttribute="top" secondItem="pyt-h7-bCI" secondAttribute="bottom" constant="8" symbolic="YES" id="YVK-vN-Ne3"/>
+                            <constraint firstItem="chx-4q-lfk" firstAttribute="top" secondItem="vsf-OS-WDi" secondAttribute="bottom" constant="8" symbolic="YES" id="a3P-1j-PMZ"/>
+                            <constraint firstItem="uHW-dX-4b7" firstAttribute="top" secondItem="8U0-My-QrZ" secondAttribute="top" constant="75" id="gor-Qp-XxD"/>
+                            <constraint firstItem="pyt-h7-bCI" firstAttribute="trailing" secondItem="vsf-OS-WDi" secondAttribute="trailing" id="kKq-Fo-Hco"/>
+                            <constraint firstItem="pyt-h7-bCI" firstAttribute="top" secondItem="3xf-Jk-EAW" secondAttribute="bottom" constant="18" id="lgB-FP-pLK"/>
+                            <constraint firstItem="W9u-gi-Gao" firstAttribute="top" secondItem="8U0-My-QrZ" secondAttribute="top" id="pe3-zW-J7J"/>
+                            <constraint firstItem="3xf-Jk-EAW" firstAttribute="centerY" secondItem="8U0-My-QrZ" secondAttribute="centerY" id="rIX-vw-wMj"/>
                             <constraint firstAttribute="bottom" secondItem="W9u-gi-Gao" secondAttribute="bottom" constant="540" id="yIe-DU-hhC"/>
-                            <constraint firstItem="chx-4q-lfk" firstAttribute="top" secondItem="vsf-OS-WDi" secondAttribute="bottom" constant="8" symbolic="YES" id="zYn-sm-ZLf"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">

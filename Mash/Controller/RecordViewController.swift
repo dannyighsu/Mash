@@ -65,6 +65,12 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
         self.saveButton.addTarget(self, action: "saveRecording:", forControlEvents: UIControlEvents.TouchDown)
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        self.parentViewController?.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Tools", style: UIBarButtonItemStyle.Plain, target: self, action: "showTools:"), animated: false)
+        self.parentViewController?.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.parentViewController?.navigationItem.title = "Record"
@@ -75,6 +81,7 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.stopRecording()
+        self.parentViewController?.navigationItem.setRightBarButtonItem(nil, animated: false)
     }
     
     func toggleMicrophone(sender: AnyObject?) {
@@ -254,7 +261,6 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
     
     func tick() {
         dispatch_async(dispatch_get_main_queue()) {
-            println(self.timeLabel.text)
             if self.timeLabel.text!.toInt() > 1 {
                 self.timeLabel.text = String(self.timeLabel.text!.toInt()! - 1)
             } else if self.timeLabel.text!.toInt() == 1 {

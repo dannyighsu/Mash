@@ -39,6 +39,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.searchController?.searchBar.sizeToFit()
         
         self.searchController?.searchBar.setShowsCancelButton(true, animated: true)
+        self.searchController?.searchBar.showsCancelButton = true
     }
     
     override func viewWillAppear(animated: Bool) {

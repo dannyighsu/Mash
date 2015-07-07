@@ -162,7 +162,7 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
             time[1] = "0" + time[1]
         }
         var timeString = time[0] + time[1]
-        var params = ["username": username!, "password_hash": passwordHash, "new_bar": timeString, "new_bpm": self.tempoField.text!, "new_key": self.keyField.text!, "new_instrument": "\(self.instrumentField.text!)", "new_genre": "\(self.genreField.text!)", "new_subgenre": "\(self.subgenreField.text!)"] as Dictionary
+        var params = ["username": username!, "password_hash": passwordHash, "song_name": "\(self.track!.titleText)", "new_bar": timeString, "new_bpm": self.tempoField.text!, "new_key": self.keyField.text!, "new_instrument": "{\(self.instrumentField.text!)}", "new_genre": "{\(self.genreField.text!)}", "new_subgenre": "{\(self.subgenreField.text!)}"] as Dictionary
         httpPatch(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
