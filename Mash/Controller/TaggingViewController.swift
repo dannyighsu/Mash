@@ -60,8 +60,8 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         self.navigationController?.navigationBarHidden = true
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        super.prepareForSegue(segue, sender: sender)
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
         self.navigationController?.navigationBarHidden = false
     }
     
@@ -162,8 +162,7 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
             time[1] = "0" + time[1]
         }
         var timeString = time[0] + time[1]
-        println(timeString)
-        var params = ["username": username!, "password_hash": passwordHash, "new_bar": timeString, "new_bpm": self.tempoField.text!, "new_key": self.keyField.text!, "new_instrument": "{\(self.instrumentField.text!)}", "new_genre": "{\(self.genreField.text!)}", "new_subgenre": "{\(self.subgenreField.text!)}"] as Dictionary
+        var params = ["username": username!, "password_hash": passwordHash, "new_bar": timeString, "new_bpm": self.tempoField.text!, "new_key": self.keyField.text!, "new_instrument": "\(self.instrumentField.text!)", "new_genre": "\(self.genreField.text!)", "new_subgenre": "\(self.subgenreField.text!)"] as Dictionary
         httpPatch(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
