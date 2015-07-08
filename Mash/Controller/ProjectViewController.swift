@@ -41,7 +41,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewDidAppear(animated)
         self.parentViewController?.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Tools", style: UIBarButtonItemStyle.Plain, target: self, action: "showTools:"), animated: false)
         self.parentViewController?.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
-        
     }
     
     override func viewWillAppear(animated: Bool) {

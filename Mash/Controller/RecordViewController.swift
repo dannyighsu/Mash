@@ -80,7 +80,9 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.stopRecording()
+        if self.recording {
+            self.stopRecording()
+        }
         self.parentViewController?.navigationItem.setRightBarButtonItem(nil, animated: false)
     }
     
