@@ -371,11 +371,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func follow(sender: UIButton) {
-        followUser(sender.superview!.superview as! User, self)
+        User.followUser(sender.superview!.superview as! User, controller: self)
     }
     
     func unfollow(sender: UIButton) {
-        followUser(sender.superview!.superview as! User, self)
+        User.followUser(sender.superview!.superview as! User, controller: self)
     }
     
     // Push direct upload page up
