@@ -59,9 +59,15 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
         metronome.tempoField.delegate = metronome
         metronome.timeSigField.delegate = metronome
         metronome.timeSigField.text = "4/4"
+        var picker = UIPickerView(frame: recordController.audioPlot.frame)
+        picker.delegate = metronome
+        picker.dataSource = metronome
+        picker.backgroundColor = lightGray()
+        metronome.timeSigField.inputView = picker
+        metronome.timeSigField.inputAccessoryView = picker
         return metronome
     }
-    
+
     func textFieldDidEndEditing(textField: UITextField) {
         if textField == self.tempoField {
             var input = self.tempoField.text
@@ -87,13 +93,8 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
     
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField == self.timeSigField {
-            var picker = UIPickerView(frame: self.frame)
-            picker.delegate = self
-            picker.dataSource = self
-            picker.backgroundColor = UIColor.whiteColor()
-            textField.inputView = picker
-            textField.inputAccessoryView = picker
-            textField.inputView?.frame.origin.y += textField.inputView!.frame.size.height / 2
+            textField.inputAccessoryView!.frame = CGRectOffset(textField.inputAccessoryView!.frame, 0, 100.0)
+            textField.inputView!.frame = CGRectOffset(textField.inputView!.frame, 0, 100.0)
         }
     }
 

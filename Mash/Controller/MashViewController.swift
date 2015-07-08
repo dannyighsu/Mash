@@ -96,7 +96,6 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     dispatch_async(dispatch_get_main_queue()) {
                         self.finish(response as! NSDictionary)
                     }
-                    Debug.printl("Data: \(data)", sender: self)
                     return
                 } else {
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
