@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3722ACE81B4DEDDE008473C3 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */; };
+		3722ACEA1B4DF1F2008473C3 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3722ACE91B4DF1F2008473C3 /* ImageCell.xib */; };
+		3722ACEC1B4DF1FF008473C3 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3722ACEB1B4DF1FF008473C3 /* ImageCell.swift */; };
 		373F0EFD1B3DEFC500DE92AB /* Basses Legato.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EF61B3DEFC500DE92AB /* Basses Legato.aif */; };
 		373F0EFE1B3DEFC500DE92AB /* Female Chorus.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EF71B3DEFC500DE92AB /* Female Chorus.aif */; };
 		373F0EFF1B3DEFC500DE92AB /* Harp.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EF81B3DEFC500DE92AB /* Harp.aif */; };
@@ -82,6 +85,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		3722ACE91B4DF1F2008473C3 /* ImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
+		3722ACEB1B4DF1FF008473C3 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		373F0EF61B3DEFC500DE92AB /* Basses Legato.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Basses Legato.aif"; sourceTree = "<group>"; };
 		373F0EF71B3DEFC500DE92AB /* Female Chorus.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Female Chorus.aif"; sourceTree = "<group>"; };
 		373F0EF81B3DEFC500DE92AB /* Harp.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = Harp.aif; sourceTree = "<group>"; };
@@ -258,6 +264,7 @@
 			isa = PBXGroup;
 			children = (
 				37E799871B3CC1C600D2E54D /* DashboardController.swift */,
+				3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */,
 				37E799881B3CC1C600D2E54D /* DirectUploadViewController.swift */,
 				37E799891B3CC1C600D2E54D /* EntryViewController.swift */,
 				37E7998A1B3CC1C600D2E54D /* ExploreViewController.swift */,
@@ -299,6 +306,7 @@
 				37E799CB1B3CC1D000D2E54D /* Track.swift */,
 				37E799CC1B3CC1D000D2E54D /* User.swift */,
 				3782615D1B4B140C00FC89A0 /* ProjectPlayer.swift */,
+				3722ACEB1B4DF1FF008473C3 /* ImageCell.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -317,6 +325,7 @@
 				37E799D71B3CC1D000D2E54D /* ProjectTrack.xib */,
 				37E799D81B3CC1D000D2E54D /* Track.xib */,
 				37DE77241B436F4A00952987 /* User.xib */,
+				3722ACE91B4DF1F2008473C3 /* ImageCell.xib */,
 			);
 			path = XIB;
 			sourceTree = "<group>";
@@ -463,6 +472,7 @@
 				373F0F021B3DEFC500DE92AB /* tock.caf in Resources */,
 				37E799EB1B3CC1D000D2E54D /* ImportHeaderView.xib in Resources */,
 				37E799EF1B3CC1D000D2E54D /* Profile.xib in Resources */,
+				3722ACEA1B4DF1F2008473C3 /* ImageCell.xib in Resources */,
 				37E799F11B3CC1D000D2E54D /* ProjectTrack.xib in Resources */,
 				373F0EFE1B3DEFC500DE92AB /* Female Chorus.aif in Resources */,
 				37E799ED1B3CC1D000D2E54D /* MashResultsHeaderView.xib in Resources */,
@@ -548,6 +558,7 @@
 				37E799B61B3CC1C600D2E54D /* RecordViewController.swift in Sources */,
 				37E799BA1B3CC1C600D2E54D /* TabBarController.swift in Sources */,
 				37E799A71B3CC1C600D2E54D /* EntryViewController.swift in Sources */,
+				3722ACE81B4DEDDE008473C3 /* ImageViewController.swift in Sources */,
 				37E799E71B3CC1D000D2E54D /* User.swift in Sources */,
 				37E799FC1B3CC1F600D2E54D /* KeychainWrapper.m in Sources */,
 				37E799DF1B3CC1D000D2E54D /* ImportHeaderView.swift in Sources */,
@@ -569,6 +580,7 @@
 				3793D32C1B4C8209006A4FDD /* HTTP.swift in Sources */,
 				37E799B91B3CC1C600D2E54D /* SignupViewController.swift in Sources */,
 				37E799AA1B3CC1C600D2E54D /* ImportViewController.swift in Sources */,
+				3722ACEC1B4DF1FF008473C3 /* ImageCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

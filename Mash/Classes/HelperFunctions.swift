@@ -53,6 +53,22 @@ func getTabBarController(input: String) -> Int {
     }
 }
 
+func getTabBarController(input: String, navcontroller: UINavigationController) -> UIViewController {
+    let tabBarController = navcontroller.viewControllers[2] as! TabBarController
+    let controllers = tabBarController.viewControllers!
+    if input == "home" {
+        return controllers[0] as! UIViewController
+    } else if input == "explore" {
+        return controllers[1] as! UIViewController
+    } else if input == "record" {
+        return controllers[2] as! UIViewController
+    } else if input == "project" {
+        return controllers[3] as! UIViewController
+    } else {
+        return controllers[4] as! UIViewController
+    }
+}
+
 func returnProjectView(navcontroller: UINavigationController) -> ProjectViewController? {
     let tabBarController = navcontroller.viewControllers[2] as! UITabBarController
     for (var i = 0; i < tabBarController.viewControllers!.count; i++) {
