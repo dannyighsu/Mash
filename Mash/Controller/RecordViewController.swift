@@ -29,6 +29,7 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
     var audioFile: EZAudioFile? = nil
     var recorder: EZRecorder? = nil
     var toolsShowing: Bool = false
+    var toolsTap: UITapGestureRecognizer? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,9 +38,6 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
         self.metronomeView.addSubview(metronome)
         self.metronome = metronome
         metronome.frame = self.metronomeView.frame
-        
-        let tools = UITapGestureRecognizer(target: self, action: "showTools:")
-        self.navigationController?.navigationBar.addGestureRecognizer(tools)
         
         let tap = UITapGestureRecognizer(target: self, action: "resignKeyboard:")
         self.view.addGestureRecognizer(tap)
@@ -63,12 +61,15 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
         self.clearButton.addTarget(self, action: "reset:", forControlEvents: UIControlEvents.TouchDown)
         self.playButton.addTarget(self, action: "playRecording:", forControlEvents: UIControlEvents.TouchDown)
         self.saveButton.addTarget(self, action: "saveRecording:", forControlEvents: UIControlEvents.TouchDown)
+        
+        self.toolsTap = UITapGestureRecognizer(target: self, action: "showTools:")
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         self.parentViewController?.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Tools", style: UIBarButtonItemStyle.Plain, target: self, action: "showTools:"), animated: false)
         self.parentViewController?.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
+        self.navigationController?.navigationBar.addGestureRecognizer(self.toolsTap!)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -84,6 +85,7 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
             self.stopRecording()
         }
         self.parentViewController?.navigationItem.setRightBarButtonItem(nil, animated: false)
+        self.navigationController?.navigationBar.removeGestureRecognizer(self.toolsTap!)
     }
     
     func toggleMicrophone(sender: AnyObject?) {

@@ -79,6 +79,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 self.logout()
             }
         } else if indexPath.section == 1 {
+            self.navigationController?.popViewControllerAnimated(true)
             if indexPath.row == 0 {
                 self.profile!.changeProfilePic()
             } else if indexPath.row == 1 {
@@ -86,7 +87,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             } else if indexPath.row == 2 {
                 self.profile!.changeName()
             }
-            self.navigationController?.popViewControllerAnimated(true)
         } else if indexPath.section == 2 {
             if indexPath.row == 0 {
                 self.profile!.deleteUser()

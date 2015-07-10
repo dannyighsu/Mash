@@ -16,7 +16,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     var data: [Track] = []
     var audioPlayers: [AVAudioPlayer] = []
     var header: UITableViewHeaderFooterView? = nil
-    var tap: UITapGestureRecognizer? = nil
+    var toolsTap: UITapGestureRecognizer? = nil
     var toolsShowing: Bool = false
 
     override func viewDidLoad() {
@@ -35,6 +35,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tracks.registerNib(header, forHeaderFooterViewReuseIdentifier: "ProjectTools")
         let player = UINib(nibName: "ProjectPlayer", bundle: nil)
         self.tracks.registerNib(player, forCellReuseIdentifier: "ProjectPlayer")
+        
+        self.toolsTap = UITapGestureRecognizer(target: self, action: "showTools:")
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -49,13 +51,12 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         if self.tracks != nil {
             self.tracks.reloadData()
         }
-        self.tap = UITapGestureRecognizer(target: self, action: "showTools:")
-        self.navigationController?.navigationBar.addGestureRecognizer(tap!)
+        self.navigationController?.navigationBar.addGestureRecognizer(self.toolsTap!)
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.navigationBar.removeGestureRecognizer(tap!)
+        self.navigationController?.navigationBar.removeGestureRecognizer(self.toolsTap!)
         self.parentViewController?.navigationItem.setRightBarButtonItem(nil, animated: false)
         self.stopPlaying()
     }
