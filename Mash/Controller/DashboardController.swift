@@ -81,7 +81,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header = view as! Profile
         
-        
         header.profilePic.contentMode = UIViewContentMode.ScaleAspectFit
         header.profilePic.layer.cornerRadius = header.profilePic.frame.size.width / 2
         header.profilePic.layer.borderWidth = 1.0
@@ -294,7 +293,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    func fetchPhotos() {
+    func fetchPhotos(type: String) {
         var photoResults = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: nil)
         /*var userAlbumOptions = PHFetchOptions.new()
         userAlbumOptions.predicate = NSPredicate(format: "estimatedAssetCount > 0")
@@ -306,12 +305,13 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }*/
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("ImageViewController") as! ImageViewController
         controller.data = photoResults
+        controller.type = type
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
     // Change profile picture
     func changeProfilePic() {
-        self.fetchPhotos()
+        self.fetchPhotos("profile")
     }
     
     func updateProfilePic(photo: PHAsset) {
@@ -319,14 +319,24 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         photo.requestContentEditingInputWithOptions(nil) {
             (contentInput, info) in
             var imageURL = contentInput.fullSizeImageURL
-            self.update("\(current_user.username)~~profile_pic.jpg", inputType: "new_profile_pic_link")
+            self.update("\(current_user.username!)~~profile_pic.jpg", inputType: "new_profile_pic_link")
             upload("\(current_user.username!)~~profile_pic.jpg", imageURL, profile_bucket)
         }
     }
     
     // Change banner
     func changeBanner() {
-        
+        self.fetchPhotos("banner")
+    }
+    
+    func updateBanner(photo: PHAsset) {
+        let manager = PHImageManager.defaultManager()
+        photo.requestContentEditingInputWithOptions(nil) {
+            (contentInput, info) in
+            var imageURL = contentInput.fullSizeImageURL
+            self.update("\(current_user.username!)~~banner.jpg", inputType: "new_banner_pic_link")
+            upload("\(current_user.username!)~~banner.jpg", imageURL, banner_bucket)
+        }
     }
     
     // Change display name

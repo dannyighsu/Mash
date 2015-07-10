@@ -75,7 +75,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.eventLabel.text = self.data[indexPath.row].eventText
         cell.userLabel.text = self.data[indexPath.row].userText
         cell.timeLabel.text = self.data[indexPath.row].timeText
-        cell.profileImage.image = UIImage(named: "logo")
+        cell.profileImage.image = self.data[indexPath.row].user!.profile_pic()
         cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFit
         cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
         cell.profileImage.layer.borderWidth = 0.5
@@ -151,14 +151,20 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 let followed = item["followed_username"] as! String
                 let event = "\(follower) followed \(followed)."
                 let time = item["timestamp"] as! String
-                let cell = HomeCell(frame: CGRectZero, eventText: event, userText: follower, timeText: time)
+                var user = User()
+                user.username = follower
+                user.profile_pic_link = item["following_profile_pic_link"] as? String
+                let cell = HomeCell(frame: CGRectZero, eventText: event, userText: follower, timeText: time, user: user)
                 self.data.append(cell)
             } else if type == "recording" {
                 let user = item["following_username"] as! String
                 let recording = item["recording_name"] as! String
                 let time = item["timestamp"] as! String
                 let event = "\(recording)"
-                let cell = HomeCell(frame: CGRectZero, eventText: event, userText: user, timeText: time)
+                var follower = User()
+                follower.username = user
+                follower.profile_pic_link = item["following_profile_pic_link"] as? String
+                let cell = HomeCell(frame: CGRectZero, eventText: event, userText: user, timeText: time, user: follower)
                 self.data.append(cell)
             }
         }

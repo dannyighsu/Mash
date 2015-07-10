@@ -16,6 +16,7 @@ class ImageViewController: UICollectionViewController, UICollectionViewDelegateF
     var data: PHFetchResult = PHFetchResult()
     var photoManager: PHImageManager = PHImageManager.defaultManager()
     var cellWidth: CGFloat = 75.0
+    var type: String? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +51,11 @@ class ImageViewController: UICollectionViewController, UICollectionViewDelegateF
         let dashboard = getTabBarController("dashboard", self.navigationController!) as! DashboardController
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! ImageCell
         self.navigationController?.popViewControllerAnimated(true)
-        dashboard.updateProfilePic(cell.photo!)
+        if self.type == "profile" {
+            dashboard.updateProfilePic(cell.photo!)
+        } else {
+            dashboard.updateBanner(cell.photo!)
+        }
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {

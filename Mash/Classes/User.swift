@@ -59,7 +59,7 @@ class User: UITableViewCell {
         if count(self.profile_pic_link!) == 0 {
             return UIImage(named: "no_profile_pic")!
         } else {
-            download("\(self.username)~~profile_pic.jpg", filePathURL(self.profile_pic_link), profile_bucket)
+            download("\(self.username!)~~profile_pic.jpg", filePathURL(self.profile_pic_link), profile_bucket)
             while !NSFileManager.defaultManager().fileExistsAtPath(filePathString(self.profile_pic_link)) {
                 Debug.printnl("waiting...")
                 NSThread.sleepForTimeInterval(0.5)
@@ -71,12 +71,17 @@ class User: UITableViewCell {
     }
     
     func banner_pic() -> UIImage {
-        if self.banner_pic_link == nil {
+        if count(self.banner_pic_link!) == 0 {
             return UIImage(named: "no_banner")!
-        } else if count(self.banner_pic_link!) != 0 {
-            return UIImage(contentsOfFile: self.banner_pic_link!)!
         } else {
-            return UIImage(named: "no_banner")!
+            download("\(self.username!)~~banner.jpg", filePathURL(self.banner_pic_link), banner_bucket)
+            while !NSFileManager.defaultManager().fileExistsAtPath(filePathString(self.banner_pic_link)) {
+                Debug.printnl("waiting...")
+                NSThread.sleepForTimeInterval(0.5)
+            }
+            NSThread.sleepForTimeInterval(0.5)
+            
+            return UIImage(contentsOfFile: filePathString(self.banner_pic_link))!
         }
     }
     
@@ -130,7 +135,7 @@ class User: UITableViewCell {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let username = current_user.username
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/user")!)
-        var params = ["username": username!, "password_hash": passwordHash, "userid": "\(current_user.userid!)", "query_name": "\(current_user.username)"] as Dictionary
+        var params = ["username": username!, "password_hash": passwordHash, "userid": "\(current_user.userid!)", "query_name": "\(current_user.username!)"] as Dictionary
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -155,16 +160,18 @@ class User: UITableViewCell {
                         current_user.followers = String(dict["followers"] as! Int)
                         current_user.following = String(dict["following"] as! Int)
                         current_user.tracks = String(dict["track_count"] as! Int)
-                        current_user.user_description = data["description"] as? String
                         
                         controller.parentViewController?.navigationItem.title! = current_user.display_name()!
                         let profile = controller.tracks.headerViewForSection(0) as! Profile
                         profile.profilePic.image = current_user.profile_pic()
                         profile.bannerImage.image = current_user.banner_pic()
-                        profile.followerCount.text = current_user.followers
-                        profile.followingCount.text = current_user.following
-                        profile.descriptionLabel.text = current_user.description
-                        profile.trackCount.text = current_user.tracks
+                        profile.descriptionLabel.text = current_user.user_description
+                        var followers = NSMutableAttributedString(string: "  \(current_user.followers!)\n  FOLLOWERS")
+                        profile.followerCount.attributedText = followers
+                        var following = NSMutableAttributedString(string: "  \(current_user.following!)\n  FOLLOWING")
+                        profile.followingCount.attributedText = following
+                        var tracks = NSMutableAttributedString(string: "  \(current_user.tracks!)\n  TRACKS")
+                        profile.trackCount.attributedText = tracks
                     }
                 } else if statusCode == HTTP_SERVER_ERROR {
                     Debug.printl("Internal server error.", sender: nil)
