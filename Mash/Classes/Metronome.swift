@@ -93,8 +93,7 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
     
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField == self.timeSigField {
-            textField.inputAccessoryView!.frame = CGRectOffset(textField.inputAccessoryView!.frame, 0, 100.0)
-            textField.inputView!.frame = CGRectOffset(textField.inputView!.frame, 0, 100.0)
+            textField.inputView!.center = self.recordController!.view.center
         }
     }
 

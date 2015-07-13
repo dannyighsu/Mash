@@ -14,13 +14,13 @@ import AVFoundation
 class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophoneDelegate, EZAudioFileDelegate, EZOutputDataSource {
     
     @IBOutlet var micButton: UIButton!
-    @IBOutlet weak var metronomeView: UIView!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var clearButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var instructionLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var audioPlot: EZAudioPlotGL!
+    @IBOutlet weak var metronomeView: UIView!
 
     var recording: Bool = false
     var eof: Bool = false
@@ -33,10 +33,21 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        /*let tools = self.storyboard?.instantiateViewControllerWithIdentifier("RecordToolsController") as! RecordToolsController
+        self.addChildViewController(tools)
+        self.toolsController = tools
+        self.toolsController!.view.frame = self.view.frame
+        self.view.addSubview(self.toolsController!.view)
 
         var metronome = Metronome.createView(self)
-        self.metronomeView.addSubview(metronome)
+        self.toolsController!.metronomeView.addSubview(metronome)
         self.metronome = metronome
+        metronome.frame = self.toolsController!.metronomeView.frame*/
+        
+        var metronome = Metronome.createView(self)
+        self.metronome = metronome
+        self.metronomeView.addSubview(metronome)
         metronome.frame = self.metronomeView.frame
         
         let tap = UITapGestureRecognizer(target: self, action: "resignKeyboard:")

@@ -18,11 +18,15 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     var data: [Track] = []
     var audioPlayer:AVAudioPlayer? = nil
     var user: User = current_user
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tracks.delegate = self
         self.tracks.dataSource = self
+        
+        self.view.addSubview(self.activityView)
+        self.activityView.center = self.view.center
         
         // Register profile and track nibs
         let profile = UINib(nibName: "Profile", bundle: nil)
@@ -188,6 +192,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
         var params = ["username": username, "password_hash": passwordHash, "query_name": self.user.username!] as Dictionary
+        self.activityView.startAnimating()
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -240,6 +245,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         dispatch_async(dispatch_get_main_queue()) {
             self.tracks.reloadData()
+            self.activityView.stopAnimating()
         }
     }
     

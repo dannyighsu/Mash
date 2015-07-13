@@ -14,6 +14,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
+    
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,9 +26,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.usernameField.returnKeyType = UIReturnKeyType.Next
         self.passwordField.returnKeyType = UIReturnKeyType.Go
         
-        // Add tap gesture to superview for text fields
         let tap = UITapGestureRecognizer(target: self, action: "resignTextField:")
         self.view.addGestureRecognizer(tap)
+        
+        self.view.addSubview(self.activityView)
+        self.activityView.center = self.view.center
         
         let hasLoginKey = NSUserDefaults.standardUserDefaults().boolForKey("hasLoginKey")
         if hasLoginKey == true {
@@ -96,8 +100,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let passwordHash = hashPassword(password)
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/signin")!)
         var params = ["username": username, "password_hash": passwordHash, "query_name": username] as Dictionary
+        self.activityView.startAnimating()
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityView.stopAnimating()
+            }
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
                 return

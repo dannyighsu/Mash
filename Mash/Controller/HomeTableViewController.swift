@@ -13,6 +13,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     @IBOutlet var activityFeed: UITableView!
     var data: [HomeCell] = []
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +22,9 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.activityFeed.delegate = self
         self.activityFeed.dataSource = self
         self.activityFeed.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+        
+        self.view.addSubview(self.activityView)
+        self.activityView.center = self.view.center
         
         // Home cell and header registration
         let nib = UINib(nibName: "HomeCell", bundle: nil)
@@ -113,6 +117,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func retrieveTracks() {
+        self.activityView.startAnimating()
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/feed")!)
@@ -169,6 +174,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             }
         }
         self.activityFeed.reloadData()
+        self.activityView.stopAnimating()
     }
     
     override func didReceiveMemoryWarning() {
