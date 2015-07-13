@@ -16,7 +16,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
-    var audioPlayer:AVAudioPlayer? = nil
+    var audioPlayer: AVAudioPlayer? = nil
     var user: User = current_user
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     
@@ -47,6 +47,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             self.parentViewController?.navigationItem.title = self.user.display_name()
         }
         self.retrieveTracks()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -121,8 +125,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let tap2 = UITapGestureRecognizer(target: self, action: "goToFollowing:")
         header.followingCount.addGestureRecognizer(tap2)
         
-        header.bannerImage.image = self.user.banner_pic()
-        header.profilePic.image = self.user.profile_pic()
+        self.user.banner_pic(header.bannerImage)
+        self.user.profile_pic(header.profilePic)
         var followers = NSMutableAttributedString(string: "  \(self.user.followers!)\n  FOLLOWERS")
         header.followerCount.attributedText = followers
         var following = NSMutableAttributedString(string: "  \(self.user.following!)\n  FOLLOWING")
@@ -154,12 +158,15 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
         
         download("\(self.user.username!)~~\(track.titleText)\(track.format)", filePathURL(track.titleText + track.format), track_bucket)
+        self.activityView.startAnimating()
         
         while !NSFileManager.defaultManager().fileExistsAtPath(filePathString(track.titleText + track.format)) {
             Debug.printnl("waiting...")
             NSThread.sleepForTimeInterval(0.5)
         }
         NSThread.sleepForTimeInterval(0.5)
+        
+        self.activityView.stopAnimating()
         
         self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(track.titleText + track.format), error: nil)
         self.audioPlayer!.play()

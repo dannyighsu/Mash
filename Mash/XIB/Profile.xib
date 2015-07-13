@@ -89,7 +89,7 @@
                         <constraint firstItem="VC7-aU-ud6" firstAttribute="leading" secondItem="miv-rN-N0T" secondAttribute="trailing" id="uI2-Ub-U2V"/>
                     </constraints>
                 </view>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CYo-X6-CjW">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no_banner" translatesAutoresizingMaskIntoConstraints="NO" id="CYo-X6-CjW">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="150"/>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F4O-Jv-95C">
@@ -107,7 +107,7 @@
                         </mask>
                     </variation>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="danny_profile" translatesAutoresizingMaskIntoConstraints="NO" id="XNv-YT-gfh">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no_profile_pic" translatesAutoresizingMaskIntoConstraints="NO" id="XNv-YT-gfh">
                     <rect key="frame" x="40" y="15" width="120" height="120"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="150" id="7Sz-vf-qaR"/>
@@ -136,7 +136,7 @@
                     </constraints>
                     <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="15"/>
                     <state key="normal" title="Edit Profile">
-                        <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                 </button>
@@ -178,6 +178,7 @@
         </view>
     </objects>
     <resources>
-        <image name="danny_profile" width="900" height="906"/>
+        <image name="no_banner" width="2100" height="1500"/>
+        <image name="no_profile_pic" width="600" height="600"/>
     </resources>
 </document>

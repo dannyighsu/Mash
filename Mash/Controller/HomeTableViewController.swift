@@ -79,7 +79,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.eventLabel.text = self.data[indexPath.row].eventText
         cell.userLabel.text = self.data[indexPath.row].userText
         cell.timeLabel.text = self.data[indexPath.row].timeText
-        cell.profileImage.image = self.data[indexPath.row].user!.profile_pic()
+        self.data[indexPath.row].user!.profile_pic(cell.profileImage)
         cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFit
         cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
         cell.profileImage.layer.borderWidth = 0.5
@@ -148,6 +148,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func updateActivity(data: NSDictionary) {
+        self.data = []
         var activity = data["feed"] as! NSArray
         for item in activity {
             let type = item["type"] as! String
