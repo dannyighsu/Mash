@@ -53,6 +53,17 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
         let tap = UITapGestureRecognizer(target: self, action: "resignKeyboard:")
         self.view.addGestureRecognizer(tap)
         
+        let session = AVAudioSession.sharedInstance()
+        var error: NSError? = nil
+        session.setCategory(AVAudioSessionCategoryPlayAndRecord, error: &error)
+        if error != nil {
+            Debug.printl("Error setting up session: \(error?.localizedDescription)", sender: self)
+        }
+        session.setActive(true, error: &error)
+        if error != nil {
+            Debug.printl("Error setting session active: \(error?.localizedDescription)", sender: self)
+        }
+        
         self.audioPlot?.hidden = true
         self.audioPlot?.alpha = 0
         self.playButton?.hidden = true
@@ -166,10 +177,6 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
             self.saveButton.hidden = true
             self.audioPlot.hidden = true
         }
-        
-        EZOutput.sharedOutput().outputDataSource = nil
-        EZOutput.sharedOutput().stopPlayback()
-        self.recorder?.closeAudioFile()
     }
 
     func playRecording(sender: AnyObject?) {
@@ -222,8 +229,6 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
     
     func openFile(url: NSURL) {
         self.audioPlot?.clear()
-        EZOutput.sharedOutput().stopPlayback()
-        EZOutput.sharedOutput().outputDataSource = nil
         self.audioFile = EZAudioFile(URL: url)
         self.eof = false
         EZOutput.sharedOutput().setAudioStreamBasicDescription(self.audioFile!.clientFormat())
@@ -275,21 +280,18 @@ class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophon
     }*/
     
     func tick() {
-        dispatch_async(dispatch_get_main_queue()) {
-            if self.timeLabel.text!.toInt() > 1 {
-                self.timeLabel.text = String(self.timeLabel.text!.toInt()! - 1)
-            } else if self.timeLabel.text!.toInt() == 1 {
-                self.record()
-                self.micButton.hidden = false
-                UIView.animateWithDuration(0.3, animations: { self.micButton.alpha = 1 }) {
-                    (finished: Bool) in
-                    self.timeLabel.hidden = true
-                }
-                self.timeLabel.alpha = 0
-                self.timeLabel.text = "0"
+        if self.timeLabel.text!.toInt() > 1 {
+            self.timeLabel.text = String(self.timeLabel.text!.toInt()! - 1)
+        } else if self.timeLabel.text!.toInt() == 1 {
+            self.record()
+            self.micButton.hidden = false
+            UIView.animateWithDuration(0.3, animations: { self.micButton.alpha = 1 }) {
+                (finished: Bool) in
+                self.timeLabel.hidden = true
             }
+            self.timeLabel.alpha = 0
+            self.timeLabel.text = "0"
         }
-        
     }
     
     func showTools(sender: AnyObject?) {

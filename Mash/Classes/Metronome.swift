@@ -134,7 +134,7 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
     }
 
     func startDriverTimer(sender: AnyObject?) {
-        NSThread.setThreadPriority(1.0)
+        NSThread.setThreadPriority(1.5)
         var continuePlaying: Bool = true
         
         while (continuePlaying) {
@@ -154,10 +154,6 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
     }
     
     func startDriverThread() {
-        if self.soundPlayerThread != nil {
-            self.stopDriverThread()
-        }
-        
         self.soundPlayerThread = NSThread(target: self, selector: "startDriverTimer:", object: nil)
         self.soundPlayerThread!.start()
         self.isPlaying = true
@@ -172,14 +168,22 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
     }
     
     func playSound() {
-        self.recordController?.tick()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.recordController?.tick()
+        }
         if self.beat == 0 {
+            self.tickPlayer.stop()
+            self.tickPlayer.currentTime = 0
             self.tickPlayer.play()
             self.beat += 1
-        } else if beat == self.timeSignature[0] - 1 {
+        } else if self.beat == self.timeSignature[0] - 1 {
+            self.tockPlayer.stop()
+            self.tockPlayer.currentTime = 0
             self.tockPlayer.play()
             self.beat = 0
         } else {
+            self.tockPlayer.stop()
+            self.tockPlayer.currentTime = 0
             self.tockPlayer.play()
             self.beat += 1
         }

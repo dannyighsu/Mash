@@ -10,6 +10,7 @@
 		3722ACE81B4DEDDE008473C3 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */; };
 		3722ACEA1B4DF1F2008473C3 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3722ACE91B4DF1F2008473C3 /* ImageCell.xib */; };
 		3722ACEC1B4DF1FF008473C3 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3722ACEB1B4DF1FF008473C3 /* ImageCell.swift */; };
+		3727B62D1B54881B00FD2F5C /* AltRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3727B62C1B54881B00FD2F5C /* AltRecordViewController.swift */; };
 		373F0EFD1B3DEFC500DE92AB /* Basses Legato.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EF61B3DEFC500DE92AB /* Basses Legato.aif */; };
 		373F0EFE1B3DEFC500DE92AB /* Female Chorus.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EF71B3DEFC500DE92AB /* Female Chorus.aif */; };
 		373F0EFF1B3DEFC500DE92AB /* Harp.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EF81B3DEFC500DE92AB /* Harp.aif */; };
@@ -89,6 +90,7 @@
 		3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		3722ACE91B4DF1F2008473C3 /* ImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
 		3722ACEB1B4DF1FF008473C3 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		3727B62C1B54881B00FD2F5C /* AltRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AltRecordViewController.swift; sourceTree = "<group>"; };
 		373F0EF61B3DEFC500DE92AB /* Basses Legato.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Basses Legato.aif"; sourceTree = "<group>"; };
 		373F0EF71B3DEFC500DE92AB /* Female Chorus.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Female Chorus.aif"; sourceTree = "<group>"; };
 		373F0EF81B3DEFC500DE92AB /* Harp.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = Harp.aif; sourceTree = "<group>"; };
@@ -266,12 +268,13 @@
 			isa = PBXGroup;
 			children = (
 				37E799871B3CC1C600D2E54D /* DashboardController.swift */,
-				374CEFD61B508552007A7557 /* RecordToolsController.swift */,
-				3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */,
 				37E799881B3CC1C600D2E54D /* DirectUploadViewController.swift */,
+				3727B62C1B54881B00FD2F5C /* AltRecordViewController.swift */,
 				37E799891B3CC1C600D2E54D /* EntryViewController.swift */,
 				37E7998A1B3CC1C600D2E54D /* ExploreViewController.swift */,
+				37DE77261B4370B200952987 /* FollowingViewController.swift */,
 				37E7998B1B3CC1C600D2E54D /* HomeTableViewController.swift */,
+				3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */,
 				37E7998C1B3CC1C600D2E54D /* ImportViewController.swift */,
 				37E7998D1B3CC1C600D2E54D /* LoginViewController.swift */,
 				37E7998E1B3CC1C600D2E54D /* MashResultsController.swift */,
@@ -279,6 +282,7 @@
 				37E799901B3CC1C600D2E54D /* NavigationController.swift */,
 				37E7999C1B3CC1C600D2E54D /* ProjectPreferencesViewController.swift */,
 				37E7999D1B3CC1C600D2E54D /* ProjectViewController.swift */,
+				374CEFD61B508552007A7557 /* RecordToolsController.swift */,
 				37E7999E1B3CC1C600D2E54D /* RecordViewController.swift */,
 				37E7999F1B3CC1C600D2E54D /* SearchViewController.swift */,
 				37E799A01B3CC1C600D2E54D /* SettingsViewController.swift */,
@@ -286,7 +290,6 @@
 				37E799A21B3CC1C600D2E54D /* TabBarController.swift */,
 				37E799A31B3CC1C600D2E54D /* TaggingViewController.swift */,
 				37E799A41B3CC1C600D2E54D /* UploadViewController.swift */,
-				37DE77261B4370B200952987 /* FollowingViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -297,19 +300,19 @@
 				37E799BE1B3CC1D000D2E54D /* Debug.swift */,
 				37E799C01B3CC1D000D2E54D /* HelperData.swift */,
 				37E799C11B3CC1D000D2E54D /* HelperFunctions.swift */,
-				3793D32B1B4C8209006A4FDD /* HTTP.swift */,
 				37E799C21B3CC1D000D2E54D /* HomeCell.swift */,
+				3793D32B1B4C8209006A4FDD /* HTTP.swift */,
+				3722ACEB1B4DF1FF008473C3 /* ImageCell.swift */,
 				37E799C41B3CC1D000D2E54D /* ImportHeaderView.swift */,
 				37E799C51B3CC1D000D2E54D /* InstrumentCell.swift */,
 				37E799C61B3CC1D000D2E54D /* MashResultsHeaderView.swift */,
 				37E799C71B3CC1D000D2E54D /* Metronome.swift */,
 				37E799C81B3CC1D000D2E54D /* Profile.swift */,
+				3782615D1B4B140C00FC89A0 /* ProjectPlayer.swift */,
 				37E799C91B3CC1D000D2E54D /* ProjectTools.swift */,
 				37E799CA1B3CC1D000D2E54D /* ProjectTrack.swift */,
 				37E799CB1B3CC1D000D2E54D /* Track.swift */,
 				37E799CC1B3CC1D000D2E54D /* User.swift */,
-				3782615D1B4B140C00FC89A0 /* ProjectPlayer.swift */,
-				3722ACEB1B4DF1FF008473C3 /* ImageCell.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -562,6 +565,7 @@
 				37E799BA1B3CC1C600D2E54D /* TabBarController.swift in Sources */,
 				37E799A71B3CC1C600D2E54D /* EntryViewController.swift in Sources */,
 				3722ACE81B4DEDDE008473C3 /* ImageViewController.swift in Sources */,
+				3727B62D1B54881B00FD2F5C /* AltRecordViewController.swift in Sources */,
 				37E799E71B3CC1D000D2E54D /* User.swift in Sources */,
 				37E799FC1B3CC1F600D2E54D /* KeychainWrapper.m in Sources */,
 				37E799DF1B3CC1D000D2E54D /* ImportHeaderView.swift in Sources */,
