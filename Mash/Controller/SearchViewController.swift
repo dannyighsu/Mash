@@ -65,8 +65,12 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
 
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let track = tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
         let index = indexPath.row
-        let track = cell as! Track
         track.title.text = self.searchResults[index].titleText
         track.titleText = track.title.text!
         track.instruments = self.searchResults[index].instruments
@@ -78,11 +82,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         track.userText = searchResults[index].userText
         track.userLabel.text = track.userText
         track.format = searchResults[index].format
-    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
-        return cell
+        return track
     }
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

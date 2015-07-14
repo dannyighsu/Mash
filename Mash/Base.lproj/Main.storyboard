@@ -7,124 +7,6 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Record-->
-        <scene sceneID="hNm-BG-mAR">
-            <objects>
-                <viewController id="p9J-K8-zvw" customClass="RecordViewController" customModule="Mash" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="rH7-XG-S0J"/>
-                        <viewControllerLayoutGuide type="bottom" id="YoD-I0-uUW"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8U0-My-QrZ">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uHW-dX-4b7" customClass="EZAudioPlotGL">
-                                <rect key="frame" x="0.0" y="75" width="600" height="476"/>
-                            </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap To Begin Recording" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gBW-XB-ijb">
-                                <rect key="frame" x="177" y="386" width="246" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="246" id="fia-Xk-w62"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="20"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pyt-h7-bCI">
-                                <rect key="frame" x="277" y="382" width="46" height="27"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="46" id="pyy-Od-rbs"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="15"/>
-                                <state key="normal" title="Play">
-                                    <color key="titleColor" red="0.48235297199999999" green="0.67450982329999998" blue="0.90196084980000002" alpha="1" colorSpace="deviceRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vsf-OS-WDi">
-                                <rect key="frame" x="277" y="417" width="46" height="27"/>
-                                <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="15"/>
-                                <state key="normal" title="Clear">
-                                    <color key="titleColor" red="0.48235297199999999" green="0.67450982329999998" blue="0.90196084980000002" alpha="1" colorSpace="deviceRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="chx-4q-lfk">
-                                <rect key="frame" x="275" y="452" width="50" height="27"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="50" id="EQ1-uO-phY"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="15"/>
-                                <state key="normal" title="Save">
-                                    <color key="titleColor" red="0.48235297199999999" green="0.67450982329999998" blue="0.90196084980000002" alpha="1" colorSpace="deviceRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C9V-OH-ME6">
-                                <rect key="frame" x="251" y="246" width="98" height="107"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="107" id="LGI-ph-M4W"/>
-                                    <constraint firstAttribute="width" constant="98" id="hmt-HG-HJb"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="100"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3xf-Jk-EAW">
-                                <rect key="frame" x="236" y="236" width="128" height="128"/>
-                                <state key="normal" image="microphone"/>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="136" y="207" width="128" height="128"/>
-                                </variation>
-                            </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gmw-Is-5e8">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="75"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="vsf-OS-WDi" firstAttribute="leading" secondItem="pyt-h7-bCI" secondAttribute="leading" id="0k2-5c-lNf"/>
-                            <constraint firstItem="uHW-dX-4b7" firstAttribute="leading" secondItem="8U0-My-QrZ" secondAttribute="leading" id="3az-79-Cgy"/>
-                            <constraint firstItem="3xf-Jk-EAW" firstAttribute="centerX" secondItem="C9V-OH-ME6" secondAttribute="centerX" id="4xR-hZ-3jk"/>
-                            <constraint firstItem="uHW-dX-4b7" firstAttribute="bottom" secondItem="YoD-I0-uUW" secondAttribute="top" constant="-49" id="5N3-74-JWy"/>
-                            <constraint firstItem="pyt-h7-bCI" firstAttribute="top" secondItem="C9V-OH-ME6" secondAttribute="bottom" constant="29" id="5ea-cP-sMF"/>
-                            <constraint firstItem="uHW-dX-4b7" firstAttribute="top" secondItem="Gmw-Is-5e8" secondAttribute="bottom" id="FB8-V3-lc7"/>
-                            <constraint firstItem="vsf-OS-WDi" firstAttribute="centerX" secondItem="chx-4q-lfk" secondAttribute="centerX" id="Gy8-WY-HLy"/>
-                            <constraint firstItem="Gmw-Is-5e8" firstAttribute="trailing" secondItem="uHW-dX-4b7" secondAttribute="trailing" id="MQq-68-wri"/>
-                            <constraint firstAttribute="trailing" secondItem="uHW-dX-4b7" secondAttribute="trailing" id="QC0-pJ-5lF"/>
-                            <constraint firstItem="pyt-h7-bCI" firstAttribute="centerX" secondItem="gBW-XB-ijb" secondAttribute="centerX" id="QQs-Dn-LoI"/>
-                            <constraint firstItem="gBW-XB-ijb" firstAttribute="centerX" secondItem="C9V-OH-ME6" secondAttribute="centerX" id="TCJ-uT-MJ9"/>
-                            <constraint firstItem="gBW-XB-ijb" firstAttribute="top" secondItem="3xf-Jk-EAW" secondAttribute="bottom" constant="22" id="UmI-EU-1nU"/>
-                            <constraint firstItem="vsf-OS-WDi" firstAttribute="top" secondItem="gBW-XB-ijb" secondAttribute="bottom" constant="10" id="UpJ-fY-Tfl"/>
-                            <constraint firstItem="vsf-OS-WDi" firstAttribute="top" secondItem="pyt-h7-bCI" secondAttribute="bottom" constant="8" symbolic="YES" id="YVK-vN-Ne3"/>
-                            <constraint firstItem="chx-4q-lfk" firstAttribute="top" secondItem="vsf-OS-WDi" secondAttribute="bottom" constant="8" symbolic="YES" id="a3P-1j-PMZ"/>
-                            <constraint firstItem="Gmw-Is-5e8" firstAttribute="leading" secondItem="uHW-dX-4b7" secondAttribute="leading" id="bqx-1G-sHI"/>
-                            <constraint firstItem="uHW-dX-4b7" firstAttribute="top" secondItem="8U0-My-QrZ" secondAttribute="top" constant="75" id="gor-Qp-XxD"/>
-                            <constraint firstItem="pyt-h7-bCI" firstAttribute="trailing" secondItem="vsf-OS-WDi" secondAttribute="trailing" id="kKq-Fo-Hco"/>
-                            <constraint firstItem="pyt-h7-bCI" firstAttribute="top" secondItem="3xf-Jk-EAW" secondAttribute="bottom" constant="18" id="lgB-FP-pLK"/>
-                            <constraint firstItem="3xf-Jk-EAW" firstAttribute="centerY" secondItem="8U0-My-QrZ" secondAttribute="centerY" id="rIX-vw-wMj"/>
-                            <constraint firstItem="uHW-dX-4b7" firstAttribute="centerX" secondItem="gBW-XB-ijb" secondAttribute="centerX" id="st5-7H-dU4"/>
-                            <constraint firstItem="Gmw-Is-5e8" firstAttribute="top" secondItem="8U0-My-QrZ" secondAttribute="top" id="uMs-RN-8Ws"/>
-                        </constraints>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Record" image="record" id="ThN-bL-xoC"/>
-                    <connections>
-                        <outlet property="audioPlot" destination="uHW-dX-4b7" id="gLM-Yo-GDf"/>
-                        <outlet property="clearButton" destination="vsf-OS-WDi" id="QHh-5V-O4h"/>
-                        <outlet property="instructionLabel" destination="gBW-XB-ijb" id="Tdh-p8-Dzl"/>
-                        <outlet property="metronomeView" destination="Gmw-Is-5e8" id="2oe-Jv-Qzd"/>
-                        <outlet property="micButton" destination="3xf-Jk-EAW" id="q9H-ds-d2O"/>
-                        <outlet property="playButton" destination="pyt-h7-bCI" id="jBK-aG-LbK"/>
-                        <outlet property="saveButton" destination="chx-4q-lfk" id="ZRy-vZ-eoa"/>
-                        <outlet property="timeLabel" destination="C9V-OH-ME6" id="ntf-2l-xQE"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZmM-Rz-R6L" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1167" y="243"/>
-        </scene>
         <!--Record Tools Controller-->
         <scene sceneID="OR7-tb-HOV">
             <objects>
@@ -270,7 +152,7 @@
         <!--Record-->
         <scene sceneID="cuO-RN-fAk">
             <objects>
-                <viewController id="M5F-mh-xEm" customClass="AltRecordViewController" customModule="Mash" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="M5F-mh-xEm" customClass="RecordViewController" customModule="Mash" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="OiM-yJ-Psf"/>
                         <viewControllerLayoutGuide type="bottom" id="a7z-CC-2Lx"/>
@@ -280,7 +162,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lLw-Sy-TuP">
-                                <rect key="frame" x="0.0" y="251" width="600" height="150"/>
+                                <rect key="frame" x="0.0" y="201" width="600" height="150"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d1P-cp-Upg">
                                         <rect key="frame" x="75" y="2" width="46" height="28"/>
@@ -357,7 +239,7 @@
                                 </variation>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cNk-2j-cDj" customClass="EZAudioPlotGL">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="251"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="201"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jW6-pr-TGB">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="2"/>
@@ -367,14 +249,14 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iqe-Rd-UTm">
-                                        <rect key="frame" x="0.0" y="249" width="600" height="2"/>
+                                        <rect key="frame" x="0.0" y="199" width="600" height="2"/>
                                         <color key="backgroundColor" red="0.38823529410000002" green="0.87843137250000003" blue="1" alpha="1" colorSpace="deviceRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="2" id="4d7-tf-OWe"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rUe-yk-TKk">
-                                        <rect key="frame" x="0.0" y="125.5" width="600" height="1"/>
+                                        <rect key="frame" x="0.0" y="100.5" width="600" height="1"/>
                                         <color key="backgroundColor" red="0.38823529410000002" green="0.87843137250000003" blue="1" alpha="1" colorSpace="deviceRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="coc-k1-M1K"/>
@@ -402,7 +284,7 @@
                                 </variation>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mmh-5A-WZY">
-                                <rect key="frame" x="264" y="261" width="73" height="20"/>
+                                <rect key="frame" x="264" y="211" width="73" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="73" id="b45-ER-bdK"/>
                                 </constraints>
@@ -411,10 +293,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="77c-jK-VHX">
-                                <rect key="frame" x="0.0" y="401" width="600" height="150"/>
+                                <rect key="frame" x="0.0" y="351" width="600" height="200"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="xxQ-LD-54e"/>
+                                    <constraint firstAttribute="height" constant="200" id="xxQ-LD-54e"/>
                                 </constraints>
                             </tableView>
                         </subviews>
@@ -458,7 +340,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lHP-ot-bds" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1943" y="920"/>
+            <point key="canvasLocation" x="1167" y="243"/>
         </scene>
         <!--Tagging View Controller-->
         <scene sceneID="fyq-I1-FFO">
@@ -1517,7 +1399,6 @@
         <image name="guitar_banner_2" width="1920" height="1080"/>
         <image name="home" width="30" height="30"/>
         <image name="logo" width="512" height="512"/>
-        <image name="microphone" width="128" height="128"/>
         <image name="mixer_background" width="960" height="600"/>
         <image name="password" width="512" height="512"/>
         <image name="project" width="30" height="30"/>
