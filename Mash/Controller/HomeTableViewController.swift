@@ -64,6 +64,14 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell") as! HomeCell
+        cell.eventLabel.text = self.data[indexPath.row].eventText
+        cell.userLabel.text = self.data[indexPath.row].userText
+        cell.timeLabel.text = self.data[indexPath.row].timeText
+        self.data[indexPath.row].user!.profile_pic(cell.profileImage)
+        cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFit
+        cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
+        cell.profileImage.layer.borderWidth = 0.5
+        cell.profileImage.layer.masksToBounds = true
         return cell
     }
     
@@ -75,15 +83,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = cell as! HomeCell
-        cell.eventLabel.text = self.data[indexPath.row].eventText
-        cell.userLabel.text = self.data[indexPath.row].userText
-        cell.timeLabel.text = self.data[indexPath.row].timeText
-        self.data[indexPath.row].user!.profile_pic(cell.profileImage)
-        cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFit
-        cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
-        cell.profileImage.layer.borderWidth = 0.5
-        cell.profileImage.layer.masksToBounds = true
     }
 
     // Check if project view exists in memory, if not, create one.
