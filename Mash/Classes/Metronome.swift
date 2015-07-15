@@ -10,13 +10,18 @@ import Foundation
 import UIKit
 import AVFoundation
 
-class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+protocol MetronomeDelegate {
+    func tick(metronome: Metronome)
+}
+
+class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var tempoField: UITextField!
     @IBOutlet weak var timeSigField: UITextField!
-
-    var recordController: RecordViewController?
+    @IBOutlet weak var tempoSlider: UISlider!
+    
+    var delegate: MetronomeDelegate?
     var duration: CGFloat
     var soundPlayerThread: NSThread?
     var tickPlayer: AVAudioPlayer
@@ -33,7 +38,6 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
         self.beat = 0
         self.isPlaying = false
         self.muted = false
-        self.recordController = nil
         
         var tickURL = NSBundle.mainBundle().URLForResource("tick", withExtension: ".caf")
         var tockURL = NSBundle.mainBundle().URLForResource("tock", withExtension: ".caf")
@@ -50,24 +54,35 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
     }
     
     // Create a metronome with recordController
-    class func createView(recordController: RecordViewController) -> Metronome {
+    class func createView() -> Metronome {
         var view = NSBundle.mainBundle().loadNibNamed("Metronome", owner: nil, options: nil)
         let metronome = view[0] as! Metronome
-        metronome.recordController = recordController
         metronome.startButton.addTarget(metronome, action: "toggleMetronome:", forControlEvents: UIControlEvents.TouchDown)
+        
         metronome.tempoField.keyboardType = UIKeyboardType.NumberPad
         metronome.tempoField.delegate = metronome
         metronome.timeSigField.delegate = metronome
         metronome.timeSigField.text = "4/4"
-        var picker = UIPickerView(frame: recordController.audioPlot.frame)
+        metronome.tempoSlider.minimumValue = 40
+        metronome.tempoSlider.maximumValue = 220
+        metronome.tempoSlider.value = 120
+        
+        var picker = UIPickerView(frame: CGRectZero)
         picker.delegate = metronome
         picker.dataSource = metronome
         picker.backgroundColor = lightGray()
+
         metronome.timeSigField.inputView = picker
-        metronome.timeSigField.inputAccessoryView = picker
         return metronome
     }
+    
+    @IBAction func sliderValueChanged(sender: UISlider) {
+        let value = Int(sender.value)
+        self.duration = CGFloat(60.0 / Double(value))
+        self.tempoField.text = "\(value)"
+    }
 
+    // Text Field Delegate
     func textFieldDidEndEditing(textField: UITextField) {
         if textField == self.tempoField {
             var input = self.tempoField.text
@@ -81,22 +96,21 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
             var value = input.toInt()
             if value < 40 {
                 value = 40
-                self.tempoField.text = "40"
-            } else if value > 200 {
-                value = 200
-                self.tempoField.text = "220"
+            } else if value > 220 {
+                value = 220
             }
-            
+            self.tempoField.text = "\(value!)"
+            self.tempoSlider.value = Float(value!)
             self.duration = CGFloat(60.0 / Double(value!))
         }
     }
     
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField == self.timeSigField {
-            textField.inputView!.center = self.recordController!.view.center
         }
     }
 
+    // Picker View Delegate
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         var value = timeSignatureArray[row]
         if value == "None" {
@@ -122,7 +136,8 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1
     }
-
+    
+    // Metronome functions
     func toggleMetronome(sender: AnyObject?) {
         if !muted {
             if !self.isPlaying {
@@ -169,7 +184,7 @@ class Metronome: UIView, UITextFieldDelegate, UIPickerViewDelegate, UIPickerView
     
     func playSound() {
         dispatch_async(dispatch_get_main_queue()) {
-            self.recordController?.tick()
+            self.delegate?.tick(self)
         }
         if self.beat == 0 {
             self.tickPlayer.stop()

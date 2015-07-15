@@ -45,7 +45,7 @@ class OtherRecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicr
         self.metronome = metronome
         metronome.frame = self.toolsController!.metronomeView.frame*/
         
-        var metronome = Metronome.createView(self)
+        var metronome = Metronome.createView()
         self.metronome = metronome
         self.metronomeView.addSubview(metronome)
         metronome.frame = self.metronomeView.frame

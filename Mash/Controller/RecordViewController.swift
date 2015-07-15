@@ -11,7 +11,7 @@ import UIKit
 import EZAudio
 import AVFoundation
 
-class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlayerDelegate, EZAudioFileDelegate {
+class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlayerDelegate, EZAudioFileDelegate, UITableViewDelegate, UITableViewDataSource, MetronomeDelegate {
     
     @IBOutlet weak var audioPlot: EZAudioPlotGL!
     @IBOutlet weak var recordButton: UIButton!
@@ -28,6 +28,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var recorder: EZRecorder? = nil
     var recording: Bool = false
     var recordingStartTime: NSDate = NSDate()
+    var metronome: Metronome? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +56,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.stopButton.addTarget(self, action: "stop:", forControlEvents: UIControlEvents.TouchDown)
         self.clearButton.addTarget(self, action: "clear:", forControlEvents: UIControlEvents.TouchDown)
         
+        self.toolsView.delegate = self
+        self.toolsView.dataSource = self
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -209,6 +212,42 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             milliText = milliText.substringWithRange(Range<String.Index>(start: advance(milliText.startIndex, 2), end: advance(milliText.startIndex, 4)))
             self.timeLabel.text = "\(secondText):\(milliText)"
         }
+    }
+    
+    // Metronome Delegate
+    func tick(metronome: Metronome) {
+        
+    }
+    
+    // TableView Delegate
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return 1
+        } else {
+            return 0
+        }
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            var metronome = Metronome.createView()
+            metronome.backgroundColor = lightGray()
+            self.metronome = metronome
+            return metronome
+        } else {
+            return UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "Default")
+        }
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 75
+        }
+        return 60.0
     }
 
 }
