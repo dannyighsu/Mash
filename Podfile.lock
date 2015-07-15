@@ -1,7 +1,7 @@
 PODS:
-  - AWSCore (2.2.0)
-  - AWSS3 (2.2.0):
-    - AWSCore (= 2.2.0)
+  - AWSCore (2.2.2)
+  - AWSS3 (2.2.2):
+    - AWSCore (= 2.2.2)
   - Bolts (1.2.0):
     - Bolts/AppLinks (= 1.2.0)
     - Bolts/Tasks (= 1.2.0)
@@ -9,28 +9,34 @@ PODS:
     - Bolts/Tasks
   - Bolts/Tasks (1.2.0)
   - CryptoSwift (0.0.11)
-  - EZAudio (0.0.6)
-  - FBSDKCoreKit (4.3.0):
+  - EZAudio (1.1.1):
+    - EZAudio/Full (= 1.1.1)
+  - EZAudio/Core (1.1.1)
+  - EZAudio/Full (1.1.1):
+    - EZAudio/Core
+    - TPCircularBuffer (~> 0.0)
+  - FBSDKCoreKit (4.4.0):
     - Bolts (~> 1.1)
-    - FBSDKCoreKit/arc (= 4.3.0)
-    - FBSDKCoreKit/no-arc (= 4.3.0)
-  - FBSDKCoreKit/arc (4.3.0):
+    - FBSDKCoreKit/arc (= 4.4.0)
+    - FBSDKCoreKit/no-arc (= 4.4.0)
+  - FBSDKCoreKit/arc (4.4.0):
     - Bolts (~> 1.1)
-  - FBSDKCoreKit/no-arc (4.3.0):
+  - FBSDKCoreKit/no-arc (4.4.0):
     - Bolts (~> 1.1)
     - FBSDKCoreKit/arc
-  - FBSDKLoginKit (4.3.0):
+  - FBSDKLoginKit (4.4.0):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.3.0):
+  - FBSDKShareKit (4.4.0):
     - FBSDKCoreKit
   - google-plus-ios-sdk (1.7.1)
   - IQKeyboardManager (3.2.4)
+  - TPCircularBuffer (0.0.1)
 
 DEPENDENCIES:
   - AWSCore
   - AWSS3
   - CryptoSwift (from `https://github.com/krzyzanowskim/CryptoSwift`, branch `master`)
-  - EZAudio (~> 0.0.6)
+  - EZAudio
   - FBSDKCoreKit
   - FBSDKLoginKit
   - FBSDKShareKit
@@ -48,15 +54,16 @@ CHECKOUT OPTIONS:
     :git: https://github.com/krzyzanowskim/CryptoSwift
 
 SPEC CHECKSUMS:
-  AWSCore: 36712cbe827a50b81f1660349e0c202339797f23
-  AWSS3: 5efcdff6010353fe53ef065be7760d60419c65b1
+  AWSCore: 3e969334460cc7ba16504fb2e074f59f95880800
+  AWSS3: 4f89fcc0ef11303f94f561310979a0d2ec816fff
   Bolts: d176cb1e0012175589e389a9db49b85e27787576
   CryptoSwift: 0ab68b71eaff076bddb1de4e5ac9f85f61c023e2
-  EZAudio: feb8e1c3ec17d8933bc2efc66b59ead1f2e79e54
-  FBSDKCoreKit: a3a60225a84abeace291d0fe71cae29a627382c2
-  FBSDKLoginKit: 6bc2f8f2628c3b6d2e346762fff8cb55cfd3a58d
-  FBSDKShareKit: 15806d69714de39d5dff2c84645f4cde23f5876e
+  EZAudio: 63cd1f0d1b1261f76955dab204a10af067ffb689
+  FBSDKCoreKit: 75bdd75c980e811db218488d99dd93b7740f4474
+  FBSDKLoginKit: 02a9254a4c132412fa03577b0d53e936d068a7fb
+  FBSDKShareKit: a42865f20ba2d1cc548c4d0f73ad22cff6377ddb
   google-plus-ios-sdk: 47adbe03ea904bdb7aa1c0eca282a23c4686e1bc
   IQKeyboardManager: 555b1231fefafb21b19278d7cca72986a27b748b
+  TPCircularBuffer: 949e9632b9fb99b7274d7b2296ee22bff5841e35
 
 COCOAPODS: 0.37.2

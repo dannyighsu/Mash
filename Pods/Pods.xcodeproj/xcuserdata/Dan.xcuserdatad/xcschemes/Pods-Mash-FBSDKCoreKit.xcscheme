@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4DA5A382D0E62CDE7C09476C"
+               BlueprintIdentifier = "C96A7A5A534729876A68DE9C"
                BuildableName = "FBSDKCoreKit.framework"
                BlueprintName = "Pods-Mash-FBSDKCoreKit"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -39,15 +39,6 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4DA5A382D0E62CDE7C09476C"
-            BuildableName = "FBSDKCoreKit.framework"
-            BlueprintName = "Pods-Mash-FBSDKCoreKit"
-            ReferencedContainer = "container:Pods.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

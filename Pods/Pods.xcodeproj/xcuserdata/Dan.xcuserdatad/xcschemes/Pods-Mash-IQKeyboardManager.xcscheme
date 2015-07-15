@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EAA4AB85244B37EDF59B5D38"
+               BlueprintIdentifier = "CE106D1BFFD704431F639C77"
                BuildableName = "IQKeyboardManager.framework"
                BlueprintName = "Pods-Mash-IQKeyboardManager"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -39,15 +39,6 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAA4AB85244B37EDF59B5D38"
-            BuildableName = "IQKeyboardManager.framework"
-            BlueprintName = "Pods-Mash-IQKeyboardManager"
-            ReferencedContainer = "container:Pods.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

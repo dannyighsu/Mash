@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D578F383AEB679380F4FF998"
+               BlueprintIdentifier = "36AD18E94889EE80055E2751"
                BuildableName = "CryptoSwift.framework"
                BlueprintName = "Pods-Mash-CryptoSwift"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -39,15 +39,6 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D578F383AEB679380F4FF998"
-            BuildableName = "CryptoSwift.framework"
-            BlueprintName = "Pods-Mash-CryptoSwift"
-            ReferencedContainer = "container:Pods.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

@@ -1,7 +1,6 @@
 #import <UIKit/UIKit.h>
 
 #import "AWSCore.h"
-#import "metamacros.h"
 #import "AWSCredentialsProvider.h"
 #import "AWSIdentityProvider.h"
 #import "AWSSignature.h"
@@ -13,13 +12,6 @@
 #import "AWSCognitoIdentityModel.h"
 #import "AWSCognitoIdentityResources.h"
 #import "AWSCognitoIdentityService.h"
-//#import "AWSFMDatabase.h"
-//#import "AWSFMDatabaseAdditions.h"
-//#import "AWSFMDatabasePool.h"
-//#import "AWSFMDatabaseQueue.h"
-//#import "AWSFMDB.h"
-//#import "AWSFMResultSet.h"
-#import "AWSGZIP.h"
 #import "AWSMantle.h"
 #import "AWSMTLJSONAdapter.h"
 #import "AWSMTLManagedObjectAdapter.h"
@@ -39,7 +31,6 @@
 #import "NSValueTransformer+AWSMTLPredefinedTransformerAdditions.h"
 #import "AWSNetworking.h"
 #import "AWSURLSessionManager.h"
-#import "AWSReachability.h"
 #import "AWSSerialization.h"
 #import "AWSURLRequestRetryHandler.h"
 #import "AWSURLRequestSerialization.h"
@@ -52,16 +43,10 @@
 #import "AWSSTSModel.h"
 #import "AWSSTSResources.h"
 #import "AWSSTSService.h"
-#import "AWSTMCache.h"
-#import "AWSTMDiskCache.h"
-#import "AWSTMMemoryCache.h"
-#import "AWSUICKeyChainStore.h"
 #import "AWSCategory.h"
 #import "AWSLogging.h"
 #import "AWSModel.h"
 #import "AWSSynchronizedMutableDictionary.h"
-#import "AWSXMLDictionary.h"
-#import "AWSXMLWriter.h"
 
 FOUNDATION_EXPORT double AWSCoreVersionNumber;
 FOUNDATION_EXPORT const unsigned char AWSCoreVersionString[];

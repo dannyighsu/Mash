@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "01D1D943BCD7EBE5975ECA57"
+               BlueprintIdentifier = "B361309E6EF8A69333B1BE6D"
                BuildableName = "AWSCore.framework"
                BlueprintName = "Pods-Mash-AWSCore"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -39,15 +39,6 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "01D1D943BCD7EBE5975ECA57"
-            BuildableName = "AWSCore.framework"
-            BlueprintName = "Pods-Mash-AWSCore"
-            ReferencedContainer = "container:Pods.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

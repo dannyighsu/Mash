@@ -6,7 +6,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'Mash' do
-    pod 'EZAudio', '~> 0.0.6'
+    pod 'EZAudio'
     pod 'IQKeyboardManager'
     pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :branch => "master"
     pod 'google-plus-ios-sdk'

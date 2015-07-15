@@ -22,6 +22,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     @IBOutlet weak var audioPlotBar: UIView!
     @IBOutlet weak var stopButton: UIButton!
     @IBOutlet weak var toolsView: UITableView!
+    @IBOutlet weak var volumeSlider: UISlider!
+    @IBOutlet weak var speakerImage: UIButton!
 
     var microphone: EZMicrophone? = nil
     var player: EZAudioPlayer? = nil
@@ -78,7 +80,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        if self.player != nil && self.player!.isPlaying() {
+        if self.player != nil && self.player!.isPlaying {
             self.stop(nil)
         }
         if self.recording {
@@ -88,18 +90,18 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     // Button methods
     func record(sender: AnyObject?) {
-        if self.player != nil && self.player!.isPlaying() {
+        if self.player != nil && self.player!.isPlaying {
             self.stop(nil)
         }
         if !self.recording {
             self.invalidateButtons()
             self.prepareRecording()
         } else {
+            self.metronome?.toggleMetronome(nil)
             self.microphone?.stopFetchingAudio()
             self.recorder?.closeAudioFile()
-            self.openAudioFile()
+            self.openAudio()
             self.recording = false
-            self.metronome?.toggleMetronome(nil)
             self.validateButtons()
         }
     }
@@ -108,14 +110,14 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         if self.audioFile == nil {
             return
         }
-        if self.player != nil && self.player!.isPlaying() {
+        if self.player != nil && self.player!.isPlaying {
             self.player!.pause()
             self.playButton.imageView?.image = UIImage(named: "Play")
-        } else if self.player != nil && !self.player!.isPlaying() {
+        } else if self.player != nil && !self.player!.isPlaying {
             self.player!.play()
             self.playButton.imageView?.image = UIImage(named: "Play_2")
         } else if self.player == nil {
-            self.player = EZAudioPlayer(EZAudioFile: self.audioFile, withDelegate: self)
+            self.player = EZAudioPlayer(audioFile: self.audioFile, delegate: self)
             self.player!.play()
             self.playButton.imageView?.image = UIImage(named: "Play_2")
         }
@@ -123,14 +125,16 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     func stop(sender: AnyObject?) {
         if self.player != nil {
-            self.player!.stop()
+            self.player!.pause()
+            self.player!.seekToFrame(0)
             self.playButton.imageView?.image = UIImage(named: "Play")
             self.audioPlot.clear()
+            Wrappers.getWaveform(self.audioFile!, audioPlot: self.audioPlot)
         }
     }
     
     func clear(sender: AnyObject?) {
-        if self.player != nil && self.player!.isPlaying() {
+        if self.player != nil && self.player!.isPlaying {
             self.player!.pause()
         }
         self.player = nil
@@ -147,6 +151,16 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         controller.bpm = Int(60.0 / Double(self.metronome!.duration))
         controller.timeSignature = self.metronome!.timeSigField.text
         self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    // Slider methods
+    @IBAction func volumeDidChange(sender: UISlider) {
+        if self.player != nil {
+            self.player!.volume = sender.value
+            if sender.value == 0 {
+                self.speakerImage.imageView?.image = UIImage(named: "speaker_white_2")
+            }
+        }
     }
     
     // Auxiliary methods
@@ -167,9 +181,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         beatLabel.center = view.center
         self.countoffView = view
         self.view.addSubview(view)
+        self.metronome!.toggleMetronome(nil)
         
         UIView.animateWithDuration(0.3, animations: { view.alpha = 1.0 })
-        self.metronome!.toggleMetronome(nil)
     }
     
     func drawRollingPlot() {
@@ -190,15 +204,17 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.audioPlot.gain = 1.0
     }
     
-    func openAudioFile() {
-        self.audioFile = EZAudioFile(URL: filePathURL(nil), andDelegate: self)
+    func openAudio() {
+        self.audioFile = EZAudioFile(URL: filePathURL(nil), delegate: self)
+        self.player = EZAudioPlayer(audioFile: self.audioFile)
         self.drawRollingPlot()
-        self.audioFile!.getWaveformDataWithCompletionBlock() {
-            (waveformData, length) in
+        Wrappers.getWaveform(self.audioFile!, audioPlot: self.audioPlot)
+        /*self.audioFile?.getWaveformDataWithCompletionBlock() {
+            (waveformData: UnsafeMutablePointer<UnsafeMutablePointer<Float>>, length: Int32) in
             dispatch_async(dispatch_get_main_queue()) {
-                self.audioPlot.updateBuffer(waveformData, withBufferSize: length)
+                self.audioPlot.updateBuffer(waveformData[0], withBufferSize: UInt32(length))
             }
-        }
+        }*/
     }
     
     func invalidateButtons() {
@@ -247,7 +263,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     func audioPlayer(audioPlayer: EZAudioPlayer!, updatedPosition framePosition: Int64, inAudioFile audioFile: EZAudioFile!) {
         dispatch_async(dispatch_get_main_queue()) {
-            let time = audioPlayer.currentTime()
+            let time = audioPlayer.currentTime
             if time == 0 {
                 self.timeLabel.text = "00:00"
                 return
@@ -269,7 +285,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             self.beatLabel!.text = "\(self.beat)"
         } else if self.beat == 1 {
             self.drawRollingPlot()
-            self.recorder = EZRecorder(destinationURL: filePathURL(nil), sourceFormat: self.microphone!.audioStreamBasicDescription(), destinationFileType: EZRecorderFileType.M4A)
+            self.recorder = EZRecorder(URL: filePathURL(nil), clientFormat: self.microphone!.audioStreamBasicDescription(), fileType: EZRecorderFileType.M4A)
             self.microphone?.startFetchingAudio()
             self.recordingStartTime = NSDate()
             self.recording = true

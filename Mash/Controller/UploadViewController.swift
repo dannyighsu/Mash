@@ -36,7 +36,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.doneButton.addTarget(self, action: "checkInput:", forControlEvents: UIControlEvents.TouchDown)
         self.cancelButton.addTarget(self, action: "cancel:", forControlEvents: UIControlEvents.TouchDown)
         
-        self.audioPlayer = AVAudioPlayer(contentsOfURL: recording!.url(), error: nil)
+        self.audioPlayer = AVAudioPlayer(contentsOfURL: recording!.url, error: nil)
         
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
@@ -97,7 +97,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     // Upload file to bucket, then post information to server
     func uploadAction() {
         // Bucket upload
-        var urlString = self.recording?.url()
+        var urlString = self.recording?.url
         
         // Post data to server
         let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
@@ -166,7 +166,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func finish() {
         let taggingController = self.storyboard?.instantiateViewControllerWithIdentifier("TaggingViewController") as! TaggingViewController
-        taggingController.track = Track(frame: CGRectZero, instruments: self.instruments, titleText: self.titleTextField.text, bpm: self.bpm!, trackURL: self.recording!.url().absoluteString! as String, user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
+        taggingController.track = Track(frame: CGRectZero, instruments: self.instruments, titleText: self.titleTextField.text, bpm: self.bpm!, trackURL: self.recording!.url.absoluteString! as String, user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
         taggingController.track?.instrumentFamilies += self.instruments
         var index = 0
         for i in 0...self.navigationController!.viewControllers.count {
