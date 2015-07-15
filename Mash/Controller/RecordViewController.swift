@@ -29,6 +29,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var recording: Bool = false
     var recordingStartTime: NSDate = NSDate()
     var metronome: Metronome? = nil
+    var beat: Int = 5
+    var beatLabel: UILabel? = nil
+    var countoffView: UIView? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,8 +65,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        self.parentViewController?.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Tools", style: UIBarButtonItemStyle.Plain, target: self, action: "showTools:"), animated: false)
-        self.parentViewController?.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
+        /*self.parentViewController?.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Tools", style: UIBarButtonItemStyle.Plain, target: self, action: "showTools:"), animated: false)
+        self.parentViewController?.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)*/
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -74,17 +77,14 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     // Button methods
     func record(sender: AnyObject?) {
         if !self.recording {
-            self.drawRollingPlot()
-            self.recorder = EZRecorder(destinationURL: filePathURL(nil), sourceFormat: self.microphone!.audioStreamBasicDescription(), destinationFileType: EZRecorderFileType.M4A)
-            self.microphone?.startFetchingAudio()
-            self.recordingStartTime = NSDate()
-            self.recording = true
             self.invalidateButtons()
+            self.prepareRecording()
         } else {
             self.microphone?.stopFetchingAudio()
             self.recorder?.closeAudioFile()
             self.openAudioFile()
             self.recording = false
+            self.metronome?.toggleMetronome(nil)
             self.validateButtons()
         }
     }
@@ -128,6 +128,28 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     }
     
     // Auxiliary methods
+    func prepareRecording() {
+        var view = UIView(frame: self.view.frame)
+        view.backgroundColor = UIColor(red: 40, green: 40, blue: 40, alpha: 0.6)
+        view.alpha = 0.0
+        
+        self.beat = self.metronome!.timeSignature[0] + 1
+        var beatLabel = UILabel(frame: view.frame)
+        beatLabel.font = UIFont(name: "STHeitiSC-Light", size: 100)
+        beatLabel.textColor = UIColor.blackColor()
+        beatLabel.text = "\(self.beat)"
+        beatLabel.textAlignment = NSTextAlignment.Center
+        
+        self.beatLabel = beatLabel
+        view.addSubview(beatLabel)
+        beatLabel.center = view.center
+        self.countoffView = view
+        self.view.addSubview(view)
+        
+        UIView.animateWithDuration(0.3, animations: { view.alpha = 1.0 })
+        self.metronome!.toggleMetronome(nil)
+    }
+    
     func drawRollingPlot() {
         self.audioPlot.clear()
         self.audioPlotBar.hidden = false
@@ -216,7 +238,21 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     // Metronome Delegate
     func tick(metronome: Metronome) {
-        
+        if self.beat > 1 {
+            self.beat -= 1
+            self.beatLabel!.text = "\(self.beat)"
+        } else if self.beat == 1 {
+            self.drawRollingPlot()
+            self.recorder = EZRecorder(destinationURL: filePathURL(nil), sourceFormat: self.microphone!.audioStreamBasicDescription(), destinationFileType: EZRecorderFileType.M4A)
+            self.microphone?.startFetchingAudio()
+            self.recordingStartTime = NSDate()
+            self.recording = true
+            self.beat = 0
+            UIView.animateWithDuration(0.3, animations: { self.countoffView!.alpha = 0.0 }) {
+                (completed: Bool) in
+                self.countoffView?.removeFromSuperview()
+            }
+        }
     }
     
     // TableView Delegate
@@ -235,6 +271,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             var metronome = Metronome.createView()
+            metronome.delegate = self
             metronome.backgroundColor = lightGray()
             self.metronome = metronome
             return metronome
