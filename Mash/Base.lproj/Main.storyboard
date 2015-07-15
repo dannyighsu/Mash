@@ -203,7 +203,7 @@
                                         </variation>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HeS-ZO-Pao">
-                                        <rect key="frame" x="418" y="47" width="65" height="65"/>
+                                        <rect key="frame" x="415" y="47" width="65" height="65"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="65" id="0cN-4O-Iy1"/>
                                             <constraint firstAttribute="width" constant="46" id="aw4-fQ-Ux3"/>
@@ -218,6 +218,14 @@
                                             </mask>
                                         </variation>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I0O-Jy-IRP">
+                                        <rect key="frame" x="491" y="2" width="39" height="28"/>
+                                        <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
+                                        <state key="normal" title="Save">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.21176470588235294" green="0.21176470588235294" blue="0.21176470588235294" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -227,9 +235,11 @@
                                     <constraint firstItem="d1P-cp-Upg" firstAttribute="leading" secondItem="lLw-Sy-TuP" secondAttribute="leading" constant="75" id="TKc-Fj-60K"/>
                                     <constraint firstItem="zlE-el-cOZ" firstAttribute="baseline" secondItem="HeS-ZO-Pao" secondAttribute="baseline" constant="-10.5" id="bW2-c2-wIj"/>
                                     <constraint firstAttribute="height" constant="150" id="dJz-K7-fUP"/>
-                                    <constraint firstItem="HeS-ZO-Pao" firstAttribute="leading" secondItem="zlE-el-cOZ" secondAttribute="trailing" constant="73" id="gDH-Hx-nS0"/>
+                                    <constraint firstItem="I0O-Jy-IRP" firstAttribute="bottom" secondItem="d1P-cp-Upg" secondAttribute="bottom" id="ezo-JB-1a3"/>
+                                    <constraint firstItem="HeS-ZO-Pao" firstAttribute="leading" secondItem="zlE-el-cOZ" secondAttribute="trailing" constant="70" id="gDH-Hx-nS0"/>
                                     <constraint firstItem="d1P-cp-Upg" firstAttribute="top" secondItem="lLw-Sy-TuP" secondAttribute="top" constant="2" id="hf7-Yx-6Fd"/>
                                     <constraint firstItem="zlE-el-cOZ" firstAttribute="leading" secondItem="zox-7z-BKk" secondAttribute="trailing" constant="66" id="nAh-DN-H70"/>
+                                    <constraint firstAttribute="trailing" secondItem="I0O-Jy-IRP" secondAttribute="trailing" constant="70" id="qc2-Mu-1cO"/>
                                     <constraint firstItem="zox-7z-BKk" firstAttribute="top" secondItem="lLw-Sy-TuP" secondAttribute="top" constant="47" id="uQz-eK-8KN"/>
                                 </constraints>
                                 <variation key="default">
@@ -242,21 +252,21 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="201"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jW6-pr-TGB">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="2"/>
-                                        <color key="backgroundColor" red="0.38823529410000002" green="0.87843137250000003" blue="1" alpha="1" colorSpace="deviceRGB"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="1"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="2" id="fac-mK-gNp"/>
+                                            <constraint firstAttribute="height" constant="1" id="fac-mK-gNp"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iqe-Rd-UTm">
-                                        <rect key="frame" x="0.0" y="199" width="600" height="2"/>
-                                        <color key="backgroundColor" red="0.38823529410000002" green="0.87843137250000003" blue="1" alpha="1" colorSpace="deviceRGB"/>
+                                        <rect key="frame" x="0.0" y="199" width="600" height="1"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="2" id="4d7-tf-OWe"/>
+                                            <constraint firstAttribute="height" constant="1" id="4d7-tf-OWe"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rUe-yk-TKk">
-                                        <rect key="frame" x="0.0" y="100.5" width="600" height="1"/>
+                                        <rect key="frame" x="0.0" y="101" width="600" height="1"/>
                                         <color key="backgroundColor" red="0.38823529410000002" green="0.87843137250000003" blue="1" alpha="1" colorSpace="deviceRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="coc-k1-M1K"/>
@@ -274,7 +284,7 @@
                                     <constraint firstItem="iqe-Rd-UTm" firstAttribute="leading" secondItem="cNk-2j-cDj" secondAttribute="leading" id="gtA-Im-6nQ"/>
                                     <constraint firstAttribute="centerY" secondItem="rUe-yk-TKk" secondAttribute="centerY" constant="-0.5" id="pLL-XN-qUg"/>
                                     <constraint firstItem="jW6-pr-TGB" firstAttribute="leading" secondItem="cNk-2j-cDj" secondAttribute="leading" id="sdg-sx-hxc"/>
-                                    <constraint firstAttribute="bottom" secondItem="iqe-Rd-UTm" secondAttribute="bottom" id="u0Z-6D-Of1"/>
+                                    <constraint firstAttribute="bottom" secondItem="iqe-Rd-UTm" secondAttribute="bottom" constant="1" id="u0Z-6D-Of1"/>
                                     <constraint firstItem="iqe-Rd-UTm" firstAttribute="top" secondItem="cNk-2j-cDj" secondAttribute="top" id="zbh-tO-5JC"/>
                                 </constraints>
                                 <variation key="default">
@@ -333,6 +343,7 @@
                         <outlet property="clearButton" destination="d1P-cp-Upg" id="r6f-yY-m2S"/>
                         <outlet property="playButton" destination="zox-7z-BKk" id="n7L-4C-Oie"/>
                         <outlet property="recordButton" destination="zlE-el-cOZ" id="W86-ri-LYD"/>
+                        <outlet property="saveButton" destination="I0O-Jy-IRP" id="bSQ-Kf-god"/>
                         <outlet property="stopButton" destination="HeS-ZO-Pao" id="Q33-oP-9hK"/>
                         <outlet property="timeLabel" destination="Mmh-5A-WZY" id="D1C-eD-07u"/>
                         <outlet property="toolsView" destination="77c-jK-VHX" id="3b4-Z3-9QU"/>
