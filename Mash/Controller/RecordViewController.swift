@@ -18,6 +18,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var clearButton: UIButton!
+    @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var audioPlotBar: UIView!
     @IBOutlet weak var stopButton: UIButton!
     @IBOutlet weak var toolsView: UITableView!
@@ -58,6 +59,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.recordButton.addTarget(self, action: "record:", forControlEvents: UIControlEvents.TouchDown)
         self.stopButton.addTarget(self, action: "stop:", forControlEvents: UIControlEvents.TouchDown)
         self.clearButton.addTarget(self, action: "clear:", forControlEvents: UIControlEvents.TouchDown)
+        self.saveButton.addTarget(self, action: "save:", forControlEvents: UIControlEvents.TouchDown)
         
         self.toolsView.delegate = self
         self.toolsView.dataSource = self
@@ -74,8 +76,21 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.parentViewController?.navigationItem.title = "Record"
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        if self.player != nil && self.player!.isPlaying() {
+            self.stop(nil)
+        }
+        if self.recording {
+            self.record(nil)
+        }
+    }
+    
     // Button methods
     func record(sender: AnyObject?) {
+        if self.player != nil && self.player!.isPlaying() {
+            self.stop(nil)
+        }
         if !self.recording {
             self.invalidateButtons()
             self.prepareRecording()
@@ -102,16 +117,14 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         } else if self.player == nil {
             self.player = EZAudioPlayer(EZAudioFile: self.audioFile, withDelegate: self)
             self.player!.play()
-            self.playButton.imageView?.image = UIImage(named: "play_2")
+            self.playButton.imageView?.image = UIImage(named: "Play_2")
         }
     }
     
     func stop(sender: AnyObject?) {
-        if self.player != nil && self.player!.isPlaying() {
-            self.player!.pause()
-            self.player = EZAudioPlayer(EZAudioFile: self.audioFile, withDelegate: self)
-        } else if self.player != nil {
-            self.player = EZAudioPlayer(EZAudioFile: self.audioFile, withDelegate: self)
+        if self.player != nil {
+            self.player!.stop()
+            self.playButton.imageView?.image = UIImage(named: "Play")
         }
     }
     
@@ -125,6 +138,14 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.microphone!.startFetchingAudio()
         self.drawBufferPlot()
         self.timeLabel.text = "00:00"
+    }
+    
+    func save(sender: AnyObject?) {
+        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("UploadViewController") as! UploadViewController
+        controller.recording = self.audioFile
+        controller.bpm = Int(60.0 / Double(self.metronome!.duration))
+        controller.timeSignature = self.metronome!.timeSigField.text
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     // Auxiliary methods
@@ -226,6 +247,10 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     func audioPlayer(audioPlayer: EZAudioPlayer!, updatedPosition framePosition: Int64, inAudioFile audioFile: EZAudioFile!) {
         dispatch_async(dispatch_get_main_queue()) {
             let time = audioPlayer.currentTime()
+            if time == 0 {
+                self.timeLabel.text = "00:00"
+                return
+            }
             var secondText = String(stringInterpolationSegment: Int(time))
             if time < 10.0 {
                 secondText = "0\(secondText)"

@@ -22,6 +22,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     var instruments: [String] = []
     var audioPlayer: AVAudioPlayer? = nil
     var timeSignature: String? = nil
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +37,9 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.cancelButton.addTarget(self, action: "cancel:", forControlEvents: UIControlEvents.TouchDown)
         
         self.audioPlayer = AVAudioPlayer(contentsOfURL: recording!.url(), error: nil)
+        
+        self.view.addSubview(self.activityView)
+        self.activityView.center = self.view.center
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -116,6 +120,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                     return
                 } else if statusCode == HTTP_SUCCESS {
                     dispatch_async(dispatch_get_main_queue()) {
+                        self.activityView.stopAnimating()
                         upload("\(current_user.username!)~~\(self.titleTextField.text).m4a", urlString!, track_bucket)
                         self.finish()
                     }
@@ -132,6 +137,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     func checkForDuplicate(username: String, passwordHash: String) {
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
         var params: [String: String] = ["username": username, "password_hash": passwordHash, "query_name": username, "song_name": self.titleTextField.text]
+        self.activityView.startAnimating()
         httpPost(params,request) {
             (data, statusCode, error) -> Void in
             var duplicate = false
@@ -150,6 +156,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                 self.uploadAction()
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
                     let alert = UIAlertView(title: "Track exists.", message: "Please choose a different title.", delegate: self, cancelButtonTitle: "Ok")
                     alert.show()
                 }
