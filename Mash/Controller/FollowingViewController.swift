@@ -37,7 +37,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.username = follower.username
         cell.altname = follower.altname
         cell.profile_pic_link = follower.profile_pic_link
-        cell.profilePicture?.image = follower.profile_pic()
+        follower.profile_pic(cell.profilePicture!)
         cell.profilePicture?.layer.cornerRadius = cell.imageView!.frame.size.width / 2
         cell.profilePicture?.layer.borderWidth = 1.0
         cell.profilePicture?.layer.masksToBounds = true

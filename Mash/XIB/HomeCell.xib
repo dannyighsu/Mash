@@ -16,9 +16,9 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eiq-fM-PRz">
-                        <rect key="frame" x="54" y="15" width="94" height="22"/>
+                        <rect key="frame" x="54" y="15" width="50" height="22"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="94" id="bE5-FZ-iDO"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="bE5-FZ-iDO"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="15"/>
                         <nil key="highlightedColor"/>

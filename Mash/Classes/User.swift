@@ -44,7 +44,7 @@ class User: UITableViewCell {
         self.following = following
         self.tracks = tracks
         self.user_description = description
-        self.profilePicture.image = self.profile_pic()
+        self.profile_pic(self.profilePicture)
         self.nameLabel.titleLabel?.text = self.display_name()
     }
     
@@ -55,33 +55,31 @@ class User: UITableViewCell {
         return self.altname
     }
     
-    func profile_pic() -> UIImage {
+    func profile_pic(imageView: UIImageView) {
         if count(self.profile_pic_link!) == 0 {
-            return UIImage(named: "no_profile_pic")!
+            imageView.image = UIImage(named: "no_profile_pic")!
+            return
         } else {
-            download("\(self.username!)~~profile_pic.jpg", filePathURL(self.profile_pic_link), profile_bucket)
-            while !NSFileManager.defaultManager().fileExistsAtPath(filePathString(self.profile_pic_link)) {
-                Debug.printnl("waiting...")
-                NSThread.sleepForTimeInterval(0.5)
+            download("\(self.username!)~~profile_pic.jpg", filePathURL(self.profile_pic_link), profile_bucket) {
+                (result) -> Void in
+                dispatch_async(dispatch_get_main_queue()) {
+                    imageView.image = UIImage(contentsOfFile: filePathString(self.profile_pic_link))!
+                }
             }
-            NSThread.sleepForTimeInterval(0.5)
-            
-            return UIImage(contentsOfFile: filePathString(self.profile_pic_link))!
         }
     }
     
-    func banner_pic() -> UIImage {
+    func banner_pic(imageView: UIImageView) {
         if count(self.banner_pic_link!) == 0 {
-            return UIImage(named: "no_banner")!
+            imageView.image = UIImage(named: "no_banner")!
+            return
         } else {
-            download("\(self.username!)~~banner.jpg", filePathURL(self.banner_pic_link), banner_bucket)
-            while !NSFileManager.defaultManager().fileExistsAtPath(filePathString(self.banner_pic_link)) {
-                Debug.printnl("waiting...")
-                NSThread.sleepForTimeInterval(0.5)
+            download("\(self.username!)~~banner.jpg", filePathURL(self.banner_pic_link), banner_bucket) {
+                (result) -> Void in
+                dispatch_async(dispatch_get_main_queue()) {
+                    imageView.image = UIImage(contentsOfFile: filePathString(self.banner_pic_link))!
+                }
             }
-            NSThread.sleepForTimeInterval(0.5)
-            
-            return UIImage(contentsOfFile: filePathString(self.banner_pic_link))!
         }
     }
     
@@ -163,8 +161,8 @@ class User: UITableViewCell {
                         
                         controller.parentViewController?.navigationItem.title! = current_user.display_name()!
                         let profile = controller.tracks.headerViewForSection(0) as! Profile
-                        profile.profilePic.image = current_user.profile_pic()
-                        profile.bannerImage.image = current_user.banner_pic()
+                        current_user.profile_pic(profile.profilePic)
+                        current_user.banner_pic(profile.bannerImage)
                         profile.descriptionLabel.text = current_user.user_description
                         var followers = NSMutableAttributedString(string: "  \(current_user.followers!)\n  FOLLOWERS")
                         profile.followerCount.attributedText = followers

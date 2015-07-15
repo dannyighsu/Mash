@@ -164,6 +164,32 @@ func download(key: String, url: NSURL, bucket: String) {
     }
 }
 
+func download(key: String, url: NSURL, bucket: String, completion: (result: AWSS3TransferManagerDownloadOutput) -> Void) {
+    let request: AWSS3TransferManagerDownloadRequest = AWSS3TransferManagerDownloadRequest.new()
+    request.bucket = bucket
+    request.key = key
+    request.downloadingFileURL = url
+    let transferManager: AWSS3TransferManager = AWSS3TransferManager.defaultS3TransferManager()
+    
+    transferManager.download(request).continueWithBlock() {
+        (task: AWSTask!) -> AnyObject! in
+        if (task.error != nil) {
+            if task.error.domain == AWSS3TransferManagerErrorDomain {
+                Debug.printl("Download Error: \(task.error)", sender: "helpers")
+            } else {
+                Debug.printl("Download Error: \(task.error)", sender: "helpers")
+            }
+        }
+        if (task.result != nil) {
+            let downloadOutput: AWSS3TransferManagerDownloadOutput = task.result as! AWSS3TransferManagerDownloadOutput
+            Debug.printl("download complete:\(downloadOutput)", sender: "helpers")
+            completion(result: downloadOutput)
+            return task
+        }
+        return nil
+    }
+}
+
 // Upload to S3 bucket
 func upload(key: String, url: NSURL, bucket: String) {
     let request: AWSS3TransferManagerUploadRequest = AWSS3TransferManagerUploadRequest.new()

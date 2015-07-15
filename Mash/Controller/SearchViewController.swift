@@ -15,6 +15,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     var searchResults: [Track] = []
     var searchController: UISearchController?
     var audioPlayer: AVAudioPlayer? = nil
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +25,9 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.searchController!.searchResultsUpdater = self
         self.searchController!.delegate = self
         self.searchController!.searchBar.delegate = self
+        
+        self.view.addSubview(self.activityView)
+        self.activityView.center = self.view.center
         
         // Register nibs
         let track = UINib(nibName: "Track", bundle: nil)
@@ -61,8 +65,12 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
 
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let track = tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
         let index = indexPath.row
-        let track = cell as! Track
         track.title.text = self.searchResults[index].titleText
         track.titleText = track.title.text!
         track.instruments = self.searchResults[index].instruments
@@ -74,11 +82,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         track.userText = searchResults[index].userText
         track.userLabel.text = track.userText
         track.format = searchResults[index].format
-    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
-        return cell
+        return track
     }
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -126,12 +130,16 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/search/recording")!)
         var params = ["username": username, "password_hash": passwordHash, "song_name": searchText] as Dictionary
+        self.activityView.startAnimating()
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
                 return
             } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
+                }
                 // Check status codes
                 if statusCode == HTTP_ERROR {
                     Debug.printl("Error: \(error)", sender: self)

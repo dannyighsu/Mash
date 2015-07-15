@@ -1,8 +1,8 @@
 //
 //  RecordViewController.swift
-//  Mash-iOS
+//  Mash
 //
-//  Created by Danny Hsu on 6/9/15.
+//  Created by Danny Hsu on 7/13/15.
 //  Copyright (c) 2015 Mash. All rights reserved.
 //
 
@@ -11,292 +11,280 @@ import UIKit
 import EZAudio
 import AVFoundation
 
-class RecordViewController: UIViewController, AVAudioPlayerDelegate, EZMicrophoneDelegate, EZAudioFileDelegate, EZOutputDataSource {
+class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlayerDelegate, EZAudioFileDelegate, UITableViewDelegate, UITableViewDataSource, MetronomeDelegate {
     
-    @IBOutlet var micButton: UIButton!
-    @IBOutlet weak var metronomeView: UIView!
-    @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var clearButton: UIButton!
-    @IBOutlet weak var playButton: UIButton!
-    @IBOutlet weak var instructionLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var audioPlot: EZAudioPlotGL!
+    @IBOutlet weak var recordButton: UIButton!
+    @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var clearButton: UIButton!
+    @IBOutlet weak var audioPlotBar: UIView!
+    @IBOutlet weak var stopButton: UIButton!
+    @IBOutlet weak var toolsView: UITableView!
 
-    var recording: Bool = false
-    var eof: Bool = false
-    var metronome: Metronome? = nil
     var microphone: EZMicrophone? = nil
+    var player: EZAudioPlayer? = nil
     var audioFile: EZAudioFile? = nil
     var recorder: EZRecorder? = nil
-    var toolsShowing: Bool = false
-    var toolsTap: UITapGestureRecognizer? = nil
+    var recording: Bool = false
+    var recordingStartTime: NSDate = NSDate()
+    var metronome: Metronome? = nil
+    var beat: Int = 5
+    var beatLabel: UILabel? = nil
+    var countoffView: UIView? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let session = AVAudioSession.sharedInstance()
+        var error: NSError? = nil
+        session.setCategory(AVAudioSessionCategoryPlayAndRecord, error: &error)
+        if error != nil {
+            Debug.printl("Error setting up session: \(error?.localizedDescription)", sender: self)
+        }
+        session.setActive(true, error: &error)
+        if error != nil {
+            Debug.printl("Error setting session active: \(error?.localizedDescription)", sender: self)
+        }
 
-        var metronome = Metronome.createView(self)
-        self.metronomeView.addSubview(metronome)
-        self.metronome = metronome
-        metronome.frame = self.metronomeView.frame
+        self.audioPlot.backgroundColor = darkGray()
+        self.audioPlot.color = lightBlue()
+        self.drawBufferPlot()
         
-        let tap = UITapGestureRecognizer(target: self, action: "resignKeyboard:")
-        self.view.addGestureRecognizer(tap)
+        self.microphone = EZMicrophone(delegate: self)
+        self.microphone?.startFetchingAudio()
         
-        self.audioPlot?.hidden = true
-        self.audioPlot?.alpha = 0
-        self.playButton?.hidden = true
-        self.playButton.alpha = 0
-        self.clearButton?.hidden = true
-        self.playButton.alpha = 0
-        self.saveButton?.hidden = true
-        self.saveButton.alpha = 0
-        self.audioPlot?.color = UIColor.blackColor()
-        self.audioPlot?.backgroundColor = UIColor(red: 242, green: 197, blue: 117, alpha: 1)
-        self.audioPlot?.shouldFill = true
-        self.audioPlot?.shouldMirror = true
-        self.audioPlot?.gain = 2.0
-        self.microphone = EZMicrophone(microphoneDelegate: self)
+        self.playButton.addTarget(self, action: "play:", forControlEvents: UIControlEvents.TouchDown)
+        self.recordButton.addTarget(self, action: "record:", forControlEvents: UIControlEvents.TouchDown)
+        self.stopButton.addTarget(self, action: "stop:", forControlEvents: UIControlEvents.TouchDown)
+        self.clearButton.addTarget(self, action: "clear:", forControlEvents: UIControlEvents.TouchDown)
         
-        self.micButton.addTarget(self, action: "toggleMicrophone:", forControlEvents: UIControlEvents.TouchDown)
-        self.clearButton.addTarget(self, action: "reset:", forControlEvents: UIControlEvents.TouchDown)
-        self.playButton.addTarget(self, action: "playRecording:", forControlEvents: UIControlEvents.TouchDown)
-        self.saveButton.addTarget(self, action: "saveRecording:", forControlEvents: UIControlEvents.TouchDown)
-        
-        self.toolsTap = UITapGestureRecognizer(target: self, action: "showTools:")
+        self.toolsView.delegate = self
+        self.toolsView.dataSource = self
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        self.parentViewController?.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Tools", style: UIBarButtonItemStyle.Plain, target: self, action: "showTools:"), animated: false)
-        self.parentViewController?.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
-        self.navigationController?.navigationBar.addGestureRecognizer(self.toolsTap!)
+        /*self.parentViewController?.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Tools", style: UIBarButtonItemStyle.Plain, target: self, action: "showTools:"), animated: false)
+        self.parentViewController?.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)*/
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.parentViewController?.navigationItem.title = "Record"
-        self.metronomeView.frame.size.height = 0.1
-        self.metronomeView.hidden = true
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        if self.recording {
-            self.stopRecording()
-        }
-        self.parentViewController?.navigationItem.setRightBarButtonItem(nil, animated: false)
-        self.navigationController?.navigationBar.removeGestureRecognizer(self.toolsTap!)
-    }
-    
-    func toggleMicrophone(sender: AnyObject?) {
-        if !recording {
-            self.metronome?.toggleMetronome(nil)
-            
-            self.timeLabel.text = String(self.metronome!.timeSignature[0] + 1)
-            self.timeLabel.hidden = false
-            UIView.animateWithDuration(0.3, animations: { self.micButton.alpha = 0; self.timeLabel.alpha = 1 }) {
-                (success: Bool) in
-                self.micButton.hidden = true
-            }
-            
-            UIView.animateWithDuration(1.0, delay: 0.0, options: UIViewAnimationOptions.Autoreverse|UIViewAnimationOptions.Repeat|UIViewAnimationOptions.AllowUserInteraction, animations: {self.micButton.transform = CGAffineTransformMakeScale(1.2, 1.2)}) {
-                (success: Bool) in
-            }
-
-            self.instructionLabel.hidden = false
-            UIView.animateWithDuration(0.3, animations: { self.instructionLabel.alpha = 0; self.playButton.alpha = 0; self.clearButton.alpha = 0; self.saveButton.alpha = 0 }) {
-                (finished: Bool) in
-                self.instructionLabel.text = "Recording..."
-                UIView.animateWithDuration(0.3, animations: { self.instructionLabel.alpha = 1 })
-                self.playButton.hidden = true
-                self.clearButton.hidden = true
-                self.saveButton.hidden = true
-            }
-
-            self.recording = true
+    // Button methods
+    func record(sender: AnyObject?) {
+        if !self.recording {
+            self.invalidateButtons()
+            self.prepareRecording()
         } else {
-            self.metronome?.toggleMetronome(nil)
-            self.micButton.layer.removeAllAnimations()
-            var scale = CGFloat(128 / self.micButton.frame.height)
-
-            UIView.animateWithDuration(1.0, delay: 0.0, options: nil, animations: {self.micButton.transform = CGAffineTransformMakeScale(scale, scale)}, completion: nil)
-            
-            self.playButton.hidden = false
-            self.clearButton.hidden = false
-            self.saveButton.hidden = false
-            
-            UIView.animateWithDuration(0.3, animations: { self.instructionLabel.alpha = 0; self.playButton.alpha = 1; self.clearButton.alpha = 1; self.saveButton.alpha = 1 }) {
-                (finished: Bool) in
-                self.instructionLabel.hidden = true
-            }
-            
+            self.microphone?.stopFetchingAudio()
+            self.recorder?.closeAudioFile()
+            self.openAudioFile()
             self.recording = false
-            self.stopRecording()
+            self.metronome?.toggleMetronome(nil)
+            self.validateButtons()
         }
     }
     
-    func resignKeyboard(sender: AnyObject?) {
-        if self.metronome!.tempoField.isFirstResponder() {
-            self.metronome!.tempoField.resignFirstResponder()
-        } else if self.metronome!.timeSigField.isFirstResponder() {
-            self.metronome!.timeSigField.resignFirstResponder()
+    func play(sender: AnyObject?) {
+        if self.audioFile == nil {
+            return
+        }
+        if self.player != nil && self.player!.isPlaying() {
+            self.player!.pause()
+            self.playButton.imageView?.image = UIImage(named: "Play")
+        } else if self.player != nil && !self.player!.isPlaying() {
+            self.player!.play()
+            self.playButton.imageView?.image = UIImage(named: "Play_2")
+        } else if self.player == nil {
+            self.player = EZAudioPlayer(EZAudioFile: self.audioFile, withDelegate: self)
+            self.player!.play()
+            self.playButton.imageView?.image = UIImage(named: "play_2")
         }
     }
     
-    func reset(sender: AnyObject?) {
-        self.instructionLabel.text = "Tap To Begin Recording"
-        self.instructionLabel.hidden = false
-        self.micButton.hidden = false
+    func stop(sender: AnyObject?) {
+        if self.player != nil && self.player!.isPlaying() {
+            self.player!.pause()
+            self.player = EZAudioPlayer(EZAudioFile: self.audioFile, withDelegate: self)
+        } else if self.player != nil {
+            self.player = EZAudioPlayer(EZAudioFile: self.audioFile, withDelegate: self)
+        }
+    }
+    
+    func clear(sender: AnyObject?) {
+        if self.player != nil && self.player!.isPlaying() {
+            self.player!.pause()
+        }
+        self.player = nil
+        self.audioFile = nil
+        self.recorder = nil
+        self.microphone!.startFetchingAudio()
+        self.drawBufferPlot()
+        self.timeLabel.text = "00:00"
+    }
+    
+    // Auxiliary methods
+    func prepareRecording() {
+        var view = UIView(frame: self.view.frame)
+        view.backgroundColor = UIColor(red: 40, green: 40, blue: 40, alpha: 0.6)
+        view.alpha = 0.0
         
-        UIView.animateWithDuration(0.3, animations: { self.playButton.alpha = 0; self.clearButton.alpha = 0; self.saveButton.alpha = 0; self.audioPlot.alpha = 0; self.instructionLabel.alpha = 1; self.micButton.alpha = 1 }) {
-            (finished: Bool) in
-            self.playButton.hidden = true
-            self.clearButton.hidden = true
-            self.saveButton.hidden = true
-            self.audioPlot.hidden = true
-        }
+        self.beat = self.metronome!.timeSignature[0] + 1
+        var beatLabel = UILabel(frame: view.frame)
+        beatLabel.font = UIFont(name: "STHeitiSC-Light", size: 100)
+        beatLabel.textColor = UIColor.blackColor()
+        beatLabel.text = "\(self.beat)"
+        beatLabel.textAlignment = NSTextAlignment.Center
         
-        EZOutput.sharedOutput().outputDataSource = nil
-        EZOutput.sharedOutput().stopPlayback()
-        self.recorder?.closeAudioFile()
-    }
-
-    func playRecording(sender: AnyObject?) {
-        if !EZOutput.sharedOutput().isPlaying() {
-            EZOutput.sharedOutput().outputDataSource = self
-            EZOutput.sharedOutput().startPlayback()
-            self.audioPlot?.hidden = false
-            UIView.animateWithDuration(0.3, animations: { self.audioPlot.alpha = 1; self.micButton.alpha = 0 }) {
-                (finished: Bool) in
-                self.micButton.hidden = true
-            }
-        } else {
-            EZOutput.sharedOutput().outputDataSource = nil
-            EZOutput.sharedOutput().stopPlayback()
-            self.audioFile?.seekToFrame(0)
-            self.micButton.hidden = false
-            UIView.animateWithDuration(0.3, animations: { self.audioPlot.alpha = 0; self.micButton.alpha = 1 }) {
-                (finished: Bool) in
-                self.audioPlot?.hidden = true
-            }
-        }
-    }
-
-    func saveRecording(sender: AnyObject?) {
-        if EZOutput.sharedOutput().isPlaying() {
-            self.playRecording(nil)
-        } else if self.recording {
-            self.toggleMicrophone(nil)
-        }
+        self.beatLabel = beatLabel
+        view.addSubview(beatLabel)
+        beatLabel.center = view.center
+        self.countoffView = view
+        self.view.addSubview(view)
         
-        var controller = self.storyboard?.instantiateViewControllerWithIdentifier("UploadViewController") as! UploadViewController
-        controller.recording = self.audioFile
-        let bpm = Int(60.0 / Double(self.metronome!.duration))
-        controller.bpm = bpm
-        controller.timeSignature = self.metronome!.timeSigField.text
-        self.navigationController?.pushViewController(controller, animated: true)
+        UIView.animateWithDuration(0.3, animations: { view.alpha = 1.0 })
+        self.metronome!.toggleMetronome(nil)
     }
     
-    func record() {
-        Debug.printl("Now recording.", sender: self)
-        self.recorder = EZRecorder(destinationURL: filePathURL(nil), sourceFormat: self.microphone!.audioStreamBasicDescription(), destinationFileType: EZRecorderFileType.M4A)
-        self.microphone?.startFetchingAudio()
-    }
-    
-    func stopRecording() {
-        self.microphone?.stopFetchingAudio()
-        self.recorder?.closeAudioFile()
-        self.openFile(filePathURL(nil))
-    }
-    
-    func openFile(url: NSURL) {
-        self.audioPlot?.clear()
-        EZOutput.sharedOutput().stopPlayback()
-        EZOutput.sharedOutput().outputDataSource = nil
-        self.audioFile = EZAudioFile(URL: url)
-        self.eof = false
-        EZOutput.sharedOutput().setAudioStreamBasicDescription(self.audioFile!.clientFormat())
-        
-        self.audioPlot.gain = 2.0
-        self.audioFile?.audioFileDelegate = self
+    func drawRollingPlot() {
+        self.audioPlot.clear()
+        self.audioPlotBar.hidden = false
         self.audioPlot.plotType = EZPlotType.Rolling
         self.audioPlot.shouldFill = true
         self.audioPlot.shouldMirror = true
-        self.audioFile?.getWaveformDataWithCompletionBlock() {
-            (waveForm: UnsafeMutablePointer<Float>, length: UInt32) in
-            self.audioPlot.updateBuffer(waveForm, withBufferSize: length)
-        }
+        self.audioPlot.gain = 6.0
     }
     
-    func audioFile(audioFile: EZAudioFile!, readAudio buffer: UnsafeMutablePointer<UnsafeMutablePointer<Float>>, withBufferSize bufferSize: UInt32, withNumberOfChannels numberOfChannels: UInt32) {
-        dispatch_async(dispatch_get_main_queue()) {
-            if EZOutput.sharedOutput().isPlaying() {
-                self.audioPlot.updateBuffer(buffer[0], withBufferSize: bufferSize)
+    func drawBufferPlot() {
+        self.audioPlot.clear()
+        self.audioPlotBar.hidden = true
+        self.audioPlot.plotType = EZPlotType.Buffer
+        self.audioPlot.shouldFill = false
+        self.audioPlot.shouldMirror = false
+        self.audioPlot.gain = 1.0
+    }
+    
+    func openAudioFile() {
+        self.audioFile = EZAudioFile(URL: filePathURL(nil), andDelegate: self)
+        self.drawRollingPlot()
+        self.audioFile!.getWaveformDataWithCompletionBlock() {
+            (waveformData, length) in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.audioPlot.updateBuffer(waveformData, withBufferSize: length)
             }
         }
     }
     
-    func output(output: EZOutput!, shouldFillAudioBufferList audioBufferList: UnsafeMutablePointer<AudioBufferList>, withNumberOfFrames frames: UInt32) {
-        if self.audioFile != nil {
-            var bufferSize: UInt32 = 0
-            var boolPointer = ObjCBool(self.eof)
-            self.audioFile!.readFrames(frames, audioBufferList: audioBufferList, bufferSize: &bufferSize, eof: &boolPointer)
-            if (self.eof) {
-                self.audioFile?.seekToFrame(0)
-            }
-        }
+    func invalidateButtons() {
+        self.playButton.userInteractionEnabled = false
+        self.clearButton.userInteractionEnabled = false
+        self.stopButton.userInteractionEnabled = false
     }
     
+    func validateButtons() {
+        self.playButton.userInteractionEnabled = true
+        self.clearButton.userInteractionEnabled = true
+        self.stopButton.userInteractionEnabled = true
+    }
+    
+    // Microphone Delegate Methods
     func microphone(microphone: EZMicrophone!, hasAudioReceived buffer: UnsafeMutablePointer<UnsafeMutablePointer<Float>>, withBufferSize bufferSize: UInt32, withNumberOfChannels numberOfChannels: UInt32) {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.audioPlot.updateBuffer(buffer[0], withBufferSize: bufferSize)
+            if self.recording {
+                var time = self.recordingStartTime.timeIntervalSinceNow * -1
+                var secondText = String(stringInterpolationSegment: Int(time))
+                if time < 10.0 {
+                    secondText = "0\(secondText)"
+                }
+                var milliText = String(stringInterpolationSegment: time % 1)
+                milliText = milliText.substringWithRange(Range<String.Index>(start: advance(milliText.startIndex, 2), end: advance(milliText.startIndex, 4)))
+                self.timeLabel.text = "\(secondText):\(milliText)"
+            }
+        }
+    }
+    
+    func microphone(microphone: EZMicrophone!, hasBufferList bufferList: UnsafeMutablePointer<AudioBufferList>, withBufferSize bufferSize: UInt32, withNumberOfChannels numberOfChannels: UInt32) {
+        dispatch_async(dispatch_get_main_queue()) {
+            if self.recording {
+                self.recorder?.appendDataFromBufferList(bufferList, withBufferSize: bufferSize)
+            }
+        }
+    }
+    
+    // EZAudioPlayer Delegate
+    func audioPlayer(audioPlayer: EZAudioPlayer!, readAudio buffer: UnsafeMutablePointer<UnsafeMutablePointer<Float>>, withBufferSize bufferSize: UInt32, withNumberOfChannels numberOfChannels: UInt32, inAudioFile audioFile: EZAudioFile!) {
         dispatch_async(dispatch_get_main_queue()) {
             self.audioPlot.updateBuffer(buffer[0], withBufferSize: bufferSize)
         }
     }
     
-    func microphone(microphone: EZMicrophone!, hasBufferList bufferList: UnsafeMutablePointer<AudioBufferList>, withBufferSize bufferSize: UInt32, withNumberOfChannels numberOfChannels: UInt32) {
-        if self.recording {
-            self.recorder?.appendDataFromBufferList(bufferList, withBufferSize: bufferSize)
-        }
-    }
-    
-    /*func startTimer() {
-        var timer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(self.metronome!.duration), target: self, selector: "tick:", userInfo: nil, repeats: true)
-    }*/
-    
-    func tick() {
+    func audioPlayer(audioPlayer: EZAudioPlayer!, updatedPosition framePosition: Int64, inAudioFile audioFile: EZAudioFile!) {
         dispatch_async(dispatch_get_main_queue()) {
-            if self.timeLabel.text!.toInt() > 1 {
-                self.timeLabel.text = String(self.timeLabel.text!.toInt()! - 1)
-            } else if self.timeLabel.text!.toInt() == 1 {
-                self.record()
-                self.micButton.hidden = false
-                UIView.animateWithDuration(0.3, animations: { self.micButton.alpha = 1 }) {
-                    (finished: Bool) in
-                    self.timeLabel.hidden = true
-                }
-                self.timeLabel.alpha = 0
-                self.timeLabel.text = "0"
+            let time = audioPlayer.currentTime()
+            var secondText = String(stringInterpolationSegment: Int(time))
+            if time < 10.0 {
+                secondText = "0\(secondText)"
             }
+            var milliText = String(stringInterpolationSegment: time % 1)
+            milliText = milliText.substringWithRange(Range<String.Index>(start: advance(milliText.startIndex, 2), end: advance(milliText.startIndex, 4)))
+            self.timeLabel.text = "\(secondText):\(milliText)"
         }
-        
     }
     
-    func showTools(sender: AnyObject?) {
-        if !self.toolsShowing {
-            Debug.printl("Showing tools", sender: self)
-            self.metronomeView.hidden = false
-            UIView.animateWithDuration(0.3, animations: { self.metronomeView.frame.size.height = 75 }) {
-                (finished: Bool) in
-                self.toolsShowing = true
+    // Metronome Delegate
+    func tick(metronome: Metronome) {
+        if self.beat > 1 {
+            self.beat -= 1
+            self.beatLabel!.text = "\(self.beat)"
+        } else if self.beat == 1 {
+            self.drawRollingPlot()
+            self.recorder = EZRecorder(destinationURL: filePathURL(nil), sourceFormat: self.microphone!.audioStreamBasicDescription(), destinationFileType: EZRecorderFileType.M4A)
+            self.microphone?.startFetchingAudio()
+            self.recordingStartTime = NSDate()
+            self.recording = true
+            self.beat = 0
+            UIView.animateWithDuration(0.3, animations: { self.countoffView!.alpha = 0.0 }) {
+                (completed: Bool) in
+                self.countoffView?.removeFromSuperview()
             }
+        }
+    }
+    
+    // TableView Delegate
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return 1
         } else {
-            Debug.printl("Hiding tools", sender: self)
-            UIView.animateWithDuration(0.3, animations: { self.metronomeView.frame.size.height = 0 }) {
-                (finished: Bool) in
-                self.metronomeView.hidden = true
-                self.toolsShowing = false
-            }
+            return 0
         }
     }
     
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            var metronome = Metronome.createView()
+            metronome.delegate = self
+            metronome.backgroundColor = lightGray()
+            self.metronome = metronome
+            return metronome
+        } else {
+            return UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "Default")
+        }
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 75
+        }
+        return 60.0
+    }
+
 }

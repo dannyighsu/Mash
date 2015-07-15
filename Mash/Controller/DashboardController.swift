@@ -16,13 +16,17 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
-    var audioPlayer:AVAudioPlayer? = nil
+    var audioPlayer: AVAudioPlayer? = nil
     var user: User = current_user
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tracks.delegate = self
         self.tracks.dataSource = self
+        
+        self.view.addSubview(self.activityView)
+        self.activityView.center = self.view.center
         
         // Register profile and track nibs
         let profile = UINib(nibName: "Profile", bundle: nil)
@@ -43,6 +47,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             self.parentViewController?.navigationItem.title = self.user.display_name()
         }
         self.retrieveTracks()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -117,8 +125,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let tap2 = UITapGestureRecognizer(target: self, action: "goToFollowing:")
         header.followingCount.addGestureRecognizer(tap2)
         
-        header.bannerImage.image = self.user.banner_pic()
-        header.profilePic.image = self.user.profile_pic()
+        self.user.banner_pic(header.bannerImage)
+        self.user.profile_pic(header.profilePic)
         var followers = NSMutableAttributedString(string: "  \(self.user.followers!)\n  FOLLOWERS")
         header.followerCount.attributedText = followers
         var following = NSMutableAttributedString(string: "  \(self.user.following!)\n  FOLLOWING")
@@ -150,12 +158,15 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
         
         download("\(self.user.username!)~~\(track.titleText)\(track.format)", filePathURL(track.titleText + track.format), track_bucket)
+        self.activityView.startAnimating()
         
         while !NSFileManager.defaultManager().fileExistsAtPath(filePathString(track.titleText + track.format)) {
             Debug.printnl("waiting...")
             NSThread.sleepForTimeInterval(0.5)
         }
         NSThread.sleepForTimeInterval(0.5)
+        
+        self.activityView.stopAnimating()
         
         self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(track.titleText + track.format), error: nil)
         self.audioPlayer!.play()
@@ -188,6 +199,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
         var params = ["username": username, "password_hash": passwordHash, "query_name": self.user.username!] as Dictionary
+        self.activityView.startAnimating()
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -240,6 +252,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         dispatch_async(dispatch_get_main_queue()) {
             self.tracks.reloadData()
+            self.activityView.stopAnimating()
         }
     }
     
