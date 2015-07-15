@@ -8,13 +8,13 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view alpha="0.79999999999999982" contentMode="scaleToFill" id="iN0-l3-epB" customClass="Metronome" customModule="Mash" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="75"/>
+            <rect key="frame" x="0.0" y="0.0" width="600" height="100"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="M3k-WG-ET6">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="4/4" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="M3k-WG-ET6">
                     <rect key="frame" x="530" y="37" width="62" height="30"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="62" id="Vkf-VG-sQu"/>
+                        <constraint firstAttribute="width" constant="62" id="bNN-rD-eDo"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
@@ -22,7 +22,7 @@
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="120" borderStyle="roundedRect" placeholder="Tempo" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eET-yE-RjD">
                     <rect key="frame" x="8" y="37" width="43" height="30"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="43" id="N29-9g-nfX"/>
+                        <constraint firstAttribute="width" constant="43" id="thn-s8-FMb"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
@@ -30,54 +30,83 @@
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Metronome" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B1j-ZR-IuS">
                     <rect key="frame" x="219" y="11" width="163" height="21"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="21" id="Jwc-ld-FR7"/>
-                        <constraint firstAttribute="width" constant="163" id="p9N-XS-pz3"/>
+                        <constraint firstAttribute="height" constant="21" id="lR3-j8-nMO"/>
+                        <constraint firstAttribute="width" constant="163" id="mTg-gS-kws"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="17"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="iky-yf-YBX">
-                    <rect key="frame" x="118" y="35" width="399" height="31"/>
+                    <rect key="frame" x="157" y="37" width="360" height="31"/>
+                    <color key="tintColor" red="0.38823529410000002" green="0.87843137250000003" blue="1" alpha="1" colorSpace="deviceRGB"/>
                     <connections>
-                        <action selector="sliderValueChanged:" destination="iN0-l3-epB" eventType="valueChanged" id="V0N-RK-Rhi"/>
+                        <action selector="volumeDidChange:" destination="iN0-l3-epB" eventType="valueChanged" id="u1g-jV-zb8"/>
                     </connections>
                 </slider>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wvU-kG-1R3">
-                    <rect key="frame" x="59" y="38" width="64" height="27"/>
+                    <rect key="frame" x="59" y="38" width="59" height="27"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="64" id="ciM-Rg-JfZ"/>
+                        <constraint firstAttribute="width" constant="59" id="n9j-uq-AaY"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="18"/>
-                    <state key="normal" title="Start">
+                    <state key="normal" title="Play">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HBT-uF-3Dy">
+                    <rect key="frame" x="126" y="39" width="25" height="25"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="25" id="0k4-Gy-tw2"/>
+                        <constraint firstAttribute="height" constant="25" id="mmc-w5-Rz1"/>
+                    </constraints>
+                    <state key="normal" image="speaker_white">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="kv1-p6-5Yy">
+                    <rect key="frame" x="6" y="62" width="588" height="31"/>
+                    <color key="tintColor" red="0.38823529410000002" green="0.87843137250000003" blue="1" alpha="1" colorSpace="deviceRGB"/>
+                    <connections>
+                        <action selector="tempoDidChange:" destination="iN0-l3-epB" eventType="valueChanged" id="lXb-VX-JRJ"/>
+                    </connections>
+                </slider>
             </subviews>
             <color key="backgroundColor" red="0.24882192459999999" green="0.24882192459999999" blue="0.24882192459999999" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="wvU-kG-1R3" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="38" id="3Tv-0F-cZE"/>
-                <constraint firstItem="M3k-WG-ET6" firstAttribute="leading" secondItem="iky-yf-YBX" secondAttribute="trailing" constant="15" id="Cja-q5-3w6"/>
-                <constraint firstItem="M3k-WG-ET6" firstAttribute="baseline" secondItem="eET-yE-RjD" secondAttribute="baseline" id="E8h-4V-zJq"/>
-                <constraint firstItem="B1j-ZR-IuS" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="JrU-8K-2bg"/>
-                <constraint firstItem="iky-yf-YBX" firstAttribute="leading" secondItem="eET-yE-RjD" secondAttribute="trailing" constant="69" id="cr5-Z2-k5e"/>
-                <constraint firstItem="wvU-kG-1R3" firstAttribute="leading" secondItem="eET-yE-RjD" secondAttribute="trailing" constant="8" symbolic="YES" id="dq0-4D-vMm"/>
-                <constraint firstItem="wvU-kG-1R3" firstAttribute="bottom" secondItem="iky-yf-YBX" secondAttribute="bottom" id="nNq-1U-6m5"/>
-                <constraint firstItem="eET-yE-RjD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="onU-Eg-jCZ"/>
-                <constraint firstItem="M3k-WG-ET6" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailingMargin" id="sz9-4Y-S6w"/>
-                <constraint firstAttribute="bottom" secondItem="wvU-kG-1R3" secondAttribute="bottom" constant="10" id="uxj-64-ZHl"/>
-                <constraint firstItem="M3k-WG-ET6" firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottomMargin" id="wYt-Oo-PLn"/>
-                <constraint firstItem="iky-yf-YBX" firstAttribute="top" secondItem="B1j-ZR-IuS" secondAttribute="bottom" constant="3" id="xZY-i3-oYi"/>
+                <constraint firstItem="eET-yE-RjD" firstAttribute="top" secondItem="HBT-uF-3Dy" secondAttribute="top" constant="-2" id="3Fl-h9-5wd"/>
+                <constraint firstItem="B1j-ZR-IuS" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="11" id="3yV-fx-pX2"/>
+                <constraint firstItem="kv1-p6-5Yy" firstAttribute="top" secondItem="wvU-kG-1R3" secondAttribute="bottom" constant="-3" id="AEQ-zX-9YT"/>
+                <constraint firstItem="wvU-kG-1R3" firstAttribute="leading" secondItem="eET-yE-RjD" secondAttribute="trailing" constant="8" symbolic="YES" id="FbO-2S-hL2"/>
+                <constraint firstItem="kv1-p6-5Yy" firstAttribute="leading" secondItem="eET-yE-RjD" secondAttribute="leading" id="IYU-hw-eQ3"/>
+                <constraint firstItem="wvU-kG-1R3" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="38" id="O3O-kz-mpV"/>
+                <constraint firstItem="kv1-p6-5Yy" firstAttribute="top" secondItem="eET-yE-RjD" secondAttribute="bottom" constant="-5" id="QUV-TM-9p4"/>
+                <constraint firstItem="HBT-uF-3Dy" firstAttribute="leading" secondItem="wvU-kG-1R3" secondAttribute="trailing" constant="8" symbolic="YES" id="S3W-R5-CNt"/>
+                <constraint firstItem="M3k-WG-ET6" firstAttribute="leading" secondItem="iky-yf-YBX" secondAttribute="trailing" constant="15" id="Us0-5g-eJa"/>
+                <constraint firstItem="iky-yf-YBX" firstAttribute="bottom" secondItem="wvU-kG-1R3" secondAttribute="bottom" constant="2" id="Yus-d0-eoO"/>
+                <constraint firstItem="M3k-WG-ET6" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailingMargin" id="blN-Rq-s9w"/>
+                <constraint firstItem="M3k-WG-ET6" firstAttribute="trailing" secondItem="kv1-p6-5Yy" secondAttribute="trailing" id="evH-fZ-jUh"/>
+                <constraint firstItem="kv1-p6-5Yy" firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottomMargin" id="fEJ-d2-iyb"/>
+                <constraint firstItem="iky-yf-YBX" firstAttribute="top" secondItem="B1j-ZR-IuS" secondAttribute="bottom" constant="5" id="gSL-pI-0ht"/>
+                <constraint firstItem="M3k-WG-ET6" firstAttribute="baseline" secondItem="eET-yE-RjD" secondAttribute="baseline" id="lmA-Ai-5AK"/>
+                <constraint firstItem="iky-yf-YBX" firstAttribute="leading" secondItem="HBT-uF-3Dy" secondAttribute="trailing" constant="8" symbolic="YES" id="qqj-kD-UFX"/>
+                <constraint firstItem="kv1-p6-5Yy" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="x6b-6l-9KK"/>
+                <constraint firstItem="B1j-ZR-IuS" firstAttribute="centerX" secondItem="kv1-p6-5Yy" secondAttribute="centerX" id="xP4-U0-lsW"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="speakerImage" destination="HBT-uF-3Dy" id="S5b-84-HiZ"/>
                 <outlet property="startButton" destination="wvU-kG-1R3" id="yxc-vd-DNr"/>
                 <outlet property="tempoField" destination="eET-yE-RjD" id="3Ra-zy-9tn"/>
-                <outlet property="tempoSlider" destination="iky-yf-YBX" id="KYv-8k-pzI"/>
+                <outlet property="tempoSlider" destination="kv1-p6-5Yy" id="w3f-Ih-FaI"/>
                 <outlet property="timeSigField" destination="M3k-WG-ET6" id="GHi-LN-JAD"/>
+                <outlet property="volumeSlider" destination="iky-yf-YBX" id="Wgc-Dt-i2J"/>
             </connections>
-            <point key="canvasLocation" x="344" y="523.5"/>
+            <point key="canvasLocation" x="344" y="539"/>
         </view>
     </objects>
+    <resources>
+        <image name="speaker_white" width="256" height="256"/>
+    </resources>
 </document>

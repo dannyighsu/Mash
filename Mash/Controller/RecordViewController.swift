@@ -110,14 +110,10 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         if self.audioFile == nil {
             return
         }
-        if self.player != nil && self.player!.isPlaying {
+        if self.player!.isPlaying {
             self.player!.pause()
             self.playButton.imageView?.image = UIImage(named: "Play")
-        } else if self.player != nil && !self.player!.isPlaying {
-            self.player!.play()
-            self.playButton.imageView?.image = UIImage(named: "Play_2")
-        } else if self.player == nil {
-            self.player = EZAudioPlayer(audioFile: self.audioFile, delegate: self)
+        } else if !self.player!.isPlaying {
             self.player!.play()
             self.playButton.imageView?.image = UIImage(named: "Play_2")
         }
@@ -159,6 +155,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             self.player!.volume = sender.value
             if sender.value == 0 {
                 self.speakerImage.imageView?.image = UIImage(named: "speaker_white_2")
+            } else {
+                self.speakerImage.imageView?.image = UIImage(named: "speaker_white")
             }
         }
     }
@@ -207,6 +205,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     func openAudio() {
         self.audioFile = EZAudioFile(URL: filePathURL(nil), delegate: self)
         self.player = EZAudioPlayer(audioFile: self.audioFile)
+        self.player!.volume = self.volumeSlider.value
         self.drawRollingPlot()
         Wrappers.getWaveform(self.audioFile!, audioPlot: self.audioPlot)
         /*self.audioFile?.getWaveformDataWithCompletionBlock() {
@@ -324,7 +323,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 75
+            return 100.0
         }
         return 60.0
     }

@@ -19,8 +19,10 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var tempoField: UITextField!
     @IBOutlet weak var timeSigField: UITextField!
+    @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var tempoSlider: UISlider!
-    
+    @IBOutlet weak var speakerImage: UIButton!
+
     var delegate: MetronomeDelegate?
     var duration: CGFloat
     var soundPlayerThread: NSThread?
@@ -30,6 +32,8 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     var beat: Int
     var isPlaying: Bool
     var muted: Bool
+    var previousVolume: Float = 0.6
+    var wasManuallyTriggered: Bool = false
     
     required init(coder aDecoder: NSCoder) {
         self.duration = 0.50
@@ -66,6 +70,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         metronome.tempoSlider.minimumValue = 40
         metronome.tempoSlider.maximumValue = 220
         metronome.tempoSlider.value = 120
+        metronome.speakerImage.addTarget(self, action: "mute:", forControlEvents: UIControlEvents.TouchDown)
         
         var picker = UIPickerView(frame: CGRectZero)
         picker.delegate = metronome
@@ -76,10 +81,31 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         return metronome
     }
     
-    @IBAction func sliderValueChanged(sender: UISlider) {
+    @IBAction func volumeDidChange(sender: UISlider) {
+        self.tickPlayer.volume = sender.value
+        self.tockPlayer.volume = sender.value
+        if sender.value == 0 {
+            self.speakerImage.imageView?.image = UIImage(named: "speaker_white_2")
+        } else {
+            self.speakerImage.imageView?.image = UIImage(named: "speaker_white")
+        }
+    }
+    
+    @IBAction func tempoDidChange(sender: UISlider) {
         let value = Int(sender.value)
         self.duration = CGFloat(60.0 / Double(value))
         self.tempoField.text = "\(value)"
+    }
+    
+    func mute(sender: AnyObject?) {
+        if self.volumeSlider.value == 0 {
+            self.volumeSlider.value = self.previousVolume
+            self.speakerImage.imageView?.image = UIImage(named: "speaker_white")
+        } else {
+            self.previousVolume = self.volumeSlider.value
+            self.volumeSlider.value = 0
+            self.speakerImage.imageView?.image = UIImage(named: "speaker_white_2")
+        }
     }
 
     // Text Field Delegate
@@ -139,11 +165,15 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     
     // Metronome functions
     func toggleMetronome(sender: AnyObject?) {
-        if !muted {
+        if sender != nil {
+            self.wasManuallyTriggered = true
+        }
+        if !self.muted {
             if !self.isPlaying {
                 self.startDriverThread()
             } else {
                 self.stopDriverThread()
+                self.wasManuallyTriggered = false
             }
         }
     }
@@ -183,8 +213,10 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     }
     
     func playSound() {
-        dispatch_async(dispatch_get_main_queue()) {
-            self.delegate?.tick(self)
+        if !self.wasManuallyTriggered {
+            dispatch_async(dispatch_get_main_queue()) {
+                self.delegate?.tick(self)
+            }
         }
         if self.beat == 0 {
             self.tickPlayer.stop()

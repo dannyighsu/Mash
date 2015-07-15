@@ -162,7 +162,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cNk-2j-cDj" customClass="EZAudioPlotGL">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="201"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="202"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jW6-pr-TGB">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="1"/>
@@ -172,14 +172,14 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iqe-Rd-UTm">
-                                        <rect key="frame" x="0.0" y="199" width="600" height="1"/>
+                                        <rect key="frame" x="0.0" y="200" width="600" height="1"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="4d7-tf-OWe"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rUe-yk-TKk">
-                                        <rect key="frame" x="0.0" y="101" width="600" height="1"/>
+                                        <rect key="frame" x="0.0" y="101.5" width="600" height="1"/>
                                         <color key="backgroundColor" red="0.38823529410000002" green="0.87843137250000003" blue="1" alpha="1" colorSpace="deviceRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="coc-k1-M1K"/>
@@ -207,7 +207,7 @@
                                 </variation>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mmh-5A-WZY">
-                                <rect key="frame" x="264" y="211" width="73" height="20"/>
+                                <rect key="frame" x="264" y="212" width="73" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="73" id="b45-ER-bdK"/>
                                 </constraints>
@@ -223,7 +223,7 @@
                                 </constraints>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lLw-Sy-TuP">
-                                <rect key="frame" x="0.0" y="200" width="600" height="170"/>
+                                <rect key="frame" x="0.0" y="201" width="600" height="170"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d1P-cp-Upg">
                                         <rect key="frame" x="75" y="2" width="46" height="28"/>
@@ -333,13 +333,15 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="77c-jK-VHX" secondAttribute="trailing" constant="-16" id="4QJ-1a-i3E"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="77c-jK-VHX" secondAttribute="trailing" id="4QJ-1a-i3E"/>
                             <constraint firstItem="lLw-Sy-TuP" firstAttribute="leading" secondItem="cNk-2j-cDj" secondAttribute="leading" id="9Pk-YW-Z5L"/>
                             <constraint firstItem="Mmh-5A-WZY" firstAttribute="top" secondItem="cNk-2j-cDj" secondAttribute="bottom" constant="10" id="9gN-rh-Ma9"/>
                             <constraint firstItem="a7z-CC-2Lx" firstAttribute="top" secondItem="lLw-Sy-TuP" secondAttribute="bottom" constant="267" id="CRP-g3-kXU"/>
-                            <constraint firstItem="77c-jK-VHX" firstAttribute="top" secondItem="lLw-Sy-TuP" secondAttribute="bottom" constant="1" id="JsC-ry-MjB"/>
+                            <constraint firstItem="77c-jK-VHX" firstAttribute="top" secondItem="lLw-Sy-TuP" secondAttribute="bottom" id="JsC-ry-MjB"/>
+                            <constraint firstItem="77c-jK-VHX" firstAttribute="trailing" secondItem="Z5f-Hb-zEL" secondAttribute="trailingMargin" id="NLd-T8-15K"/>
                             <constraint firstAttribute="bottom" secondItem="cNk-2j-cDj" secondAttribute="bottom" constant="444" id="QcJ-5S-pOn"/>
                             <constraint firstItem="a7z-CC-2Lx" firstAttribute="top" secondItem="Mmh-5A-WZY" secondAttribute="bottom" constant="371" id="SCX-nP-8vK"/>
+                            <constraint firstItem="77c-jK-VHX" firstAttribute="trailing" secondItem="cNk-2j-cDj" secondAttribute="trailing" id="YEf-ge-SiX"/>
                             <constraint firstItem="77c-jK-VHX" firstAttribute="leading" secondItem="lLw-Sy-TuP" secondAttribute="leading" id="aV7-eK-kBZ"/>
                             <constraint firstItem="77c-jK-VHX" firstAttribute="bottom" secondItem="a7z-CC-2Lx" secondAttribute="top" id="eZp-Dl-nib"/>
                             <constraint firstItem="cNk-2j-cDj" firstAttribute="leading" secondItem="Z5f-Hb-zEL" secondAttribute="leading" id="g03-97-lWx"/>
@@ -352,6 +354,8 @@
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="QcJ-5S-pOn"/>
+                                <exclude reference="4QJ-1a-i3E"/>
+                                <exclude reference="NLd-T8-15K"/>
                                 <exclude reference="CRP-g3-kXU"/>
                                 <exclude reference="SCX-nP-8vK"/>
                             </mask>
@@ -1425,7 +1429,7 @@
     </scenes>
     <resources>
         <image name="Play" width="626" height="626"/>
-        <image name="Record_button" width="626" height="626"/>
+        <image name="Record_button" width="209" height="209"/>
         <image name="Stop" width="626" height="626"/>
         <image name="dashboard" width="30" height="30"/>
         <image name="email" width="100" height="100"/>
