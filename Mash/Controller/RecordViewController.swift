@@ -125,6 +125,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         if self.player != nil {
             self.player!.stop()
             self.playButton.imageView?.image = UIImage(named: "Play")
+            self.audioPlot.clear()
         }
     }
     
