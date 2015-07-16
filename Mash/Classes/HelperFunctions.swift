@@ -108,31 +108,32 @@ func importTracks(tracks: [Track], navigationController: UINavigationController?
         return
     }
     
-    for track in tracks {
-        var URL = filePathURL(track.titleText + track.format)
-        download("\(current_user.username!)~~\(track.titleText)\(track.format)", URL, track_bucket)
-        track.trackURL = filePathString(track.titleText + track.format)
-        Debug.printl("Adding track with \(track.instruments), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
-        project?.data.append(track)
-    }
-
-    project?.stopPlaying()
-
-    // Load new audioplayers
-    if (project!.data.count != project!.audioPlayers.count) {
-        for (var i = project!.audioPlayers.count; i < project!.data.count; i++) {
-            var error: NSError? = nil
-            while !NSFileManager.defaultManager().fileExistsAtPath(project!.data[i].trackURL) {
-                Debug.printnl("waiting...")
-                NSThread.sleepForTimeInterval(0.5)
+    // Download new tracks asnychronously
+    let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+    dispatch_async(dispatch_get_global_queue(priority, 0)) {
+        for track in tracks {
+            var URL = filePathURL(track.titleText + track.format)
+            download("\(current_user.username!)~~\(track.titleText)\(track.format)", URL, track_bucket)
+            track.trackURL = filePathString(track.titleText + track.format)
+            Debug.printl("Adding track with \(track.instruments), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
+            project?.data.append(track)
+        }
+        
+        project?.audioPlayer?.stop()
+        
+        // Load new audioplayers
+        if (project!.data.count != project!.audioPlayer!.audioPlayers.count) {
+            for (var i = project!.audioPlayer!.audioPlayers.count; i < project!.data.count; i++) {
+                while !NSFileManager.defaultManager().fileExistsAtPath(project!.data[i].trackURL) {
+                    Debug.printnl("waiting...")
+                    NSThread.sleepForTimeInterval(0.5)
+                }
+                project!.audioPlayer!.addTrack(project!.data[i].trackURL)
             }
-            let player = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: project!.data[i].trackURL), error: &error)
-            if player == nil {
-                Debug.printl("Error playing file: \(error)", sender: "helpers")
-                return
-            }
-            player.numberOfLoops = -1
-            project!.audioPlayers.append(player)
+        }
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            project!.tracks.reloadData()
         }
     }
 }

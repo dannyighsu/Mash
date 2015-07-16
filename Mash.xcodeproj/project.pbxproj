@@ -319,17 +319,17 @@
 			isa = PBXGroup;
 			children = (
 				37E799CF1B3CC1D000D2E54D /* HomeCell.xib */,
-				3782615B1B4B139400FC89A0 /* ProjectPlayer.xib */,
+				3722ACE91B4DF1F2008473C3 /* ImageCell.xib */,
 				37E799D11B3CC1D000D2E54D /* ImportHeaderView.xib */,
 				37E799D21B3CC1D000D2E54D /* InstrumentCell.xib */,
 				37E799D31B3CC1D000D2E54D /* MashResultsHeaderView.xib */,
 				37E799D41B3CC1D000D2E54D /* Metronome.xib */,
 				37E799D51B3CC1D000D2E54D /* Profile.xib */,
+				3782615B1B4B139400FC89A0 /* ProjectPlayer.xib */,
 				37E799D61B3CC1D000D2E54D /* ProjectTools.xib */,
 				37E799D71B3CC1D000D2E54D /* ProjectTrack.xib */,
 				37E799D81B3CC1D000D2E54D /* Track.xib */,
 				37DE77241B436F4A00952987 /* User.xib */,
-				3722ACE91B4DF1F2008473C3 /* ImageCell.xib */,
 			);
 			path = XIB;
 			sourceTree = "<group>";

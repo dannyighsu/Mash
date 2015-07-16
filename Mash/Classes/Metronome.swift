@@ -32,7 +32,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     var beat: Int
     var isPlaying: Bool
     var muted: Bool
-    var previousVolume: Float = 0.6
+    var previousVolume: Float = 0.8
     var wasManuallyTriggered: Bool = false
     
     required init(coder aDecoder: NSCoder) {
@@ -70,7 +70,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         metronome.tempoSlider.minimumValue = 40
         metronome.tempoSlider.maximumValue = 220
         metronome.tempoSlider.value = 120
-        metronome.speakerImage.addTarget(self, action: "mute:", forControlEvents: UIControlEvents.TouchDown)
+        metronome.speakerImage.addTarget(metronome, action: "muteAudio:", forControlEvents: UIControlEvents.TouchDown)
         
         var picker = UIPickerView(frame: CGRectZero)
         picker.delegate = metronome
@@ -85,9 +85,9 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         self.tickPlayer.volume = sender.value
         self.tockPlayer.volume = sender.value
         if sender.value == 0 {
-            self.speakerImage.imageView?.image = UIImage(named: "speaker_white_2")
+            self.speakerImage.setImage(UIImage(named: "speaker_white_2"), forState: UIControlState.Normal)
         } else {
-            self.speakerImage.imageView?.image = UIImage(named: "speaker_white")
+            self.speakerImage.setImage(UIImage(named: "speaker_white"), forState: UIControlState.Normal)
         }
     }
     
@@ -97,14 +97,14 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         self.tempoField.text = "\(value)"
     }
     
-    func mute(sender: AnyObject?) {
+    func muteAudio(sender: AnyObject?) {
         if self.volumeSlider.value == 0 {
             self.volumeSlider.value = self.previousVolume
-            self.speakerImage.imageView?.image = UIImage(named: "speaker_white")
+            self.volumeDidChange(self.volumeSlider)
         } else {
             self.previousVolume = self.volumeSlider.value
             self.volumeSlider.value = 0
-            self.speakerImage.imageView?.image = UIImage(named: "speaker_white_2")
+            self.volumeDidChange(self.volumeSlider)
         }
     }
 

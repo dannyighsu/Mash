@@ -94,8 +94,6 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             self.audioPlayer!.stop()
         }
         var track = tableView.cellForRowAtIndexPath(indexPath) as! Track
-        println("download key: \(track.userText)~~\(track.titleText)\(track.format)")
-        println("url:\(track.trackURL)")
         download("\(track.userText)~~\(track.titleText)\(track.format)", NSURL(fileURLWithPath: track.trackURL)!, track_bucket)
         while !NSFileManager.defaultManager().fileExistsAtPath(track.trackURL) {
             Debug.printnl("waiting...")

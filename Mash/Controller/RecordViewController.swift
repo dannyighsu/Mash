@@ -65,6 +65,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         
         self.toolsView.delegate = self
         self.toolsView.dataSource = self
+        self.toolsView.allowsSelection = false
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -115,7 +116,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             self.playButton.imageView?.image = UIImage(named: "Play")
         } else if !self.player!.isPlaying {
             self.player!.play()
-            self.playButton.imageView?.image = UIImage(named: "Play_2")
+            self.playButton.imageView?.image = UIImage(named: "Pause")
         }
     }
     

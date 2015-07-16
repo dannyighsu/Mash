@@ -10,11 +10,11 @@ import UIKit
 import AVFoundation
 import EZAudio
 
-class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate {
+class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate {
 
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
-    var audioPlayers: [AVAudioPlayer] = []
+    var audioPlayer: ProjectPlayer? = nil
     var header: UITableViewHeaderFooterView? = nil
     var toolsTap: UITapGestureRecognizer? = nil
     var toolsShowing: Bool = false
@@ -58,7 +58,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewWillDisappear(animated)
         self.navigationController?.navigationBar.removeGestureRecognizer(self.toolsTap!)
         self.parentViewController?.navigationItem.setRightBarButtonItem(nil, animated: false)
-        self.stopPlaying()
+        self.audioPlayer!.stop()
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -84,11 +84,10 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             return cell
         } else {
             let player = tableView.dequeueReusableCellWithIdentifier("ProjectPlayer") as! ProjectPlayer
-            let tap = UITapGestureRecognizer(target: self, action: "playTracks:")
-            player.playButton.addGestureRecognizer(tap)
             player.addButton.addTarget(self, action: "addTracks:", forControlEvents: UIControlEvents.TouchDown)
             player.backgroundColor = darkGray()
             player.selectionStyle = UITableViewCellSelectionStyle.None
+            self.audioPlayer = player
             return player
         }
     }
@@ -120,17 +119,15 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {
             let trackNumber = indexPath.row
-            if trackNumber >= self.audioPlayers.count {
+            if trackNumber >= self.audioPlayer!.audioPlayers.count {
                 return
             }
-            let player = self.audioPlayers[trackNumber]
+            var muted = self.audioPlayer!.muteTrack(trackNumber)
             let track = self.tracks.cellForRowAtIndexPath(indexPath) as! ProjectTrack
-            if player.volume == 0.0 {
-                player.volume = 1.0
-                track.speakerImage.image = UIImage(named: "speaker")
-            } else {
-                player.volume = 0.0
+            if muted {
                 track.speakerImage.image = UIImage(named: "speaker_2")
+            } else {
+                track.speakerImage.image = UIImage(named: "speaker")
             }
         }
         tableView.cellForRowAtIndexPath(indexPath)?.selected = false
@@ -144,7 +141,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         if editingStyle == UITableViewCellEditingStyle.Delete {
             self.data.removeAtIndex(indexPath.row)
             self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
-            self.audioPlayers.removeAtIndex(indexPath.row)
+            self.audioPlayer!.audioPlayers.removeAtIndex(indexPath.row)
         }
     }
 
@@ -163,30 +160,15 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func playTracks(sender: AnyObject?) {
-        if self.audioPlayers.count == 0 {
+        if self.audioPlayer!.audioPlayers.count == 0 {
             return
         }
-        if (self.audioPlayers.count > 0 && self.audioPlayers[0].playing) {
-            self.stopPlaying()
+        if (self.audioPlayer!.audioPlayers.count > 0) {
+            self.audioPlayer!.stop()
             return
         }
-        for (var i = 0; i < self.audioPlayers.count; i++) {
-            self.audioPlayers[i].play()
-        }
+        self.audioPlayer!.play()
         let player = self.tracks.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 1)) as! ProjectPlayer
-        player.playButton.image = UIImage(named: "Play_2")
-    }
-    
-    func stopPlaying() {
-        for (var i = 0; i < self.audioPlayers.count; i++) {
-            self.audioPlayers[i].stop()
-            self.audioPlayers[i].currentTime = 0
-        }
-        var index = NSIndexPath(forRow: 0, inSection: 1)
-        if (self.tracks != nil && self.tracks.cellForRowAtIndexPath(index) != nil) {
-            let player = self.tracks.cellForRowAtIndexPath(index) as! ProjectPlayer
-            player.playButton.image = UIImage(named: "Play")
-        }
     }
     
     func mash() {

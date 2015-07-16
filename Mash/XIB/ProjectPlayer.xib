@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -11,36 +11,88 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Play" translatesAutoresizingMaskIntoConstraints="NO" id="Xsh-A5-hGj">
-                    <rect key="frame" x="0.0" y="10" width="50" height="50"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="50" id="3CC-X2-tDb"/>
-                    </constraints>
-                </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4eJ-FG-tDQ">
-                    <rect key="frame" x="570" y="24" width="22" height="22"/>
+                    <rect key="frame" x="570" y="19" width="22" height="22"/>
                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <state key="normal">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                 </button>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="9Ub-VB-UKV">
+                    <rect key="frame" x="147" y="15" width="408" height="31"/>
+                    <connections>
+                        <action selector="volumeDidChange:" destination="iN0-l3-epB" eventType="valueChanged" id="K7E-fZ-u7M"/>
+                    </connections>
+                </slider>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tMD-Mr-hXZ">
+                    <rect key="frame" x="50" y="12" width="35" height="35"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="35" id="ucw-lY-RDL"/>
+                    </constraints>
+                    <state key="normal" title="Button" image="Stop">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="stopButtonpressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="gVH-YV-791"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bgP-5f-GBX">
+                    <rect key="frame" x="111" y="15" width="30" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="30" id="Icl-CY-Rdn"/>
+                    </constraints>
+                    <state key="normal" title="Button" image="speaker_white">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="muteButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="4dk-2u-Oje"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rXP-8g-Lea">
+                    <rect key="frame" x="0.0" y="4" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="L9z-is-1u6"/>
+                    </constraints>
+                    <state key="normal" title="Button" image="Play">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="playButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="Tb8-E0-0Km"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="0.24882192459999999" green="0.24882192459999999" blue="0.24882192459999999" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="Xsh-A5-hGj" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="CGI-1u-zDI"/>
-                <constraint firstItem="4eJ-FG-tDQ" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailingMargin" id="Dvk-Pb-nd9"/>
-                <constraint firstAttribute="bottom" secondItem="Xsh-A5-hGj" secondAttribute="bottom" id="E6P-h9-iRk"/>
-                <constraint firstItem="4eJ-FG-tDQ" firstAttribute="centerY" secondItem="Xsh-A5-hGj" secondAttribute="centerY" id="MLj-oB-Rya"/>
-                <constraint firstItem="Xsh-A5-hGj" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="jjK-m8-4vl"/>
+                <constraint firstItem="tMD-Mr-hXZ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="12" id="1Hk-vw-iVY"/>
+                <constraint firstItem="bgP-5f-GBX" firstAttribute="leading" secondItem="tMD-Mr-hXZ" secondAttribute="trailing" constant="26" id="AXW-8s-9xA"/>
+                <constraint firstItem="rXP-8g-Lea" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="4" id="DzK-Wl-Cvd"/>
+                <constraint firstItem="bgP-5f-GBX" firstAttribute="top" secondItem="9Ub-VB-UKV" secondAttribute="top" id="FyR-H4-DCg"/>
+                <constraint firstItem="4eJ-FG-tDQ" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailingMargin" id="Gn4-JW-faz"/>
+                <constraint firstItem="9Ub-VB-UKV" firstAttribute="bottom" secondItem="bgP-5f-GBX" secondAttribute="bottom" id="HC2-Zh-1ms"/>
+                <constraint firstItem="4eJ-FG-tDQ" firstAttribute="leading" secondItem="9Ub-VB-UKV" secondAttribute="trailing" constant="17" id="NTW-vw-7RQ"/>
+                <constraint firstAttribute="bottom" secondItem="tMD-Mr-hXZ" secondAttribute="bottom" constant="13" id="Tkc-oB-tD4"/>
+                <constraint firstItem="bgP-5f-GBX" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="15" id="Wjv-Po-qrP"/>
+                <constraint firstItem="4eJ-FG-tDQ" firstAttribute="centerY" secondItem="9Ub-VB-UKV" secondAttribute="centerY" id="XAE-di-mU4"/>
+                <constraint firstItem="rXP-8g-Lea" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="fmK-0l-bfO"/>
+                <constraint firstItem="tMD-Mr-hXZ" firstAttribute="leading" secondItem="rXP-8g-Lea" secondAttribute="trailing" id="hBd-FF-uYK"/>
+                <constraint firstItem="9Ub-VB-UKV" firstAttribute="leading" secondItem="bgP-5f-GBX" secondAttribute="trailing" constant="8" symbolic="YES" id="tMV-aH-q28"/>
+                <constraint firstItem="rXP-8g-Lea" firstAttribute="centerY" secondItem="tMD-Mr-hXZ" secondAttribute="centerY" id="wNK-D0-dIS"/>
+                <constraint firstItem="9Ub-VB-UKV" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="zgy-aC-TlI"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="addButton" destination="4eJ-FG-tDQ" id="D69-Fe-DpS"/>
-                <outlet property="playButton" destination="Xsh-A5-hGj" id="29P-PL-grE"/>
+                <outlet property="playButton" destination="rXP-8g-Lea" id="dvM-B0-3ex"/>
+                <outlet property="speakerImage" destination="bgP-5f-GBX" id="MXj-4Y-euf"/>
+                <outlet property="stopButton" destination="tMD-Mr-hXZ" id="JRv-0E-L0I"/>
+                <outlet property="volumeSlider" destination="9Ub-VB-UKV" id="Ryo-Mz-tUz"/>
             </connections>
+            <point key="canvasLocation" x="191" y="243"/>
         </view>
     </objects>
     <resources>
         <image name="Play" width="626" height="626"/>
+        <image name="Stop" width="626" height="626"/>
+        <image name="speaker_white" width="256" height="256"/>
     </resources>
 </document>
