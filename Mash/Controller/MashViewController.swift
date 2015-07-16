@@ -77,7 +77,8 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
         
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/mash")!)
-        var params: [String: String] = ["username": username, "password_hash": passwordHash, "family": "{\(instrumentString)}"]
+        var params: [String: String] = ["username": username, "password_hash": passwordHash, "family": "{\(instrumentString)}", "bpm": "\(self.recording!.bpm)"]
+        println(self.recording!.bpm)
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {

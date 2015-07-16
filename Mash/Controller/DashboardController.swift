@@ -81,6 +81,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             track.userLabel.text = track.userText
             track.instruments = self.data[index].instruments
             track.trackURL = self.data[index].trackURL
+            track.bpm = self.data[index].bpm
             track.instrumentImage.image = findImage(track.instrumentFamilies)
             track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
         }

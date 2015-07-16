@@ -113,10 +113,10 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         }
         if self.player!.isPlaying {
             self.player!.pause()
-            self.playButton.imageView?.image = UIImage(named: "Play")
+            self.playButton.setImage(UIImage(named: "Play"), forState: UIControlState.Normal)
         } else if !self.player!.isPlaying {
             self.player!.play()
-            self.playButton.imageView?.image = UIImage(named: "Pause")
+            self.playButton.setImage(UIImage(named: "Pause"), forState: UIControlState.Normal)
         }
     }
     
@@ -124,7 +124,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         if self.player != nil {
             self.player!.pause()
             self.player!.seekToFrame(0)
-            self.playButton.imageView?.image = UIImage(named: "Play")
+            self.playButton.setImage(UIImage(named: "Play"), forState: UIControlState.Normal)
             self.audioPlot.clear()
             Wrappers.getWaveform(self.audioFile!, audioPlot: self.audioPlot)
         }
@@ -155,9 +155,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         if self.player != nil {
             self.player!.volume = sender.value
             if sender.value == 0 {
-                self.speakerImage.imageView?.image = UIImage(named: "speaker_white_2")
+                self.speakerImage.setImage(UIImage(named: "speaker_white_2"), forState: UIControlState.Normal)
             } else {
-                self.speakerImage.imageView?.image = UIImage(named: "speaker_white")
+                self.speakerImage.setImage(UIImage(named: "speaker_white"), forState: UIControlState.Normal)
             }
         }
     }
@@ -295,6 +295,11 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 self.countoffView?.removeFromSuperview()
             }
         }
+    }
+    
+    // AudioFile Delegate
+    func audioFile(audioFile: EZAudioFile!, readAudio buffer: UnsafeMutablePointer<UnsafeMutablePointer<Float>>, withBufferSize bufferSize: UInt32, withNumberOfChannels numberOfChannels: UInt32) {
+        
     }
     
     // TableView Delegate

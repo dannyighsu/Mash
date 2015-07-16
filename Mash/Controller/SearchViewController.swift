@@ -82,6 +82,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         track.userText = searchResults[index].userText
         track.userLabel.text = track.userText
         track.format = searchResults[index].format
+        track.bpm = searchResults[index].bpm
         return track
     }
 

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 // Helper objects
-let db: String = "http://10.142.46.131:5010"
+let db: String = "http://localhost:5010"
 var keychainWrapper:KeychainWrapper = KeychainWrapper()
 var current_user = User()
 var user_following: [User] = []
@@ -58,7 +58,7 @@ var instrumentArray: [String: [String]] = [
     "Brass": ["", "French Horn", "Trombone", "Trumpet", "Tuba"],
     "Woodwinds": ["", "Saxophone", "Flute", "Piccolo", "Oboe", "English Horn", "Bassoon", "Clarinet", "Harmonia", "Accordians"],
     "Percussion": ["", "Electronic", "Cajon", "Drum Kit", "Triangle", "Xylophone", "Snare", "Bass Drum", "Vibraphone", "Marimba", "Bongo", "Tamborine", "Darbuka"],
-    "Electronic": ["", "Turntables", "Sample"],
+    "Electronic": ["", "Turntables", "Sample", "Synthesizer"],
     "Strings": ["", "Violin", "Voila", "Cello", "Ukulele", "Harp", "Sitar", "Banjo", "Lyre", "Upright Bass", "Mandolin"],
     "Guitar": ["", "Acoustic Guitar", "Electric Guitar", "Bass Guitar"],
     "Keyboard": ["", "Synthesizer", "Piano", "Organ", "Electric Piano"],

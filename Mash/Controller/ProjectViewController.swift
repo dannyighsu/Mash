@@ -18,6 +18,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     var header: UITableViewHeaderFooterView? = nil
     var toolsTap: UITapGestureRecognizer? = nil
     var toolsShowing: Bool = false
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +38,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tracks.registerNib(player, forCellReuseIdentifier: "ProjectPlayer")
         
         self.toolsTap = UITapGestureRecognizer(target: self, action: "showTools:")
+        self.view.addSubview(self.activityView)
+        self.activityView.center = self.view.center
     }
     
     override func viewDidAppear(animated: Bool) {
