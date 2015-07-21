@@ -22,12 +22,6 @@ class ImportViewController: UITableViewController {
         self.tracks.registerNib(track, forCellReuseIdentifier: "Track")
         let header = UINib(nibName: "ImportHeaderView", bundle: nil)
         self.tracks.registerNib(header, forHeaderFooterViewReuseIdentifier: "ImportHeaderView")
-        
-        self.data.append(Track(frame: CGRectZero, instruments: ["sample"], titleText: "Harp", bpm: 120, trackURL: "Harp", user: "Danny", format: ".m4a"))
-        self.data.append(Track(frame: CGRectZero, instruments: ["drums"], titleText: "Spacious Set", bpm: 120, trackURL: "Spacious Set", user: "Danny", format: ".m4a"))
-        self.data.append(Track(frame: CGRectZero, instruments: ["strings"], titleText: "Basses Legato", bpm: 120, trackURL: "Basses Legato", user: "Danny", format: ".m4a"))
-        self.data.append(Track(frame: CGRectZero, instruments: ["vocals"], titleText: "Female Chorus", bpm: 120, trackURL: "Female Chorus", user: "Danny", format: ".m4a"))
-        self.data.append(Track(frame: CGRectZero, instruments: ["strings"], titleText: "Violins", bpm: 120, trackURL: "Violins 1", user: "Danny", format: ".m4a"))
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

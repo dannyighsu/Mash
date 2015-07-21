@@ -117,6 +117,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 header.editButton.backgroundColor = lightBlue()
                 header.editButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchDown)
             }
+            header.editButton.titleLabel!.textAlignment = .Center
         } else {
             header.editButton.addTarget(self, action: "goToSettings:", forControlEvents: UIControlEvents.TouchDown)
         }
@@ -240,15 +241,16 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             if instruments.count != 0 {
                 instrument = instruments[0] as! String
             }
-            var url = (dict["song_name"] as! String) + (dict["format"] as! String)
-            url = filePathString(url)
-            var track = Track(frame: CGRectZero, instruments: [instrument], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
             var families = dict["family"] as! NSArray
             var family = ""
             if families.count != 0 {
                 family = families[0] as! String
             }
-            track.instrumentFamilies = [family]
+            var url = (dict["song_name"] as! String) + (dict["format"] as! String)
+            url = filePathString(url)
+            
+            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            
             self.data.append(track)
         }
         dispatch_async(dispatch_get_main_queue()) {
@@ -407,11 +409,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func follow(sender: UIButton) {
-        User.followUser(sender.superview!.superview as! User, controller: self)
+        self.user.follow(nil)
     }
     
     func unfollow(sender: UIButton) {
-        User.followUser(sender.superview!.superview as! User, controller: self)
+        self.user.unfollow(nil)
     }
     
     // Push direct upload page up

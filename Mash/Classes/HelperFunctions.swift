@@ -85,7 +85,6 @@ func returnProjectView(navcontroller: UINavigationController) -> ProjectViewCont
 func hashPassword(input: String) -> String {
     var data: NSData = NSData(bytes: input, length: count(input))
     let hash = data.sha256()
-    Debug.printl(hash!.hexString, sender: "helpers")
     return hash!.hexString
 }
 
@@ -214,7 +213,6 @@ func upload(key: String, url: NSURL, bucket: String) {
         if (task.result != nil) {
             let uploadOutput: AWSS3TransferManagerUploadOutput = task.result as! AWSS3TransferManagerUploadOutput
             Debug.printl("File uploaded succesfully", sender: "helpers")
-            Debug.printl(uploadOutput, sender: "helpers")
         }
         return nil
     }

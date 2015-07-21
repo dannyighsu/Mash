@@ -12,10 +12,11 @@ import AVFoundation
 
 class SearchViewController: UITableViewController, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating {
    
-    var searchResults: [Track] = []
+    var searchResults: [AnyObject] = []
     var searchController: UISearchController?
     var audioPlayer: AVAudioPlayer? = nil
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+    var scope: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +26,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.searchController!.searchResultsUpdater = self
         self.searchController!.delegate = self
         self.searchController!.searchBar.delegate = self
+        self.searchController!.searchBar.scopeButtonTitles = ["Recording", "User"]
         
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
@@ -32,24 +34,21 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         // Register nibs
         let track = UINib(nibName: "Track", bundle: nil)
         self.tableView.registerNib(track, forCellReuseIdentifier: "Track")
-
-        // Set searchDisplay properties
-        /* let searchDisplay = self.searchController.searchResultsController
-        searchDisplay?.rowHeight = 75.0
-        searchDisplay?.separatorStyle = .None*/
+        let user = UINib(nibName: "User", bundle: nil)
+        self.tableView.registerNib(user, forCellReuseIdentifier: "User")
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
         
         self.tableView.tableHeaderView = self.searchController?.searchBar
         self.definesPresentationContext = true
         self.searchController?.searchBar.sizeToFit()
-        
         self.searchController?.searchBar.setShowsCancelButton(true, animated: true)
-        self.searchController?.searchBar.showsCancelButton = true
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.setHidesBackButton(true, animated: false)
-        
+        self.navigationController?.navigationBarHidden = true
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -63,27 +62,43 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.searchResults.count
     }
-
+    
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        
+        if self.scope == 0 {
+            
+        } else {
+            let user = cell as! User
+            user.updateDisplays()
+        }
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let track = tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
-        let index = indexPath.row
-        track.title.text = self.searchResults[index].titleText
-        track.titleText = track.title.text!
-        track.instruments = self.searchResults[index].instruments
-        track.trackURL = self.searchResults[index].trackURL
-        track.instrumentImage.image = findImage(track.instruments)
-        track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
-        track.titleText = searchResults[index].titleText
-        track.title.text = searchResults[index].titleText
-        track.userText = searchResults[index].userText
-        track.userLabel.text = track.userText
-        track.format = searchResults[index].format
-        track.bpm = searchResults[index].bpm
-        return track
+        if self.scope == 0 {
+            let track = self.tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
+            let trackData = self.searchResults[indexPath.row] as! Track
+            track.title.text = trackData.titleText
+            track.titleText = track.title.text!
+            track.instruments = trackData.instruments
+            track.instrumentFamilies = trackData.instrumentFamilies
+            track.trackURL = trackData.trackURL
+            track.instrumentImage.image = findImage(track.instrumentFamilies)
+            track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
+            track.titleText = trackData.titleText
+            track.title.text = trackData.titleText
+            track.userText = trackData.userText
+            track.userLabel.text = track.userText
+            track.format = trackData.format
+            track.bpm = trackData.bpm
+            return track
+        } else {
+            let user = self.tableView.dequeueReusableCellWithIdentifier("User", forIndexPath: indexPath) as! User
+            let userData = self.searchResults[indexPath.row] as! User
+            user.username = userData.username
+            user.altname = userData.altname
+            user.profile_pic_link = userData.profile_pic_link
+            return user
+        }
+        
     }
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -94,23 +109,48 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         if self.audioPlayer != nil {
             self.audioPlayer!.stop()
         }
-        var track = tableView.cellForRowAtIndexPath(indexPath) as! Track
-        download("\(track.userText)~~\(track.titleText)\(track.format)", NSURL(fileURLWithPath: track.trackURL)!, track_bucket)
-        while !NSFileManager.defaultManager().fileExistsAtPath(track.trackURL) {
-            Debug.printnl("waiting...")
+        if self.scope == 0 {
+            var track = self.tableView.cellForRowAtIndexPath(indexPath) as! Track
+            download("\(track.userText)~~\(track.titleText)\(track.format)", NSURL(fileURLWithPath: track.trackURL)!, track_bucket)
+            while !NSFileManager.defaultManager().fileExistsAtPath(track.trackURL) {
+                Debug.printnl("waiting...")
+                NSThread.sleepForTimeInterval(0.5)
+            }
             NSThread.sleepForTimeInterval(0.5)
+            
+            self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
+            self.audioPlayer!.play()
+            self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        } else {
+            let user = self.tableView.cellForRowAtIndexPath(indexPath) as! User
+            User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
+            self.tableView.cellForRowAtIndexPath(indexPath)!.selected = false
         }
-        NSThread.sleepForTimeInterval(0.5)
-        
-        self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
-        self.audioPlayer!.play()
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        Debug.printl("Playing track \(track.titleText)", sender: self)
+    }
+    
+    func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        self.scope = selectedScope
+        self.searchResults = []
+        self.tableView.reloadData()
     }
     
     func searchController(controller: UISearchController, shouldReloadTableForSearchString searchString: String!) -> Bool {
-        self.searchTextFilter(searchString)
+        if searchString == "" {
+            return false
+        }
         return true
+    }
+    
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        let searchString = self.searchController?.searchBar.text
+        if searchString == "" {
+            return
+        }
+        self.searchTextFilter(searchString!)
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
@@ -118,17 +158,18 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
 
     func searchTextFilter(searchText: String) {
-        /*let results = self.searchItems.filter({(track: String) -> Bool in
-            let match = track.rangeOfString(searchText)
-            return match != nil
-        })
-        for (var i = 0; i < results.count; i++) {
-            self.searchResults.append(Track(frame: CGRectZero, instruments: ["multiple"], titleText: results[i]))
-        }*/
         let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/search/recording")!)
-        var params = ["username": username, "password_hash": passwordHash, "song_name": searchText] as Dictionary
+        var request: NSMutableURLRequest
+        var params: Dictionary<String, String>
+        let scope = self.scope
+        if scope == 0 {
+            request = NSMutableURLRequest(URL: NSURL(string: "\(db)/search/recording")!)
+            params = ["username": username, "password_hash": passwordHash, "song_name": searchText] as Dictionary
+        } else {
+            request = NSMutableURLRequest(URL: NSURL(string: "\(db)/search/user")!)
+            params = ["username": username, "password_hash": passwordHash, "user_id": "\(current_user.userid!)", "query_name": searchText] as Dictionary
+        }
         self.activityView.startAnimating()
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
@@ -142,25 +183,23 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 // Check status codes
                 if statusCode == HTTP_ERROR {
                     Debug.printl("Error: \(error)", sender: self)
-                    return
                 } else if statusCode == HTTP_WRONG_MEDIA {
-                    return
                 } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    var error: NSError? = nil
-                    var response: AnyObject? = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error)
-                    self.updateResults(response as! NSDictionary)
-                    return
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        var error: NSError? = nil
+                        var response: AnyObject? = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error)
+                        if scope == 0 {
+                            self.updateResults(response as! NSDictionary)
+                        } else {
+                            self.updateUserResults(response as! NSDictionary)
+                        }
+                    }
                 } else {
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                    return
                 }
             }
         }
-    }
-    
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
-        let searchString = self.searchController?.searchBar.text
-        self.searchTextFilter(searchString!)
     }
     
     func updateResults(data: NSDictionary) {
@@ -173,23 +212,33 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             if instruments.count != 0 {
                 instrument = instruments[0] as! String
             }
+            var families = dict["family"] as! NSArray
+            var family = ""
+            if families.count != 0 {
+                family = families[0] as! String
+            }
             var url = (dict["song_name"] as! String) + (dict["format"] as! String)
             url = filePathString(url)
-            var track = Track(frame: CGRectZero, instruments: [instrument], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            
+            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            
             self.searchResults.append(track)
         }
-        dispatch_async(dispatch_get_main_queue()) {
-            self.tableView.reloadData()
-        }
-        /*var users = data["user"] as! NSArray
+        self.tableView.reloadData()
+    }
+    
+    func updateUserResults(data: NSDictionary) {
+        self.searchResults = []
+        var users = data["users"] as! NSArray
         for u in users {
             var dict = u as! NSDictionary
-            var user = User(username: data["username"] as? String, altname: data["display_name"] as? String, profile_pic_link: data["profile_pic_link"] as? String, banner_pic_link: data["banner_pic_link"] as? String, followers: String(data["followers"] as! Int), following: String(data["following"] as! Int), tracks: String(data["tracks"] as! Int), description: data["description"] as? String)
+            var user = User()
+            user.username = dict["username"] as? String
+            user.altname = dict["display_name"] as? String
+            user.profile_pic_link = dict["profile_pic_link"] as? String
             self.searchResults.append(user)
         }
-        dispatch_async(dispatch_get_main_queue()) {
-            self.tableView.reloadData()
-        }*/
+        self.tableView.reloadData()
     }
     
     func addTrack(sender: UIButton) {

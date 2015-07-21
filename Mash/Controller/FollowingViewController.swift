@@ -75,11 +75,11 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func follow(sender: UIButton) {
-        User.followUser(getUserCell(sender), controller: self)
+        User.followUser(getUserCell(sender), target: self)
     }
     
     func unfollow(sender: UIButton) {
-        User.unfollowUser(getUserCell(sender), controller: self)
+        User.unfollowUser(getUserCell(sender), target: self)
     }
     
     func getUserCell(input: UIButton) -> User {

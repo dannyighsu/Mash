@@ -117,14 +117,15 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
             if instruments.count != 0 {
                 instrument = instruments[0] as! String
             }
-            var url = (dict["song_name"] as! String) + (dict["format"] as! String)
-            var track = Track(frame: CGRectZero, instruments: [instrument], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
             var families = dict["family"] as! NSArray
             var family = ""
             if families.count != 0 {
                 family = families[0] as! String
             }
-            track.instrumentFamilies = [family]
+            
+            var url = (dict["song_name"] as! String) + (dict["format"] as! String)
+            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            
             controller.results.append(track)
         }
         var index = 0

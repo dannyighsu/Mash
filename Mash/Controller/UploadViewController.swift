@@ -166,8 +166,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func finish() {
         let taggingController = self.storyboard?.instantiateViewControllerWithIdentifier("TaggingViewController") as! TaggingViewController
-        taggingController.track = Track(frame: CGRectZero, instruments: self.instruments, titleText: self.titleTextField.text, bpm: self.bpm!, trackURL: self.recording!.url.absoluteString! as String, user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
-        taggingController.track?.instrumentFamilies += self.instruments
+        taggingController.track = Track(frame: CGRectZero, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text, bpm: self.bpm!, trackURL: self.recording!.url.absoluteString! as String, user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
         var index = 0
         for i in 0...self.navigationController!.viewControllers.count {
             if self.navigationController!.viewControllers[i] as? UploadViewController != nil {

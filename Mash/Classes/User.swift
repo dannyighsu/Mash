@@ -83,6 +83,38 @@ class User: UITableViewCell {
         }
     }
     
+    // Updates all displays of the view
+    func updateDisplays() {
+        self.nameLabel.titleLabel?.text = self.display_name()
+        var following = false
+        for u in user_following {
+            if u.username! == self.username {
+                following = true
+                break
+            }
+        }
+        if following {
+            self.followButton.titleLabel!.text = "Unfollow"
+            self.followButton.backgroundColor = lightGray()
+            self.followButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
+            self.followButton.removeTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
+        } else {
+            self.followButton.titleLabel!.text = "Follow"
+            self.followButton.backgroundColor = lightBlue()
+            self.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
+            self.followButton.removeTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
+        }
+        self.profile_pic(self.profilePicture)
+    }
+    
+    func follow(sender: AnyObject?) {
+        User.followUser(self, target: self)
+    }
+    
+    func unfollow(sender: AnyObject?) {
+        User.unfollowUser(self, target: self)
+    }
+    
     // User-related Helper Functions
 
     // Make get request for user and instantiate dashboard
@@ -180,7 +212,7 @@ class User: UITableViewCell {
         }
     }
     
-    class func followUser(user: User, controller: UIViewController) {
+    class func followUser(user: User, target: AnyObject) {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let username = current_user.username
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/follow/user")!)
@@ -200,8 +232,8 @@ class User: UITableViewCell {
                         user_following.append(user)
                         user.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
                         user.followButton.backgroundColor = lightGray()
-                        user.followButton.removeTarget(controller, action: "follow:", forControlEvents: UIControlEvents.TouchDown)
-                        user.followButton.addTarget(controller, action: "unfollow:", forControlEvents: UIControlEvents.TouchDown)
+                        user.followButton.removeTarget(target, action: "follow:", forControlEvents: UIControlEvents.TouchDown)
+                        user.followButton.addTarget(target, action: "unfollow:", forControlEvents: UIControlEvents.TouchDown)
                     }
                 } else if statusCode == HTTP_SERVER_ERROR {
                     Debug.printl("Internal server error.", sender: "helper")
@@ -212,7 +244,7 @@ class User: UITableViewCell {
         }
     }
     
-    class func unfollowUser(user: User, controller: UIViewController) {
+    class func unfollowUser(user: User, target: AnyObject) {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let username = current_user.username
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/unfollow/user")!)
@@ -236,8 +268,8 @@ class User: UITableViewCell {
                         }
                         user.followButton.setTitle("Follow", forState: UIControlState.Normal)
                         user.followButton.backgroundColor = lightBlue()
-                        user.followButton.removeTarget(controller, action: "unfollow:", forControlEvents: UIControlEvents.TouchDown)
-                        user.followButton.addTarget(controller, action: "follow:", forControlEvents: UIControlEvents.TouchDown)
+                        user.followButton.removeTarget(target, action: "unfollow:", forControlEvents: UIControlEvents.TouchDown)
+                        user.followButton.addTarget(target, action: "follow:", forControlEvents: UIControlEvents.TouchDown)
                     }
                 } else if statusCode == HTTP_SERVER_ERROR {
                     Debug.printl("Internal server error.", sender: "helper")

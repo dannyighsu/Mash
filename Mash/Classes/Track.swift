@@ -36,9 +36,10 @@ class Track: UITableViewCell{
         self.bpm = bpm
     }
 
-    convenience init(frame: CGRect, instruments: [String], titleText: String, bpm: Int, trackURL: String, user: String, format: String) {
+    convenience init(frame: CGRect, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, trackURL: String, user: String, format: String) {
         self.init(frame: frame)
         self.instruments = instruments
+        self.instrumentFamilies = instrumentFamilies
         self.titleText = titleText
         self.trackURL = trackURL
         self.bpm = bpm
