@@ -98,7 +98,6 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             user.profile_pic_link = userData.profile_pic_link
             return user
         }
-        
     }
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

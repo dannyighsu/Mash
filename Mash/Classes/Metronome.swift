@@ -12,6 +12,8 @@ import AVFoundation
 
 protocol MetronomeDelegate {
     func tick(metronome: Metronome)
+    func tempoFieldDidBeginEditing(metronome: Metronome)
+    func timeFieldDidBeginEditing(metronome: Metronome)
 }
 
 class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
@@ -133,6 +135,9 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField == self.timeSigField {
+            self.delegate?.timeFieldDidBeginEditing(self)
+        } else if textField == self.tempoField {
+            self.delegate?.tempoFieldDidBeginEditing(self)
         }
     }
 
