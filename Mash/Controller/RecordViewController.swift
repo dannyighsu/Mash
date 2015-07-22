@@ -228,7 +228,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.player = EZAudioPlayer(audioFile: self.audioFile)
         self.player!.delegate = self
         self.player!.volume = self.volumeSlider.value
-        self.audioPlot.clear()
         var data = self.audioFile!.getWaveformData()
         self.audioPlot.updateBuffer(data.buffers[0], withBufferSize: data.bufferSize)
         
@@ -303,7 +302,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             let time = audioPlayer.currentTime
             if time == 0 {
                 self.timeLabel.text = "00:00"
-                self.play(nil)
+                if self.audioFile != nil {
+                    self.play(nil)
+                }
                 return
             }
             var secondText = String(stringInterpolationSegment: Int(time))

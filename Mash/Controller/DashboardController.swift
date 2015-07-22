@@ -159,21 +159,19 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
         
-        download("\(self.user.username!)~~\(track.titleText)\(track.format)", filePathURL(track.titleText + track.format), track_bucket)
         self.activityView.startAnimating()
-        
-        while !NSFileManager.defaultManager().fileExistsAtPath(filePathString(track.titleText + track.format)) {
-            Debug.printnl("waiting...")
-            NSThread.sleepForTimeInterval(0.5)
+        download("\(self.user.username!)~~\(track.titleText)\(track.format)", filePathURL(track.titleText + track.format), track_bucket) {
+            (result) in
+            dispatch_async(dispatch_get_main_queue()) {
+                track.generateWaveform()
+                self.activityView.stopAnimating()
+                
+                self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(track.titleText + track.format), error: nil)
+                self.audioPlayer!.play()
+                tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                Debug.printl("Playing track \(track.titleText)", sender: self)
+            }
         }
-        NSThread.sleepForTimeInterval(0.5)
-        
-        self.activityView.stopAnimating()
-        
-        self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(track.titleText + track.format), error: nil)
-        self.audioPlayer!.play()
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        Debug.printl("Playing track \(track.titleText)", sender: self)
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
