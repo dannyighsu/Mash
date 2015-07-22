@@ -21,6 +21,7 @@
 		373F0F021B3DEFC500DE92AB /* tock.caf in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFB1B3DEFC500DE92AB /* tock.caf */; };
 		373F0F031B3DEFC500DE92AB /* Violins 1.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */; };
 		374CEFD71B508552007A7557 /* RecordToolsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374CEFD61B508552007A7557 /* RecordToolsController.swift */; };
+		376282F41B5EF89700C59774 /* AudioProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376282F31B5EF89700C59774 /* AudioProcessor.swift */; };
 		3782615C1B4B139400FC89A0 /* ProjectPlayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3782615B1B4B139400FC89A0 /* ProjectPlayer.xib */; };
 		3782615E1B4B140C00FC89A0 /* ProjectPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3782615D1B4B140C00FC89A0 /* ProjectPlayer.swift */; };
 		379265F91B5DDA3600E78F2E /* SwipeBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 379265F81B5DDA3600E78F2E /* SwipeBar.xib */; };
@@ -103,6 +104,7 @@
 		373F0EFB1B3DEFC500DE92AB /* tock.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = tock.caf; sourceTree = "<group>"; };
 		373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Violins 1.aif"; sourceTree = "<group>"; };
 		374CEFD61B508552007A7557 /* RecordToolsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordToolsController.swift; sourceTree = "<group>"; };
+		376282F31B5EF89700C59774 /* AudioProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioProcessor.swift; sourceTree = "<group>"; };
 		3782615B1B4B139400FC89A0 /* ProjectPlayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectPlayer.xib; sourceTree = "<group>"; };
 		3782615D1B4B140C00FC89A0 /* ProjectPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectPlayer.swift; sourceTree = "<group>"; };
 		379265F81B5DDA3600E78F2E /* SwipeBar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwipeBar.xib; sourceTree = "<group>"; };
@@ -299,6 +301,7 @@
 		37E799BD1B3CC1D000D2E54D /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				376282F31B5EF89700C59774 /* AudioProcessor.swift */,
 				37E799BE1B3CC1D000D2E54D /* Debug.swift */,
 				37E799C01B3CC1D000D2E54D /* HelperData.swift */,
 				37E799C11B3CC1D000D2E54D /* HelperFunctions.swift */,
@@ -313,9 +316,9 @@
 				3782615D1B4B140C00FC89A0 /* ProjectPlayer.swift */,
 				37E799C91B3CC1D000D2E54D /* ProjectTools.swift */,
 				37E799CA1B3CC1D000D2E54D /* ProjectTrack.swift */,
+				379265FA1B5DDA6400E78F2E /* SwipeBar.swift */,
 				37E799CB1B3CC1D000D2E54D /* Track.swift */,
 				37E799CC1B3CC1D000D2E54D /* User.swift */,
-				379265FA1B5DDA6400E78F2E /* SwipeBar.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -597,6 +600,7 @@
 				37E799B91B3CC1C600D2E54D /* SignupViewController.swift in Sources */,
 				37E799AA1B3CC1C600D2E54D /* ImportViewController.swift in Sources */,
 				3722ACEC1B4DF1FF008473C3 /* ImageCell.swift in Sources */,
+				376282F41B5EF89700C59774 /* AudioProcessor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -749,11 +753,13 @@
 					"\"$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.7.1\"",
 					"\"$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.7.1\"",
 				);
+				GCC_INPUT_FILETYPE = automatic;
 				INFOPLIST_FILE = Mash/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mash/Objective-C",
+					"$(PROJECT_DIR)/Mash/Objective-C/Superpowered",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -784,11 +790,13 @@
 					"\"$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.7.1\"",
 					"\"$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.7.1\"",
 				);
+				GCC_INPUT_FILETYPE = automatic;
 				INFOPLIST_FILE = Mash/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mash/Objective-C",
+					"$(PROJECT_DIR)/Mash/Objective-C/Superpowered",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",

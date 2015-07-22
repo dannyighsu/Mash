@@ -12,5 +12,6 @@ import UIKit
 class SwipeBar: UITableViewHeaderFooterView {
     
     @IBOutlet weak var swipeView: UIView!
+    @IBOutlet weak var swipeArrow: UIImageView!
     
 }

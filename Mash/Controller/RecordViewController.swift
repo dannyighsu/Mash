@@ -37,6 +37,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var beatLabel: UILabel? = nil
     var countoffView: UIView? = nil
     var toolsViewFrame: CGRect? = nil
+    var swipeArrow: UIImageView? = nil
+    var upTap: UITapGestureRecognizer? = nil
+    var downTap: UITapGestureRecognizer? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,6 +78,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.toolsView.allowsSelection = false
         let swipebar = UINib(nibName: "SwipeBar", bundle: nil)
         self.toolsView.registerNib(swipebar, forHeaderFooterViewReuseIdentifier: "SwipeBar")
+        self.toolsView.scrollEnabled = false
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -222,7 +226,12 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     func openAudio() {
         self.audioFile = EZAudioFile(URL: filePathURL(nil), delegate: self)
         self.player = EZAudioPlayer(audioFile: self.audioFile)
+        self.player!.delegate = self
         self.player!.volume = self.volumeSlider.value
+        self.audioPlot.clear()
+        var data = self.audioFile!.getWaveformData()
+        self.audioPlot.updateBuffer(data.buffers[0], withBufferSize: data.bufferSize)
+        
         /*self.audioFile?.getWaveformDataWithCompletionBlock() {
             (waveformData: UnsafeMutablePointer<UnsafeMutablePointer<Float>>, length: Int32) in
             dispatch_async(dispatch_get_main_queue()) {
@@ -244,14 +253,26 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     }
     
     func showTools(sender: AnyObject?) {
-        UIView.animateWithDuration(0.5, animations: { self.toolsView.frame = self.view.frame })
+        UIView.animateWithDuration(0.5, animations: { self.toolsView.frame = self.view.frame }) {
+            (completed: Bool) in
+            self.swipeArrow?.image = UIImage(named: "swipe_arrow")
+            self.swipeArrow?.removeGestureRecognizer(self.upTap!)
+            self.swipeArrow?.addGestureRecognizer(self.downTap!)
+            self.toolsView.scrollEnabled = true
+        }
     }
     
     func hideTools(sender: AnyObject?) {
-        UIView.animateWithDuration(0.5, animations: { self.toolsView.frame = self.toolsViewFrame! })
+        UIView.animateWithDuration(0.5, animations: { self.toolsView.frame = self.toolsViewFrame! }) {
+            (completed: Bool) in
+            self.swipeArrow?.image = UIImage(named: "swipe_arrow_2")
+            self.swipeArrow?.removeGestureRecognizer(self.downTap!)
+            self.swipeArrow?.addGestureRecognizer(self.upTap!)
+            self.toolsView.scrollEnabled = false
+        }
     }
     
-    // Microphone Delegate Methods
+    // Microphone Delegate
     func microphone(microphone: EZMicrophone!, hasAudioReceived buffer: UnsafeMutablePointer<UnsafeMutablePointer<Float>>, withBufferSize bufferSize: UInt32, withNumberOfChannels numberOfChannels: UInt32) {
         dispatch_async(dispatch_get_main_queue()) {
             self.audioPlot.updateBuffer(buffer[0], withBufferSize: bufferSize)
@@ -277,17 +298,12 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     }
     
     // EZAudioPlayer Delegate
-    func audioPlayer(audioPlayer: EZAudioPlayer!, readAudio buffer: UnsafeMutablePointer<UnsafeMutablePointer<Float>>, withBufferSize bufferSize: UInt32, withNumberOfChannels numberOfChannels: UInt32, inAudioFile audioFile: EZAudioFile!) {
-        dispatch_async(dispatch_get_main_queue()) {
-            self.audioPlot.updateBuffer(buffer[0], withBufferSize: bufferSize)
-        }
-    }
-    
     func audioPlayer(audioPlayer: EZAudioPlayer!, updatedPosition framePosition: Int64, inAudioFile audioFile: EZAudioFile!) {
         dispatch_async(dispatch_get_main_queue()) {
             let time = audioPlayer.currentTime
             if time == 0 {
                 self.timeLabel.text = "00:00"
+                self.play(nil)
                 return
             }
             var secondText = String(stringInterpolationSegment: Int(time))
@@ -297,6 +313,13 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             var milliText = String(stringInterpolationSegment: time % 1)
             milliText = milliText.substringWithRange(Range<String.Index>(start: advance(milliText.startIndex, 2), end: advance(milliText.startIndex, 4)))
             self.timeLabel.text = "\(secondText):\(milliText)"
+        }
+    }
+    
+    // EZAudioFile Delegate
+    func audioFile(audioFile: EZAudioFile!, readAudio buffer: UnsafeMutablePointer<UnsafeMutablePointer<Float>>, withBufferSize bufferSize: UInt32, withNumberOfChannels numberOfChannels: UInt32) {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.audioPlot.updateBuffer(buffer[0], withBufferSize: bufferSize)
         }
     }
     
@@ -329,11 +352,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.showTools(nil)
     }
     
-    // AudioFile Delegate
-    func audioFile(audioFile: EZAudioFile!, readAudio buffer: UnsafeMutablePointer<UnsafeMutablePointer<Float>>, withBufferSize bufferSize: UInt32, withNumberOfChannels numberOfChannels: UInt32) {
-        
-    }
-    
     // TableView Delegate
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("SwipeBar") as! SwipeBar
@@ -343,6 +361,11 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         down.direction = .Down
         header.swipeView.addGestureRecognizer(up)
         header.swipeView.addGestureRecognizer(down)
+        
+        self.upTap = UITapGestureRecognizer(target: self, action: "showTools:")
+        self.downTap = UITapGestureRecognizer(target: self, action: "hideTools:")
+        self.swipeArrow = header.swipeArrow
+        self.swipeArrow?.addGestureRecognizer(self.upTap!)
         return header
     }
 
