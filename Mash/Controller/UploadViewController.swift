@@ -94,6 +94,36 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         checkForDuplicate(username, passwordHash: passwordHash)
     }
     
+    func checkForDuplicate(username: String, passwordHash: String) {
+        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
+        var params: [String: String] = ["username": username, "password_hash": passwordHash, "query_name": username, "song_name": self.titleTextField.text]
+        self.activityView.startAnimating()
+        httpPost(params,request) {
+            (data, statusCode, error) -> Void in
+            var duplicate = false
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: self)
+            } else {
+                if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
+                    if count(data) > 22 {
+                        duplicate = true
+                    }
+                } else if statusCode == HTTP_SERVER_ERROR {
+                    duplicate = true
+                }
+            }
+            if !duplicate {
+                self.uploadAction()
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
+                    let alert = UIAlertView(title: "Track exists.", message: "Please choose a different title.", delegate: self, cancelButtonTitle: "Ok")
+                    alert.show()
+                }
+            }
+        }
+    }
+    
     // Upload file to bucket, then post information to server
     func uploadAction() {
         // Bucket upload
@@ -129,36 +159,6 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                 } else {
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
                     return
-                }
-            }
-        }
-    }
-    
-    func checkForDuplicate(username: String, passwordHash: String) {
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
-        var params: [String: String] = ["username": username, "password_hash": passwordHash, "query_name": username, "song_name": self.titleTextField.text]
-        self.activityView.startAnimating()
-        httpPost(params,request) {
-            (data, statusCode, error) -> Void in
-            var duplicate = false
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
-            } else {
-                if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    if count(data) > 22 {
-                        duplicate = true
-                    }
-                } else if statusCode == HTTP_SERVER_ERROR {
-                    duplicate = true
-                }
-            }
-            if !duplicate {
-                self.uploadAction()
-            } else {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.activityView.stopAnimating()
-                    let alert = UIAlertView(title: "Track exists.", message: "Please choose a different title.", delegate: self, cancelButtonTitle: "Ok")
-                    alert.show()
                 }
             }
         }

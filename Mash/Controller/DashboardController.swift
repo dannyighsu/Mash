@@ -70,20 +70,26 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if cell is Track {
-            cell.backgroundColor = offWhite()
-            let index = indexPath.row
-            let track = cell as! Track
-            track.title.text = self.data[index].titleText
-            track.titleText = track.title.text!
-            track.format = self.data[index].format
-            track.userText = self.data[index].userText
-            track.userLabel.text = track.userText
-            track.instruments = self.data[index].instruments
-            track.trackURL = self.data[index].trackURL
-            track.bpm = self.data[index].bpm
-            track.instrumentImage.image = findImage(track.instrumentFamilies)
-            track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
+        let track = cell as! Track
+        let index = indexPath.row
+        track.backgroundColor = offWhite()
+        track.title.text = self.data[index].titleText
+        track.titleText = track.title.text!
+        track.format = self.data[index].format
+        track.userText = self.data[index].userText
+        track.userLabel.text = track.userText
+        track.instruments = self.data[index].instruments
+        track.trackURL = self.data[index].trackURL
+        track.bpm = self.data[index].bpm
+        track.instrumentImage.image = findImage(track.instrumentFamilies)
+        track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
+        self.activityView.startAnimating()
+        download("\(self.user.username!)~~\(track.titleText)\(track.format)", filePathURL(track.titleText + track.format), track_bucket) {
+            (result) in
+            dispatch_async(dispatch_get_main_queue()) {
+                track.generateWaveform()
+                self.activityView.stopAnimating()
+            }
         }
     }
     
@@ -158,20 +164,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
-        
-        self.activityView.startAnimating()
-        download("\(self.user.username!)~~\(track.titleText)\(track.format)", filePathURL(track.titleText + track.format), track_bucket) {
-            (result) in
-            dispatch_async(dispatch_get_main_queue()) {
-                track.generateWaveform()
-                self.activityView.stopAnimating()
-                
-                self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(track.titleText + track.format), error: nil)
-                self.audioPlayer!.play()
-                tableView.deselectRowAtIndexPath(indexPath, animated: true)
-                Debug.printl("Playing track \(track.titleText)", sender: self)
-            }
-        }
+        self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(track.titleText + track.format), error: nil)
+        self.audioPlayer!.play()
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        Debug.printl("Playing track \(track.titleText)", sender: self)
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {

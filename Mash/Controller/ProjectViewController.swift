@@ -27,7 +27,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tracks.delegate = self
         self.tracks.dataSource = self
         self.tracks.backgroundColor = offWhite()
-        self.tracks.separatorStyle = .None
+        self.tracks.separatorStyle = .SingleLine
 
         // Register nibs
         let nib = UINib(nibName: "ProjectTrack", bundle: nil)
@@ -84,6 +84,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
             cell.track = trackData
             cell.backgroundColor = lightGray()
+            cell.generateWaveform()
             return cell
         } else {
             let player = tableView.dequeueReusableCellWithIdentifier("ProjectPlayer") as! ProjectPlayer

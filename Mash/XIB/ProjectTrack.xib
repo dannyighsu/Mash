@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -16,9 +16,6 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EJI-Hf-g0O">
                         <rect key="frame" x="0.0" y="26" width="40" height="40"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="waveform_static" translatesAutoresizingMaskIntoConstraints="NO" id="CIY-iy-YcL">
-                        <rect key="frame" x="48" y="26" width="497" height="40"/>
-                    </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="speaker" translatesAutoresizingMaskIntoConstraints="NO" id="o53-QN-6pw">
                         <rect key="frame" x="562" y="31" width="30" height="30"/>
                         <constraints>
@@ -33,26 +30,43 @@
                         <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="20"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uoj-bb-PFd" customClass="EZAudioPlot">
+                        <rect key="frame" x="48" y="27" width="506" height="38"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="waveform_static" translatesAutoresizingMaskIntoConstraints="NO" id="CIY-iy-YcL">
+                                <rect key="frame" x="4" y="-1" width="497" height="40"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="CIY-iy-YcL" firstAttribute="centerY" secondItem="uoj-bb-PFd" secondAttribute="centerY" id="4gH-aX-XZN"/>
+                            <constraint firstAttribute="trailing" secondItem="CIY-iy-YcL" secondAttribute="trailing" constant="5" id="ZV9-tn-onM"/>
+                            <constraint firstItem="CIY-iy-YcL" firstAttribute="top" secondItem="uoj-bb-PFd" secondAttribute="top" constant="-1" id="nT5-or-54X"/>
+                            <constraint firstItem="CIY-iy-YcL" firstAttribute="leading" secondItem="uoj-bb-PFd" secondAttribute="leading" constant="4" id="v3S-mq-haJ"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="o53-QN-6pw" firstAttribute="leading" secondItem="CIY-iy-YcL" secondAttribute="trailing" constant="17" id="0Qe-1L-sUe"/>
+                    <constraint firstItem="ZNn-5t-h0K" firstAttribute="leading" secondItem="uoj-bb-PFd" secondAttribute="leading" id="27e-zn-grr"/>
                     <constraint firstItem="ZNn-5t-h0K" firstAttribute="leading" secondItem="y7O-0r-oaR" secondAttribute="leadingMargin" constant="40" id="2mh-DR-f0d"/>
-                    <constraint firstItem="EJI-Hf-g0O" firstAttribute="bottom" secondItem="CIY-iy-YcL" secondAttribute="bottom" id="5OJ-dg-cdg"/>
                     <constraint firstItem="o53-QN-6pw" firstAttribute="top" secondItem="y7O-0r-oaR" secondAttribute="topMargin" constant="23" id="BtL-hV-BzL"/>
-                    <constraint firstItem="CIY-iy-YcL" firstAttribute="centerY" secondItem="o53-QN-6pw" secondAttribute="centerY" id="H9Z-Bk-KjZ"/>
+                    <constraint firstItem="uoj-bb-PFd" firstAttribute="centerY" secondItem="EJI-Hf-g0O" secondAttribute="centerY" id="Dui-Wm-UAj"/>
                     <constraint firstAttribute="bottomMargin" secondItem="o53-QN-6pw" secondAttribute="bottom" constant="5.5" id="SWu-3b-5up"/>
                     <constraint firstItem="ZNn-5t-h0K" firstAttribute="leading" secondItem="EJI-Hf-g0O" secondAttribute="trailing" constant="8" symbolic="YES" id="SaK-2Q-82O"/>
                     <constraint firstAttribute="trailingMargin" secondItem="o53-QN-6pw" secondAttribute="trailing" id="Y6m-yd-FZO"/>
                     <constraint firstItem="EJI-Hf-g0O" firstAttribute="leading" secondItem="y7O-0r-oaR" secondAttribute="leading" id="c03-f8-llP"/>
-                    <constraint firstItem="CIY-iy-YcL" firstAttribute="top" secondItem="EJI-Hf-g0O" secondAttribute="top" id="cQd-Vx-CJm"/>
                     <constraint firstItem="ZNn-5t-h0K" firstAttribute="top" secondItem="y7O-0r-oaR" secondAttribute="topMargin" id="cra-HS-fmd"/>
-                    <constraint firstItem="ZNn-5t-h0K" firstAttribute="leading" secondItem="CIY-iy-YcL" secondAttribute="leading" id="ffS-dH-Mu2"/>
+                    <constraint firstItem="uoj-bb-PFd" firstAttribute="top" secondItem="y7O-0r-oaR" secondAttribute="topMargin" constant="19" id="dzM-cP-FWv"/>
+                    <constraint firstItem="o53-QN-6pw" firstAttribute="leading" secondItem="uoj-bb-PFd" secondAttribute="trailing" constant="8" symbolic="YES" id="fJv-yv-0Gs"/>
+                    <constraint firstItem="uoj-bb-PFd" firstAttribute="centerY" secondItem="o53-QN-6pw" secondAttribute="centerY" id="iJR-18-vWe"/>
                     <constraint firstItem="EJI-Hf-g0O" firstAttribute="top" secondItem="y7O-0r-oaR" secondAttribute="topMargin" constant="18" id="zVR-qP-adY"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="audioPlot" destination="uoj-bb-PFd" id="W0t-2a-FGx"/>
                 <outlet property="instrumentImage" destination="EJI-Hf-g0O" id="eqk-R7-xWh"/>
                 <outlet property="speakerImage" destination="o53-QN-6pw" id="ZrS-6Q-evX"/>
+                <outlet property="staticAudioPlot" destination="CIY-iy-YcL" id="Ep7-ts-yYC"/>
                 <outlet property="trackTitle" destination="ZNn-5t-h0K" id="WaS-4t-cjr"/>
             </connections>
             <point key="canvasLocation" x="398" y="251.5"/>
