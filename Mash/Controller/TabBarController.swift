@@ -21,4 +21,24 @@ class TabBarController: UITabBarController {
         self.selectedIndex = getTabBarController("record")
     }
     
+    override func shouldAutorotate() -> Bool {
+        var result: Bool
+        if self.selectedViewController!.respondsToSelector("shouldAutorotate") {
+            result = self.selectedViewController!.shouldAutorotate()
+        } else {
+            result = super.shouldAutorotate()
+        }
+        return result
+    }
+    
+    override func supportedInterfaceOrientations() -> Int {
+        var result: Int
+        if self.selectedViewController!.respondsToSelector("supportedInterfaceOrientations") {
+            result = self.selectedViewController!.supportedInterfaceOrientations()
+        } else {
+            result = super.supportedInterfaceOrientations()
+        }
+        return result
+    }
+    
 }

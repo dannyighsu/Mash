@@ -60,6 +60,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         self.parentViewController?.navigationItem.setHidesBackButton(true, animated: false)
     }
+    
+    override func supportedInterfaceOrientations() -> Int {
+        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+    }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1

@@ -71,6 +71,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return /*GPPURLHandler.handleURL(url, sourceApplication: sourceApplication, annotation: annotation) && */FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
     }
     
+    func application(application: UIApplication, supportedInterfaceOrientationsForWindow window: UIWindow?) -> Int {
+        var orientations = Int(UIInterfaceOrientationMask.Portrait.rawValue)
+        if self.window?.rootViewController != nil {
+            var navController = self.window?.rootViewController as! NavigationController
+            var viewController = navController.viewControllers.last as! UIViewController
+            orientations = viewController.supportedInterfaceOrientations()
+        }
+        return orientations
+    }
     
 }
 

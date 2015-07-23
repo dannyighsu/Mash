@@ -103,6 +103,10 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         }
     }
     
+    override func supportedInterfaceOrientations() -> Int {
+        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+    }
+    
     // Button methods
     func record(sender: AnyObject?) {
         if self.player != nil && self.player!.isPlaying {

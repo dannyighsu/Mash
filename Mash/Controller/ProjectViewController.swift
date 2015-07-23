@@ -10,15 +10,15 @@ import UIKit
 import AVFoundation
 import EZAudio
 
-class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate {
+class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate, MetronomeDelegate {
 
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
     var audioPlayer: ProjectPlayer? = nil
-    var header: UITableViewHeaderFooterView? = nil
     var toolsTap: UITapGestureRecognizer? = nil
-    var toolsShowing: Bool = false
+    var mixerShowing: Bool = false
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+    var metronome: Metronome = Metronome.createView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +28,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tracks.dataSource = self
         self.tracks.backgroundColor = offWhite()
         self.tracks.separatorStyle = .SingleLine
+        self.tracks.tableFooterView = UIView(frame: CGRectZero)
 
         // Register nibs
         let nib = UINib(nibName: "ProjectTrack", bundle: nil)
@@ -35,89 +36,85 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         let header = UINib(nibName: "ProjectTools", bundle: nil)
         self.tracks.registerNib(header, forHeaderFooterViewReuseIdentifier: "ProjectTools")
         let player = UINib(nibName: "ProjectPlayer", bundle: nil)
-        self.tracks.registerNib(player, forCellReuseIdentifier: "ProjectPlayer")
+        self.tracks.registerNib(player, forHeaderFooterViewReuseIdentifier: "ProjectPlayer")
         
-        self.toolsTap = UITapGestureRecognizer(target: self, action: "showTools:")
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
+        
+        self.metronome.delegate = self
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        self.parentViewController?.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Tools", style: UIBarButtonItemStyle.Plain, target: self, action: "showTools:"), animated: false)
-        self.parentViewController?.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
+        /*self.parentViewController?.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Tools", style: UIBarButtonItemStyle.Plain, target: self, action: "showTools:"), animated: false)
+        self.parentViewController?.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)*/
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.parentViewController?.navigationItem.title = "Your Project"
+        self.navigationController?.navigationBarHidden = true
+        self.view.frame = self.tabBarController!.view.frame
+        /*self.parentViewController?.navigationItem.title = "Your Project"*/
+        /*self.navigationController?.navigationBar.addGestureRecognizer(self.toolsTap!)*/
         if self.tracks != nil {
             self.tracks.reloadData()
         }
-        self.navigationController?.navigationBar.addGestureRecognizer(self.toolsTap!)
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.navigationBar.removeGestureRecognizer(self.toolsTap!)
-        self.parentViewController?.navigationItem.setRightBarButtonItem(nil, animated: false)
+        self.navigationController?.navigationBarHidden = false
+        /*self.navigationController?.navigationBar.removeGestureRecognizer(self.toolsTap!)
+        self.parentViewController?.navigationItem.setRightBarButtonItem(nil, animated: false)*/
         self.audioPlayer!.stop()
     }
-
+    
+    override func shouldAutorotate() -> Bool {
+        return true
+    }
+    
+    override func supportedInterfaceOrientations() -> Int {
+        return Int(UIInterfaceOrientationMask.LandscapeRight.rawValue)
+    }
+    
+    // TableView delegate
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return self.data.count
-        } else {
-            return 1
-        }
+        return self.data.count
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("ProjectTrack") as! ProjectTrack
-            let trackData = self.data[indexPath.row]
-            cell.trackTitle.text = trackData.titleText
-            cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
-            cell.track = trackData
-            cell.backgroundColor = lightGray()
-            cell.generateWaveform()
-            return cell
-        } else {
-            let player = tableView.dequeueReusableCellWithIdentifier("ProjectPlayer") as! ProjectPlayer
-            player.addButton.addTarget(self, action: "addTracks:", forControlEvents: UIControlEvents.TouchDown)
-            player.backgroundColor = darkGray()
-            player.selectionStyle = UITableViewCellSelectionStyle.None
-            self.audioPlayer = player
-            return player
-        }
+        let cell = tableView.dequeueReusableCellWithIdentifier("ProjectTrack") as! ProjectTrack
+        let trackData = self.data[indexPath.row]
+        cell.trackTitle.text = trackData.titleText
+        cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
+        cell.track = trackData
+        cell.backgroundColor = lightGray()
+        cell.generateWaveform()
+        return cell
+        
     }
 
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        let header = view as! ProjectTools
-        header.optionsButton.addTarget(self, action: "showPreferences:", forControlEvents: UIControlEvents.TouchDown)
+        let header = view as! ProjectPlayer
     }
 
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("ProjectTools") as! ProjectTools
-        self.header = header
-        self.header?.hidden = true
-        return header
+        let player = tableView.dequeueReusableHeaderFooterViewWithIdentifier("ProjectPlayer") as! ProjectPlayer
+        self.audioPlayer = player
+        self.audioPlayer?.delegate = self
+        return player
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 75.0
-        } else {
-            return 60.0
-        }
+        return 75.0
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0.1
+        return 60.0
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -148,7 +145,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             self.audioPlayer!.audioPlayers.removeAtIndex(indexPath.row)
         }
     }
-
+    
+    // AlertView delegate
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if alertView.title == "Create a New Project?" {
             if buttonIndex == 1 {
@@ -160,39 +158,46 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.save(title)
             }
         }
-        
     }
     
-    func playTracks(sender: AnyObject?) {
-        if self.audioPlayer!.audioPlayers.count == 0 {
-            return
-        }
-        if (self.audioPlayer!.audioPlayers.count > 0) {
-            self.audioPlayer!.stop()
-            return
-        }
-        self.audioPlayer!.play()
-        let player = self.tracks.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 1)) as! ProjectPlayer
-    }
-    
-    func mash() {
-        if (self.data.count == 0) {
-            var alert = UIAlertView(title: "Error", message: "You have no tracks in your project.", delegate: self, cancelButtonTitle: "OK")
-            alert.show()
-            return
-        }
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MashViewController") as! MashViewController
-        controller.recording = self.data[0]
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    // Raise alert for save project
     func saveAlert() {
         var alert = UIAlertView(title: "Saving your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         alert.show()
     }
     
+    // Player Delegate
+    func showTools() {
+        println("why")
+        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("ProjectPreferencesViewController") as! ProjectPreferencesViewController
+        controller.projectView = self
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+
+    func showMixer() {
+        if !self.mixerShowing {
+        
+        } else {
+            
+        }
+    }
+    
+    func addTracks() {
+        Debug.printl("Pushing new searchcontroller.", sender: self)
+        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("SearchViewController") as! SearchViewController
+        self.navigationController?.pushViewController(controller, animated: false)
+    }
+    
+    func toggleMetronome(toggled: Bool) {
+        
+    }
+    
+    // Metronome Delegate
+    func tick(metronome: Metronome) {
+        
+    }
+    
+    // Save methods
     func save(name: String) -> Bool {
         var directory = applicationDocumentsDirectory()
         var nextClipTime: CMTime = kCMTimeZero
@@ -271,12 +276,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func addTracks(sender: AnyObject?) {
-        Debug.printl("Pushing new searchcontroller.", sender: self)
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("SearchViewController") as! SearchViewController
-        self.navigationController?.pushViewController(controller, animated: false)
-    }
-    
+    // Track management
     func removeTrack(sender: UISwipeGestureRecognizer?) {
         let track = sender?.view as! ProjectTrack
         var trackIndex: Int? = nil
@@ -290,14 +290,35 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
 
         self.tracks.reloadData()
     }
+    
+    func playTracks(sender: AnyObject?) {
+        if self.audioPlayer!.audioPlayers.count == 0 {
+            return
+        }
+        if (self.audioPlayer!.audioPlayers.count > 0) {
+            self.audioPlayer!.stop()
+            return
+        }
+        self.audioPlayer!.play()
+    }
+    
+    func mash() {
+        if (self.data.count == 0) {
+            var alert = UIAlertView(title: "Error", message: "You have no tracks in your project.", delegate: self, cancelButtonTitle: "OK")
+            alert.show()
+            return
+        }
+        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MashViewController") as! MashViewController
+        controller.recording = self.data[0]
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
 
-    // Raise Alert for New Project
+    // New Project
     func confirmNewProject() {
         let alert = UIAlertView(title: "Create a New Project?", message: "You Will Lose Any Unsaved Changes", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "OK")
         alert.show()
     }
     
-    // Create New Project
     func newProject() {
         Debug.printl("Creating new project view", sender: self)
         let thisController = self
@@ -308,30 +329,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         let newProjectView = self.storyboard?.instantiateViewControllerWithIdentifier("ProjectViewController") as! ProjectViewController
         newTabBarController.replaceObjectAtIndex(projectViewIndex, withObject: newProjectView)
         tabBarController.setViewControllers(newTabBarController as [AnyObject], animated: true)
-    }
-    
-    func showTools(sender: AnyObject?) {
-        if !self.toolsShowing {
-            Debug.printl("Showing tools", sender: self)
-            self.header?.hidden = false
-            UIView.animateWithDuration(0.3, animations: { self.header!.frame.size.height = 60 }) {
-                (finished: Bool) in
-                self.toolsShowing = true
-            }
-        } else {
-            Debug.printl("Hiding tools", sender: self)
-            UIView.animateWithDuration(0.3, animations: { self.header!.frame.size.height = 0 }) {
-                (finished: Bool) in
-                self.header?.hidden = true
-                self.toolsShowing = false
-            }
-        }
-    }
-    
-    func showPreferences(sender: AnyObject?) {
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("ProjectPreferencesViewController") as! ProjectPreferencesViewController
-        controller.projectView = self
-        self.navigationController?.pushViewController(controller, animated: true)
     }
 
     override func didReceiveMemoryWarning() {

@@ -14,7 +14,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tools" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uUb-q3-Dxc">
-                            <rect key="frame" x="228" y="30" width="145" height="21"/>
+                            <rect key="frame" x="228" y="30" width="145" height="20"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="145" id="oo6-Rd-Frh"/>
                             </constraints>
@@ -22,24 +22,10 @@
                             <color key="textColor" red="0.24882192459999999" green="0.24882192459999999" blue="0.24882192459999999" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ozi-6H-f9j">
-                            <rect key="frame" x="535" y="27" width="57" height="27"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="57" id="Hsq-Mr-v7f"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="15"/>
-                            <state key="normal" title="Options">
-                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="deviceRGB"/>
                     <constraints>
-                        <constraint firstItem="Ozi-6H-f9j" firstAttribute="centerY" secondItem="uUb-q3-Dxc" secondAttribute="centerY" id="6sA-p0-6vz"/>
                         <constraint firstItem="uUb-q3-Dxc" firstAttribute="centerX" secondItem="S7g-dI-vWa" secondAttribute="centerX" id="McB-oc-PhD"/>
-                        <constraint firstItem="Ozi-6H-f9j" firstAttribute="top" secondItem="S7g-dI-vWa" secondAttribute="top" constant="27" id="PIJ-Q5-uOu"/>
-                        <constraint firstAttribute="trailing" secondItem="Ozi-6H-f9j" secondAttribute="trailing" constant="8" id="dKC-iJ-z2h"/>
                         <constraint firstItem="uUb-q3-Dxc" firstAttribute="top" secondItem="S7g-dI-vWa" secondAttribute="top" constant="30" id="ig2-iQ-L7p"/>
                     </constraints>
                 </view>
@@ -52,7 +38,6 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="optionsButton" destination="Ozi-6H-f9j" id="bAN-eo-C8n"/>
                 <outlet property="titleLabel" destination="uUb-q3-Dxc" id="i9p-Vg-uUj"/>
             </connections>
             <point key="canvasLocation" x="363" y="152"/>

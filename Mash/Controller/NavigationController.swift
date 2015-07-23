@@ -29,4 +29,24 @@ class NavigationController: UINavigationController {
         return UIStatusBarStyle.LightContent
     }
     
+    override func shouldAutorotate() -> Bool {
+        var result: Bool
+        if self.topViewController.respondsToSelector("shouldAutorotate") {
+            result = self.topViewController.shouldAutorotate()
+        } else {
+            result = super.shouldAutorotate()
+        }
+        return result
+    }
+    
+    override func supportedInterfaceOrientations() -> Int {
+        var result: Int
+        if self.topViewController.respondsToSelector("supportedInterfaceOrientations") {
+            result = self.topViewController.supportedInterfaceOrientations()
+        } else {
+            result = super.supportedInterfaceOrientations()
+        }
+        return result
+    }
+    
 }

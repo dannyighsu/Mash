@@ -9,23 +9,31 @@
 import Foundation
 import UIKit
 
-protocol PlayerDelegate {
+@objc protocol PlayerDelegate {
+    optional func showTools()
+    optional func showMixer()
+    func addTracks()
+    func toggleMetronome(toggled: Bool)
 }
 
-class ProjectPlayer: UITableViewCell {
+class ProjectPlayer: UITableViewHeaderFooterView {
     
     
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var stopButton: UIButton!
-    @IBOutlet weak var speakerImage: UIButton!
-
+    @IBOutlet weak var titleLabel: UITextField!
+    @IBOutlet weak var toolsButton: UIButton!
+    @IBOutlet weak var mixerButton: UIButton!
+    @IBOutlet weak var metronomeButton: UIButton!
+    
     var delegate: PlayerDelegate? = nil
     var audioPlayers: [AVAudioPlayer] = []
     var volumes: [Float] = []
     var mutes: [Bool] = []
     var previousVolume: Float = 0.8
+    var metronomeToggled: Bool = false
     
     // Button Methods
     @IBAction func playButtonPressed(sender: AnyObject) {
@@ -39,12 +47,31 @@ class ProjectPlayer: UITableViewCell {
         }
     }
     
-    @IBAction func stopButtonpressed(sender: AnyObject) {
+    @IBAction func addButtonPressed(sender: AnyObject) {
+        self.delegate?.addTracks()
+    }
+    
+    @IBAction func stopButtonPressed(sender: AnyObject) {
         self.stop()
     }
     
-    @IBAction func muteButtonPressed(sender: AnyObject) {
-        self.muteAudio(sender)
+    @IBAction func toolsButtonPressed(sender: AnyObject) {
+        self.delegate?.showTools!()
+    }
+    
+    @IBAction func mixerButtonPressed(sender: AnyObject) {
+        self.delegate?.showMixer!()
+    }
+    
+    @IBAction func metronomeButtonPressed(sender: AnyObject) {
+        if !self.metronomeToggled {
+            self.metronomeButton.setImage(UIImage(named: "metronome_2"), forState: UIControlState.Normal)
+            self.metronomeToggled = true
+        } else {
+            self.metronomeButton.setImage(UIImage(named: "metronome"), forState: UIControlState.Normal)
+            self.metronomeToggled = false
+        }
+        self.delegate?.toggleMetronome(self.metronomeToggled)
     }
     
     func play() {
@@ -71,15 +98,13 @@ class ProjectPlayer: UITableViewCell {
     
     // Volume controls
     @IBAction func volumeDidChange(sender: UISlider) {
+        if self.audioPlayers.count == 0 {
+            return
+        }
         for i in 0...self.audioPlayers.count - 1 {
             if !self.mutes[i] {
                 self.audioPlayers[i].volume = sender.value
             }
-        }
-        if sender.value == 0 {
-            self.speakerImage.setImage(UIImage(named: "speaker_white_2"), forState: UIControlState.Normal)
-        } else {
-            self.speakerImage.setImage(UIImage(named: "speaker_white"), forState: UIControlState.Normal)
         }
     }
     
@@ -94,7 +119,7 @@ class ProjectPlayer: UITableViewCell {
         }
     }
     
-    // Returns true if now muted
+    // Mute track. Returns true if now muted.
     func muteTrack(number: Int) -> Bool {
         let player = self.audioPlayers[number]
         let muted = self.mutes[number]

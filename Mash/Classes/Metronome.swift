@@ -10,10 +10,10 @@ import Foundation
 import UIKit
 import AVFoundation
 
-protocol MetronomeDelegate {
-    func tick(metronome: Metronome)
-    func tempoFieldDidBeginEditing(metronome: Metronome)
-    func timeFieldDidBeginEditing(metronome: Metronome)
+@objc protocol MetronomeDelegate {
+    optional func tick(metronome: Metronome)
+    optional func tempoFieldDidBeginEditing(metronome: Metronome)
+    optional func timeFieldDidBeginEditing(metronome: Metronome)
 }
 
 class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
@@ -135,9 +135,9 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField == self.timeSigField {
-            self.delegate?.timeFieldDidBeginEditing(self)
+            self.delegate?.timeFieldDidBeginEditing!(self)
         } else if textField == self.tempoField {
-            self.delegate?.tempoFieldDidBeginEditing(self)
+            self.delegate?.tempoFieldDidBeginEditing!(self)
         }
     }
 
@@ -220,7 +220,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     func playSound() {
         if !self.wasManuallyTriggered {
             dispatch_async(dispatch_get_main_queue()) {
-                self.delegate?.tick(self)
+                self.delegate?.tick!(self)
             }
         }
         if self.beat == 0 {

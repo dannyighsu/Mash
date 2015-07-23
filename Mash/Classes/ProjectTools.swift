@@ -11,7 +11,6 @@ import UIKit
 
 class ProjectTools: UITableViewHeaderFooterView {
 
-    @IBOutlet weak var optionsButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
 
 }

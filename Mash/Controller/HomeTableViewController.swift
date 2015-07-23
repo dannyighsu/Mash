@@ -54,6 +54,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.parentViewController?.navigationItem.rightBarButtonItem = nil
     }
     
+    // TableView delegate
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.data.count
     }
@@ -67,6 +68,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.eventLabel.text = self.data[indexPath.row].eventText
         cell.userLabel.text = self.data[indexPath.row].userText
         cell.timeLabel.text = self.data[indexPath.row].timeText
+        cell.timeLabel.text = cell.timeLabel.text!.substringWithRange(Range<String.Index>(start: cell.timeLabel.text!.startIndex, end: advance(cell.timeLabel.text!.endIndex, -13)))
         self.data[indexPath.row].user!.profile_pic(cell.profileImage)
         cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFit
         cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
