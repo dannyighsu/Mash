@@ -63,7 +63,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     class func createView() -> Metronome {
         var view = NSBundle.mainBundle().loadNibNamed("Metronome", owner: nil, options: nil)
         let metronome = view[0] as! Metronome
-        metronome.startButton.addTarget(metronome, action: "toggleMetronome:", forControlEvents: UIControlEvents.TouchDown)
+        metronome.startButton.addTarget(metronome, action: "toggle:", forControlEvents: UIControlEvents.TouchDown)
         
         metronome.tempoField.keyboardType = UIKeyboardType.NumberPad
         metronome.tempoField.delegate = metronome
@@ -95,8 +95,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     
     @IBAction func tempoDidChange(sender: UISlider) {
         let value = Int(sender.value)
-        self.duration = CGFloat(60.0 / Double(value))
-        self.tempoField.text = "\(value)"
+        self.setTempo(value)
     }
     
     func muteAudio(sender: AnyObject?) {
@@ -122,14 +121,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
             }
             
             var value = input.toInt()
-            if value < 40 {
-                value = 40
-            } else if value > 220 {
-                value = 220
-            }
-            self.tempoField.text = "\(value!)"
-            self.tempoSlider.value = Float(value!)
-            self.duration = CGFloat(60.0 / Double(value!))
+            self.setTempo(value!)
         }
     }
     
@@ -169,15 +161,15 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     }
     
     // Metronome functions
-    func toggleMetronome(sender: AnyObject?) {
+    func toggle(sender: AnyObject?) {
         if sender != nil {
             self.wasManuallyTriggered = true
         }
         if !self.muted {
             if !self.isPlaying {
-                self.startDriverThread()
+                self.start()
             } else {
-                self.stopDriverThread()
+                self.stop()
                 self.wasManuallyTriggered = false
             }
         }
@@ -203,13 +195,13 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         }
     }
     
-    func startDriverThread() {
+    func start() {
         self.soundPlayerThread = NSThread(target: self, selector: "startDriverTimer:", object: nil)
         self.soundPlayerThread!.start()
         self.isPlaying = true
     }
     
-    func stopDriverThread() {
+    func stop() {
         self.soundPlayerThread!.cancel()
         self.waitForSoundDriverThreadToFinish()
         self.soundPlayerThread = nil
@@ -245,6 +237,19 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         while self.soundPlayerThread != nil && !self.soundPlayerThread!.finished {
             NSThread.sleepForTimeInterval(0.1)
         }
+    }
+    
+    // Auxiliary
+    func setTempo(input: Int) {
+        var value = input
+        if value < 40 {
+            value = 40
+        } else if value > 220 {
+            value = 220
+        }
+        self.tempoField.text = "\(value)"
+        self.tempoSlider.value = Float(value)
+        self.duration = CGFloat(60.0 / Double(value))
     }
     
 }

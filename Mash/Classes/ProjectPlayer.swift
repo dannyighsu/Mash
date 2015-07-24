@@ -12,8 +12,9 @@ import UIKit
 @objc protocol PlayerDelegate {
     optional func showTools()
     optional func showMixer()
+    optional func didPressPlay(audioPlayer: ProjectPlayer)
     func addTracks()
-    func toggleMetronome(toggled: Bool)
+    func toggleMetronome()
 }
 
 class ProjectPlayer: UITableViewHeaderFooterView {
@@ -45,6 +46,7 @@ class ProjectPlayer: UITableViewHeaderFooterView {
         } else {
             self.pause()
         }
+        self.delegate?.didPressPlay?(self)
     }
     
     @IBAction func addButtonPressed(sender: AnyObject) {
@@ -65,13 +67,13 @@ class ProjectPlayer: UITableViewHeaderFooterView {
     
     @IBAction func metronomeButtonPressed(sender: AnyObject) {
         if !self.metronomeToggled {
-            self.metronomeButton.setImage(UIImage(named: "metronome_2"), forState: UIControlState.Normal)
+            self.metronomeButton.setImage(UIImage(named: "metronome"), forState: UIControlState.Normal)
             self.metronomeToggled = true
         } else {
-            self.metronomeButton.setImage(UIImage(named: "metronome"), forState: UIControlState.Normal)
+            self.metronomeButton.setImage(UIImage(named: "metronome_2"), forState: UIControlState.Normal)
             self.metronomeToggled = false
         }
-        self.delegate?.toggleMetronome(self.metronomeToggled)
+        self.delegate?.toggleMetronome()
     }
     
     func play() {

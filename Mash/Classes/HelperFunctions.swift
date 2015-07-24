@@ -107,36 +107,35 @@ func importTracks(tracks: [Track], navigationController: UINavigationController?
         return
     }
     
+    // If this is the first track, set the project's bpm
+    if project!.data.count == 0 {
+        project!.bpm = tracks[0].bpm
+    }
+    
     // Download new tracks asnychronously
     let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
     project!.activityView.startAnimating()
-    dispatch_async(dispatch_get_global_queue(priority, 0)) {
-        for track in tracks {
-            var URL = filePathURL(track.titleText + track.format)
-            download("\(track.userText)~~\(track.titleText)\(track.format)", URL, track_bucket)
+    
+    for track in tracks {
+        var URL = filePathURL(track.titleText + track.format)
+        download("\(track.userText)~~\(track.titleText)\(track.format)", URL, track_bucket) {
+            (result) in
             track.trackURL = filePathString(track.titleText + track.format)
             Debug.printl("Adding track with \(track.instruments), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
             project?.data.append(track)
-        }
-        
-        project?.audioPlayer?.stop()
-        
-        // Load new audioplayers
-        if (project!.data.count != project!.audioPlayer!.audioPlayers.count) {
-            for (var i = project!.audioPlayer!.audioPlayers.count; i < project!.data.count; i++) {
-                while !NSFileManager.defaultManager().fileExistsAtPath(project!.data[i].trackURL) {
-                    Debug.printnl("waiting...")
+            dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                while project!.audioPlayer == nil {
                     NSThread.sleepForTimeInterval(0.5)
                 }
-                project!.audioPlayer!.addTrack(project!.data[i].trackURL)
+                project!.audioPlayer!.addTrack(track.trackURL)
+                dispatch_async(dispatch_get_main_queue()) {
+                    project!.activityView.stopAnimating()
+                }
             }
         }
-        
-        dispatch_async(dispatch_get_main_queue()) {
-            project!.tracks.reloadData()
-            project!.activityView.stopAnimating()
-        }
     }
+    
+    project!.audioPlayer?.stop()
 }
 
 // Download from S3 bucket

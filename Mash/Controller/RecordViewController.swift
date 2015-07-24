@@ -192,13 +192,13 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         beatLabel.center = view.center
         self.countoffView = view
         self.view.addSubview(view)
-        self.metronome!.toggleMetronome(nil)
+        self.metronome!.toggle(nil)
         
         UIView.animateWithDuration(0.3, animations: { view.alpha = 1.0 })
     }
     
     func stopRecording() {
-        self.metronome?.toggleMetronome(nil)
+        self.metronome?.toggle(nil)
         self.microphone?.stopFetchingAudio()
         self.recorder?.closeAudioFile()
         self.openAudio()
@@ -294,8 +294,12 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     func microphone(microphone: EZMicrophone!, hasBufferList bufferList: UnsafeMutablePointer<AudioBufferList>, withBufferSize bufferSize: UInt32, withNumberOfChannels numberOfChannels: UInt32) {
         dispatch_async(dispatch_get_main_queue()) {
-            if self.recording {
-                self.recorder?.appendDataFromBufferList(bufferList, withBufferSize: bufferSize)
+            [weak self] in
+            if self == nil {
+                return
+            }
+            if self!.recording {
+                self?.recorder?.appendDataFromBufferList(bufferList, withBufferSize: bufferSize)
             }
         }
     }
@@ -324,7 +328,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     // EZAudioFile Delegate
     func audioFile(audioFile: EZAudioFile!, readAudio buffer: UnsafeMutablePointer<UnsafeMutablePointer<Float>>, withBufferSize bufferSize: UInt32, withNumberOfChannels numberOfChannels: UInt32) {
         dispatch_async(dispatch_get_main_queue()) {
-            self.audioPlot.updateBuffer(buffer[0], withBufferSize: bufferSize)
+            [weak self] in
+            self?.audioPlot.updateBuffer(buffer[0], withBufferSize: bufferSize)
         }
     }
     

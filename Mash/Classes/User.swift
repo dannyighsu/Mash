@@ -28,6 +28,8 @@ class User: UITableViewCell {
         self.init(frame: CGRectZero)
         self.username = NSUserDefaults.standardUserDefaults().valueForKey("username") as? String
         self.altname = ""
+        self.profile_pic_link = ""
+        self.banner_pic_link = ""
         self.followers = "0"
         self.following = "0"
         self.tracks = "0"
@@ -161,7 +163,7 @@ class User: UITableViewCell {
         }
     }
     
-    class func updateSelf(controller: DashboardController) {
+    class func updateSelf(controller: DashboardController?) {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let username = current_user.username
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/user")!)
@@ -191,17 +193,19 @@ class User: UITableViewCell {
                         current_user.following = String(dict["following"] as! Int)
                         current_user.tracks = String(dict["track_count"] as! Int)
                         
-                        controller.parentViewController?.navigationItem.title! = current_user.display_name()!
-                        let profile = controller.tracks.headerViewForSection(0) as! Profile
-                        current_user.profile_pic(profile.profilePic)
-                        current_user.banner_pic(profile.bannerImage)
-                        profile.descriptionLabel.text = current_user.user_description
-                        var followers = NSMutableAttributedString(string: "  \(current_user.followers!)\n  FOLLOWERS")
-                        profile.followerCount.attributedText = followers
-                        var following = NSMutableAttributedString(string: "  \(current_user.following!)\n  FOLLOWING")
-                        profile.followingCount.attributedText = following
-                        var tracks = NSMutableAttributedString(string: "  \(current_user.tracks!)\n  TRACKS")
-                        profile.trackCount.attributedText = tracks
+                        if controller != nil {
+                            controller!.parentViewController?.navigationItem.title! = current_user.display_name()!
+                            let profile = controller!.tracks.headerViewForSection(0) as! Profile
+                            current_user.profile_pic(profile.profilePic)
+                            current_user.banner_pic(profile.bannerImage)
+                            profile.descriptionLabel.text = current_user.user_description
+                            var followers = NSMutableAttributedString(string: "  \(current_user.followers!)\n  FOLLOWERS")
+                            profile.followerCount.attributedText = followers
+                            var following = NSMutableAttributedString(string: "  \(current_user.following!)\n  FOLLOWING")
+                            profile.followingCount.attributedText = following
+                            var tracks = NSMutableAttributedString(string: "  \(current_user.tracks!)\n  TRACKS")
+                            profile.trackCount.attributedText = tracks
+                        }
                     }
                 } else if statusCode == HTTP_SERVER_ERROR {
                     Debug.printl("Internal server error.", sender: nil)

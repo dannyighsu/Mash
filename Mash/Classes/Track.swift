@@ -53,7 +53,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
     
     func generateWaveform() {
         self.staticAudioPlot.hidden = true
-        self.audioPlot.color = UIColor.blackColor()
+        self.audioPlot.color = lightBlue()
         self.audioFile = EZAudioFile(URL: NSURL(fileURLWithPath: self.trackURL), delegate: self)
         self.audioPlot.plotType = .Buffer
         self.audioPlot.shouldFill = true

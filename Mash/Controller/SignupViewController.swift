@@ -41,7 +41,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Sign Up", style: UIBarButtonItemStyle.Plain, target: self, action: "signUpgAction:"), animated: false)
+        self.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Sign Up", style: UIBarButtonItemStyle.Plain, target: self, action: "signUpAction:"), animated: false)
         self.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
     }
     
@@ -129,7 +129,14 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
                 } else if statusCode == HTTP_KEY_IN_USE {
                     self.raiseAlert("Incorrect Username and/or Password.")
                     return
-                } else if statusCode == HTTP_SUCCESS {
+                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
+                    var error: NSError? = nil
+                    var response = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary
+                    self.saveLoginItems()
+                    current_user = User()
+                    current_user.userid = response["id"] as? Int
+                    User.getUsersFollowing()
+                    User.updateSelf(nil)
                     var alert = UIAlertView()
                     self.raiseAlert("Success!", message: "Welcome to Mash.")
                 } else {
@@ -141,8 +148,6 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     }
     
     func loginAction() {
-        self.saveLoginItems()
-        current_user = User()
         Debug.printl("Successful registration - pushing tab bar controller onto navigation controller", sender: self)
         let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController
         self.navigationController?.pushViewController(tabbarcontroller, animated: true)

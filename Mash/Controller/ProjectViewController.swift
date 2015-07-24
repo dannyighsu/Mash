@@ -19,6 +19,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     var mixerShowing: Bool = false
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
     var metronome: Metronome = Metronome.createView()
+    var bpm: Int = 120
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +59,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         /*self.navigationController?.navigationBar.addGestureRecognizer(self.toolsTap!)*/
         if self.tracks != nil {
             self.tracks.reloadData()
+            self.metronome.setTempo(self.bpm)
         }
     }
     
@@ -95,7 +97,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.backgroundColor = lightGray()
         cell.generateWaveform()
         return cell
-        
     }
 
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -110,7 +111,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 75.0
+        return 85.0
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -126,9 +127,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             var muted = self.audioPlayer!.muteTrack(trackNumber)
             let track = self.tracks.cellForRowAtIndexPath(indexPath) as! ProjectTrack
             if muted {
-                track.speakerImage.image = UIImage(named: "speaker_2")
+                track.speakerImage.image = UIImage(named: "speaker_white_2")
             } else {
-                track.speakerImage.image = UIImage(named: "speaker")
+                track.speakerImage.image = UIImage(named: "speaker_white")
             }
         }
         tableView.cellForRowAtIndexPath(indexPath)?.selected = false
@@ -168,7 +169,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // Player Delegate
     func showTools() {
-        println("why")
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("ProjectPreferencesViewController") as! ProjectPreferencesViewController
         controller.projectView = self
         self.navigationController?.pushViewController(controller, animated: true)
@@ -188,10 +188,14 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.navigationController?.pushViewController(controller, animated: false)
     }
     
-    func toggleMetronome(toggled: Bool) {
-        
+    func toggleMetronome() {
+        self.metronome.muteAudio(nil)
     }
     
+    func didPressPlay(audioPlayer: ProjectPlayer) {
+        self.metronome.toggle(nil)
+    }
+
     // Metronome Delegate
     func tick(metronome: Metronome) {
         
