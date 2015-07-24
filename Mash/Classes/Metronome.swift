@@ -36,6 +36,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     var muted: Bool
     var previousVolume: Float = 0.8
     var wasManuallyTriggered: Bool = false
+    var timer: CADisplayLink? = nil
     
     required init(coder aDecoder: NSCoder) {
         self.duration = 0.50
@@ -174,14 +175,33 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
             }
         }
     }
-
+    
+    func start() {
+        self.soundPlayerThread = NSThread(target: self, selector: "startDriverTimer:", object: nil)
+        self.soundPlayerThread!.start()
+        self.isPlaying = true
+        /*self.timer = CADisplayLink(target: self, selector: "playSound")
+        self.timer!.frameInterval = 30
+        self.timer!.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSDefaultRunLoopMode)*/
+    }
+    
+    func stop() {
+        self.soundPlayerThread!.cancel()
+        self.finishDriverThread()
+        self.soundPlayerThread = nil
+        self.isPlaying = false
+        self.beat = 0
+    }
+    
     func startDriverTimer(sender: AnyObject?) {
-        NSThread.setThreadPriority(1.5)
+        NSThread.setThreadPriority(1.0)
         var continuePlaying: Bool = true
         
         while (continuePlaying) {
-            self.playSound()
-            
+            let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+            dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                self.playSound()
+            }
             var curtainTime: NSDate = NSDate(timeIntervalSinceNow: NSTimeInterval(self.duration))
             var currentTime: NSDate = NSDate()
             
@@ -189,24 +209,9 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
                 if (self.soundPlayerThread == nil || self.soundPlayerThread!.cancelled) {
                     continuePlaying = false
                 }
-                NSThread.sleepForTimeInterval(0.01)
                 currentTime = NSDate()
             }
         }
-    }
-    
-    func start() {
-        self.soundPlayerThread = NSThread(target: self, selector: "startDriverTimer:", object: nil)
-        self.soundPlayerThread!.start()
-        self.isPlaying = true
-    }
-    
-    func stop() {
-        self.soundPlayerThread!.cancel()
-        self.waitForSoundDriverThreadToFinish()
-        self.soundPlayerThread = nil
-        self.isPlaying = false
-        self.beat = 0
     }
     
     func playSound() {
@@ -233,7 +238,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         }
     }
     
-    func waitForSoundDriverThreadToFinish() {
+    func finishDriverThread() {
         while self.soundPlayerThread != nil && !self.soundPlayerThread!.finished {
             NSThread.sleepForTimeInterval(0.1)
         }
