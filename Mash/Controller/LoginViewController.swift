@@ -59,7 +59,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     func signinAction(sender: AnyObject?) {
         if ((count(self.usernameField.text!) < 1) || (count(self.passwordField.text!) < 1)) {
-            self.raiseAlert("Incorrect Username and/or Password")
+            raiseAlert("Incorrect Username and/or Password", self)
             return
         }
         
@@ -72,7 +72,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.passwordField.becomeFirstResponder()
         } else {
             if textField.text.isEmpty {
-                self.raiseAlert("Please enter a password.")
+                raiseAlert("Please enter a password.", self)
                 return false
             }
             self.passwordField.resignFirstResponder()
@@ -117,7 +117,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 } else if statusCode == HTTP_WRONG_MEDIA {
                     return
                 } else if statusCode == HTTP_AUTH_FAIL {
-                    self.raiseAlert("Incorrect Username and/or Password.")
+                    raiseAlert("Incorrect Username and/or Password.", self)
                     return
                 } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
                     dispatch_async(dispatch_get_main_queue()) {
@@ -164,27 +164,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         Debug.printl("Successful login - pushing tab bar controller onto navigation controller", sender: self)
         let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController
         self.navigationController?.pushViewController(tabbarcontroller, animated: false)
-    }
-
-    func raiseAlert(input: String) {
-        dispatch_async(dispatch_get_main_queue()) {
-            var alert = UIAlertView()
-            alert.title = input
-            alert.addButtonWithTitle("OK")
-            alert.delegate = self
-            alert.show()
-        }
-    }
-    
-    func raiseAlert(input: String, message: String) {
-        dispatch_async(dispatch_get_main_queue()) {
-            var alert = UIAlertView()
-            alert.title = input
-            alert.message = message
-            alert.addButtonWithTitle("OK")
-            alert.delegate = self
-            alert.show()
-        }
     }
     
 }

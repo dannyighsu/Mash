@@ -248,3 +248,25 @@ func filePathString(input: String?) -> String {
         return NSString(format: "%@/%@", applicationDocumentsDirectory(), input!) as String!
     }
 }
+
+// Alert methods
+func raiseAlert(input: String, delegate: UIViewController) {
+    dispatch_async(dispatch_get_main_queue()) {
+        var alert = UIAlertView()
+        alert.title = input
+        alert.addButtonWithTitle("OK")
+        alert.delegate = delegate
+        alert.show()
+    }
+}
+
+func raiseAlert(input: String, delegate: UIViewController, message: String) {
+    dispatch_async(dispatch_get_main_queue()) {
+        var alert = UIAlertView()
+        alert.title = input
+        alert.message = message
+        alert.addButtonWithTitle("OK")
+        alert.delegate = delegate
+        alert.show()
+    }
+}

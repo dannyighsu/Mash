@@ -108,24 +108,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         return cell
     }
 
-    /*func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        let header = view as! ProjectPlayer
-    }
-
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let player = tableView.dequeueReusableHeaderFooterViewWithIdentifier("ProjectPlayer") as! ProjectPlayer
-        self.audioPlayer = player
-        self.audioPlayer?.delegate = self
-        return player
-    }*/
-
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 85.0
     }
-    
-    /*func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60.0
-    }*/
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {

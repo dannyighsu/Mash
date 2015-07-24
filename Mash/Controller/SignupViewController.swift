@@ -16,7 +16,6 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var usernameField: UITextField!
-    let keychainWrapper = KeychainWrapper()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -156,8 +155,8 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     func saveLoginItems() {
         Debug.printl("Saving user " + self.usernameField.text + " to NSUserDefaults.", sender: self)
         NSUserDefaults.standardUserDefaults().setValue(self.usernameField.text, forKey: "username")
-        self.keychainWrapper.mySetObject(self.passwordField.text, forKey: kSecValueData)
-        self.keychainWrapper.writeToKeychain()
+        keychainWrapper.mySetObject(self.passwordField.text, forKey: kSecValueData)
+        keychainWrapper.writeToKeychain()
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasLoginKey")
         NSUserDefaults.standardUserDefaults().synchronize()
     }

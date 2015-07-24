@@ -278,16 +278,17 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     // Microphone Delegate
     func microphone(microphone: EZMicrophone!, hasAudioReceived buffer: UnsafeMutablePointer<UnsafeMutablePointer<Float>>, withBufferSize bufferSize: UInt32, withNumberOfChannels numberOfChannels: UInt32) {
         dispatch_async(dispatch_get_main_queue()) {
-            self.audioPlot.updateBuffer(buffer[0], withBufferSize: bufferSize)
-            if self.recording {
-                var time = self.recordingStartTime.timeIntervalSinceNow * -1
+            [weak self] in
+            self?.audioPlot.updateBuffer(buffer[0], withBufferSize: bufferSize)
+            if self != nil && self!.recording {
+                var time = self!.recordingStartTime.timeIntervalSinceNow * -1
                 var secondText = String(stringInterpolationSegment: Int(time))
                 if time < 10.0 {
                     secondText = "0\(secondText)"
                 }
                 var milliText = String(stringInterpolationSegment: time % 1)
                 milliText = milliText.substringWithRange(Range<String.Index>(start: advance(milliText.startIndex, 2), end: advance(milliText.startIndex, 4)))
-                self.timeLabel.text = "\(secondText):\(milliText)"
+                self!.timeLabel.text = "\(secondText):\(milliText)"
             }
         }
     }

@@ -11,7 +11,7 @@ import UIKit
 
 // Helper objects
 let db: String = "http://localhost:5010"
-var keychainWrapper:KeychainWrapper = KeychainWrapper()
+var keychainWrapper: KeychainWrapper = KeychainWrapper()
 var current_user = User()
 var user_following: [User] = []
 let track_bucket: String = "mash1-tracks"
