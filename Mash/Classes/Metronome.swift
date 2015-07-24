@@ -171,7 +171,6 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
                 self.start()
             } else {
                 self.stop()
-                self.wasManuallyTriggered = false
             }
         }
     }
@@ -186,6 +185,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     }
     
     func stop() {
+        self.wasManuallyTriggered = false
         self.soundPlayerThread!.cancel()
         self.finishDriverThread()
         self.soundPlayerThread = nil

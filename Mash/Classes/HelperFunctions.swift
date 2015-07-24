@@ -113,7 +113,6 @@ func importTracks(tracks: [Track], navigationController: UINavigationController?
     }
     
     // Download new tracks asnychronously
-    let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
     project!.activityView.startAnimating()
     
     for track in tracks {
@@ -123,6 +122,7 @@ func importTracks(tracks: [Track], navigationController: UINavigationController?
             track.trackURL = filePathString(track.titleText + track.format)
             Debug.printl("Adding track with \(track.instruments), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
             project?.data.append(track)
+            let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
             dispatch_async(dispatch_get_global_queue(priority, 0)) {
                 while project!.audioPlayer == nil {
                     NSThread.sleepForTimeInterval(0.5)
@@ -134,8 +134,6 @@ func importTracks(tracks: [Track], navigationController: UINavigationController?
             }
         }
     }
-    
-    project!.audioPlayer?.stop()
 }
 
 // Download from S3 bucket

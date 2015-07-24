@@ -43,6 +43,12 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.activityView.center = self.view.center
         
         self.metronome.delegate = self
+        
+        var view = NSBundle.mainBundle().loadNibNamed("ProjectPlayer", owner: nil, options: nil)
+        let head = view[0] as! ProjectPlayer
+        self.audioPlayer = head
+        self.audioPlayer?.delegate = self
+        self.tracks.tableHeaderView = head
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -58,7 +64,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         /*self.parentViewController?.navigationItem.title = "Your Project"*/
         /*self.navigationController?.navigationBar.addGestureRecognizer(self.toolsTap!)*/
         if self.tracks != nil {
-            self.tracks.reloadData()
+            self.tracks.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
             self.metronome.setTempo(self.bpm)
         }
     }
@@ -69,6 +75,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         /*self.navigationController?.navigationBar.removeGestureRecognizer(self.toolsTap!)
         self.parentViewController?.navigationItem.setRightBarButtonItem(nil, animated: false)*/
         self.audioPlayer!.stop()
+        if self.metronome.isPlaying {
+            self.metronome.toggle(nil)
+        }
     }
     
     override func shouldAutorotate() -> Bool {
@@ -99,7 +108,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         return cell
     }
 
-    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    /*func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header = view as! ProjectPlayer
     }
 
@@ -108,15 +117,15 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.audioPlayer = player
         self.audioPlayer?.delegate = self
         return player
-    }
+    }*/
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 85.0
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    /*func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 60.0
-    }
+    }*/
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {
