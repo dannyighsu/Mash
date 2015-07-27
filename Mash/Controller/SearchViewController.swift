@@ -110,16 +110,14 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         }
         if self.scope == 0 {
             var track = self.tableView.cellForRowAtIndexPath(indexPath) as! Track
-            download("\(track.userText)~~\(track.titleText)\(track.format)", NSURL(fileURLWithPath: track.trackURL)!, track_bucket)
-            while !NSFileManager.defaultManager().fileExistsAtPath(track.trackURL) {
-                Debug.printnl("waiting...")
-                NSThread.sleepForTimeInterval(0.5)
+            download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
+                (result) in
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                    self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
+                    self.audioPlayer!.play()
+                }
             }
-            NSThread.sleepForTimeInterval(0.5)
-            
-            self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
-            self.audioPlayer!.play()
-            self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
         } else {
             let user = self.tableView.cellForRowAtIndexPath(indexPath) as! User
             User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)

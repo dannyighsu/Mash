@@ -58,7 +58,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vLu-gC-b0b" customClass="EZAudioPlot">
                                 <rect key="frame" x="56" y="30" width="506" height="38"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="waveform_static" translatesAutoresizingMaskIntoConstraints="NO" id="oQt-q2-2Ca">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oQt-q2-2Ca">
                                         <rect key="frame" x="0.0" y="0.0" width="506" height="38"/>
                                     </imageView>
                                 </subviews>
@@ -69,28 +69,42 @@
                                     <constraint firstAttribute="trailing" secondItem="oQt-q2-2Ca" secondAttribute="trailing" id="gSL-ux-T4b"/>
                                     <constraint firstAttribute="bottom" secondItem="oQt-q2-2Ca" secondAttribute="bottom" id="lJf-yQ-cJp"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="8I2-MQ-eNp"/>
+                                    </mask>
+                                </variation>
                             </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="eOi-my-olC">
+                                <rect key="frame" x="290" y="25" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="Urb-v9-JfE" firstAttribute="bottom" secondItem="vLu-gC-b0b" secondAttribute="bottom" id="3fw-hk-caA"/>
                             <constraint firstItem="UT0-Y5-o8t" firstAttribute="trailing" secondItem="vsu-SK-UoO" secondAttribute="trailingMargin" id="43t-uW-7vS"/>
                             <constraint firstItem="UT0-Y5-o8t" firstAttribute="leading" secondItem="vLu-gC-b0b" secondAttribute="trailing" constant="8" symbolic="YES" id="5Bg-pe-tAU"/>
                             <constraint firstItem="TcW-94-A6x" firstAttribute="leading" secondItem="vsu-SK-UoO" secondAttribute="leading" constant="56" id="9NW-gy-5QJ"/>
+                            <constraint firstAttribute="centerY" secondItem="eOi-my-olC" secondAttribute="centerY" constant="2.5" id="AV4-Yz-ISC"/>
                             <constraint firstItem="UT0-Y5-o8t" firstAttribute="top" secondItem="vsu-SK-UoO" secondAttribute="topMargin" constant="29" id="EoM-sN-kCg"/>
                             <constraint firstItem="oci-gO-a3c" firstAttribute="centerY" secondItem="vsu-SK-UoO" secondAttribute="centerY" constant="-25" id="KEj-c6-GaR"/>
                             <constraint firstItem="oci-gO-a3c" firstAttribute="top" secondItem="TcW-94-A6x" secondAttribute="bottom" constant="-22" id="Ks9-ZR-QqC"/>
                             <constraint firstAttribute="bottom" secondItem="Urb-v9-JfE" secondAttribute="bottom" constant="7" id="Q72-UE-nOt"/>
                             <constraint firstItem="vLu-gC-b0b" firstAttribute="top" secondItem="TcW-94-A6x" secondAttribute="bottom" constant="6" id="TYp-ZU-Ulg"/>
+                            <constraint firstItem="eOi-my-olC" firstAttribute="top" secondItem="vsu-SK-UoO" secondAttribute="top" constant="25" id="cLR-D0-Gt6"/>
                             <constraint firstAttribute="trailing" secondItem="oci-gO-a3c" secondAttribute="trailing" constant="8" id="dbb-Kk-orT"/>
+                            <constraint firstItem="Urb-v9-JfE" firstAttribute="leading" secondItem="oQt-q2-2Ca" secondAttribute="leading" constant="-56" id="eE7-nd-ct7"/>
                             <constraint firstItem="Urb-v9-JfE" firstAttribute="leading" secondItem="vsu-SK-UoO" secondAttribute="leading" id="fmk-eH-YO4"/>
                             <constraint firstItem="vLu-gC-b0b" firstAttribute="leading" secondItem="TcW-94-A6x" secondAttribute="leading" id="mTs-AL-dQn"/>
                             <constraint firstItem="oci-gO-a3c" firstAttribute="baseline" secondItem="TcW-94-A6x" secondAttribute="baseline" id="mvX-z0-ZST"/>
+                            <constraint firstItem="UT0-Y5-o8t" firstAttribute="trailing" secondItem="oQt-q2-2Ca" secondAttribute="trailing" constant="30" id="oEl-rD-W9h"/>
                             <constraint firstItem="oci-gO-a3c" firstAttribute="leading" secondItem="TcW-94-A6x" secondAttribute="leading" constant="336" id="pGK-Zh-mso"/>
                             <constraint firstAttribute="bottom" secondItem="oci-gO-a3c" secondAttribute="bottom" constant="52" id="qdV-IR-eoJ"/>
                             <constraint firstItem="TcW-94-A6x" firstAttribute="top" secondItem="vsu-SK-UoO" secondAttribute="top" constant="3" id="vUs-Ud-Yfs"/>
+                            <constraint firstItem="eOi-my-olC" firstAttribute="centerX" secondItem="vsu-SK-UoO" secondAttribute="centerX" id="z3E-DZ-aWa"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="cLR-D0-Gt6"/>
                                 <exclude reference="pGK-Zh-mso"/>
                             </mask>
                         </variation>
@@ -103,6 +117,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="activityView" destination="eOi-my-olC" id="zx0-TD-SUG"/>
                 <outlet property="addButton" destination="UT0-Y5-o8t" id="MhZ-Gq-p6Y"/>
                 <outlet property="audioPlot" destination="vLu-gC-b0b" id="ha4-OA-PoY"/>
                 <outlet property="instrumentImage" destination="Urb-v9-JfE" id="qjI-CC-dAR"/>
@@ -113,7 +128,4 @@
             <point key="canvasLocation" x="363" y="422.5"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="waveform_static" width="2003" height="555"/>
-    </resources>
 </document>

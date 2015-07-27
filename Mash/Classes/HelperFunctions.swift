@@ -117,7 +117,7 @@ func importTracks(tracks: [Track], navigationController: UINavigationController?
     
     for track in tracks {
         var URL = filePathURL(track.titleText + track.format)
-        download("\(track.userText)~~\(track.titleText)\(track.format)", URL, track_bucket) {
+        download(getS3Key(track), URL, track_bucket) {
             (result) in
             track.trackURL = filePathString(track.titleText + track.format)
             Debug.printl("Adding track with \(track.instruments), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
@@ -125,7 +125,7 @@ func importTracks(tracks: [Track], navigationController: UINavigationController?
             let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
             dispatch_async(dispatch_get_global_queue(priority, 0)) {
                 while project!.audioPlayer == nil {
-                    NSThread.sleepForTimeInterval(0.5)
+                    NSThread.sleepForTimeInterval(0.1)
                 }
                 project!.audioPlayer!.addTrack(track.trackURL)
                 dispatch_async(dispatch_get_main_queue()) {
@@ -138,6 +138,9 @@ func importTracks(tracks: [Track], navigationController: UINavigationController?
 
 // Download from S3 bucket
 func download(key: String, url: NSURL, bucket: String) {
+    if NSFileManager.defaultManager().fileExistsAtPath(url.path!) {
+        return
+    }
     let request: AWSS3TransferManagerDownloadRequest = AWSS3TransferManagerDownloadRequest.new()
     request.bucket = bucket
     request.key = key
@@ -184,7 +187,7 @@ func download(key: String, url: NSURL, bucket: String, completion: (result: AWSS
         }
         if (task.result != nil) {
             let downloadOutput: AWSS3TransferManagerDownloadOutput = task.result as! AWSS3TransferManagerDownloadOutput
-            Debug.printl("download complete:\(downloadOutput)", sender: "helpers")
+            Debug.printl("download complete: \(downloadOutput)", sender: "helpers")
             completion(result: downloadOutput)
             return task
         }
@@ -216,6 +219,11 @@ func upload(key: String, url: NSURL, bucket: String) {
         }
         return nil
     }
+}
+
+// Returns AWSS3 bucket name
+func getS3Key(track: Track) -> String {
+    return "\(track.userText)~~\(track.titleText)\(track.format)"
 }
 
 // Returns directory to application's documents

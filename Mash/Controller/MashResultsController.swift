@@ -24,7 +24,6 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         
         self.trackTable.delegate = self
         self.trackTable.dataSource = self
-        self.trackTable.separatorStyle = .None
         
         let track = UINib(nibName: "Track", bundle: nil)
         self.trackTable.registerNib(track, forCellReuseIdentifier: "Track")
@@ -53,7 +52,11 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        let track = cell as! Track
+        
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let track = tableView.dequeueReusableCellWithIdentifier("Track") as! Track
         let trackData = self.results[indexPath.row]
         track.titleText = trackData.titleText
         track.userText = trackData.userText
@@ -62,18 +65,21 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         track.bpm = trackData.bpm
         track.format = trackData.format
         track.trackURL = filePathString(track.titleText + track.format)
-        if !contains(self.downloadedTracks, indexPath.row)  {
-            download("\(track.userText)~~\(track.titleText)\(track.format)", NSURL(fileURLWithPath: track.trackURL)!, track_bucket)
+        if !contains(self.downloadedTracks, indexPath.row) {
+            track.activityView.startAnimating()
+            download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
+                (result) in
+                dispatch_async(dispatch_get_main_queue()) {
+                    track.activityView.stopAnimating()
+                    track.generateWaveform()
+                }
+            }
             self.downloadedTracks.insert(indexPath.row)
         }
-
-        track.imageView?.image = findImage(self.results[indexPath.row].instrumentFamilies)
+        
+        track.instrumentImage.image = findImage(self.results[indexPath.row].instrumentFamilies)
         track.addButton.addTarget(self, action: "done:", forControlEvents: UIControlEvents.TouchDown)
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Track") as! Track
-        return cell
+        return track
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -87,11 +93,16 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let track = self.trackTable.cellForRowAtIndexPath(indexPath) as! Track
 
+        var i = 0
         while !NSFileManager.defaultManager().fileExistsAtPath(track.trackURL) {
             Debug.printnl("waiting...")
             NSThread.sleepForTimeInterval(0.5)
+            if i == 5 {
+                raiseAlert("Error", self, "Unable to play track.")
+                return
+            }
+            i += 1
         }
-        NSThread.sleepForTimeInterval(0.5)
         
         self.playTracks(track)
         Debug.printl("Playing track \(track.titleText)", sender: self)
@@ -126,7 +137,6 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
             self.audioPlayers.removeAtIndex(1)
         }
         self.audioPlayers.append(AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: &error))
-        NSThread.sleepForTimeInterval(0.3)
         self.audioPlayers[0].play()
         self.audioPlayers[1].play()
     }
