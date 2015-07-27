@@ -39,8 +39,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var fileManager = NSFileManager.defaultManager()
         for file in fileManager.contentsOfDirectoryAtPath(dir as String, error: &error)! {
             var success = fileManager.removeItemAtPath(NSString(format: "%@/%@", dir, file as! String) as String, error: &error)
+            println(NSString(format: "%@/%@", dir, file as! String))
             if (!success || error != nil) {
                 Debug.printl("removal of file failed", sender: nil)
+            } else {
+                Debug.printl("removed file", sender: nil)
             }
         }
     }
@@ -52,19 +55,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         FBSDKAppEvents.activateApp()
+        
     }
     
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        var dir = applicationDocumentsDirectory()
-        var error: NSError? = nil
-        var fileManager = NSFileManager.defaultManager()
-        for file in fileManager.contentsOfDirectoryAtPath(dir as String, error: &error)! {
-            var success = fileManager.removeItemAtPath(NSString(format: "%@/%@", dir, file as! String) as String, error: &error)
-            if (!success || error != nil) {
-                Debug.printl("removal of file failed", sender: nil)
-            }
-        }
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {

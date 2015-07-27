@@ -18,15 +18,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     var data: [Track] = []
     var audioPlayer: AVAudioPlayer? = nil
     var user: User = current_user
-    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tracks.delegate = self
         self.tracks.dataSource = self
-        
-        self.view.addSubview(self.activityView)
-        self.activityView.center = self.view.center
         
         // Register profile and track nibs
         let profile = UINib(nibName: "Profile", bundle: nil)
@@ -51,6 +47,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        let value = UIInterfaceOrientation.Portrait.rawValue
+        UIDevice.currentDevice().setValue(value, forKey: "orientation")
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -73,8 +71,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         return self.data.count
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        let track = cell as! Track
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let track = tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
         let index = indexPath.row
         track.backgroundColor = offWhite()
         track.title.text = self.data[index].titleText
@@ -87,12 +85,18 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         track.bpm = self.data[index].bpm
         track.instrumentImage.image = findImage(track.instrumentFamilies)
         track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
-        self.activityView.startAnimating()
-        download("\(self.user.username!)~~\(track.titleText)\(track.format)", filePathURL(track.titleText + track.format), track_bucket) {
+        return track
+    }
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        let track = cell as! Track
+        let index = indexPath.row
+        track.activityView.startAnimating()
+        download(getS3Key(track), filePathURL(track.titleText + track.format), track_bucket) {
             (result) in
             dispatch_async(dispatch_get_main_queue()) {
                 track.generateWaveform()
-                self.activityView.stopAnimating()
+                track.activityView.stopAnimating()
             }
         }
     }
@@ -111,7 +115,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         header.descriptionLabel.layer.borderWidth = 0.2
         
         if self.user.username != current_user.username {
-            
             var following: Bool = false
             for u in user_following {
                 if u.username! == self.user.username! {
@@ -151,11 +154,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tracks.dequeueReusableHeaderFooterViewWithIdentifier("Profile") as! Profile
         return header
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
-        return cell
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -199,7 +197,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
         var params = ["username": username, "password_hash": passwordHash, "query_name": self.user.username!] as Dictionary
-        self.activityView.startAnimating()
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -253,7 +250,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         dispatch_async(dispatch_get_main_queue()) {
             self.tracks.reloadData()
-            self.activityView.stopAnimating()
         }
     }
     
