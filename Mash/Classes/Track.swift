@@ -18,6 +18,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
     @IBOutlet weak var userLabel: UILabel!
     @IBOutlet weak var audioPlot: EZAudioPlot!
     @IBOutlet weak var staticAudioPlot: UIImageView!
+    @IBOutlet weak var activityView: UIActivityIndicatorView!
     var instruments: [String] = []
     var instrumentFamilies: [String] = []
     var titleText: String = ""
@@ -32,13 +33,6 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         self.instruments = instruments
         self.titleText = titleText
     }
-    
-    convenience init(frame: CGRect, instruments: [String], titleText: String, bpm: Int) {
-        self.init(frame: frame)
-        self.instruments = instruments
-        self.titleText = titleText
-        self.bpm = bpm
-    }
 
     convenience init(frame: CGRect, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, trackURL: String, user: String, format: String) {
         self.init(frame: frame)
@@ -51,9 +45,15 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         self.format = format
     }
     
+    // Should only be called in the completion block of a download function.
     func generateWaveform() {
         self.staticAudioPlot.hidden = true
         self.audioPlot.color = lightBlue()
+        
+        // FIXME: figure out why this is called before file finishes download and remove the hacky shit below
+        while !NSFileManager.defaultManager().fileExistsAtPath(self.trackURL) {
+            NSThread.sleepForTimeInterval(0.1)
+        }
         self.audioFile = EZAudioFile(URL: NSURL(fileURLWithPath: self.trackURL), delegate: self)
         self.audioPlot.plotType = .Buffer
         self.audioPlot.shouldFill = true

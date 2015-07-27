@@ -16,6 +16,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var recording: Track? = nil
     var bpm: Int? = nil
     var instruments: [String] = []
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +25,9 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         self.instrumentsCollection.dataSource = self
         let cell = UINib(nibName: "InstrumentCell", bundle: nil)
         self.instrumentsCollection.registerNib(cell, forCellWithReuseIdentifier: "InstrumentCell")
+        
+        self.activityView.center = self.view.center
+        self.view.addSubview(self.activityView)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -35,6 +39,10 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationItem.setHidesBackButton(true, animated: false)
+    }
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -78,6 +86,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/mash")!)
         var params: [String: String] = ["username": username, "password_hash": passwordHash, "family": "{\(instrumentString)}", "bpm": "\(self.recording!.bpm)"]
+        self.activityView.startAnimating()
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -127,6 +136,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
             
             controller.results.append(track)
         }
+        self.activityView.stopAnimating()
         var index = 0
         for i in 0...self.navigationController!.viewControllers.count {
             if self.navigationController!.viewControllers[i] as? MashViewController != nil {

@@ -90,6 +90,10 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         return Int(UIInterfaceOrientationMask.LandscapeRight.rawValue)
     }
     
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
+    
     // TableView delegate
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
