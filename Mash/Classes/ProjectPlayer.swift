@@ -13,6 +13,7 @@ import UIKit
     optional func showTools()
     optional func showMixer()
     optional func didPressPlay(audioPlayer: ProjectPlayer)
+    optional func didStopPlaying(audioPlayer: ProjectPlayer)
     func addTracks()
     func toggleMetronome()
 }
@@ -55,6 +56,7 @@ class ProjectPlayer: UITableViewHeaderFooterView {
     
     @IBAction func stopButtonPressed(sender: AnyObject) {
         self.stop()
+        self.delegate?.didStopPlaying?(self)
     }
     
     @IBAction func toolsButtonPressed(sender: AnyObject) {

@@ -13,7 +13,7 @@ import EZAudio
 class ProjectTrack: UITableViewCell, EZAudioFileDelegate {
     
     @IBOutlet weak var trackTitle: UILabel!
-    @IBOutlet weak var speakerImage: UIImageView!
+    @IBOutlet weak var speakerButton: UIButton!
     @IBOutlet weak var instrumentImage: UIImageView!
     @IBOutlet weak var audioPlot: EZAudioPlot!
     @IBOutlet weak var staticAudioPlot: UIImageView!
@@ -23,7 +23,7 @@ class ProjectTrack: UITableViewCell, EZAudioFileDelegate {
     convenience init(frame: CGRect, track: Track) {
         self.init(frame: frame)
         self.track = track
-        self.trackTitle = track.title
+        self.trackTitle.text = track.titleText
         self.instrumentImage.image = findImage(track.instruments)
     }
     

@@ -88,15 +88,15 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             return
         }
         
-        let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         
-        checkForDuplicate(username, passwordHash: passwordHash)
+        checkForDuplicate(handle, passwordHash: passwordHash)
     }
     
-    func checkForDuplicate(username: String, passwordHash: String) {
+    func checkForDuplicate(handle: String, passwordHash: String) {
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
-        var params: [String: String] = ["username": username, "password_hash": passwordHash, "query_name": username, "song_name": self.titleTextField.text]
+        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "query_name": handle, "song_name": self.titleTextField.text]
         self.activityView.startAnimating()
         httpPost(params,request) {
             (data, statusCode, error) -> Void in
@@ -130,12 +130,12 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         var urlString = self.recording?.url
         
         // Post data to server
-        let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
         var instrumentString = String(stringInterpolationSegment: self.instruments)
         instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
-        var params: [String: String] = ["username": username, "password_hash": passwordHash, "name": self.titleTextField.text, "bpm": "0", "bar": "0", "key": "0", "family": "{\(instrumentString)}", "instrument": "{}", "genre": "{}", "subgenre": "{}", "feel": "0", "solo": "0", "format": ".m4a"]
+        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "title": self.titleTextField.text, "bpm": "0", "bar": "0", "key": "0", "family": "{\(instrumentString)}", "instrument": "{}", "genre": "{}", "subgenre": "{}", "feel": "0", "solo": "0", "format": ".m4a"]
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -151,7 +151,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                 } else if statusCode == HTTP_SUCCESS {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.activityView.stopAnimating()
-                        upload("\(current_user.username!)~~\(self.titleTextField.text).m4a", urlString!, track_bucket)
+                        upload("\(current_user.handle!)~~\(self.titleTextField.text).m4a", urlString!, track_bucket)
                         self.finish()
                     }
                     Debug.printl("Data: \(data)", sender: self)

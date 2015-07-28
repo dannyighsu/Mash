@@ -1023,9 +1023,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="iys-sh-RCj"/>
                     <connections>
+                        <outlet property="handleField" destination="ny3-2N-o3r" id="7nk-Rs-wje"/>
                         <outlet property="passwordField" destination="o5K-a9-vcI" id="s59-LI-Ty7"/>
                         <outlet property="titleLabel" destination="omv-B9-Zrq" id="9sj-4i-68M"/>
-                        <outlet property="usernameField" destination="ny3-2N-o3r" id="jtW-PO-nS3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pkO-Qo-K42" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1429,8 +1429,8 @@
                     </view>
                     <connections>
                         <outlet property="emailField" destination="INi-mJ-v3t" id="unX-DT-aB2"/>
+                        <outlet property="handleField" destination="UYK-u5-zyU" id="xQa-Bt-bWq"/>
                         <outlet property="passwordField" destination="0mG-BI-fOh" id="Oax-Qh-Bs6"/>
-                        <outlet property="usernameField" destination="UYK-u5-zyU" id="x9x-ig-7FL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SSU-Y0-WEz" userLabel="First Responder" sceneMemberID="firstResponder"/>

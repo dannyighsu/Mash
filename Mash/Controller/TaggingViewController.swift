@@ -155,14 +155,14 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
 
     func finish(sender: AnyObject?) {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let username = current_user.username
+        let handle = current_user.handle
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/update/recording")!)
         var time = split(self.timeField.text!) {$0 == "/"}
         if count(time[1]) == 1 {
             time[1] = "0" + time[1]
         }
         var timeString = time[0] + time[1]
-        var params = ["username": username!, "password_hash": passwordHash, "song_name": "\(self.track!.titleText)", "new_bar": timeString, "new_bpm": self.tempoField.text!, "new_key": self.keyField.text!, "new_instrument": "{\(self.instrumentField.text!)}", "new_genre": "{\(self.genreField.text!)}", "new_subgenre": "{\(self.subgenreField.text!)}"] as Dictionary
+        var params = ["handle": handle!, "password_hash": passwordHash, "song_name": "\(self.track!.titleText)", "new_bar": timeString, "new_bpm": self.tempoField.text!, "new_key": self.keyField.text!, "new_instrument": "{\(self.instrumentField.text!)}", "new_genre": "{\(self.genreField.text!)}", "new_subgenre": "{\(self.subgenreField.text!)}"] as Dictionary
         httpPatch(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
