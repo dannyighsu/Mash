@@ -1,5 +1,5 @@
 //
-//  ProjectTrack.swift
+//  Channel.swift
 //  Mash-iOS
 //
 //  Created by Danny Hsu on 4/8/15.
@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import EZAudio
 
-class ProjectTrack: UITableViewCell, EZAudioFileDelegate {
+class Channel: UITableViewCell, EZAudioFileDelegate {
     
     @IBOutlet weak var trackTitle: UILabel!
     @IBOutlet weak var speakerButton: UIButton!

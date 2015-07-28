@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		3718EF291B57071D00AA5D26 /* Objective-C.h in Headers */ = {isa = PBXBuildFile; fileRef = 3718EF271B57071D00AA5D26 /* Objective-C.h */; };
 		3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718EF281B57071D00AA5D26 /* Objective-C.m */; };
-		371F863D1B67062F00BCBEDD /* MixerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 371F863C1B67062F00BCBEDD /* MixerCell.xib */; };
-		371F863F1B6708D900BCBEDD /* MixerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F863E1B6708D900BCBEDD /* MixerCell.swift */; };
+		371F863D1B67062F00BCBEDD /* MixerChannel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 371F863C1B67062F00BCBEDD /* MixerChannel.xib */; };
+		371F863F1B6708D900BCBEDD /* MixerChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F863E1B6708D900BCBEDD /* MixerChannel.swift */; };
 		3722ACE81B4DEDDE008473C3 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */; };
 		3722ACEA1B4DF1F2008473C3 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3722ACE91B4DF1F2008473C3 /* ImageCell.xib */; };
 		3722ACEC1B4DF1FF008473C3 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3722ACEB1B4DF1FF008473C3 /* ImageCell.swift */; };
@@ -34,6 +34,7 @@
 		37A3C2D11B3CC00600F77F2A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37A3C2D01B3CC00600F77F2A /* Images.xcassets */; };
 		37A3C2D41B3CC00600F77F2A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37A3C2D21B3CC00600F77F2A /* LaunchScreen.xib */; };
 		37A3C2E01B3CC00600F77F2A /* MashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A3C2DF1B3CC00600F77F2A /* MashTests.swift */; };
+		37D420321B68345200A29F44 /* MixerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D420311B68345200A29F44 /* MixerController.swift */; };
 		37DE77251B436F4A00952987 /* User.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37DE77241B436F4A00952987 /* User.xib */; };
 		37DE77271B4370B200952987 /* FollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DE77261B4370B200952987 /* FollowingViewController.swift */; };
 		37E799A51B3CC1C600D2E54D /* DashboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799871B3CC1C600D2E54D /* DashboardController.swift */; };
@@ -64,7 +65,7 @@
 		37E799E21B3CC1D000D2E54D /* Metronome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799C71B3CC1D000D2E54D /* Metronome.swift */; };
 		37E799E31B3CC1D000D2E54D /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799C81B3CC1D000D2E54D /* Profile.swift */; };
 		37E799E41B3CC1D000D2E54D /* ProjectTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799C91B3CC1D000D2E54D /* ProjectTools.swift */; };
-		37E799E51B3CC1D000D2E54D /* ProjectTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799CA1B3CC1D000D2E54D /* ProjectTrack.swift */; };
+		37E799E51B3CC1D000D2E54D /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799CA1B3CC1D000D2E54D /* Channel.swift */; };
 		37E799E61B3CC1D000D2E54D /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799CB1B3CC1D000D2E54D /* Track.swift */; };
 		37E799E71B3CC1D000D2E54D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799CC1B3CC1D000D2E54D /* User.swift */; };
 		37E799E91B3CC1D000D2E54D /* HomeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799CF1B3CC1D000D2E54D /* HomeCell.xib */; };
@@ -74,7 +75,7 @@
 		37E799EE1B3CC1D000D2E54D /* Metronome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D41B3CC1D000D2E54D /* Metronome.xib */; };
 		37E799EF1B3CC1D000D2E54D /* Profile.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D51B3CC1D000D2E54D /* Profile.xib */; };
 		37E799F01B3CC1D000D2E54D /* ProjectTools.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D61B3CC1D000D2E54D /* ProjectTools.xib */; };
-		37E799F11B3CC1D000D2E54D /* ProjectTrack.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D71B3CC1D000D2E54D /* ProjectTrack.xib */; };
+		37E799F11B3CC1D000D2E54D /* Channel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D71B3CC1D000D2E54D /* Channel.xib */; };
 		37E799F21B3CC1D000D2E54D /* Track.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D81B3CC1D000D2E54D /* Track.xib */; };
 		37E799FC1B3CC1F600D2E54D /* KeychainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E799F51B3CC1F600D2E54D /* KeychainWrapper.m */; };
 		F183417BACCA4D316DF84567 /* Pods_Mash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8DF6AC8CCE7D187FEEE8D82 /* Pods_Mash.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -93,8 +94,8 @@
 /* Begin PBXFileReference section */
 		3718EF271B57071D00AA5D26 /* Objective-C.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Objective-C.h"; sourceTree = "<group>"; };
 		3718EF281B57071D00AA5D26 /* Objective-C.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Objective-C.m"; sourceTree = "<group>"; };
-		371F863C1B67062F00BCBEDD /* MixerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MixerCell.xib; sourceTree = "<group>"; };
-		371F863E1B6708D900BCBEDD /* MixerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MixerCell.swift; sourceTree = "<group>"; };
+		371F863C1B67062F00BCBEDD /* MixerChannel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MixerChannel.xib; sourceTree = "<group>"; };
+		371F863E1B6708D900BCBEDD /* MixerChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MixerChannel.swift; sourceTree = "<group>"; };
 		3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		3722ACE91B4DF1F2008473C3 /* ImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
 		3722ACEB1B4DF1FF008473C3 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
@@ -122,6 +123,7 @@
 		37A3C2D91B3CC00600F77F2A /* MashTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MashTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		37A3C2DE1B3CC00600F77F2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37A3C2DF1B3CC00600F77F2A /* MashTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MashTests.swift; sourceTree = "<group>"; };
+		37D420311B68345200A29F44 /* MixerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MixerController.swift; sourceTree = "<group>"; };
 		37DE77241B436F4A00952987 /* User.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = User.xib; sourceTree = "<group>"; };
 		37DE77261B4370B200952987 /* FollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowingViewController.swift; sourceTree = "<group>"; };
 		37E799851B3CC12D00D2E54D /* Mash-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mash-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -153,7 +155,7 @@
 		37E799C71B3CC1D000D2E54D /* Metronome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metronome.swift; sourceTree = "<group>"; };
 		37E799C81B3CC1D000D2E54D /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		37E799C91B3CC1D000D2E54D /* ProjectTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTools.swift; sourceTree = "<group>"; };
-		37E799CA1B3CC1D000D2E54D /* ProjectTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTrack.swift; sourceTree = "<group>"; };
+		37E799CA1B3CC1D000D2E54D /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		37E799CB1B3CC1D000D2E54D /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		37E799CC1B3CC1D000D2E54D /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		37E799CF1B3CC1D000D2E54D /* HomeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeCell.xib; sourceTree = "<group>"; };
@@ -163,7 +165,7 @@
 		37E799D41B3CC1D000D2E54D /* Metronome.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Metronome.xib; sourceTree = "<group>"; };
 		37E799D51B3CC1D000D2E54D /* Profile.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Profile.xib; sourceTree = "<group>"; };
 		37E799D61B3CC1D000D2E54D /* ProjectTools.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectTools.xib; sourceTree = "<group>"; };
-		37E799D71B3CC1D000D2E54D /* ProjectTrack.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectTrack.xib; sourceTree = "<group>"; };
+		37E799D71B3CC1D000D2E54D /* Channel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Channel.xib; sourceTree = "<group>"; };
 		37E799D81B3CC1D000D2E54D /* Track.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Track.xib; sourceTree = "<group>"; };
 		37E799F41B3CC1F600D2E54D /* KeychainWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainWrapper.h; sourceTree = "<group>"; };
 		37E799F51B3CC1F600D2E54D /* KeychainWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainWrapper.m; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 				37E7998D1B3CC1C600D2E54D /* LoginViewController.swift */,
 				37E7998E1B3CC1C600D2E54D /* MashResultsController.swift */,
 				37E7998F1B3CC1C600D2E54D /* MashViewController.swift */,
+				37D420311B68345200A29F44 /* MixerController.swift */,
 				37E799901B3CC1C600D2E54D /* NavigationController.swift */,
 				37E7999C1B3CC1C600D2E54D /* ProjectPreferencesViewController.swift */,
 				37E7999D1B3CC1C600D2E54D /* ProjectViewController.swift */,
@@ -303,6 +306,7 @@
 			isa = PBXGroup;
 			children = (
 				376282F31B5EF89700C59774 /* AudioProcessor.swift */,
+				37E799CA1B3CC1D000D2E54D /* Channel.swift */,
 				37E799BE1B3CC1D000D2E54D /* Debug.swift */,
 				37E799C01B3CC1D000D2E54D /* HelperData.swift */,
 				37E799C11B3CC1D000D2E54D /* HelperFunctions.swift */,
@@ -313,14 +317,13 @@
 				37E799C51B3CC1D000D2E54D /* InstrumentCell.swift */,
 				37E799C61B3CC1D000D2E54D /* MashResultsHeaderView.swift */,
 				37E799C71B3CC1D000D2E54D /* Metronome.swift */,
+				371F863E1B6708D900BCBEDD /* MixerChannel.swift */,
 				37E799C81B3CC1D000D2E54D /* Profile.swift */,
 				3782615D1B4B140C00FC89A0 /* ProjectPlayer.swift */,
 				37E799C91B3CC1D000D2E54D /* ProjectTools.swift */,
-				37E799CA1B3CC1D000D2E54D /* ProjectTrack.swift */,
 				379265FA1B5DDA6400E78F2E /* SwipeBar.swift */,
 				37E799CB1B3CC1D000D2E54D /* Track.swift */,
 				37E799CC1B3CC1D000D2E54D /* User.swift */,
-				371F863E1B6708D900BCBEDD /* MixerCell.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -328,17 +331,17 @@
 		37E799CD1B3CC1D000D2E54D /* XIB */ = {
 			isa = PBXGroup;
 			children = (
+				37E799D71B3CC1D000D2E54D /* Channel.xib */,
 				37E799CF1B3CC1D000D2E54D /* HomeCell.xib */,
 				3722ACE91B4DF1F2008473C3 /* ImageCell.xib */,
 				37E799D11B3CC1D000D2E54D /* ImportHeaderView.xib */,
 				37E799D21B3CC1D000D2E54D /* InstrumentCell.xib */,
 				37E799D31B3CC1D000D2E54D /* MashResultsHeaderView.xib */,
 				37E799D41B3CC1D000D2E54D /* Metronome.xib */,
-				371F863C1B67062F00BCBEDD /* MixerCell.xib */,
+				371F863C1B67062F00BCBEDD /* MixerChannel.xib */,
 				37E799D51B3CC1D000D2E54D /* Profile.xib */,
 				3782615B1B4B139400FC89A0 /* ProjectPlayer.xib */,
 				37E799D61B3CC1D000D2E54D /* ProjectTools.xib */,
-				37E799D71B3CC1D000D2E54D /* ProjectTrack.xib */,
 				379265F81B5DDA3600E78F2E /* SwipeBar.xib */,
 				37E799D81B3CC1D000D2E54D /* Track.xib */,
 				37DE77241B436F4A00952987 /* User.xib */,
@@ -491,8 +494,8 @@
 				37E799EF1B3CC1D000D2E54D /* Profile.xib in Resources */,
 				379265F91B5DDA3600E78F2E /* SwipeBar.xib in Resources */,
 				3722ACEA1B4DF1F2008473C3 /* ImageCell.xib in Resources */,
-				371F863D1B67062F00BCBEDD /* MixerCell.xib in Resources */,
-				37E799F11B3CC1D000D2E54D /* ProjectTrack.xib in Resources */,
+				371F863D1B67062F00BCBEDD /* MixerChannel.xib in Resources */,
+				37E799F11B3CC1D000D2E54D /* Channel.xib in Resources */,
 				373F0EFE1B3DEFC500DE92AB /* Female Chorus.aif in Resources */,
 				37E799ED1B3CC1D000D2E54D /* MashResultsHeaderView.xib in Resources */,
 				373F0EFD1B3DEFC500DE92AB /* Basses Legato.aif in Resources */,
@@ -567,7 +570,7 @@
 				37E799B41B3CC1C600D2E54D /* ProjectPreferencesViewController.swift in Sources */,
 				37DE77271B4370B200952987 /* FollowingViewController.swift in Sources */,
 				37E799DB1B3CC1D000D2E54D /* HelperData.swift in Sources */,
-				37E799E51B3CC1D000D2E54D /* ProjectTrack.swift in Sources */,
+				37E799E51B3CC1D000D2E54D /* Channel.swift in Sources */,
 				37E799AE1B3CC1C600D2E54D /* NavigationController.swift in Sources */,
 				37E799DC1B3CC1D000D2E54D /* HelperFunctions.swift in Sources */,
 				37E799E01B3CC1D000D2E54D /* InstrumentCell.swift in Sources */,
@@ -576,7 +579,7 @@
 				37E799AC1B3CC1C600D2E54D /* MashResultsController.swift in Sources */,
 				37E799A61B3CC1C600D2E54D /* DirectUploadViewController.swift in Sources */,
 				37E799BA1B3CC1C600D2E54D /* TabBarController.swift in Sources */,
-				371F863F1B6708D900BCBEDD /* MixerCell.swift in Sources */,
+				371F863F1B6708D900BCBEDD /* MixerChannel.swift in Sources */,
 				37E799A71B3CC1C600D2E54D /* EntryViewController.swift in Sources */,
 				3722ACE81B4DEDDE008473C3 /* ImageViewController.swift in Sources */,
 				3727B62D1B54881B00FD2F5C /* RecordViewController.swift in Sources */,
@@ -593,6 +596,7 @@
 				374CEFD71B508552007A7557 /* RecordToolsController.swift in Sources */,
 				37E799BB1B3CC1C600D2E54D /* TaggingViewController.swift in Sources */,
 				37E799B71B3CC1C600D2E54D /* SearchViewController.swift in Sources */,
+				37D420321B68345200A29F44 /* MixerController.swift in Sources */,
 				37E799E41B3CC1D000D2E54D /* ProjectTools.swift in Sources */,
 				37E799A91B3CC1C600D2E54D /* HomeTableViewController.swift in Sources */,
 				37E799A51B3CC1C600D2E54D /* DashboardController.swift in Sources */,

@@ -32,8 +32,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tracks.tableFooterView = UIView(frame: CGRectZero)
 
         // Register nibs
-        let nib = UINib(nibName: "ProjectTrack", bundle: nil)
-        self.tracks.registerNib(nib, forCellReuseIdentifier: "ProjectTrack")
+        let nib = UINib(nibName: "Channel", bundle: nil)
+        self.tracks.registerNib(nib, forCellReuseIdentifier: "Channel")
         let header = UINib(nibName: "ProjectTools", bundle: nil)
         self.tracks.registerNib(header, forHeaderFooterViewReuseIdentifier: "ProjectTools")
         let player = UINib(nibName: "ProjectPlayer", bundle: nil)
@@ -104,7 +104,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ProjectTrack") as! ProjectTrack
+        let cell = tableView.dequeueReusableCellWithIdentifier("Channel") as! Channel
         let trackData = self.data[indexPath.row]
         cell.trackTitle.text = trackData.titleText
         cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
@@ -125,7 +125,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 return
             }
             var muted = self.audioPlayer!.muteTrack(trackNumber)
-            let track = self.tracks.cellForRowAtIndexPath(indexPath) as! ProjectTrack
+            let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Channel
             if muted {
                 track.speakerButton.setImage(UIImage(named: "speaker_white_2"), forState: UIControlState.Normal)
             } else {
@@ -288,7 +288,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // Track management
     func removeTrack(sender: UISwipeGestureRecognizer?) {
-        let track = sender?.view as! ProjectTrack
+        let track = sender?.view as! Channel
         var trackIndex: Int? = nil
         Debug.printl("Removing track \(track)", sender: self)
         for (var i = 0; i < self.data.count; i++) {
