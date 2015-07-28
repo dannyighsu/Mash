@@ -19,23 +19,25 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EJI-Hf-g0O">
                                 <rect key="frame" x="17" y="39" width="40" height="40"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="speaker_white" translatesAutoresizingMaskIntoConstraints="NO" id="o53-QN-6pw">
-                                <rect key="frame" x="25" y="6" width="25" height="25"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Phz-b3-d5D">
+                                <rect key="frame" x="25" y="8" width="25" height="25"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="25" id="5Lt-qr-DlL"/>
-                                    <constraint firstAttribute="height" constant="25" id="6tE-69-Gz7"/>
+                                    <constraint firstAttribute="height" constant="25" id="xkn-2V-GCR"/>
                                 </constraints>
-                            </imageView>
+                                <state key="normal" title="Button" image="speaker_white">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="EJI-Hf-g0O" firstAttribute="centerX" secondItem="2mF-aZ-xG3" secondAttribute="centerX" id="9XC-Wy-Ncg"/>
-                            <constraint firstItem="EJI-Hf-g0O" firstAttribute="centerX" secondItem="o53-QN-6pw" secondAttribute="centerX" id="SRz-Qr-U2g"/>
-                            <constraint firstItem="o53-QN-6pw" firstAttribute="leading" secondItem="2mF-aZ-xG3" secondAttribute="leading" constant="25" id="WN7-Ld-sfw"/>
-                            <constraint firstItem="EJI-Hf-g0O" firstAttribute="top" secondItem="o53-QN-6pw" secondAttribute="bottom" constant="8" id="gju-Xm-xBk"/>
+                            <constraint firstItem="EJI-Hf-g0O" firstAttribute="top" secondItem="Phz-b3-d5D" secondAttribute="bottom" constant="6" id="MhM-ee-vLI"/>
+                            <constraint firstItem="Phz-b3-d5D" firstAttribute="top" secondItem="2mF-aZ-xG3" secondAttribute="topMargin" id="jEx-hr-Yl7"/>
+                            <constraint firstItem="Phz-b3-d5D" firstAttribute="leading" secondItem="2mF-aZ-xG3" secondAttribute="leading" constant="25" id="kGO-I9-pRl"/>
                             <constraint firstItem="EJI-Hf-g0O" firstAttribute="leading" secondItem="2mF-aZ-xG3" secondAttribute="leading" constant="17" id="rAY-10-7ts"/>
-                            <constraint firstItem="o53-QN-6pw" firstAttribute="top" secondItem="2mF-aZ-xG3" secondAttribute="top" constant="6" id="u5O-IG-lvQ"/>
                             <constraint firstAttribute="bottom" secondItem="EJI-Hf-g0O" secondAttribute="bottom" constant="6" id="viq-3h-Bgi"/>
+                            <constraint firstItem="Phz-b3-d5D" firstAttribute="centerX" secondItem="EJI-Hf-g0O" secondAttribute="centerX" id="yer-qm-T89"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uoj-bb-PFd" customClass="EZAudioPlot">
@@ -66,6 +68,7 @@
                     </view>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="uoj-bb-PFd" firstAttribute="leading" secondItem="y7O-0r-oaR" secondAttribute="leading" constant="76" id="AmO-Ef-Bdk"/>
                     <constraint firstItem="uoj-bb-PFd" firstAttribute="leading" secondItem="2mF-aZ-xG3" secondAttribute="trailing" constant="1" id="B4c-HW-w1P"/>
                     <constraint firstItem="2mF-aZ-xG3" firstAttribute="leading" secondItem="y7O-0r-oaR" secondAttribute="leading" id="QBE-TX-EyE"/>
                     <constraint firstItem="2mF-aZ-xG3" firstAttribute="top" secondItem="y7O-0r-oaR" secondAttribute="top" id="TIP-Yp-sAG"/>
@@ -79,7 +82,7 @@
             <connections>
                 <outlet property="audioPlot" destination="uoj-bb-PFd" id="W0t-2a-FGx"/>
                 <outlet property="instrumentImage" destination="EJI-Hf-g0O" id="eqk-R7-xWh"/>
-                <outlet property="speakerImage" destination="o53-QN-6pw" id="ZrS-6Q-evX"/>
+                <outlet property="speakerButton" destination="Phz-b3-d5D" id="nl2-u6-hJU"/>
                 <outlet property="staticAudioPlot" destination="CIY-iy-YcL" id="Ep7-ts-yYC"/>
                 <outlet property="trackTitle" destination="ZNn-5t-h0K" id="WaS-4t-cjr"/>
             </connections>

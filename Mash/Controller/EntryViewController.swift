@@ -36,10 +36,10 @@ class EntryViewController: UIViewController {
         if hasLoginKey == true {
             var login = self.storyboard?.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
             self.navigationController?.pushViewController(login, animated: false)
-            let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+            let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
             let password = keychainWrapper.myObjectForKey("v_Data") as! String
-            Debug.printl("Attempting to log in with username \(username) and password \(password)", sender: self)
-            login.authenticate(username, password: password)
+            Debug.printl("Attempting to log in with username \(handle) and password \(password)", sender: self)
+            login.authenticate(handle, password: password)
         }
     }
     

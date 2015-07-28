@@ -127,9 +127,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             var muted = self.audioPlayer!.muteTrack(trackNumber)
             let track = self.tracks.cellForRowAtIndexPath(indexPath) as! ProjectTrack
             if muted {
-                track.speakerImage.image = UIImage(named: "speaker_white_2")
+                track.speakerButton.setImage(UIImage(named: "speaker_white_2"), forState: UIControlState.Normal)
             } else {
-                track.speakerImage.image = UIImage(named: "speaker_white")
+                track.speakerButton.setImage(UIImage(named: "speaker_white"), forState: UIControlState.Normal)
             }
         }
         tableView.cellForRowAtIndexPath(indexPath)?.selected = false
@@ -195,6 +195,12 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     func didPressPlay(audioPlayer: ProjectPlayer) {
         self.metronome.toggle(nil)
     }
+    
+    func didStopPlaying(audioPlayer: ProjectPlayer) {
+        if self.metronome.isPlaying {
+            self.metronome.toggle(nil)
+        }
+    }
 
     // Metronome Delegate
     func tick(metronome: Metronome) {
@@ -238,10 +244,10 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func uploadAction(url: String, name: String) {
-        upload("\(current_user.username!)~~\(name).m4a", NSURL(fileURLWithPath: url)!, track_bucket)
+        upload("\(current_user.handle!)~~\(name).m4a", NSURL(fileURLWithPath: url)!, track_bucket)
         
         // Post data to server
-        let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         var instruments: [String] = []
         for track in self.data {
@@ -251,7 +257,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         var instrumentString = String(stringInterpolationSegment: instruments)
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
-        var params: [String: String] = ["username": username, "password_hash": passwordHash, "song_name": name, "bpm": "0", "bar": "0", "key": "0", "instrument": instrumentString, "family": "", "genre": "", "subgenre": "", "feel": "0", "effects": "", "theme": "", "solo": "0", "format": ".m4a"]
+        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "song_name": name, "bpm": "0", "bar": "0", "key": "0", "instrument": instrumentString, "family": "", "genre": "", "subgenre": "", "feel": "0", "effects": "", "theme": "", "solo": "0", "format": ".m4a"]
 
         httpPost(params, request) {
             (data, statusCode, error) -> Void in

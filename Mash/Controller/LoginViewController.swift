@@ -12,7 +12,7 @@ import UIKit
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var usernameField: UITextField!
+    @IBOutlet weak var handleField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
@@ -21,9 +21,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
 
         self.navigationController?.navigationBarHidden = false
-        self.usernameField.delegate = self
+        self.handleField.delegate = self
         self.passwordField.delegate = self
-        self.usernameField.returnKeyType = UIReturnKeyType.Next
+        self.handleField.returnKeyType = UIReturnKeyType.Next
         self.passwordField.returnKeyType = UIReturnKeyType.Go
         
         let tap = UITapGestureRecognizer(target: self, action: "resignTextField:")
@@ -34,16 +34,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         let hasLoginKey = NSUserDefaults.standardUserDefaults().boolForKey("hasLoginKey")
         if hasLoginKey == true {
-            let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+            let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
             let password = keychainWrapper.myObjectForKey("v_Data") as! String
-            self.usernameField.text = username
+            self.handleField.text = handle
             self.passwordField.text = password
         }
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        self.usernameField.becomeFirstResponder()
+        self.handleField.becomeFirstResponder()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -58,17 +58,17 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     func signinAction(sender: AnyObject?) {
-        if ((count(self.usernameField.text!) < 1) || (count(self.passwordField.text!) < 1)) {
+        if ((count(self.handleField.text!) < 1) || (count(self.passwordField.text!) < 1)) {
             raiseAlert("Incorrect Username and/or Password", self)
             return
         }
         
-        authenticate(self.usernameField.text, password: self.passwordField.text)
+        authenticate(self.handleField.text, password: self.passwordField.text)
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        if textField == self.usernameField {
-            self.usernameField.resignFirstResponder()
+        if textField == self.handleField {
+            self.handleField.resignFirstResponder()
             self.passwordField.becomeFirstResponder()
         } else {
             if textField.text.isEmpty {
@@ -82,24 +82,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     func resignTextField(sender: AnyObject?) {
-        self.usernameField.resignFirstResponder()
+        self.handleField.resignFirstResponder()
         self.passwordField.resignFirstResponder()
     }
 
-    func saveLoginItems() {
-        Debug.printl("Saving user " + self.usernameField.text + " to NSUserDefaults.", sender: self)
-        NSUserDefaults.standardUserDefaults().setValue(self.usernameField.text, forKey: "username")
-        keychainWrapper.mySetObject(self.passwordField.text, forKey: kSecValueData)
-        keychainWrapper.writeToKeychain()
-        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasLoginKey")
-        NSUserDefaults.standardUserDefaults().synchronize()
-    }
-
-    func authenticate(username: String, password: String) {
+    func authenticate(handle: String, password: String) {
         // Check authentication with database
         let passwordHash = hashPassword(password)
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/signin")!)
-        var params = ["username": username, "password_hash": passwordHash, "query_name": username] as Dictionary
+        var params = ["handle": handle, "password_hash": passwordHash, "query_name": handle] as Dictionary
         self.activityView.startAnimating()
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
@@ -130,8 +121,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         }
                         current_user = User()
                         var data = response["user"] as! NSDictionary
-                        current_user.username = username
-                        current_user.altname = data["display_name"] as? String
+                        current_user.handle = handle
+                        current_user.username = data["name"] as? String
                         current_user.profile_pic_link = data["profile_pic_link"] as? String
                         current_user.banner_pic_link = data["banner_pic_link"] as? String
                         current_user.followers = String(data["followers_count"] as! Int)
@@ -139,7 +130,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         current_user.tracks = String(data["track_count"] as! Int)
                         current_user.user_description = data["description"] as? String
                         current_user.userid = data["id"] as? Int
-                        self!.completeLogin(username, password: password)
+                        self!.completeLogin(handle, password: password)
                     }
                 } else {
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
@@ -149,12 +140,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    func completeLogin(username: String, password: String) {
+    func completeLogin(handle: String, password: String) {
         let hasLoginKey = NSUserDefaults.standardUserDefaults().boolForKey("hasLoginKey")
         if !hasLoginKey {
             self.saveLoginItems()
         } else {
-            if (NSUserDefaults.standardUserDefaults().valueForKey("username") as? String != username || keychainWrapper.myObjectForKey("v_Data") as? String != password) {
+            if (NSUserDefaults.standardUserDefaults().valueForKey("username") as? String != handle || keychainWrapper.myObjectForKey("v_Data") as? String != password) {
                 Debug.printl("Updating saved username and password", sender: self)
                 self.saveLoginItems()
             }
@@ -164,6 +155,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         Debug.printl("Successful login - pushing tab bar controller onto navigation controller", sender: self)
         let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController
         self.navigationController?.pushViewController(tabbarcontroller, animated: false)
+    }
+    
+    func saveLoginItems() {
+        Debug.printl("Saving user " + self.handleField.text + " to NSUserDefaults.", sender: self)
+        NSUserDefaults.standardUserDefaults().setValue(self.handleField.text, forKey: "username")
+        keychainWrapper.mySetObject(self.passwordField.text, forKey: kSecValueData)
+        keychainWrapper.writeToKeychain()
+        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasLoginKey")
+        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
 }

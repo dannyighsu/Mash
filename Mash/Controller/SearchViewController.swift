@@ -89,12 +89,20 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             track.userLabel.text = track.userText
             track.format = trackData.format
             track.bpm = trackData.bpm
+            track.activityView.startAnimating()
+            download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
+                (result) in
+                dispatch_async(dispatch_get_main_queue()) {
+                    track.generateWaveform()
+                    track.activityView.stopAnimating()
+                }
+            }
             return track
         } else {
             let user = self.tableView.dequeueReusableCellWithIdentifier("User", forIndexPath: indexPath) as! User
             let userData = self.searchResults[indexPath.row] as! User
+            user.handle = userData.handle
             user.username = userData.username
-            user.altname = userData.altname
             user.profile_pic_link = userData.profile_pic_link
             return user
         }
@@ -110,14 +118,9 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         }
         if self.scope == 0 {
             var track = self.tableView.cellForRowAtIndexPath(indexPath) as! Track
-            download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
-                (result) in
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
-                    self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
-                    self.audioPlayer!.play()
-                }
-            }
+            self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
+            self.audioPlayer!.play()
         } else {
             let user = self.tableView.cellForRowAtIndexPath(indexPath) as! User
             User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
@@ -155,17 +158,17 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
 
     func searchTextFilter(searchText: String) {
-        let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         var request: NSMutableURLRequest
         var params: Dictionary<String, String>
         let scope = self.scope
         if scope == 0 {
             request = NSMutableURLRequest(URL: NSURL(string: "\(db)/search/recording")!)
-            params = ["username": username, "password_hash": passwordHash, "song_name": searchText] as Dictionary
+            params = ["handle": handle, "password_hash": passwordHash, "song_name": searchText] as Dictionary
         } else {
             request = NSMutableURLRequest(URL: NSURL(string: "\(db)/search/user")!)
-            params = ["username": username, "password_hash": passwordHash, "user_id": "\(current_user.userid!)", "query_name": searchText] as Dictionary
+            params = ["handle": handle, "password_hash": passwordHash, "user_id": "\(current_user.userid!)", "query_name": searchText] as Dictionary
         }
         self.activityView.startAnimating()
         httpPost(params, request) {
@@ -217,7 +220,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             var url = (dict["song_name"] as! String) + (dict["format"] as! String)
             url = filePathString(url)
             
-            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["handle"] as! String, format: dict["format"] as! String)
             
             self.searchResults.append(track)
         }
@@ -230,8 +233,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         for u in users {
             var dict = u as! NSDictionary
             var user = User()
+            user.handle = dict["handle"] as? String
             user.username = dict["username"] as? String
-            user.altname = dict["display_name"] as? String
             user.profile_pic_link = dict["profile_pic_link"] as? String
             self.searchResults.append(user)
         }

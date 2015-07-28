@@ -13,7 +13,7 @@ import EZAudio
 class ProjectTrack: UITableViewCell, EZAudioFileDelegate {
     
     @IBOutlet weak var trackTitle: UILabel!
-    @IBOutlet weak var speakerImage: UIImageView!
+    @IBOutlet weak var speakerButton: UIButton!
     @IBOutlet weak var instrumentImage: UIImageView!
     @IBOutlet weak var audioPlot: EZAudioPlot!
     @IBOutlet weak var staticAudioPlot: UIImageView!

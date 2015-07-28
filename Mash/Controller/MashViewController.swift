@@ -79,13 +79,13 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     func downloadAction(instrument: [String]) {
         
         // Post data to server
-        let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         var instrumentString = String(stringInterpolationSegment: instrument)
         instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
         
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/mash")!)
-        var params: [String: String] = ["username": username, "password_hash": passwordHash, "family": "{\(instrumentString)}", "bpm": "\(self.recordings[0].bpm)"]
+        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "family": "{\(instrumentString)}", "bpm": "\(self.recordings[0].bpm)"]
         self.activityView.startAnimating()
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
@@ -132,7 +132,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
             }
             
             var url = (dict["song_name"] as! String) + (dict["format"] as! String)
-            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["handle"] as! String, format: dict["format"] as! String)
             
             controller.results.append(track)
         }

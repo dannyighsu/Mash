@@ -15,7 +15,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var emailField: UITextField!
-    @IBOutlet weak var usernameField: UITextField!
+    @IBOutlet weak var handleField: UITextField!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,17 +25,17 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         // Set textfield delegates
         self.passwordField.delegate = self
         self.emailField.delegate = self
-        self.usernameField.delegate = self
+        self.handleField.delegate = self
 
         // Set textfield actions
         self.passwordField.returnKeyType = UIReturnKeyType.Go
         self.emailField.returnKeyType = UIReturnKeyType.Next
-        self.usernameField.returnKeyType = UIReturnKeyType.Next
+        self.handleField.returnKeyType = UIReturnKeyType.Next
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        self.usernameField.becomeFirstResponder()
+        self.handleField.becomeFirstResponder()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -54,7 +54,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
             Debug.printl("Text field is empty", sender: self)
             return false
         }
-        if textField == self.usernameField {
+        if textField == self.handleField {
             textField.resignFirstResponder()
             self.emailField.becomeFirstResponder()
         } else if textField == self.emailField {
@@ -88,13 +88,13 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
 
     // Check for length & validity of text fields
     func signUpAction(sender: AnyObject?) {
-        if ((count(self.usernameField.text!) < 1) || (count(self.passwordField.text!) < 1)) {
+        if ((count(self.handleField.text!) < 1) || (count(self.passwordField.text!) < 1)) {
             self.raiseAlert("Username and Password must have at least 1 character.")
             return
-        } else if ((count(self.usernameField.text!) > 40 || (count(self.passwordField.text!) > 40))) {
+        } else if ((count(self.handleField.text!) > 40 || (count(self.passwordField.text!) > 40))) {
             self.raiseAlert("Username and Password must be less than 40 characters long.")
             return
-        } else if self.usernameField.text!.rangeOfString(" ") != nil {
+        } else if self.handleField.text!.rangeOfString(" ") != nil {
             self.raiseAlert("Username cannot contain spaces.")
         }
 
@@ -112,7 +112,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         // Register with database
         let passwordHash = hashPassword(self.passwordField.text)
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/register")!)
-        var params = ["username": self.usernameField.text!, "password_hash": passwordHash, "email": self.emailField.text!, "display_name": "", "register_agent": "0", "profile_pic_link": "", "banner_pic_link": ""] as Dictionary
+        var params = ["handle": self.handleField.text!, "password_hash": passwordHash, "email": self.emailField.text!, "username": "", "register_agent": "0", "profile_pic_link": "", "banner_pic_link": ""] as Dictionary
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -153,8 +153,8 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     }
     
     func saveLoginItems() {
-        Debug.printl("Saving user " + self.usernameField.text + " to NSUserDefaults.", sender: self)
-        NSUserDefaults.standardUserDefaults().setValue(self.usernameField.text, forKey: "username")
+        Debug.printl("Saving user " + self.handleField.text + " to NSUserDefaults.", sender: self)
+        NSUserDefaults.standardUserDefaults().setValue(self.handleField.text, forKey: "username")
         keychainWrapper.mySetObject(self.passwordField.text, forKey: kSecValueData)
         keychainWrapper.writeToKeychain()
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasLoginKey")

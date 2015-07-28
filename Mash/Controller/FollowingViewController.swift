@@ -34,8 +34,8 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
         var cell = self.users.dequeueReusableCellWithIdentifier("User") as! User
         var follower = self.data[indexPath.row]
         cell.nameLabel?.setTitle(follower.display_name(), forState: UIControlState.Normal)
+        cell.handle = follower.handle
         cell.username = follower.username
-        cell.altname = follower.altname
         cell.profile_pic_link = follower.profile_pic_link
         follower.profile_pic(cell.profilePicture!)
         cell.profilePicture?.layer.cornerRadius = cell.imageView!.frame.size.width / 2
@@ -43,7 +43,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.profilePicture?.layer.masksToBounds = true
         var following: Bool = false
         for u in user_following {
-            if u.username! == follower.username! {
+            if u.handle! == follower.handle! {
                 following = true
             }
         }
@@ -94,9 +94,9 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func getUserFollowing(user: User, type: String) {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let username = current_user.username
+        let handle = current_user.handle
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/user/\(type)")!)
-        var params = ["username": username!, "password_hash": passwordHash, "query_name": user.username!] as Dictionary
+        var params = ["handle": handle!, "password_hash": passwordHash, "query_name": user.handle!] as Dictionary
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -116,8 +116,8 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                         for u in users {
                             var dict = u as! NSDictionary
                             var follower = User()
-                            follower.username = dict["username"] as? String
-                            follower.altname = dict["display_name"] as? String
+                            follower.handle = dict["handle"] as? String
+                            follower.username = dict["name"] as? String
                             follower.profile_pic_link = dict["profile_pic_link"] as? String
                             self.data.append(follower)
                         }

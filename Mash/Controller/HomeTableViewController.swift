@@ -80,7 +80,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! HomeCell
         var user = User()
-        user.username = cell.userLabel.text
+        user.handle = cell.userLabel.text
         User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
     }
     
@@ -120,9 +120,9 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func retrieveTracks() {
         self.activityView.startAnimating()
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/feed")!)
-        var params = ["username": username, "password_hash": passwordHash, "userid": String(current_user.userid!)] as Dictionary
+        var params = ["handle": handle, "password_hash": passwordHash, "userid": String(current_user.userid!)] as Dictionary
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -154,22 +154,22 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         for item in activity {
             let type = item["type"] as! String
             if type == "follow" {
-                let follower = item["following_username"] as! String
-                let followed = item["followed_username"] as! String
+                let follower = item["following_handle"] as! String
+                let followed = item["followed_handle"] as! String
                 let event = "\(follower) followed \(followed)."
                 let time = item["timestamp"] as! String
                 var user = User()
-                user.username = follower
+                user.handle = follower
                 user.profile_pic_link = item["following_profile_pic_link"] as? String
                 let cell = HomeCell(frame: CGRectZero, eventText: event, userText: follower, timeText: time, user: user)
                 self.data.append(cell)
             } else if type == "recording" {
-                let user = item["following_username"] as! String
+                let user = item["following_handle"] as! String
                 let recording = item["recording_name"] as! String
                 let time = item["timestamp"] as! String
                 let event = "\(recording)"
                 var follower = User()
-                follower.username = user
+                follower.handle = user
                 follower.profile_pic_link = item["following_profile_pic_link"] as? String
                 let cell = HomeCell(frame: CGRectZero, eventText: event, userText: user, timeText: time, user: follower)
                 self.data.append(cell)
