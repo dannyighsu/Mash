@@ -13,7 +13,7 @@ import AVFoundation
 class MashViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAlertViewDelegate {
     
     @IBOutlet weak var instrumentsCollection: UICollectionView!
-    var recording: Track? = nil
+    var recordings: [Track] = []
     var bpm: Int? = nil
     var instruments: [String] = []
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
@@ -85,7 +85,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
         
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/mash")!)
-        var params: [String: String] = ["username": username, "password_hash": passwordHash, "family": "{\(instrumentString)}", "bpm": "\(self.recording!.bpm)"]
+        var params: [String: String] = ["username": username, "password_hash": passwordHash, "family": "{\(instrumentString)}", "bpm": "\(self.recordings[0].bpm)"]
         self.activityView.startAnimating()
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
@@ -116,7 +116,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func finish(inputData: NSDictionary) {
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MashResultsController") as! MashResultsController
-        controller.recording = self.recording
+        controller.projectRecordings = self.recordings
         var tracks = inputData["recordings"] as! NSArray
         for t in tracks {
             var dict = t as! NSDictionary
@@ -156,7 +156,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     func cheat() {
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MashResultsController") as! MashResultsController
         
-        controller.recording = self.recording
+        controller.projectRecordings = self.recordings
         var index = 0
         for i in 0...self.navigationController!.viewControllers.count {
             if self.navigationController!.viewControllers[i] as? MashViewController != nil {

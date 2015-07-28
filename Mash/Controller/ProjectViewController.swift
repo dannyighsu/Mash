@@ -313,7 +313,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             return
         }
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MashViewController") as! MashViewController
-        controller.recording = self.data[0]
+        for track in self.data {
+            controller.recordings.append(track)
+        }
         self.navigationController?.pushViewController(controller, animated: true)
     }
 

@@ -23,7 +23,7 @@ class ProjectTrack: UITableViewCell, EZAudioFileDelegate {
     convenience init(frame: CGRect, track: Track) {
         self.init(frame: frame)
         self.track = track
-        self.trackTitle = track.title
+        self.trackTitle.text = track.titleText
         self.instrumentImage.image = findImage(track.instruments)
     }
     
