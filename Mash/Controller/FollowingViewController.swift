@@ -38,7 +38,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.username = follower.username
         cell.profile_pic_link = follower.profile_pic_link
         follower.profile_pic(cell.profilePicture!)
-        cell.profilePicture?.layer.cornerRadius = cell.imageView!.frame.size.width / 2
+        cell.profilePicture?.layer.cornerRadius = cell.profilePicture!.frame.size.width / 2
         cell.profilePicture?.layer.borderWidth = 1.0
         cell.profilePicture?.layer.masksToBounds = true
         var following: Bool = false
@@ -48,11 +48,11 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
             }
         }
         if following {
-            cell.followButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchDown)
+            cell.followButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
             cell.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
             cell.followButton.backgroundColor = lightGray()
         } else {
-            cell.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchDown)
+            cell.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
         }
         return cell
     }

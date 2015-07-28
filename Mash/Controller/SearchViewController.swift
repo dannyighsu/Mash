@@ -234,7 +234,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             var dict = u as! NSDictionary
             var user = User()
             user.handle = dict["handle"] as? String
-            user.username = dict["username"] as? String
+            user.username = dict["name"] as? String
             user.profile_pic_link = dict["profile_pic_link"] as? String
             self.searchResults.append(user)
         }
