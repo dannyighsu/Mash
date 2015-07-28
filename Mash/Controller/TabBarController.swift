@@ -19,6 +19,8 @@ class TabBarController: UITabBarController {
         self.navigationItem.setHidesBackButton(true, animated: false)
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.selectedIndex = getTabBarController("record")
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "update:", name: "UpdateUINotification", object: nil)
     }
     
     override func shouldAutorotate() -> Bool {
@@ -39,6 +41,16 @@ class TabBarController: UITabBarController {
             result = super.supportedInterfaceOrientations()
         }
         return result
+    }
+    
+    // Update view controllers on return from extended inactivity
+    func update(sender: AnyObject?) {
+        if self.navigationController!.viewControllers.count > 3 {
+            for i in 0...self.navigationController!.viewControllers.count - 3 {
+                self.navigationController!.popViewControllerAnimated(false)
+            }
+        }
+        self.selectedIndex = getTabBarController("record")
     }
     
 }

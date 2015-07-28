@@ -15,8 +15,9 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     
     @IBOutlet weak var trackTable: UITableView!
     var results: [Track] = []
-    var recording: Track? = nil
-    var audioPlayers: [AVAudioPlayer] = []
+    var projectRecordings: [Track] = []
+    var projectPlayers: [AVAudioPlayer] = []
+    var audioPlayer: AVAudioPlayer? = nil
     var downloadedTracks: Set<Int> = Set<Int>()
     
     override func viewDidLoad() {
@@ -30,7 +31,9 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         let profile = UINib(nibName: "MashResultsHeaderView", bundle: nil)
         self.trackTable.registerNib(profile, forHeaderFooterViewReuseIdentifier: "MashResultsHeaderView")
         
-        self.audioPlayers.append(AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: self.recording!.trackURL), error: nil))
+        for track in projectRecordings {
+            self.projectPlayers.append(AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil))
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -109,7 +112,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        if self.audioPlayers[0].playing {
+        if self.projectPlayers[0].playing {
             self.stopPlaying(nil)
         }
     }
@@ -126,25 +129,22 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     
     func playTracks(track: Track) {
         let header = self.trackTable.headerViewForSection(0) as! MashResultsHeaderView
-        if self.audioPlayers.count < 1 {
-            return
-        }
-        if self.audioPlayers[0].playing {
+        if self.projectPlayers[0].playing {
             self.stopPlaying(nil)
         }
         var error: NSError? = nil
-        if self.audioPlayers.count == 2 {
-            self.audioPlayers.removeAtIndex(1)
+        self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
+        self.audioPlayer!.play()
+        for player in self.projectPlayers {
+            player.play()
         }
-        self.audioPlayers.append(AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: &error))
-        self.audioPlayers[0].play()
-        self.audioPlayers[1].play()
     }
     
     func stopPlaying(sender: AnyObject?) {
-        for (var i = 0; i < self.audioPlayers.count; i++) {
-            self.audioPlayers[i].stop()
-            self.audioPlayers[i].currentTime = 0
+        self.audioPlayer!.stop()
+        for (var i = 0; i < self.projectPlayers.count; i++) {
+            self.projectPlayers[i].stop()
+            self.projectPlayers[i].currentTime = 0
             let header = self.trackTable.headerViewForSection(0) as! MashResultsHeaderView
         }
     }

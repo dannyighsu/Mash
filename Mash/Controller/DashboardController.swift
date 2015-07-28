@@ -114,10 +114,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         header.trackCount.layer.borderWidth = 0.2
         header.descriptionLabel.layer.borderWidth = 0.2
         
-        if self.user.username != current_user.username {
+        if self.user.handle != current_user.handle {
             var following: Bool = false
             for u in user_following {
-                if u.username! == self.user.username! {
+                if u.handle! == self.user.handle! {
                     following = true
                 }
             }
@@ -194,9 +194,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     // Pull user tracks from API
     func retrieveTracks() {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let username = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
-        var params = ["username": username, "password_hash": passwordHash, "query_name": self.user.username!] as Dictionary
+        var params = ["handle": handle, "password_hash": passwordHash, "query_name": self.user.handle!] as Dictionary
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -244,7 +244,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             var url = (dict["song_name"] as! String) + (dict["format"] as! String)
             url = filePathString(url)
             
-            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["username"] as! String, format: dict["format"] as! String)
+            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["handle"] as! String, format: dict["format"] as! String)
             
             self.data.append(track)
         }
@@ -264,9 +264,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     // Delete track from db
     func deleteTrack(track: Track, indexPath: NSIndexPath) {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let username = current_user.username!
+        let handle = current_user.handle!
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/delete/recordings")!)
-        var params = ["username": username, "password_hash": passwordHash, "song_name": track.titleText] as Dictionary
+        var params = ["handle": handle, "password_hash": passwordHash, "song_name": track.titleText] as Dictionary
         httpDelete(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -329,8 +329,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         photo.requestContentEditingInputWithOptions(nil) {
             (contentInput, info) in
             var imageURL = contentInput.fullSizeImageURL
-            self.update("\(current_user.username!)~~profile_pic.jpg", inputType: "new_profile_pic_link")
-            upload("\(current_user.username!)~~profile_pic.jpg", imageURL, profile_bucket)
+            self.update("\(current_user.handle!)~~profile_pic.jpg", inputType: "new_profile_pic_link")
+            upload("\(current_user.handle!)~~profile_pic.jpg", imageURL, profile_bucket)
         }
     }
     
@@ -344,8 +344,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         photo.requestContentEditingInputWithOptions(nil) {
             (contentInput, info) in
             var imageURL = contentInput.fullSizeImageURL
-            self.update("\(current_user.username!)~~banner.jpg", inputType: "new_banner_pic_link")
-            upload("\(current_user.username!)~~banner.jpg", imageURL, banner_bucket)
+            self.update("\(current_user.handle!)~~banner.jpg", inputType: "new_banner_pic_link")
+            upload("\(current_user.handle!)~~banner.jpg", imageURL, banner_bucket)
         }
     }
     
@@ -358,9 +358,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func update(input: String, inputType: String) {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let username = current_user.username
+        let handle = current_user.handle
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/update/user")!)
-        var params = ["username": username!, "password_hash": passwordHash, inputType: input] as Dictionary
+        var params = ["handle": handle!, "password_hash": passwordHash, inputType: input] as Dictionary
         httpPatch(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -425,9 +425,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     // Delete user from db
     func delete() {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let username = current_user.username
+        let handle = current_user.handle
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/delete/user")!)
-        var params = ["username": username!, "password_hash": passwordHash] as Dictionary
+        var params = ["handle": handle!, "password_hash": passwordHash] as Dictionary
         httpDelete(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {

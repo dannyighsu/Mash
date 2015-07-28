@@ -24,7 +24,7 @@ class ProjectPreferencesViewController: UIViewController, UITableViewDelegate, U
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBarHidden = false
-        self.preferencesTable.frame = self.view.frame
+        self.view.frame = self.navigationController!.view.frame
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

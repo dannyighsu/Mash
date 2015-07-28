@@ -14,8 +14,8 @@ class User: UITableViewCell {
     @IBOutlet weak var profilePicture: UIImageView!
     @IBOutlet weak var followButton: UIButton!
     @IBOutlet weak var nameLabel: UIButton!
+    var handle: String? = nil
     var username: String? = nil
-    var altname: String? = nil
     var profile_pic_link: String? = nil
     var banner_pic_link: String? = nil
     var followers: String? = nil
@@ -26,8 +26,8 @@ class User: UITableViewCell {
     
     convenience init() {
         self.init(frame: CGRectZero)
-        self.username = NSUserDefaults.standardUserDefaults().valueForKey("username") as? String
-        self.altname = ""
+        self.handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as? String
+        self.username = ""
         self.profile_pic_link = ""
         self.banner_pic_link = ""
         self.followers = "0"
@@ -36,10 +36,10 @@ class User: UITableViewCell {
         self.user_description = ""
     }
     
-    convenience init(username: String?, altname: String?, profile_pic_link: String?, banner_pic_link: String?, followers: String?, following: String?, tracks: String?, description: String?) {
+    convenience init(handle: String?, username: String?, profile_pic_link: String?, banner_pic_link: String?, followers: String?, following: String?, tracks: String?, description: String?) {
         self.init(frame: CGRectZero)
+        self.handle = handle
         self.username = username
-        self.altname = altname
         self.profile_pic_link = profile_pic_link
         self.banner_pic_link = banner_pic_link
         self.followers = followers
@@ -51,10 +51,10 @@ class User: UITableViewCell {
     }
     
     func display_name() -> String? {
-        if count(self.altname!) == 0 {
-            return self.username
+        if count(self.username!) == 0 {
+            return self.handle
         }
-        return self.altname
+        return self.username
     }
     
     func profile_pic(imageView: UIImageView) {
@@ -62,7 +62,7 @@ class User: UITableViewCell {
             imageView.image = UIImage(named: "no_profile_pic")!
             return
         } else {
-            download("\(self.username!)~~profile_pic.jpg", filePathURL(self.profile_pic_link), profile_bucket) {
+            download("\(self.handle!)~~profile_pic.jpg", filePathURL(self.profile_pic_link), profile_bucket) {
                 (result) -> Void in
                 dispatch_async(dispatch_get_main_queue()) {
                     imageView.image = UIImage(contentsOfFile: filePathString(self.profile_pic_link))!
@@ -76,7 +76,7 @@ class User: UITableViewCell {
             imageView.image = UIImage(named: "no_banner")!
             return
         } else {
-            download("\(self.username!)~~banner.jpg", filePathURL(self.banner_pic_link), banner_bucket) {
+            download("\(self.handle!)~~banner.jpg", filePathURL(self.banner_pic_link), banner_bucket) {
                 (result) -> Void in
                 dispatch_async(dispatch_get_main_queue()) {
                     imageView.image = UIImage(contentsOfFile: filePathString(self.banner_pic_link))!
@@ -90,7 +90,7 @@ class User: UITableViewCell {
         self.nameLabel.titleLabel?.text = self.display_name()
         var following = false
         for u in user_following {
-            if u.username! == self.username {
+            if u.handle! == self.handle {
                 following = true
                 break
             }
@@ -122,9 +122,9 @@ class User: UITableViewCell {
     // Make get request for user and instantiate dashboard
     class func getUser(input: User, storyboard: UIStoryboard, navigationController: UINavigationController) {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let username = current_user.username
+        let handle = current_user.handle
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/user")!)
-        var params = ["username": username!, "password_hash": passwordHash, "userid": "\(current_user.userid!)", "query_name": input.username!] as Dictionary
+        var params = ["handle": handle!, "password_hash": passwordHash, "userid": "\(current_user.userid!)", "query_name": input.handle!] as Dictionary
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -141,8 +141,8 @@ class User: UITableViewCell {
                         var data = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary
                         
                         var dict = data["user"] as! NSDictionary
-                        input.username = dict["username"] as? String
-                        input.altname = dict["display_name"] as? String
+                        input.handle = dict["handle"] as? String
+                        input.username = dict["name"] as? String
                         input.banner_pic_link = dict["banner_pic_link"] as? String
                         input.profile_pic_link = dict["profile_pic_link"] as? String
                         input.user_description = dict["description"] as? String
@@ -165,9 +165,9 @@ class User: UITableViewCell {
     
     class func updateSelf(controller: DashboardController?) {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let username = current_user.username
+        let handle = current_user.handle
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/user")!)
-        var params = ["username": username!, "password_hash": passwordHash, "userid": "\(current_user.userid!)", "query_name": "\(current_user.username!)"] as Dictionary
+        var params = ["handle": handle!, "password_hash": passwordHash, "userid": "\(current_user.userid!)", "query_name": "\(current_user.handle!)"] as Dictionary
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -184,8 +184,8 @@ class User: UITableViewCell {
                         var data = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary
                         
                         var dict = data["user"] as! NSDictionary
-                        current_user.username = dict["username"] as? String
-                        current_user.altname = dict["display_name"] as? String
+                        current_user.handle = dict["handle"] as? String
+                        current_user.username = dict["name"] as? String
                         current_user.banner_pic_link = dict["banner_pic_link"] as? String
                         current_user.profile_pic_link = dict["profile_pic_link"] as? String
                         current_user.user_description = dict["description"] as? String
@@ -218,9 +218,9 @@ class User: UITableViewCell {
     
     class func followUser(user: User, target: AnyObject) {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let username = current_user.username
+        let handle = current_user.handle
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/follow/user")!)
-        var params = ["username": username!, "password_hash": passwordHash, "following_name": user.username!] as Dictionary
+        var params = ["handle": handle!, "password_hash": passwordHash, "following_name": user.handle!] as Dictionary
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -250,9 +250,9 @@ class User: UITableViewCell {
     
     class func unfollowUser(user: User, target: AnyObject) {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let username = current_user.username
+        let handle = current_user.handle
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/unfollow/user")!)
-        var params = ["username": username!, "password_hash": passwordHash, "following_name": user.username!] as Dictionary
+        var params = ["handle": handle!, "password_hash": passwordHash, "following_name": user.handle!] as Dictionary
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
             if error != nil {
@@ -266,7 +266,7 @@ class User: UITableViewCell {
                 } else if statusCode == HTTP_SUCCESS {
                     dispatch_async(dispatch_get_main_queue()) {
                         for (var i = 0; i < user_following.count; i++) {
-                            if user_following[i].username == user.username {
+                            if user_following[i].handle == user.handle {
                                 user_following.removeAtIndex(i)
                             }
                         }
@@ -286,9 +286,9 @@ class User: UITableViewCell {
     
     class func getUsersFollowing() {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let username = current_user.username
+        let handle = current_user.handle
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/user/following")!)
-        var params = ["username": username!, "password_hash": passwordHash, "query_name": current_user.username!] as Dictionary
+        var params = ["handle": handle!, "password_hash": passwordHash, "query_name": current_user.handle!] as Dictionary
         var result: [User] = []
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
@@ -310,8 +310,8 @@ class User: UITableViewCell {
                         for u in users {
                             var dict = u as! NSDictionary
                             var user = User()
-                            user.username = dict["username"] as? String
-                            user.altname = dict["display_name"] as? String
+                            user.handle = dict["handle"] as? String
+                            user.username = dict["name"] as? String
                             user.profile_pic_link = dict["profile_pic_link"] as? String
                             result.append(user)
                         }

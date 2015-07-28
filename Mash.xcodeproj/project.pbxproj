@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		3718EF291B57071D00AA5D26 /* Objective-C.h in Headers */ = {isa = PBXBuildFile; fileRef = 3718EF271B57071D00AA5D26 /* Objective-C.h */; };
 		3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718EF281B57071D00AA5D26 /* Objective-C.m */; };
+		371F863D1B67062F00BCBEDD /* MixerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 371F863C1B67062F00BCBEDD /* MixerCell.xib */; };
+		371F863F1B6708D900BCBEDD /* MixerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F863E1B6708D900BCBEDD /* MixerCell.swift */; };
 		3722ACE81B4DEDDE008473C3 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */; };
 		3722ACEA1B4DF1F2008473C3 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3722ACE91B4DF1F2008473C3 /* ImageCell.xib */; };
 		3722ACEC1B4DF1FF008473C3 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3722ACEB1B4DF1FF008473C3 /* ImageCell.swift */; };
@@ -75,7 +77,6 @@
 		37E799F11B3CC1D000D2E54D /* ProjectTrack.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D71B3CC1D000D2E54D /* ProjectTrack.xib */; };
 		37E799F21B3CC1D000D2E54D /* Track.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D81B3CC1D000D2E54D /* Track.xib */; };
 		37E799FC1B3CC1F600D2E54D /* KeychainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E799F51B3CC1F600D2E54D /* KeychainWrapper.m */; };
-		37F5FB0D1B3E0DE700605C0B /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F5FB0C1B3E0DE700605C0B /* sqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F183417BACCA4D316DF84567 /* Pods_Mash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8DF6AC8CCE7D187FEEE8D82 /* Pods_Mash.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -92,6 +93,8 @@
 /* Begin PBXFileReference section */
 		3718EF271B57071D00AA5D26 /* Objective-C.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Objective-C.h"; sourceTree = "<group>"; };
 		3718EF281B57071D00AA5D26 /* Objective-C.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Objective-C.m"; sourceTree = "<group>"; };
+		371F863C1B67062F00BCBEDD /* MixerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MixerCell.xib; sourceTree = "<group>"; };
+		371F863E1B6708D900BCBEDD /* MixerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MixerCell.swift; sourceTree = "<group>"; };
 		3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		3722ACE91B4DF1F2008473C3 /* ImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
 		3722ACEB1B4DF1FF008473C3 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
@@ -122,7 +125,7 @@
 		37DE77241B436F4A00952987 /* User.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = User.xib; sourceTree = "<group>"; };
 		37DE77261B4370B200952987 /* FollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowingViewController.swift; sourceTree = "<group>"; };
 		37E799851B3CC12D00D2E54D /* Mash-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mash-Bridging-Header.h"; sourceTree = "<group>"; };
-		37E799871B3CC1C600D2E54D /* DashboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardController.swift; sourceTree = "<group>"; };
+		37E799871B3CC1C600D2E54D /* DashboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DashboardController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		37E799881B3CC1C600D2E54D /* DirectUploadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectUploadViewController.swift; sourceTree = "<group>"; };
 		37E799891B3CC1C600D2E54D /* EntryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntryViewController.swift; sourceTree = "<group>"; };
 		37E7998A1B3CC1C600D2E54D /* ExploreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
@@ -164,7 +167,6 @@
 		37E799D81B3CC1D000D2E54D /* Track.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Track.xib; sourceTree = "<group>"; };
 		37E799F41B3CC1F600D2E54D /* KeychainWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainWrapper.h; sourceTree = "<group>"; };
 		37E799F51B3CC1F600D2E54D /* KeychainWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainWrapper.m; sourceTree = "<group>"; };
-		37F5FB0C1B3E0DE700605C0B /* sqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		65A069C569B0565C12B1DE57 /* Pods-Mash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mash.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mash/Pods-Mash.debug.xcconfig"; sourceTree = "<group>"; };
 		8E5C7599631EC276A2A7DA6C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		BC856ADAFC521A5BEAA61FB7 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -208,7 +210,6 @@
 		37A3C2BB1B3CC00600F77F2A = {
 			isa = PBXGroup;
 			children = (
-				37F5FB0C1B3E0DE700605C0B /* sqlite3.h */,
 				37A3C2C61B3CC00600F77F2A /* Mash */,
 				37A3C2DC1B3CC00600F77F2A /* MashTests */,
 				37A3C2C51B3CC00600F77F2A /* Products */,
@@ -319,6 +320,7 @@
 				379265FA1B5DDA6400E78F2E /* SwipeBar.swift */,
 				37E799CB1B3CC1D000D2E54D /* Track.swift */,
 				37E799CC1B3CC1D000D2E54D /* User.swift */,
+				371F863E1B6708D900BCBEDD /* MixerCell.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -332,13 +334,14 @@
 				37E799D21B3CC1D000D2E54D /* InstrumentCell.xib */,
 				37E799D31B3CC1D000D2E54D /* MashResultsHeaderView.xib */,
 				37E799D41B3CC1D000D2E54D /* Metronome.xib */,
+				371F863C1B67062F00BCBEDD /* MixerCell.xib */,
 				37E799D51B3CC1D000D2E54D /* Profile.xib */,
 				3782615B1B4B139400FC89A0 /* ProjectPlayer.xib */,
 				37E799D61B3CC1D000D2E54D /* ProjectTools.xib */,
 				37E799D71B3CC1D000D2E54D /* ProjectTrack.xib */,
+				379265F81B5DDA3600E78F2E /* SwipeBar.xib */,
 				37E799D81B3CC1D000D2E54D /* Track.xib */,
 				37DE77241B436F4A00952987 /* User.xib */,
-				379265F81B5DDA3600E78F2E /* SwipeBar.xib */,
 			);
 			path = XIB;
 			sourceTree = "<group>";
@@ -381,7 +384,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3718EF291B57071D00AA5D26 /* Objective-C.h in Headers */,
-				37F5FB0D1B3E0DE700605C0B /* sqlite3.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,6 +491,7 @@
 				37E799EF1B3CC1D000D2E54D /* Profile.xib in Resources */,
 				379265F91B5DDA3600E78F2E /* SwipeBar.xib in Resources */,
 				3722ACEA1B4DF1F2008473C3 /* ImageCell.xib in Resources */,
+				371F863D1B67062F00BCBEDD /* MixerCell.xib in Resources */,
 				37E799F11B3CC1D000D2E54D /* ProjectTrack.xib in Resources */,
 				373F0EFE1B3DEFC500DE92AB /* Female Chorus.aif in Resources */,
 				37E799ED1B3CC1D000D2E54D /* MashResultsHeaderView.xib in Resources */,
@@ -573,6 +576,7 @@
 				37E799AC1B3CC1C600D2E54D /* MashResultsController.swift in Sources */,
 				37E799A61B3CC1C600D2E54D /* DirectUploadViewController.swift in Sources */,
 				37E799BA1B3CC1C600D2E54D /* TabBarController.swift in Sources */,
+				371F863F1B6708D900BCBEDD /* MixerCell.swift in Sources */,
 				37E799A71B3CC1C600D2E54D /* EntryViewController.swift in Sources */,
 				3722ACE81B4DEDDE008473C3 /* ImageViewController.swift in Sources */,
 				3727B62D1B54881B00FD2F5C /* RecordViewController.swift in Sources */,
