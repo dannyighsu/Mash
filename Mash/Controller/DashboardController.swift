@@ -122,17 +122,17 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
             if following {
-                header.editButton.titleLabel!.text = "Unfollow"
+                header.editButton.setTitle("Unfollow", forState: UIControlState.Normal)
                 header.editButton.backgroundColor = lightGray()
-                header.editButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchDown)
+                header.editButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
             } else {
-                header.editButton.titleLabel!.text = "Follow"
+                header.editButton.setTitle("Follow", forState: UIControlState.Normal)
                 header.editButton.backgroundColor = lightBlue()
-                header.editButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchDown)
+                header.editButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
             }
             header.editButton.titleLabel!.textAlignment = .Center
         } else {
-            header.editButton.addTarget(self, action: "goToSettings:", forControlEvents: UIControlEvents.TouchDown)
+            header.editButton.addTarget(self, action: "goToSettings:", forControlEvents: UIControlEvents.TouchUpInside)
         }
         
         let tap1 = UITapGestureRecognizer(target: self, action: "goToFollowers:")

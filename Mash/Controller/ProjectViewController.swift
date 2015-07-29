@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import EZAudio
 
-class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate, MetronomeDelegate {
+class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate, MetronomeDelegate, ChannelDelegate {
 
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
@@ -110,6 +110,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
         cell.track = trackData
         cell.backgroundColor = lightGray()
+        cell.trackNumber = indexPath.row
+        cell.delegate = self
         cell.generateWaveform()
         return cell
     }
@@ -207,6 +209,11 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
+    // Channel Delegate
+    func channelVolumeDidChange(channel: Channel, number: Int, value: Float) {
+        self.audioPlayer!.audioPlayers[number].volume = value
+    }
+    
     // Save methods
     func save(name: String) -> Bool {
         var directory = applicationDocumentsDirectory()
@@ -217,7 +224,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             
             var compositionTrack: AVMutableCompositionTrack = composition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
             var asset: AVAsset = AVURLAsset(URL: NSURL(fileURLWithPath: track.trackURL), options: nil)
-            var tracks: NSArray = asset.tracksWithMediaType(AVMediaTypeAudio)
+            var tracks: NSArray = asset.tracks
             var clip: AVAssetTrack = tracks.objectAtIndex(0) as! AVAssetTrack
             compositionTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), ofTrack: clip, atTime: kCMTimeZero, error: nil)
         }
@@ -250,14 +257,23 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         var instruments: [String] = []
+        var families: [String] = []
+
         for track in self.data {
             for instr in track.instruments {
                 instruments.append(instr)
             }
+            for fam in track.instrumentFamilies {
+                families.append(fam)
+            }
         }
         var instrumentString = String(stringInterpolationSegment: instruments)
+        instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
+        var familyString = String(stringInterpolationSegment: families)
+        familyString = familyString.substringWithRange(Range<String.Index>(start: advance(familyString.startIndex, 1), end: advance(familyString.endIndex, -1)))
+        
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
-        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "song_name": name, "bpm": "0", "bar": "0", "key": "0", "instrument": instrumentString, "family": "", "genre": "", "subgenre": "", "feel": "0", "effects": "", "theme": "", "solo": "0", "format": ".m4a"]
+        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "title": name, "bpm": "0", "bar": "0", "key": "0", "instrument": "{\(instrumentString)}", "family": "{\(familyString)}", "genre": "{}", "subgenre": "{}", "feel": "0", "solo": "0", "format": ".m4a"]
 
         httpPost(params, request) {
             (data, statusCode, error) -> Void in

@@ -10,6 +10,10 @@ import Foundation
 import UIKit
 import EZAudio
 
+protocol ChannelDelegate {
+    func channelVolumeDidChange(channel: Channel, number: Int, value: Float)
+}
+
 class Channel: UITableViewCell, EZAudioFileDelegate {
     
     @IBOutlet weak var trackTitle: UILabel!
@@ -17,14 +21,19 @@ class Channel: UITableViewCell, EZAudioFileDelegate {
     @IBOutlet weak var instrumentImage: UIImageView!
     @IBOutlet weak var audioPlot: EZAudioPlot!
     @IBOutlet weak var staticAudioPlot: UIImageView!
+    @IBOutlet weak var optionsExtension: UIView!
+    @IBOutlet weak var volumeSlider: UISlider!
     var audioFile: EZAudioFile? = nil
     var track: Track?
+    var trackNumber: Int? = nil
+    var delegate: ChannelDelegate? = nil
     
-    convenience init(frame: CGRect, track: Track) {
+    convenience init(frame: CGRect, track: Track, trackNumber: Int, delegate: ChannelDelegate) {
         self.init(frame: frame)
         self.track = track
         self.trackTitle.text = track.titleText
         self.instrumentImage.image = findImage(track.instruments)
+        self.trackNumber = trackNumber
     }
     
     func generateWaveform() {
@@ -37,6 +46,10 @@ class Channel: UITableViewCell, EZAudioFileDelegate {
         self.audioPlot.gain = 2.0
         var data = self.audioFile!.getWaveformData()
         self.audioPlot.updateBuffer(data.buffers[0], withBufferSize: data.bufferSize)
+    }
+    
+    @IBAction func volumeDidChange(sender: UISlider) {
+        self.delegate?.channelVolumeDidChange(self, number: self.trackNumber!, value: sender.value)
     }
 
 }
