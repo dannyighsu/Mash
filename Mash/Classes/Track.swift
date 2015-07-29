@@ -62,5 +62,31 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         var data = self.audioFile!.getWaveformData()
         self.audioPlot.updateBuffer(data.buffers[0], withBufferSize: data.bufferSize)
     }
+    
+    class func mixTracks(name: String, tracks: [Track], completion: (exportSession: AVAssetExportSession) -> ()) -> Bool {
+        var directory = applicationDocumentsDirectory()
+        var nextClipTime: CMTime = kCMTimeZero
+        var composition: AVMutableComposition = AVMutableComposition()
+        for (var i = 0; i < tracks.count; i++) {
+            var track: Track = tracks[i]
+            
+            var compositionTrack: AVMutableCompositionTrack = composition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
+            var asset: AVAsset = AVURLAsset(URL: NSURL(fileURLWithPath: track.trackURL), options: nil)
+            var tracks: NSArray = asset.tracks
+            var clip: AVAssetTrack = tracks.objectAtIndex(0) as! AVAssetTrack
+            compositionTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), ofTrack: clip, atTime: kCMTimeZero, error: nil)
+        }
+        var newTrack = filePathString(name + ".m4a")
+        var exportSession: AVAssetExportSession? = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetAppleM4A)
+        if (exportSession == nil) {
+            return false
+        }
+        exportSession?.outputURL = NSURL(fileURLWithPath: newTrack)
+        exportSession?.outputFileType = AVFileTypeAppleM4A
+        exportSession?.exportAsynchronouslyWithCompletionHandler() {
+            completion(exportSession: exportSession!)
+        }
+        return true
+    }
 
 }

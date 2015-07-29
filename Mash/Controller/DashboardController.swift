@@ -132,6 +132,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             }
             header.editButton.titleLabel!.textAlignment = .Center
         } else {
+            header.editButton.setTitle("Edit Profile", forState: UIControlState.Normal)
             header.editButton.addTarget(self, action: "goToSettings:", forControlEvents: UIControlEvents.TouchUpInside)
         }
         

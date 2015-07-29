@@ -1202,7 +1202,7 @@
             </objects>
             <point key="canvasLocation" x="-982" y="-15"/>
         </scene>
-        <!--Dashboard-->
+        <!--Profile-->
         <scene sceneID="Ve9-CY-Hut">
             <objects>
                 <viewController storyboardIdentifier="DashboardController" id="gLO-81-nwt" customClass="DashboardController" customModule="Mash" customModuleProvider="target" sceneMemberID="viewController">
@@ -1233,7 +1233,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" id="rfI-hh-aaF"/>
+                    <tabBarItem key="tabBarItem" title="Profile" image="dashboard" id="rfI-hh-aaF"/>
                     <connections>
                         <outlet property="tracks" destination="Gb5-vy-SRn" id="Qbx-Hl-gap"/>
                     </connections>

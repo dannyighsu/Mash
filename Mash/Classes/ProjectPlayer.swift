@@ -14,13 +14,14 @@ import UIKit
     optional func showMixer()
     optional func didPressPlay(audioPlayer: ProjectPlayer)
     optional func didStopPlaying(audioPlayer: ProjectPlayer)
+    optional func didToggleRecording(audioPlayer: ProjectPlayer)
     func addTracks()
     func toggleMetronome()
 }
 
 class ProjectPlayer: UITableViewHeaderFooterView {
     
-    
+    @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var volumeSlider: UISlider!
@@ -48,6 +49,10 @@ class ProjectPlayer: UITableViewHeaderFooterView {
             self.pause()
         }
         self.delegate?.didPressPlay?(self)
+    }
+    
+    @IBAction func recordButtonPressed(sender: AnyObject) {
+        self.delegate?.didToggleRecording?(self)
     }
     
     @IBAction func addButtonPressed(sender: AnyObject) {

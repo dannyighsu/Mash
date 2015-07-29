@@ -135,7 +135,7 @@
                         <constraint firstAttribute="width" constant="111" id="Kd9-9l-Gaz"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="15"/>
-                    <state key="normal" title="Edit Profile">
+                    <state key="normal">
                         <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>

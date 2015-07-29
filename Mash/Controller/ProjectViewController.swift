@@ -166,6 +166,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     func saveAlert() {
         var alert = UIAlertView(title: "Saving your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
+        alert.textFieldAtIndex(0)?.text = self.audioPlayer!.titleLabel.text
         alert.show()
     }
     
@@ -216,35 +217,16 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // Save methods
     func save(name: String) -> Bool {
-        var directory = applicationDocumentsDirectory()
-        var nextClipTime: CMTime = kCMTimeZero
-        var composition: AVMutableComposition = AVMutableComposition()
-        for (var i = 0; i < self.data.count; i++) {
-            var track: Track = self.data[i]
-            
-            var compositionTrack: AVMutableCompositionTrack = composition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
-            var asset: AVAsset = AVURLAsset(URL: NSURL(fileURLWithPath: track.trackURL), options: nil)
-            var tracks: NSArray = asset.tracks
-            var clip: AVAssetTrack = tracks.objectAtIndex(0) as! AVAssetTrack
-            compositionTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), ofTrack: clip, atTime: kCMTimeZero, error: nil)
-        }
-        
-        var exportSession: AVAssetExportSession? = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetAppleM4A)
-        if (exportSession == nil) {
-            return false
-        }
-        var newTrack = directory.stringByAppendingPathComponent(name + ".m4a")
-        exportSession?.outputURL = NSURL(fileURLWithPath: newTrack)
-        exportSession?.outputFileType = AVFileTypeAppleM4A
-        exportSession?.exportAsynchronouslyWithCompletionHandler() {
-            if exportSession?.status == AVAssetExportSessionStatus.Completed {
-                Debug.printl("File export of track \(name) completed", sender: self)
-                self.uploadAction(newTrack, name: name + ".m4a")
-            } else if exportSession?.status == AVAssetExportSessionStatus.Failed {
-                Debug.printl("File export failed.", sender: self)
-            } else {
-                Debug.printl("File export status: \(exportSession?.status)", sender: self)
-            }
+        Track.mixTracks(name, tracks: self.data) {
+            (exportSession) in
+                if exportSession.status == AVAssetExportSessionStatus.Completed {
+                    Debug.printl("File export of track \(name) completed", sender: self)
+                    self.uploadAction(filePathString(name + ".m4a"), name: name + ".m4a")
+                } else if exportSession.status == AVAssetExportSessionStatus.Failed {
+                    Debug.printl("File export failed.", sender: self)
+                } else {
+                    Debug.printl("File export status: \(exportSession.status)", sender: self)
+                }
         }
         
         return true
@@ -300,6 +282,19 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
             }
         }
+    }
+    
+    func share() {
+        if self.data.count < 1 {
+            raiseAlert("Error", self, "There must be a track in your project to share.")
+            return
+        }
+        var name = self.audioPlayer!.titleLabel.text
+        var composition = Track.mixTracks(name, tracks: self.data) {
+            (exportSession) in
+            
+        }
+        
     }
     
     // Track management
