@@ -292,7 +292,11 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         var name = self.audioPlayer!.titleLabel.text
         var composition = Track.mixTracks(name, tracks: self.data) {
             (exportSession) in
-            
+            dispatch_async(dispatch_get_main_queue()) {
+                var sharingObjects = [filePathURL(name + ".m4a")]
+                var activityController = UIActivityViewController(activityItems: sharingObjects, applicationActivities: nil)
+                self.presentViewController(activityController, animated: true, completion: nil)
+            }
         }
         
     }

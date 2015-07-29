@@ -51,7 +51,7 @@ class ShareView: UIView, UICollectionViewDataSource, UICollectionViewDelegate {
             }
             return cell
         } else {
-            cell.photoView.image = UIImage
+            return cell
         }
     }
     
