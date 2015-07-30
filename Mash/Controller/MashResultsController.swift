@@ -156,7 +156,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     func done(sender: UIButton) {
         var track = sender.superview?.superview?.superview as! Track
         let project = returnProjectView(self.navigationController!) as ProjectViewController!
-        importTracks([track], self.navigationController, self.storyboard)
+        ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
         self.navigationController?.popViewControllerAnimated(true)
     }
     

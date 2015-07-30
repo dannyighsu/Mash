@@ -243,7 +243,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     
     func addTrack(sender: UIButton) {
         var track = sender.superview?.superview?.superview as! Track
-        importTracks([track], self.navigationController, self.storyboard)
+        ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
         let tabBarController = self.navigationController?.viewControllers[2] as! TabBarController
         tabBarController.selectedIndex = getTabBarController("project")
         self.back(nil)

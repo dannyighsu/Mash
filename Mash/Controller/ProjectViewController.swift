@@ -204,6 +204,32 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             self.metronome.toggle(nil)
         }
     }
+    
+    // Track management
+    func removeTrack(sender: UISwipeGestureRecognizer?) {
+        let track = sender?.view as! Channel
+        var trackIndex: Int? = nil
+        Debug.printl("Removing track \(track)", sender: self)
+        for (var i = 0; i < self.data.count; i++) {
+            if self.data[i].titleText == track.trackTitle.text {
+                self.data.removeAtIndex(i)
+                trackIndex = i
+            }
+        }
+        
+        self.tracks.reloadData()
+    }
+    
+    func playTracks(sender: AnyObject?) {
+        if self.audioPlayer!.audioPlayers.count == 0 {
+            return
+        }
+        if (self.audioPlayer!.audioPlayers.count > 0) {
+            self.audioPlayer!.stop()
+            return
+        }
+        self.audioPlayer!.play()
+    }
 
     // Metronome Delegate
     func tick(metronome: Metronome) {
@@ -215,7 +241,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.audioPlayer!.audioPlayers[number].volume = value
     }
     
-    // Save methods
+    // Preferences methods
     func save(name: String) -> Bool {
         Track.mixTracks(name, tracks: self.data) {
             (exportSession) in
@@ -298,33 +324,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.presentViewController(activityController, animated: true, completion: nil)
             }
         }
-        
-    }
-    
-    // Track management
-    func removeTrack(sender: UISwipeGestureRecognizer?) {
-        let track = sender?.view as! Channel
-        var trackIndex: Int? = nil
-        Debug.printl("Removing track \(track)", sender: self)
-        for (var i = 0; i < self.data.count; i++) {
-            if self.data[i].titleText == track.trackTitle.text {
-                self.data.removeAtIndex(i)
-                trackIndex = i
-            }
-        }
-
-        self.tracks.reloadData()
-    }
-    
-    func playTracks(sender: AnyObject?) {
-        if self.audioPlayer!.audioPlayers.count == 0 {
-            return
-        }
-        if (self.audioPlayer!.audioPlayers.count > 0) {
-            self.audioPlayer!.stop()
-            return
-        }
-        self.audioPlayer!.play()
     }
     
     func mash() {
@@ -340,7 +339,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.navigationController?.pushViewController(controller, animated: true)
     }
 
-    // New Project
     func confirmNewProject() {
         let alert = UIAlertView(title: "Create a New Project?", message: "You Will Lose Any Unsaved Changes", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "OK")
         alert.show()
@@ -357,10 +355,59 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         newTabBarController.replaceObjectAtIndex(projectViewIndex, withObject: newProjectView)
         tabBarController.setViewControllers(newTabBarController as [AnyObject], animated: true)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    class func importTracks(tracks: [Track], navigationController: UINavigationController?, storyboard: UIStoryboard?) {
+        var project: ProjectViewController? = nil
+        let tabBarController = navigationController?.viewControllers[2] as! UITabBarController
+        
+        for (var i = 0; i < tabBarController.viewControllers!.count; i++) {
+            let controller = tabBarController.viewControllers![i] as? ProjectViewController
+            if controller != nil {
+                Debug.printl("Using existing project view controller", sender: "helpers")
+                project = controller
+                break
+            }
+        }
+        
+        if project == nil {
+            Debug.printl("Something went horrendously wrong because project view does not exist.", sender: "helpers")
+            return
+        }
+        
+        // If this is the first track, set the project's bpm
+        if project!.data.count == 0 {
+            project!.bpm = tracks[0].bpm
+        }
+        
+        // Download new tracks asnychronously
+        project!.activityView.startAnimating()
+        
+        for track in tracks {
+            var URL = filePathURL(track.titleText + track.format)
+            download(getS3Key(track), URL, track_bucket) {
+                (result) in
+                track.trackURL = filePathString(track.titleText + track.format)
+                
+                if track.bpm != project!.bpm {
+                    var shiftAmount: Float = Float(project!.bpm) / Float(track.bpm)
+                    let newURL = AudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: "new_\(track.titleText)", amountToShift: shiftAmount)
+                    track.trackURL = newURL
+                }
+                
+                Debug.printl("Adding track with \(track.instruments), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
+                project?.data.append(track)
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    while project!.audioPlayer == nil {
+                        NSThread.sleepForTimeInterval(0.1)
+                    }
+                    project!.audioPlayer!.addTrack(track.trackURL)
+                    dispatch_async(dispatch_get_main_queue()) {
+                        project!.activityView.stopAnimating()
+                    }
+                }
+            }
+        }
     }
 
 }

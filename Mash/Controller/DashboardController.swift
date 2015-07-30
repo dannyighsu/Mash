@@ -62,7 +62,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     override func supportedInterfaceOrientations() -> Int {
         return Int(UIInterfaceOrientationMask.Portrait.rawValue)
     }
-
+    
+    // Table View Delegate
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -186,13 +187,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
 
-    func stopPlaying() {
-        if self.audioPlayer!.playing {
-            self.audioPlayer!.stop()
-        }
-    }
-
-    // Pull user tracks from API
+    // Track management
     func retrieveTracks() {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
@@ -220,13 +215,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
     }
-    
-    // Download track to play
-    func playTrack() {
-        download("Harp.aif", NSURL(fileURLWithPath: NSString(format: "%@/%@", applicationDocumentsDirectory(), "EZAudioTest.m4a") as String)!, track_bucket)
-    }
-    
-    // Update table with track data
+
     func updateTable(data: NSDictionary) {
         self.data = []
         var tracks = data["recordings"] as! NSArray
@@ -254,15 +243,13 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    // Add selected track to project
     func addTrack(sender: UIButton) {
         let track = sender.superview!.superview!.superview as! Track
-        importTracks([track], self.navigationController, self.storyboard)
+        ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
         let tabBarController = self.navigationController?.viewControllers[2] as! UITabBarController
         tabBarController.selectedIndex = getTabBarController("project")
     }
     
-    // Delete track from db
     func deleteTrack(track: Track, indexPath: NSIndexPath) {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let handle = current_user.handle!
@@ -292,6 +279,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
 
+    // Alert view delegate
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if alertView.title == "Change Display Name" {
             if buttonIndex == 1 {
@@ -304,6 +292,12 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    func deleteUser() {
+        var alert = UIAlertView(title: "Are you Sure?", message: "Delete your account?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "Yes")
+        alert.show()
+    }
+    
+    // Profile edititing
     func fetchPhotos(type: String) {
         var photoResults = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: nil)
         /*var userAlbumOptions = PHFetchOptions.new()
@@ -320,7 +314,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
-    // Change profile picture
     func changeProfilePic() {
         self.fetchPhotos("profile")
     }
@@ -335,7 +328,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    // Change banner
     func changeBanner() {
         self.fetchPhotos("banner")
     }
@@ -350,11 +342,16 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    // Change display name
     func changeName() {
         var alert = UIAlertView(title: "Change Display Name", message: "Enter a new name.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         alert.show()
+    }
+    
+    func stopPlaying() {
+        if self.audioPlayer!.playing {
+            self.audioPlayer!.stop()
+        }
     }
     
     func update(input: String, inputType: String) {
@@ -383,26 +380,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    func goToSettings(sender: AnyObject?) {
-        let settings = self.storyboard?.instantiateViewControllerWithIdentifier("SettingsViewController") as! SettingsViewController
-        settings.profile = self
-        self.navigationController?.pushViewController(settings, animated: true)
-    }
-    
-    func goToFollowers(sender: AnyObject?) {
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("FollowingViewController") as! FollowingViewController
-        controller.user = self.user
-        controller.type = "followers"
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    func goToFollowing(sender: AnyObject?) {
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("FollowingViewController") as! FollowingViewController
-        controller.user = self.user
-        controller.type = "following"
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
-    
     func follow(sender: UIButton) {
         self.user.follow(nil)
     }
@@ -411,19 +388,13 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         self.user.unfollow(nil)
     }
     
-    // Push direct upload page up
-    func goToDirectUpload(sender: AnyObject?) {
-        let upload = self.storyboard?.instantiateViewControllerWithIdentifier("DirectUploadViewController") as! DirectUploadViewController
-        self.navigationController?.pushViewController(upload, animated: true)
+    func logout() {
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("hasLoginKey")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("username")
+        Debug.printl("User has successfully logged out - popping to root view controller.", sender: self)
+        self.navigationController?.popToRootViewControllerAnimated(true)
     }
     
-    // Delete user alert
-    func deleteUser() {
-        var alert = UIAlertView(title: "Are you Sure?", message: "Delete your account?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "Yes")
-        alert.show()
-    }
-    
-    // Delete user from db
     func delete() {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let handle = current_user.handle
@@ -452,12 +423,30 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    // Log out
-    func logout() {
-        NSUserDefaults.standardUserDefaults().removeObjectForKey("hasLoginKey")
-        NSUserDefaults.standardUserDefaults().removeObjectForKey("username")
-        Debug.printl("User has successfully logged out - popping to root view controller.", sender: self)
-        self.navigationController?.popToRootViewControllerAnimated(true)
+    // Segues
+    func goToDirectUpload(sender: AnyObject?) {
+        let upload = self.storyboard?.instantiateViewControllerWithIdentifier("DirectUploadViewController") as! DirectUploadViewController
+        self.navigationController?.pushViewController(upload, animated: true)
+    }
+    
+    func goToSettings(sender: AnyObject?) {
+        let settings = self.storyboard?.instantiateViewControllerWithIdentifier("SettingsViewController") as! SettingsViewController
+        settings.profile = self
+        self.navigationController?.pushViewController(settings, animated: true)
+    }
+    
+    func goToFollowers(sender: AnyObject?) {
+        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("FollowingViewController") as! FollowingViewController
+        controller.user = self.user
+        controller.type = "followers"
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func goToFollowing(sender: AnyObject?) {
+        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("FollowingViewController") as! FollowingViewController
+        controller.user = self.user
+        controller.type = "following"
+        self.navigationController?.pushViewController(controller, animated: true)
     }
 
 }
