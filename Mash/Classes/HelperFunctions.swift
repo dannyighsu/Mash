@@ -88,54 +88,6 @@ func hashPassword(input: String) -> String {
     return hash!.hexString
 }
 
-// Adds input tracks to current project view
-func importTracks(tracks: [Track], navigationController: UINavigationController?, storyboard: UIStoryboard?) {
-    var project: ProjectViewController? = nil
-    let tabBarController = navigationController?.viewControllers[2] as! UITabBarController
-    
-    for (var i = 0; i < tabBarController.viewControllers!.count; i++) {
-        let controller = tabBarController.viewControllers![i] as? ProjectViewController
-        if controller != nil {
-            Debug.printl("Using existing project view controller", sender: "helpers")
-            project = controller
-            break
-        }
-    }
-    
-    if project == nil {
-        Debug.printl("Something went horrendously wrong because project view does not exist.", sender: "helpers")
-        return
-    }
-    
-    // If this is the first track, set the project's bpm
-    if project!.data.count == 0 {
-        project!.bpm = tracks[0].bpm
-    }
-    
-    // Download new tracks asnychronously
-    project!.activityView.startAnimating()
-    
-    for track in tracks {
-        var URL = filePathURL(track.titleText + track.format)
-        download(getS3Key(track), URL, track_bucket) {
-            (result) in
-            track.trackURL = filePathString(track.titleText + track.format)
-            Debug.printl("Adding track with \(track.instruments), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
-            project?.data.append(track)
-            let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-            dispatch_async(dispatch_get_global_queue(priority, 0)) {
-                while project!.audioPlayer == nil {
-                    NSThread.sleepForTimeInterval(0.1)
-                }
-                project!.audioPlayer!.addTrack(track.trackURL)
-                dispatch_async(dispatch_get_main_queue()) {
-                    project!.activityView.stopAnimating()
-                }
-            }
-        }
-    }
-}
-
 // Download from S3 bucket
 func download(key: String, url: NSURL, bucket: String) {
     if NSFileManager.defaultManager().fileExistsAtPath(url.path!) {

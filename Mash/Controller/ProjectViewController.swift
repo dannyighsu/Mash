@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import EZAudio
 
-class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate, MetronomeDelegate {
+class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate, MetronomeDelegate, ChannelDelegate {
 
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
@@ -32,8 +32,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tracks.tableFooterView = UIView(frame: CGRectZero)
 
         // Register nibs
-        let nib = UINib(nibName: "ProjectTrack", bundle: nil)
-        self.tracks.registerNib(nib, forCellReuseIdentifier: "ProjectTrack")
+        let nib = UINib(nibName: "Channel", bundle: nil)
+        self.tracks.registerNib(nib, forCellReuseIdentifier: "Channel")
         let header = UINib(nibName: "ProjectTools", bundle: nil)
         self.tracks.registerNib(header, forHeaderFooterViewReuseIdentifier: "ProjectTools")
         let player = UINib(nibName: "ProjectPlayer", bundle: nil)
@@ -104,12 +104,14 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ProjectTrack") as! ProjectTrack
+        let cell = tableView.dequeueReusableCellWithIdentifier("Channel") as! Channel
         let trackData = self.data[indexPath.row]
         cell.trackTitle.text = trackData.titleText
         cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
         cell.track = trackData
         cell.backgroundColor = lightGray()
+        cell.trackNumber = indexPath.row
+        cell.delegate = self
         cell.generateWaveform()
         return cell
     }
@@ -125,7 +127,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 return
             }
             var muted = self.audioPlayer!.muteTrack(trackNumber)
-            let track = self.tracks.cellForRowAtIndexPath(indexPath) as! ProjectTrack
+            let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Channel
             if muted {
                 track.speakerButton.setImage(UIImage(named: "speaker_white_2"), forState: UIControlState.Normal)
             } else {
@@ -164,6 +166,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     func saveAlert() {
         var alert = UIAlertView(title: "Saving your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
+        alert.textFieldAtIndex(0)?.text = self.audioPlayer!.titleLabel.text
         alert.show()
     }
     
@@ -201,43 +204,55 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             self.metronome.toggle(nil)
         }
     }
+    
+    // Track management
+    func removeTrack(sender: UISwipeGestureRecognizer?) {
+        let track = sender?.view as! Channel
+        var trackIndex: Int? = nil
+        Debug.printl("Removing track \(track)", sender: self)
+        for (var i = 0; i < self.data.count; i++) {
+            if self.data[i].titleText == track.trackTitle.text {
+                self.data.removeAtIndex(i)
+                trackIndex = i
+            }
+        }
+        
+        self.tracks.reloadData()
+    }
+    
+    func playTracks(sender: AnyObject?) {
+        if self.audioPlayer!.audioPlayers.count == 0 {
+            return
+        }
+        if (self.audioPlayer!.audioPlayers.count > 0) {
+            self.audioPlayer!.stop()
+            return
+        }
+        self.audioPlayer!.play()
+    }
 
     // Metronome Delegate
     func tick(metronome: Metronome) {
         
     }
     
-    // Save methods
+    // Channel Delegate
+    func channelVolumeDidChange(channel: Channel, number: Int, value: Float) {
+        self.audioPlayer!.audioPlayers[number].volume = value
+    }
+    
+    // Preferences methods
     func save(name: String) -> Bool {
-        var directory = applicationDocumentsDirectory()
-        var nextClipTime: CMTime = kCMTimeZero
-        var composition: AVMutableComposition = AVMutableComposition()
-        for (var i = 0; i < self.data.count; i++) {
-            var track: Track = self.data[i]
-            
-            var compositionTrack: AVMutableCompositionTrack = composition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
-            var asset: AVAsset = AVURLAsset(URL: NSURL(fileURLWithPath: track.trackURL), options: nil)
-            var tracks: NSArray = asset.tracksWithMediaType(AVMediaTypeAudio)
-            var clip: AVAssetTrack = tracks.objectAtIndex(0) as! AVAssetTrack
-            compositionTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), ofTrack: clip, atTime: kCMTimeZero, error: nil)
-        }
-        
-        var exportSession: AVAssetExportSession? = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetAppleM4A)
-        if (exportSession == nil) {
-            return false
-        }
-        var newTrack = directory.stringByAppendingPathComponent(name + ".m4a")
-        exportSession?.outputURL = NSURL(fileURLWithPath: newTrack)
-        exportSession?.outputFileType = AVFileTypeAppleM4A
-        exportSession?.exportAsynchronouslyWithCompletionHandler() {
-            if exportSession?.status == AVAssetExportSessionStatus.Completed {
-                Debug.printl("File export of track \(name) completed", sender: self)
-                self.uploadAction(newTrack, name: name + ".m4a")
-            } else if exportSession?.status == AVAssetExportSessionStatus.Failed {
-                Debug.printl("File export failed.", sender: self)
-            } else {
-                Debug.printl("File export status: \(exportSession?.status)", sender: self)
-            }
+        Track.mixTracks(name, tracks: self.data) {
+            (exportSession) in
+                if exportSession.status == AVAssetExportSessionStatus.Completed {
+                    Debug.printl("File export of track \(name) completed", sender: self)
+                    self.uploadAction(filePathString(name + ".m4a"), name: name + ".m4a")
+                } else if exportSession.status == AVAssetExportSessionStatus.Failed {
+                    Debug.printl("File export failed.", sender: self)
+                } else {
+                    Debug.printl("File export status: \(exportSession.status)", sender: self)
+                }
         }
         
         return true
@@ -250,14 +265,23 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         var instruments: [String] = []
+        var families: [String] = []
+
         for track in self.data {
             for instr in track.instruments {
                 instruments.append(instr)
             }
+            for fam in track.instrumentFamilies {
+                families.append(fam)
+            }
         }
         var instrumentString = String(stringInterpolationSegment: instruments)
+        instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
+        var familyString = String(stringInterpolationSegment: families)
+        familyString = familyString.substringWithRange(Range<String.Index>(start: advance(familyString.startIndex, 1), end: advance(familyString.endIndex, -1)))
+        
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
-        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "song_name": name, "bpm": "0", "bar": "0", "key": "0", "instrument": instrumentString, "family": "", "genre": "", "subgenre": "", "feel": "0", "effects": "", "theme": "", "solo": "0", "format": ".m4a"]
+        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "title": name, "bpm": "0", "bar": "0", "key": "0", "instrument": "{\(instrumentString)}", "family": "{\(familyString)}", "genre": "{}", "subgenre": "{}", "feel": "0", "solo": "0", "format": ".m4a"]
 
         httpPost(params, request) {
             (data, statusCode, error) -> Void in
@@ -286,30 +310,20 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    // Track management
-    func removeTrack(sender: UISwipeGestureRecognizer?) {
-        let track = sender?.view as! ProjectTrack
-        var trackIndex: Int? = nil
-        Debug.printl("Removing track \(track)", sender: self)
-        for (var i = 0; i < self.data.count; i++) {
-            if self.data[i].titleText == track.trackTitle.text {
-                self.data.removeAtIndex(i)
-                trackIndex = i
+    func share() {
+        if self.data.count < 1 {
+            raiseAlert("Error", self, "There must be a track in your project to share.")
+            return
+        }
+        var name = self.audioPlayer!.titleLabel.text
+        var composition = Track.mixTracks(name, tracks: self.data) {
+            (exportSession) in
+            dispatch_async(dispatch_get_main_queue()) {
+                var sharingObjects = [filePathURL(name + ".m4a")]
+                var activityController = UIActivityViewController(activityItems: sharingObjects, applicationActivities: nil)
+                self.presentViewController(activityController, animated: true, completion: nil)
             }
         }
-
-        self.tracks.reloadData()
-    }
-    
-    func playTracks(sender: AnyObject?) {
-        if self.audioPlayer!.audioPlayers.count == 0 {
-            return
-        }
-        if (self.audioPlayer!.audioPlayers.count > 0) {
-            self.audioPlayer!.stop()
-            return
-        }
-        self.audioPlayer!.play()
     }
     
     func mash() {
@@ -325,7 +339,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.navigationController?.pushViewController(controller, animated: true)
     }
 
-    // New Project
     func confirmNewProject() {
         let alert = UIAlertView(title: "Create a New Project?", message: "You Will Lose Any Unsaved Changes", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "OK")
         alert.show()
@@ -342,10 +355,59 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         newTabBarController.replaceObjectAtIndex(projectViewIndex, withObject: newProjectView)
         tabBarController.setViewControllers(newTabBarController as [AnyObject], animated: true)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    class func importTracks(tracks: [Track], navigationController: UINavigationController?, storyboard: UIStoryboard?) {
+        var project: ProjectViewController? = nil
+        let tabBarController = navigationController?.viewControllers[2] as! UITabBarController
+        
+        for (var i = 0; i < tabBarController.viewControllers!.count; i++) {
+            let controller = tabBarController.viewControllers![i] as? ProjectViewController
+            if controller != nil {
+                Debug.printl("Using existing project view controller", sender: "helpers")
+                project = controller
+                break
+            }
+        }
+        
+        if project == nil {
+            Debug.printl("Something went horrendously wrong because project view does not exist.", sender: "helpers")
+            return
+        }
+        
+        // If this is the first track, set the project's bpm
+        if project!.data.count == 0 {
+            project!.bpm = tracks[0].bpm
+        }
+        
+        // Download new tracks asnychronously
+        project!.activityView.startAnimating()
+        
+        for track in tracks {
+            var URL = NSURL(fileURLWithPath: track.trackURL)!
+            download(getS3Key(track), URL, track_bucket) {
+                (result) in
+                
+                if track.bpm != project!.bpm {
+                    var shiftAmount: Float = Float(project!.bpm) / Float(track.bpm)
+                    let newURL = AudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: "new_\(track.titleText)", amountToShift: shiftAmount)
+                    track.trackURL = newURL
+                    track.bpm = project!.bpm
+                }
+                
+                Debug.printl("Adding track with \(track.instruments), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
+                project?.data.append(track)
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    while project!.audioPlayer == nil {
+                        NSThread.sleepForTimeInterval(0.1)
+                    }
+                    project!.audioPlayer!.addTrack(track.trackURL)
+                    dispatch_async(dispatch_get_main_queue()) {
+                        project!.activityView.stopAnimating()
+                    }
+                }
+            }
+        }
     }
 
 }

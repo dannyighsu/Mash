@@ -38,6 +38,11 @@ func offWhite() -> UIColor {
     return UIColor(red: (240/255), green: (240/255), blue: (240/255), alpha: 1.0)
 }
 
+// Returns purple
+func purple() -> UIColor {
+    return UIColor(red: (149/255), green: 0, blue: (254/255), alpha: 1.0)
+}
+
 // Designates all keys
 var keysArray: [String] = [
     "C", "Cm", "C#", "C#m", "D", "Dm", "D#", "D#m", "E", "Em", "F", "Fm", "F#", "F#m", "G", "Gm", "G#", "G#m", "A", "Am", "A#", "A#m", "B", "Bm"

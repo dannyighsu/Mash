@@ -18,6 +18,9 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var instruments: [String] = []
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     
+    // Testing
+    // var audioPlayer: AVAudioPlayer? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,6 +37,17 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewWillAppear(animated)
         self.navigationItem.title = "Mash an Instrument"
         self.navigationItem.setHidesBackButton(false, animated: false)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // Testing
+        /*var superpowered = SuperpoweredModule()
+        superpowered.timeShift(NSURL(fileURLWithPath: self.recordings[0].trackURL), newName: "test")
+        
+        self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL("test.m4a"), error: nil)
+        self.audioPlayer!.play()*/
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -85,7 +99,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
         
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/mash")!)
-        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "family": "{\(instrumentString)}", "bpm": "\(self.recordings[0].bpm)"]
+        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "family": "{\(instrumentString)}"]
         self.activityView.startAnimating()
         httpPost(params, request) {
             (data, statusCode, error) -> Void in

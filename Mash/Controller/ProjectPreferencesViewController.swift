@@ -28,7 +28,7 @@ class ProjectPreferencesViewController: UIViewController, UITableViewDelegate, U
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 4
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -41,6 +41,8 @@ class ProjectPreferencesViewController: UIViewController, UITableViewDelegate, U
             cell.textLabel!.text = "New Project"
         } else if indexPath.row == 1 {
             cell.textLabel!.text = "Mash"
+        } else if indexPath.row == 2 {
+            cell.textLabel!.text = "Share"
         } else {
             cell.textLabel!.text = "Save"
         }
@@ -54,6 +56,9 @@ class ProjectPreferencesViewController: UIViewController, UITableViewDelegate, U
         } else if indexPath.row == 1 {
             self.navigationController?.popViewControllerAnimated(true)
             self.projectView?.mash()
+        } else if indexPath.row == 2 {
+            self.navigationController?.popViewControllerAnimated(true)
+            self.projectView?.share()
         } else {
             self.navigationController?.popViewControllerAnimated(true)
             self.projectView?.saveAlert()

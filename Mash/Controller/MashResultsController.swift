@@ -96,6 +96,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let track = self.trackTable.cellForRowAtIndexPath(indexPath) as! Track
 
+        // FIXME: hacky
         var i = 0
         while !NSFileManager.defaultManager().fileExistsAtPath(track.trackURL) {
             Debug.printnl("waiting...")
@@ -132,6 +133,14 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         if self.projectPlayers[0].playing {
             self.stopPlaying(nil)
         }
+        
+        if track.bpm != self.projectRecordings[0].bpm {
+            var shiftAmount: Float = Float(self.projectRecordings[0].bpm) / Float(track.bpm)
+            let newURL = AudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: "new_\(track.titleText)", amountToShift: shiftAmount)
+            track.trackURL = newURL
+            track.bpm = self.projectRecordings[0].bpm
+        }
+        
         var error: NSError? = nil
         self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
         self.audioPlayer!.play()
@@ -156,7 +165,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     func done(sender: UIButton) {
         var track = sender.superview?.superview?.superview as! Track
         let project = returnProjectView(self.navigationController!) as ProjectViewController!
-        importTracks([track], self.navigationController, self.storyboard)
+        ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
         self.navigationController?.popViewControllerAnimated(true)
     }
     

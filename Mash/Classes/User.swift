@@ -85,9 +85,9 @@ class User: UITableViewCell {
         }
     }
     
-    // Updates all displays of the view
+    // Update all displays of the view
     func updateDisplays() {
-        self.nameLabel.titleLabel?.text = self.display_name()
+        self.nameLabel.setTitle(self.display_name(), forState: UIControlState.Normal)
         var following = false
         for u in user_following {
             if u.handle! == self.handle {
@@ -96,17 +96,16 @@ class User: UITableViewCell {
             }
         }
         if following {
-            self.followButton.titleLabel!.text = "Unfollow"
-            self.followButton.backgroundColor = lightGray()
             self.followButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
-            self.followButton.removeTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
+            self.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
+            self.followButton.backgroundColor = lightGray()
         } else {
-            self.followButton.titleLabel!.text = "Follow"
-            self.followButton.backgroundColor = lightBlue()
             self.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
-            self.followButton.removeTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
         }
         self.profile_pic(self.profilePicture)
+        self.profilePicture?.layer.cornerRadius = self.profilePicture!.frame.size.width / 2
+        self.profilePicture?.layer.borderWidth = 1.0
+        self.profilePicture?.layer.masksToBounds = true
     }
     
     func follow(sender: AnyObject?) {
