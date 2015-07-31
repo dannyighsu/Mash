@@ -97,7 +97,7 @@ class ExploreViewController: UIViewController, UITableViewDelegate, UITableViewD
     // Add selected track to project
     func addTrack(sender: UIButton) {
         let track = sender.superview!.superview!.superview as! Track
-        importTracks([track], self.navigationController, self.storyboard)
+        ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
         let tabBarController = self.navigationController?.viewControllers[2] as! UITabBarController
         tabBarController.selectedIndex = getTabBarController("project")
     }

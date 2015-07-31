@@ -118,6 +118,18 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         }
         if self.scope == 0 {
             var track = self.tableView.cellForRowAtIndexPath(indexPath) as! Track
+            
+            // FIXME: hacky
+            var i = 0
+            while !NSFileManager.defaultManager().fileExistsAtPath(track.trackURL) {
+                Debug.printnl("waiting...")
+                NSThread.sleepForTimeInterval(0.5)
+                if i == 5 {
+                    raiseAlert("Error", self, "Unable to play track.")
+                    return
+                }
+                i += 1
+            }
             self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
             self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
             self.audioPlayer!.play()
@@ -234,7 +246,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             var dict = u as! NSDictionary
             var user = User()
             user.handle = dict["handle"] as? String
-            user.username = dict["username"] as? String
+            user.username = dict["name"] as? String
             user.profile_pic_link = dict["profile_pic_link"] as? String
             self.searchResults.append(user)
         }
@@ -243,7 +255,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     
     func addTrack(sender: UIButton) {
         var track = sender.superview?.superview?.superview as! Track
-        importTracks([track], self.navigationController, self.storyboard)
+        ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
         let tabBarController = self.navigationController?.viewControllers[2] as! TabBarController
         tabBarController.selectedIndex = getTabBarController("project")
         self.back(nil)

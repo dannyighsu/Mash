@@ -4,3 +4,10 @@
 
 #import "KeychainWrapper.h"
 #import "Objective-C.h"
+
+@interface AudioModule : NSObject
+
++(NSString *) timeShift:(NSURL *)url newName: (NSString*)newName amountToShift: (float)shiftAmount;
++(NSString *) pitchShift:(NSURL *)url newName: (NSString*)newName amountToShift: (int)shiftAmount;
+
+@end
