@@ -99,7 +99,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
         
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/mash")!)
-        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "family": "{\(instrumentString)}", "bpm": "\(self.recordings[0].bpm)"]
+        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "family": "{\(instrumentString)}"]
         self.activityView.startAnimating()
         httpPost(params, request) {
             (data, statusCode, error) -> Void in

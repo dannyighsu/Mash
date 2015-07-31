@@ -383,15 +383,15 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         project!.activityView.startAnimating()
         
         for track in tracks {
-            var URL = filePathURL(track.titleText + track.format)
+            var URL = NSURL(fileURLWithPath: track.trackURL)!
             download(getS3Key(track), URL, track_bucket) {
                 (result) in
-                track.trackURL = filePathString(track.titleText + track.format)
                 
                 if track.bpm != project!.bpm {
                     var shiftAmount: Float = Float(project!.bpm) / Float(track.bpm)
                     let newURL = AudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: "new_\(track.titleText)", amountToShift: shiftAmount)
                     track.trackURL = newURL
+                    track.bpm = project!.bpm
                 }
                 
                 Debug.printl("Adding track with \(track.instruments), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")

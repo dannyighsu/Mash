@@ -168,6 +168,18 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
+        
+        // FIXME: hacky
+        var i = 0
+        while !NSFileManager.defaultManager().fileExistsAtPath(track.trackURL) {
+            Debug.printnl("waiting...")
+            NSThread.sleepForTimeInterval(0.5)
+            if i == 5 {
+                raiseAlert("Error", self, "Unable to play track.")
+                return
+            }
+            i += 1
+        }
         self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(track.titleText + track.format), error: nil)
         self.audioPlayer!.play()
         tableView.deselectRowAtIndexPath(indexPath, animated: true)

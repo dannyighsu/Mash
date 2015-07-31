@@ -118,6 +118,18 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         }
         if self.scope == 0 {
             var track = self.tableView.cellForRowAtIndexPath(indexPath) as! Track
+            
+            // FIXME: hacky
+            var i = 0
+            while !NSFileManager.defaultManager().fileExistsAtPath(track.trackURL) {
+                Debug.printnl("waiting...")
+                NSThread.sleepForTimeInterval(0.5)
+                if i == 5 {
+                    raiseAlert("Error", self, "Unable to play track.")
+                    return
+                }
+                i += 1
+            }
             self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
             self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
             self.audioPlayer!.play()
