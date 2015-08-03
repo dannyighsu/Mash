@@ -66,11 +66,11 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.microphone?.startFetchingAudio()
         
         // Button targets
-        self.playButton.addTarget(self, action: "play:", forControlEvents: UIControlEvents.TouchDown)
-        self.recordButton.addTarget(self, action: "record:", forControlEvents: UIControlEvents.TouchDown)
-        self.stopButton.addTarget(self, action: "stop:", forControlEvents: UIControlEvents.TouchDown)
-        self.clearButton.addTarget(self, action: "clear:", forControlEvents: UIControlEvents.TouchDown)
-        self.saveButton.addTarget(self, action: "save:", forControlEvents: UIControlEvents.TouchDown)
+        self.playButton.addTarget(self, action: "play:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.recordButton.addTarget(self, action: "record:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.stopButton.addTarget(self, action: "stop:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.clearButton.addTarget(self, action: "clear:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.saveButton.addTarget(self, action: "save:", forControlEvents: UIControlEvents.TouchUpInside)
         
         // Configure toolsView table
         self.toolsView.delegate = self
@@ -138,8 +138,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     func stop(sender: AnyObject?) {
         if self.player != nil {
-            self.player!.pause()
             self.player!.seekToFrame(0)
+            self.player!.pause()
+            self.player!.currentTime = 0
             self.playButton.setImage(UIImage(named: "Play"), forState: UIControlState.Normal)
         }
     }
