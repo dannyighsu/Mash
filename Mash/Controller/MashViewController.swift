@@ -132,8 +132,8 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MashResultsController") as! MashResultsController
         controller.projectRecordings = self.recordings
         var tracks = inputData["recordings"] as! NSArray
-        for t in tracks {
-            var dict = t as! NSDictionary
+        for i in 0...tracks.count - 1 {
+            var dict = tracks[i] as! NSDictionary
             var instruments = dict["instrument"] as! NSArray
             var instrument = ""
             if instruments.count != 0 {
@@ -148,7 +148,10 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
             var url = (dict["song_name"] as! String) + (dict["format"] as! String)
             var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["handle"] as! String, format: dict["format"] as! String)
             
-            controller.results.append(track)
+            controller.allResults.append(track)
+            if i < DEFAULT_DISPLAY_AMOUNT {
+                controller.results.append(track)
+            }
         }
         self.activityView.stopAnimating()
         var index = 0

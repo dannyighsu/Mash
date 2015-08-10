@@ -12,10 +12,14 @@ import AVFoundation
 
 class SearchViewController: UITableViewController, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating {
    
-    var searchResults: [AnyObject] = []
     var searchController: UISearchController?
     var audioPlayer: AVAudioPlayer? = nil
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+    // Holds current search results
+    var searchResults: [AnyObject] = []
+    // Holds all search results
+    var allResults: [AnyObject] = []
+    // Current search scope
     var scope: Int = 0
     
     override func viewDidLoad() {
@@ -42,7 +46,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.tableView.tableHeaderView = self.searchController?.searchBar
         self.definesPresentationContext = true
         self.searchController?.searchBar.sizeToFit()
-        self.searchController?.searchBar.setShowsCancelButton(true, animated: true)
+        self.searchController?.searchBar.setShowsCancelButton(true, animated: false)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -59,16 +63,14 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.navigationController?.navigationBarHidden = false
     }
     
+    // Table View Delegate
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.searchResults.count
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if self.scope == 0 {
-            
-        } else {
-            let user = cell as! User
-            user.updateDisplays()
+        if indexPath.row == self.searchResults.count - 1 {
+            self.loadNextData()
         }
     }
     
@@ -104,6 +106,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             user.handle = userData.handle
             user.username = userData.username
             user.profile_pic_link = userData.profile_pic_link
+            user.updateDisplays()
             return user
         }
     }
@@ -140,6 +143,21 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         }
     }
     
+    func loadNextData() {
+        var currentNumResults = self.searchResults.count - 1
+        if currentNumResults == self.allResults.count - 1 {
+            return
+        }
+        for i in currentNumResults...currentNumResults + 15 {
+            if i >= self.allResults.count {
+                break
+            }
+            self.searchResults.append(self.allResults[i])
+        }
+        self.tableView.reloadData()
+    }
+    
+    // Search Controller
     func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         self.scope = selectedScope
         self.searchResults = []
@@ -151,6 +169,10 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             return false
         }
         return true
+    }
+    
+    func didDismissSearchController(searchController: UISearchController) {
+        searchController.searchBar.setShowsCancelButton(true, animated: true)
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
@@ -215,10 +237,11 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     func updateResults(data: NSDictionary) {
+        self.allResults = []
         self.searchResults = []
         var tracks = data["recordings"] as! NSArray
-        for t in tracks {
-            var dict = t as! NSDictionary
+        for i in 0...tracks.count - 1 {
+            var dict = tracks[i] as! NSDictionary
             var instruments = dict["instrument"] as! NSArray
             var instrument = ""
             if instruments.count != 0 {
@@ -234,21 +257,28 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             
             var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["handle"] as! String, format: dict["format"] as! String)
             
-            self.searchResults.append(track)
+            self.allResults.append(track)
+            if i < DEFAULT_DISPLAY_AMOUNT {
+                self.searchResults.append(track)
+            }
         }
         self.tableView.reloadData()
     }
     
     func updateUserResults(data: NSDictionary) {
         self.searchResults = []
+        self.allResults = []
         var users = data["users"] as! NSArray
-        for u in users {
-            var dict = u as! NSDictionary
+        for i in 0...users.count {
+            var dict = users[i] as! NSDictionary
             var user = User()
             user.handle = dict["handle"] as? String
             user.username = dict["name"] as? String
             user.profile_pic_link = dict["profile_pic_link"] as? String
-            self.searchResults.append(user)
+            self.allResults.append(user)
+            if i < DEFAULT_DISPLAY_AMOUNT {
+                self.searchResults.append(user)
+            }
         }
         self.tableView.reloadData()
     }

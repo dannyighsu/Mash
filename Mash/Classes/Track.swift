@@ -70,9 +70,10 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         for (var i = 0; i < tracks.count; i++) {
             var track: Track = tracks[i]
             
-            var compositionTrack: AVMutableCompositionTrack = composition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
+            var compositionTrack: AVMutableCompositionTrack = composition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID(kCMPersistentTrackID_Invalid))
             var asset: AVAsset = AVURLAsset(URL: NSURL(fileURLWithPath: track.trackURL), options: nil)
-            var tracks: NSArray = asset.tracks
+            println(asset.tracks)
+            var tracks: NSArray = asset.tracksWithMediaType(AVMediaTypeAudio)
             var clip: AVAssetTrack = tracks.objectAtIndex(0) as! AVAssetTrack
             compositionTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), ofTrack: clip, atTime: kCMTimeZero, error: nil)
         }

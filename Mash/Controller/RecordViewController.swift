@@ -52,6 +52,10 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             Debug.printl("Error setting up session: \(error?.localizedDescription)", sender: self)
         }
         session.setActive(true, error: &error)
+        /*let output = session.currentRoute.outputs.first as! AVAudioSessionPortDescription
+        if output.portType == "Receiver" {
+        }*/
+        session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker, error: nil)
         if error != nil {
             Debug.printl("Error setting session active: \(error?.localizedDescription)", sender: self)
         }

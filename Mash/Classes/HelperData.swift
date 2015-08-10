@@ -17,6 +17,7 @@ var user_following: [User] = []
 let track_bucket: String = "mash1-tracks"
 let profile_bucket: String = "mash-profiles"
 let banner_bucket: String = "mash-banners"
+let DEFAULT_DISPLAY_AMOUNT = 15
 
 // Returns light blue
 func lightBlue() -> UIColor {

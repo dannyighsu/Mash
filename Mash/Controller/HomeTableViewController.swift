@@ -85,6 +85,13 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.row == self.data.count - 1 {
+            self.loadNextData()
+        }
+    }
+    
+    func loadNextData() {
+        
     }
 
     // Check if project view exists in memory, if not, create one.

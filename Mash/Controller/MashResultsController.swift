@@ -15,6 +15,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     
     @IBOutlet weak var trackTable: UITableView!
     var results: [Track] = []
+    var allResults: [Track] = []
     var projectRecordings: [Track] = []
     var projectPlayers: [AVAudioPlayer] = []
     var audioPlayer: AVAudioPlayer? = nil
@@ -46,6 +47,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         self.navigationController?.navigationBarHidden = false
     }
     
+    // Table View Delegate
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -55,7 +57,9 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        
+        if indexPath.row == self.results.count - 1 {
+            self.loadNextData()
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -126,6 +130,20 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.trackTable.dequeueReusableHeaderFooterViewWithIdentifier("MashResultsHeaderView") as! MashResultsHeaderView
         return header
+    }
+    
+    func loadNextData() {
+        var currentNumResults = self.results.count - 1
+        if currentNumResults == self.allResults.count - 1 {
+            return
+        }
+        for i in currentNumResults...currentNumResults + 15 {
+            if i >= self.allResults.count {
+                break
+            }
+            self.results.append(self.allResults[i])
+        }
+        self.trackTable.reloadData()
     }
     
     func playTracks(track: Track) {

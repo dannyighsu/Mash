@@ -23,6 +23,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = configuration
         
+        // Check if update required
+        var info: NSDictionary = NSBundle.mainBundle().infoDictionary!
+        var appID = info["CFBundleIdentifier"] as! String
+        let url = NSURL(string: "http://itunes.apple.com/lookup?bundleId=\(appID)")
+        var data = NSData(contentsOfURL: url!)!
+        var lookup = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as! NSDictionary
+        
+        if lookup["resultCount"]!.integerValue == 1 {
+            var appStoreVersion = ((lookup["results"] as! NSArray)[0] as! NSDictionary)["version"] as! String
+            var currentVersion = info["CFBundleShortVersionString"] as! String
+            if appStoreVersion != currentVersion {
+                Debug.printl("version oudated", sender: nil)
+                // Handle outdated version
+            }
+        }
+        
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
