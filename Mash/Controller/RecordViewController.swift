@@ -162,6 +162,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     }
     
     func save(sender: AnyObject?) {
+        if self.player == nil || self.audioFile == nil {
+            return
+        }
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("UploadViewController") as! UploadViewController
         controller.recording = self.audioFile
         controller.bpm = Int(60.0 / Double(self.metronome!.duration))

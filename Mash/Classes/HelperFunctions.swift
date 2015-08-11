@@ -108,8 +108,7 @@ func download(key: String, url: NSURL, bucket: String) {
             } else {
                 Debug.printl("Download Error: \(task.error)", sender: "helpers")
             }
-        }
-        if (task.result != nil) {
+        } else if (task.result != nil) {
             let downloadOutput: AWSS3TransferManagerDownloadOutput = task.result as! AWSS3TransferManagerDownloadOutput
             Debug.printl("download complete:\(downloadOutput)", sender: "helpers")
             return task
@@ -136,8 +135,8 @@ func download(key: String, url: NSURL, bucket: String, completion: (result: AWSS
             } else {
                 Debug.printl("Download Error: \(task.error)", sender: "helpers")
             }
-        }
-        if (task.result != nil) {
+            completion(result: nil)
+        } else if (task.result != nil) {
             let downloadOutput: AWSS3TransferManagerDownloadOutput = task.result as! AWSS3TransferManagerDownloadOutput
             Debug.printl("download complete: \(downloadOutput)", sender: "helpers")
             completion(result: downloadOutput)
@@ -164,10 +163,35 @@ func upload(key: String, url: NSURL, bucket: String) {
             } else {
                 Debug.printl("Upload Error: \(task.error)", sender: "helpers")
             }
-        }
-        if (task.result != nil) {
+        } else if (task.result != nil) {
             let uploadOutput: AWSS3TransferManagerUploadOutput = task.result as! AWSS3TransferManagerUploadOutput
             Debug.printl("File uploaded succesfully", sender: "helpers")
+        }
+        return nil
+    }
+}
+
+func upload(key: String, url: NSURL, bucket: String, completion: (result: AWSS3TransferManagerUploadOutput?) -> Void) {
+    let request: AWSS3TransferManagerUploadRequest = AWSS3TransferManagerUploadRequest.new()
+    request.bucket = bucket
+    request.key = key
+    request.body = url
+    let transferManager: AWSS3TransferManager = AWSS3TransferManager.defaultS3TransferManager()
+    
+    transferManager.upload(request).continueWithBlock() {
+        (task: AWSTask!) -> AnyObject! in
+        if (task.error != nil) {
+            if task.error.domain == AWSS3TransferManagerErrorDomain {
+                Debug.printl("Upload Error: \(task.error)", sender: "helpers")
+                return nil
+            } else {
+                Debug.printl("Upload Error: \(task.error)", sender: "helpers")
+            }
+            completion(result: nil)
+        } else if (task.result != nil) {
+            let uploadOutput: AWSS3TransferManagerUploadOutput = task.result as! AWSS3TransferManagerUploadOutput
+            Debug.printl("File uploaded succesfully", sender: "helpers")
+            completion(result: uploadOutput)
         }
         return nil
     }
@@ -176,6 +200,11 @@ func upload(key: String, url: NSURL, bucket: String) {
 // Returns AWSS3 bucket name
 func getS3Key(track: Track) -> String {
     return "\(track.userText)~~\(track.titleText)\(track.format)"
+}
+
+// Returns AWSS3 waveform bucket name
+func getS3WaveformKey(track: Track) -> String {
+    return "\(track.userText)~~\(track.titleText)_waveform.jpg"
 }
 
 // Returns directory to application's documents
@@ -229,4 +258,13 @@ func raiseAlert(input: String, delegate: UIViewController, message: String) {
         alert.delegate = delegate
         alert.show()
     }
+}
+
+// Save view as UIImage
+func takeShotOfView(view: UIView) -> UIImage {
+    UIGraphicsBeginImageContext(CGSizeMake(view.frame.size.width, view.frame.size.height))
+    view.drawViewHierarchyInRect(CGRectMake(0, 0, view.frame.size.width, view.frame.size.height), afterScreenUpdates: true)
+    var image = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    return image
 }
