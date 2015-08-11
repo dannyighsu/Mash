@@ -92,11 +92,10 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             track.format = trackData.format
             track.bpm = trackData.bpm
             track.activityView.startAnimating()
-            download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
+            download(getS3WaveformKey(track), filePathURL(getS3WaveformKey(track)), waveform_bucket) {
                 (result) in
-                dispatch_async(dispatch_get_main_queue()) {
-                    track.generateWaveform()
-                    track.activityView.stopAnimating()
+                if result != nil {
+                    track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
                 }
             }
             return track
@@ -105,7 +104,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             let userData = self.searchResults[indexPath.row] as! User
             user.handle = userData.handle
             user.username = userData.username
-            user.profile_pic_link = userData.profile_pic_link
+            user.profile_pic_key = "\(user.handle)~~profile_pic.jpg"
             user.updateDisplays()
             return user
         }
@@ -121,21 +120,16 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         }
         if self.scope == 0 {
             var track = self.tableView.cellForRowAtIndexPath(indexPath) as! Track
-            
-            // FIXME: hacky
-            var i = 0
-            while !NSFileManager.defaultManager().fileExistsAtPath(track.trackURL) {
-                Debug.printnl("waiting...")
-                NSThread.sleepForTimeInterval(0.5)
-                if i == 5 {
-                    raiseAlert("Error", self, "Unable to play track.")
-                    return
+            download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
+                (result) in
+                dispatch_async(dispatch_get_main_queue()) {
+                    track.generateWaveform()
+                    track.activityView.stopAnimating()
+                    self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                    self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
+                    self.audioPlayer!.play()
                 }
-                i += 1
             }
-            self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
-            self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
-            self.audioPlayer!.play()
         } else {
             let user = self.tableView.cellForRowAtIndexPath(indexPath) as! User
             User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
@@ -269,12 +263,12 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.searchResults = []
         self.allResults = []
         var users = data["users"] as! NSArray
-        for i in 0...users.count {
+        for i in 0...users.count - 1 {
             var dict = users[i] as! NSDictionary
             var user = User()
             user.handle = dict["handle"] as? String
             user.username = dict["name"] as? String
-            user.profile_pic_link = dict["profile_pic_link"] as? String
+            user.profile_pic_key = "\(user.handle)~~profile_pic.jpg"
             self.allResults.append(user)
             if i < DEFAULT_DISPLAY_AMOUNT {
                 self.searchResults.append(user)

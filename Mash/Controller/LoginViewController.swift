@@ -123,13 +123,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         var data = response["user"] as! NSDictionary
                         current_user.handle = handle
                         current_user.username = data["name"] as? String
-                        current_user.profile_pic_link = data["profile_pic_link"] as? String
-                        current_user.banner_pic_link = data["banner_pic_link"] as? String
                         current_user.followers = String(data["followers_count"] as! Int)
                         current_user.following = String(data["following_count"] as! Int)
                         current_user.tracks = String(data["track_count"] as! Int)
                         current_user.user_description = data["description"] as? String
                         current_user.userid = data["id"] as? Int
+                        current_user.profile_pic_key = "\(current_user.handle)~~profile_pic.jpg"
+                        current_user.banner_pic_key = "\(current_user.handle)~~banner.jpg"
                         self!.completeLogin(handle, password: password)
                     }
                 } else {

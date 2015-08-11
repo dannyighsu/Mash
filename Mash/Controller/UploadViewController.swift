@@ -68,6 +68,9 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
+        if contains(self.instruments, cell.instrument) {
+            return
+        }
         self.instruments.append(cell.instrument)
         cell.layer.borderColor = darkGray().CGColor
         cell.backgroundColor = lightGray()

@@ -16,8 +16,8 @@ class User: UITableViewCell {
     @IBOutlet weak var nameLabel: UIButton!
     var handle: String? = nil
     var username: String? = nil
-    var profile_pic_link: String? = nil
-    var banner_pic_link: String? = nil
+    var profile_pic_key: String? = nil
+    var banner_pic_key: String? = nil
     var followers: String? = nil
     var following: String? = nil
     var tracks: String? = nil
@@ -28,20 +28,20 @@ class User: UITableViewCell {
         self.init(frame: CGRectZero)
         self.handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as? String
         self.username = ""
-        self.profile_pic_link = ""
-        self.banner_pic_link = ""
+        self.profile_pic_key = ""
+        self.banner_pic_key = ""
         self.followers = "0"
         self.following = "0"
         self.tracks = "0"
         self.user_description = ""
     }
     
-    convenience init(handle: String?, username: String?, profile_pic_link: String?, banner_pic_link: String?, followers: String?, following: String?, tracks: String?, description: String?) {
+    convenience init(handle: String?, username: String?, profile_pic_key: String?, banner_pic_key: String?, followers: String?, following: String?, tracks: String?, description: String?) {
         self.init(frame: CGRectZero)
         self.handle = handle
         self.username = username
-        self.profile_pic_link = profile_pic_link
-        self.banner_pic_link = banner_pic_link
+        self.profile_pic_key = profile_pic_key
+        self.banner_pic_key = banner_pic_key
         self.followers = followers
         self.following = following
         self.tracks = tracks
@@ -58,28 +58,32 @@ class User: UITableViewCell {
     }
     
     func profile_pic(imageView: UIImageView) {
-        if count(self.profile_pic_link!) == 0 {
+        if count(self.profile_pic_key!) == 0 {
             imageView.image = UIImage(named: "no_profile_pic")!
             return
         } else {
-            download("\(self.handle!)~~profile_pic.jpg", filePathURL(self.profile_pic_link), profile_bucket) {
+            download("\(self.handle!)~~profile_pic.jpg", filePathURL(self.profile_pic_key), profile_bucket) {
                 (result) -> Void in
-                dispatch_async(dispatch_get_main_queue()) {
-                    imageView.image = UIImage(contentsOfFile: filePathString(self.profile_pic_link))!
+                if result != nil {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        imageView.image = UIImage(contentsOfFile: filePathString(self.profile_pic_key))!
+                    }
                 }
             }
         }
     }
     
     func banner_pic(imageView: UIImageView) {
-        if count(self.banner_pic_link!) == 0 {
+        if count(self.banner_pic_key!) == 0 {
             imageView.image = UIImage(named: "no_banner")!
             return
         } else {
-            download("\(self.handle!)~~banner.jpg", filePathURL(self.banner_pic_link), banner_bucket) {
+            download("\(self.handle!)~~banner.jpg", filePathURL(self.banner_pic_key), banner_bucket) {
                 (result) -> Void in
-                dispatch_async(dispatch_get_main_queue()) {
-                    imageView.image = UIImage(contentsOfFile: filePathString(self.banner_pic_link))!
+                if result != nil {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        imageView.image = UIImage(contentsOfFile: filePathString(self.banner_pic_key))!
+                    }
                 }
             }
         }
@@ -142,12 +146,12 @@ class User: UITableViewCell {
                         var dict = data["user"] as! NSDictionary
                         input.handle = dict["handle"] as? String
                         input.username = dict["name"] as? String
-                        input.banner_pic_link = dict["banner_pic_link"] as? String
-                        input.profile_pic_link = dict["profile_pic_link"] as? String
                         input.user_description = dict["description"] as? String
                         input.followers = String(dict["followers"] as! Int)
                         input.following = String(dict["following"] as! Int)
                         input.tracks = String(dict["track_count"] as! Int)
+                        input.banner_pic_key = "\(input.handle)~~banner.jpg"
+                        input.profile_pic_key = "\(input.handle)~~profile_pic.jpg"
 
                         let controller = storyboard.instantiateViewControllerWithIdentifier("DashboardController") as! DashboardController
                         controller.user = input
@@ -185,12 +189,12 @@ class User: UITableViewCell {
                         var dict = data["user"] as! NSDictionary
                         current_user.handle = dict["handle"] as? String
                         current_user.username = dict["name"] as? String
-                        current_user.banner_pic_link = dict["banner_pic_link"] as? String
-                        current_user.profile_pic_link = dict["profile_pic_link"] as? String
                         current_user.user_description = dict["description"] as? String
                         current_user.followers = String(dict["followers"] as! Int)
                         current_user.following = String(dict["following"] as! Int)
                         current_user.tracks = String(dict["track_count"] as! Int)
+                        current_user.banner_pic_key = "\(current_user.handle)~~banner.jpg"
+                        current_user.profile_pic_key = "\(current_user.handle)~~profile_pic.jpg"
                         
                         if controller != nil {
                             controller!.parentViewController?.navigationItem.title! = current_user.display_name()!
@@ -311,7 +315,7 @@ class User: UITableViewCell {
                             var user = User()
                             user.handle = dict["handle"] as? String
                             user.username = dict["name"] as? String
-                            user.profile_pic_link = dict["profile_pic_link"] as? String
+                            user.profile_pic_key = "\(user.handle)~~profile_pic.jpg"
                             result.append(user)
                         }
                         user_following = result

@@ -87,14 +87,14 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         track.instrumentImage.image = findImage(track.instrumentFamilies)
         track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
         track.activityView.startAnimating()
-        download(getS3WaveformKey(track), filePathURL("\(track.titleText)_waveform.jpg"), waveform_bucket) {
+        download(getS3WaveformKey(track), filePathURL(getS3WaveformKey(track)), waveform_bucket) {
             (result) in
             dispatch_async(dispatch_get_main_queue()) {
                 track.activityView.stopAnimating()
             }
             if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
-                    track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString("\(track.titleText)_waveform.jpg"))
+                    track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
                 }
             }
         }
