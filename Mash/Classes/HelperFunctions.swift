@@ -119,7 +119,7 @@ func download(key: String, url: NSURL, bucket: String) {
 
 func download(key: String, url: NSURL, bucket: String, completion: (result: AWSS3TransferManagerDownloadOutput?) -> Void) {
     if NSFileManager.defaultManager().fileExistsAtPath(url.path!) {
-        return completion(result: nil)
+        return completion(result: AWSS3TransferManagerDownloadOutput())
     }
     let request: AWSS3TransferManagerDownloadRequest = AWSS3TransferManagerDownloadRequest.new()
     request.bucket = bucket

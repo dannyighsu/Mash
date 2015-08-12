@@ -118,7 +118,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                             var follower = User()
                             follower.handle = dict["handle"] as? String
                             follower.username = dict["name"] as? String
-                            follower.profile_pic_key = "\(follower.handle)~~profile_pic.jpg"
+                            follower.profile_pic_key = "\(follower.handle!)~~profile_pic.jpg"
                             self.data.append(follower)
                         }
                         self.users.reloadData()

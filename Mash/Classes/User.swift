@@ -62,11 +62,11 @@ class User: UITableViewCell {
             imageView.image = UIImage(named: "no_profile_pic")!
             return
         } else {
-            download("\(self.handle!)~~profile_pic.jpg", filePathURL(self.profile_pic_key), profile_bucket) {
+            download("\(self.handle!)~~profile_pic.jpg", filePathURL(self.profile_pic_key!), profile_bucket) {
                 (result) -> Void in
                 if result != nil {
                     dispatch_async(dispatch_get_main_queue()) {
-                        imageView.image = UIImage(contentsOfFile: filePathString(self.profile_pic_key))!
+                        imageView.image = UIImage(contentsOfFile: filePathString(self.profile_pic_key!))!
                     }
                 }
             }
@@ -78,11 +78,11 @@ class User: UITableViewCell {
             imageView.image = UIImage(named: "no_banner")!
             return
         } else {
-            download("\(self.handle!)~~banner.jpg", filePathURL(self.banner_pic_key), banner_bucket) {
+            download("\(self.handle!)~~banner.jpg", filePathURL(self.banner_pic_key!), banner_bucket) {
                 (result) -> Void in
                 if result != nil {
                     dispatch_async(dispatch_get_main_queue()) {
-                        imageView.image = UIImage(contentsOfFile: filePathString(self.banner_pic_key))!
+                        imageView.image = UIImage(contentsOfFile: filePathString(self.banner_pic_key!))!
                     }
                 }
             }
@@ -150,8 +150,8 @@ class User: UITableViewCell {
                         input.followers = String(dict["followers"] as! Int)
                         input.following = String(dict["following"] as! Int)
                         input.tracks = String(dict["track_count"] as! Int)
-                        input.banner_pic_key = "\(input.handle)~~banner.jpg"
-                        input.profile_pic_key = "\(input.handle)~~profile_pic.jpg"
+                        input.banner_pic_key = "\(input.handle!)~~banner.jpg"
+                        input.profile_pic_key = "\(input.handle!)~~profile_pic.jpg"
 
                         let controller = storyboard.instantiateViewControllerWithIdentifier("DashboardController") as! DashboardController
                         controller.user = input
@@ -193,8 +193,8 @@ class User: UITableViewCell {
                         current_user.followers = String(dict["followers"] as! Int)
                         current_user.following = String(dict["following"] as! Int)
                         current_user.tracks = String(dict["track_count"] as! Int)
-                        current_user.banner_pic_key = "\(current_user.handle)~~banner.jpg"
-                        current_user.profile_pic_key = "\(current_user.handle)~~profile_pic.jpg"
+                        current_user.banner_pic_key = "\(current_user.handle!)~~banner.jpg"
+                        current_user.profile_pic_key = "\(current_user.handle!)~~profile_pic.jpg"
                         
                         if controller != nil {
                             controller!.parentViewController?.navigationItem.title! = current_user.display_name()!
@@ -315,7 +315,7 @@ class User: UITableViewCell {
                             var user = User()
                             user.handle = dict["handle"] as? String
                             user.username = dict["name"] as? String
-                            user.profile_pic_key = "\(user.handle)~~profile_pic.jpg"
+                            user.profile_pic_key = "\(user.handle!)~~profile_pic.jpg"
                             result.append(user)
                         }
                         user_following = result

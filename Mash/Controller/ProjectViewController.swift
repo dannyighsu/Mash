@@ -40,7 +40,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tracks.registerNib(player, forHeaderFooterViewReuseIdentifier: "ProjectPlayer")
         
         self.view.addSubview(self.activityView)
-        self.activityView.center = self.view.center
         
         self.metronome.delegate = self
         
@@ -57,6 +56,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.parentViewController?.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)*/
         let value = UIInterfaceOrientation.LandscapeRight.rawValue
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
+        self.activityView.center = self.view.center
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -158,16 +158,16 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         } else if alertView.title == "Saving your Mash" {
             if buttonIndex == 1 {
                 var title = alertView.textFieldAtIndex(0)!.text
-                self.save(title)
+                self.audioPlayer!.titleLabel.text = title
+                self.uploadSavedTrack(title)
+            }
+        } else if alertView.title == "Sharing your Mash" {
+            if buttonIndex == 1 {
+                var title = alertView.textFieldAtIndex(0)!.text
+                self.audioPlayer!.titleLabel.text = title
+                self.shareTrack(title)
             }
         }
-    }
-    
-    func saveAlert() {
-        var alert = UIAlertView(title: "Saving your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
-        alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
-        alert.textFieldAtIndex(0)?.text = self.audioPlayer!.titleLabel.text
-        alert.show()
     }
     
     // Player Delegate
@@ -242,72 +242,29 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     // Preferences methods
-    func save(name: String) -> Bool {
+    func save() {
+        if self.data.count < 1 {
+            raiseAlert("Error", self, "There must be a track in your project to save.")
+            return
+        }
+        var alert = UIAlertView(title: "Saving your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
+        alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
+        alert.textFieldAtIndex(0)?.text = self.audioPlayer!.titleLabel.text
+        alert.show()
+    }
+    
+    func uploadSavedTrack(name: String) -> Bool {
         Track.mixTracks(name, tracks: self.data) {
             (exportSession) in
-                if exportSession.status == AVAssetExportSessionStatus.Completed {
-                    Debug.printl("File export of track \(name) completed", sender: self)
-                    self.uploadAction(filePathString(name + ".m4a"), name: name + ".m4a")
-                } else if exportSession.status == AVAssetExportSessionStatus.Failed {
-                    Debug.printl("File export failed.", sender: self)
-                } else {
-                    Debug.printl("File export status: \(exportSession.status)", sender: self)
-                }
+            if exportSession == nil || exportSession!.status == AVAssetExportSessionStatus.Failed {
+                raiseAlert("Error exporting file.", self)
+            } else {
+                Debug.printl("File export of track \(name) completed", sender: self)
+                self.checkForDuplicate(name)
+            }
         }
         
         return true
-    }
-    
-    func uploadAction(url: String, name: String) {
-        upload("\(current_user.handle!)~~\(name).m4a", NSURL(fileURLWithPath: url)!, track_bucket)
-        
-        // Post data to server
-        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        var instruments: [String] = []
-        var families: [String] = []
-
-        for track in self.data {
-            for instr in track.instruments {
-                instruments.append(instr)
-            }
-            for fam in track.instrumentFamilies {
-                families.append(fam)
-            }
-        }
-        var instrumentString = String(stringInterpolationSegment: instruments)
-        instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
-        var familyString = String(stringInterpolationSegment: families)
-        familyString = familyString.substringWithRange(Range<String.Index>(start: advance(familyString.startIndex, 1), end: advance(familyString.endIndex, -1)))
-        
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
-        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "title": name, "bpm": "0", "bar": "0", "key": "0", "instrument": "{\(instrumentString)}", "family": "{\(familyString)}", "genre": "{}", "subgenre": "{}", "feel": "0", "solo": "0", "format": ".m4a"]
-
-        httpPost(params, request) {
-            (data, statusCode, error) -> Void in
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
-                return
-            } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("Error: \(error)", sender: self)
-                    return
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    return
-                } else if statusCode == HTTP_SUCCESS {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        var alert = UIAlertView(title: "Success!", message: "Your Mash has been Saved.", delegate: self, cancelButtonTitle: "OK")
-                        alert.show()
-                    }
-                    Debug.printl("Data: \(data)", sender: self)
-                    return
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                    return
-                }
-            }
-        }
     }
     
     func share() {
@@ -315,13 +272,23 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             raiseAlert("Error", self, "There must be a track in your project to share.")
             return
         }
-        var name = self.audioPlayer!.titleLabel.text
-        var composition = Track.mixTracks(name, tracks: self.data) {
+        var alert = UIAlertView(title: "Sharing your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
+        alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
+        alert.textFieldAtIndex(0)?.text = self.audioPlayer!.titleLabel.text
+        alert.show()
+    }
+    
+    func shareTrack(name: String) {
+        Track.mixTracks(name, tracks: self.data) {
             (exportSession) in
-            dispatch_async(dispatch_get_main_queue()) {
-                var sharingObjects = [filePathURL(name + ".m4a")]
-                var activityController = UIActivityViewController(activityItems: sharingObjects, applicationActivities: nil)
-                self.presentViewController(activityController, animated: true, completion: nil)
+            if exportSession == nil || exportSession!.status == AVAssetExportSessionStatus.Failed {
+                raiseAlert("Error exporting file.", self)
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    var sharingObjects = [filePathURL("\(current_user.handle!)~~\(name).m4a")]
+                    var activityController = UIActivityViewController(activityItems: sharingObjects, applicationActivities: nil)
+                    self.presentViewController(activityController, animated: true, completion: nil)
+                }
             }
         }
     }
@@ -354,6 +321,95 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         let newProjectView = self.storyboard?.instantiateViewControllerWithIdentifier("ProjectViewController") as! ProjectViewController
         newTabBarController.replaceObjectAtIndex(projectViewIndex, withObject: newProjectView)
         tabBarController.setViewControllers(newTabBarController as [AnyObject], animated: true)
+    }
+    
+    // Upload functions
+    func checkForDuplicate(name: String) {
+        let handle = current_user.handle!
+        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
+        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
+        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "query_name": handle, "song_name": name]
+        self.activityView.startAnimating()
+        httpPost(params,request) {
+            (data, statusCode, error) -> Void in
+            var duplicate = false
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: self)
+            } else {
+                if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
+                    if count(data) > 22 {
+                        duplicate = true
+                    }
+                } else if statusCode == HTTP_SERVER_ERROR {
+                    duplicate = true
+                }
+            }
+            if !duplicate {
+                self.uploadAction(filePathString("\(handle)~~\(name).m4a"), name: name)
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
+                }
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
+                    let alert = UIAlertView(title: "Track exists.", message: "Please choose a different title.", delegate: self, cancelButtonTitle: "Ok")
+                    alert.show()
+                }
+            }
+        }
+    }
+    
+    func uploadAction(url: String, name: String) {
+        upload("\(current_user.handle!)~~\(name).m4a", NSURL(fileURLWithPath: url)!, track_bucket)
+        
+        // FIXME: Using waveform of first track for now
+        let waveformKey = "\(current_user.handle!)~~\(name)_waveform.jpg"
+        let track = self.tracks.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! Channel
+        var waveform = takeShotOfView(track.audioPlot)
+        UIImageJPEGRepresentation(waveform, 1.0).writeToFile(filePathString(waveformKey), atomically: true)
+        upload(waveformKey, filePathURL(waveformKey), waveform_bucket)
+        
+        // Post data to server
+        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
+        var instruments: [String] = []
+        var families: [String] = []
+        
+        for track in self.data {
+            for instr in track.instruments {
+                instruments.append(instr)
+            }
+            for fam in track.instrumentFamilies {
+                families.append(fam)
+            }
+        }
+        var instrumentString = String(stringInterpolationSegment: instruments)
+        instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
+        var familyString = String(stringInterpolationSegment: families)
+        familyString = familyString.substringWithRange(Range<String.Index>(start: advance(familyString.startIndex, 1), end: advance(familyString.endIndex, -1)))
+        
+        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
+        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "title": name, "bpm": "0", "bar": "0", "key": "0", "instrument": "{\(instrumentString)}", "family": "{\(familyString)}", "genre": "{}", "subgenre": "{}", "feel": "0", "solo": "0", "format": ".m4a"]
+        
+        httpPost(params, request) {
+            (data, statusCode, error) -> Void in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: self)
+            } else {
+                // Check status codes
+                if statusCode == HTTP_ERROR {
+                    Debug.printl("Error: \(error)", sender: self)
+                } else if statusCode == HTTP_WRONG_MEDIA {
+                } else if statusCode == HTTP_SUCCESS {
+                    /*dispatch_async(dispatch_get_main_queue()) {
+                        var alert = UIAlertView(title: "Success!", message: "Your Mash has been Saved.", delegate: self, cancelButtonTitle: "OK")
+                        alert.show()
+                    }*/
+                } else {
+                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
+                }
+            }
+        }
     }
     
     class func importTracks(tracks: [Track], navigationController: UINavigationController?, storyboard: UIStoryboard?) {
@@ -404,6 +460,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                     project!.audioPlayer!.addTrack(track.trackURL)
                     dispatch_async(dispatch_get_main_queue()) {
                         project!.activityView.stopAnimating()
+                        project!.tracks.reloadData()
                     }
                 }
             }

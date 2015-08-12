@@ -145,8 +145,13 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 family = families[0] as! String
             }
             
-            var url = (dict["song_name"] as! String) + (dict["format"] as! String)
-            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["handle"] as! String, format: dict["format"] as! String)
+            var trackName = dict["song_name"] as! String
+            var format = dict["format"] as! String
+            var user = dict["handle"] as! String
+            var url = "\(user)~~\(trackName)\(format)"
+            url = filePathString(url)
+            
+            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: user, format: format)
             
             controller.allResults.append(track)
             if i < DEFAULT_DISPLAY_AMOUNT {

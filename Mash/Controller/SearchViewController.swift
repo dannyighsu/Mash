@@ -92,10 +92,13 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             track.format = trackData.format
             track.bpm = trackData.bpm
             track.activityView.startAnimating()
-            download(getS3WaveformKey(track), filePathURL(getS3WaveformKey(track)), waveform_bucket) {
+            download(getS3WaveformKey(track), NSURL(fileURLWithPath: track.trackURL)!, waveform_bucket) {
                 (result) in
-                if result != nil {
-                    track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
+                dispatch_async(dispatch_get_main_queue()) {
+                    track.activityView.stopAnimating()
+                    if result != nil {
+                        track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
+                    }
                 }
             }
             return track
@@ -104,7 +107,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             let userData = self.searchResults[indexPath.row] as! User
             user.handle = userData.handle
             user.username = userData.username
-            user.profile_pic_key = "\(user.handle)~~profile_pic.jpg"
+            user.profile_pic_key = "\(user.handle!)~~profile_pic.jpg"
             user.updateDisplays()
             return user
         }
@@ -120,6 +123,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         }
         if self.scope == 0 {
             var track = self.tableView.cellForRowAtIndexPath(indexPath) as! Track
+            track.activityView.startAnimating()
             download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
                 (result) in
                 dispatch_async(dispatch_get_main_queue()) {
@@ -246,10 +250,13 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             if families.count != 0 {
                 family = families[0] as! String
             }
-            var url = (dict["song_name"] as! String) + (dict["format"] as! String)
+            var trackName = dict["song_name"] as! String
+            var format = dict["format"] as! String
+            var user = dict["handle"] as! String
+            var url = "\(user)~~\(trackName)\(format)"
             url = filePathString(url)
             
-            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["handle"] as! String, format: dict["format"] as! String)
+            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: user, format: format)
             
             self.allResults.append(track)
             if i < DEFAULT_DISPLAY_AMOUNT {
@@ -268,7 +275,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             var user = User()
             user.handle = dict["handle"] as? String
             user.username = dict["name"] as? String
-            user.profile_pic_key = "\(user.handle)~~profile_pic.jpg"
+            user.profile_pic_key = "\(user.handle!)~~profile_pic.jpg"
             self.allResults.append(user)
             if i < DEFAULT_DISPLAY_AMOUNT {
                 self.searchResults.append(user)

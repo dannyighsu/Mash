@@ -61,7 +61,7 @@ class ProjectPreferencesViewController: UIViewController, UITableViewDelegate, U
             self.projectView?.share()
         } else {
             self.navigationController?.popViewControllerAnimated(true)
-            self.projectView?.saveAlert()
+            self.projectView?.save()
         }
     }
     
