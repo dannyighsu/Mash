@@ -23,6 +23,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = configuration
         
+        // Check if update required
+        var info: NSDictionary = NSBundle.mainBundle().infoDictionary!
+        var appID = info["CFBundleIdentifier"] as! String
+        let url = NSURL(string: "http://itunes.apple.com/lookup?bundleId=\(appID)")
+        var data = NSData(contentsOfURL: url!)!
+        var lookup = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as! NSDictionary
+        
+        if lookup["resultCount"]!.integerValue == 1 {
+            var appStoreVersion = ((lookup["results"] as! NSArray)[0] as! NSDictionary)["version"] as! String
+            var currentVersion = info["CFBundleShortVersionString"] as! String
+            if appStoreVersion != currentVersion {
+                Debug.printl("version oudated", sender: nil)
+                // Handle outdated version
+            }
+        }
+        
+        AppDelegate.deleteFiles()
+        
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
@@ -46,25 +64,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         FBSDKAppEvents.activateApp()
-        
         var defaults = NSUserDefaults.standardUserDefaults()
         var exitTime = defaults.objectForKey("exitTime") as? NSDate
         if exitTime != nil {
             var currentTime = NSDate()
             var diff = currentTime.timeIntervalSinceDate(exitTime!)
             if diff > 120 {
-                NSNotificationCenter.defaultCenter().postNotificationName("UpdateUINotification", object: nil)
-                var dir = applicationDocumentsDirectory()
-                var error: NSError? = nil
-                var fileManager = NSFileManager.defaultManager()
-                for file in fileManager.contentsOfDirectoryAtPath(dir as String, error: &error)! {
-                    var success = fileManager.removeItemAtPath(NSString(format: "%@/%@", dir, file as! String) as String, error: &error)
-                    if (!success || error != nil) {
-                        Debug.printl("removal of file failed", sender: nil)
-                    } else {
-                        Debug.printl("removed file", sender: nil)
-                    }
-                }
+                AppDelegate.deleteFiles()
             }
         }
     }
@@ -96,6 +102,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             orientations = viewController.supportedInterfaceOrientations()
         }
         return orientations
+    }
+    
+    class func deleteFiles() {
+        NSNotificationCenter.defaultCenter().postNotificationName("UpdateUINotification", object: nil)
+        var dir = applicationDocumentsDirectory()
+        var error: NSError? = nil
+        var fileManager = NSFileManager.defaultManager()
+        for file in fileManager.contentsOfDirectoryAtPath(dir as String, error: &error)! {
+            var success = fileManager.removeItemAtPath(NSString(format: "%@/%@", dir, file as! String) as String, error: &error)
+            if (!success || error != nil) {
+                Debug.printl("removal of file failed", sender: nil)
+            } else {
+                Debug.printl("removed file", sender: nil)
+            }
+        }
     }
     
 }

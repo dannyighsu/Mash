@@ -9,5 +9,6 @@
 
 +(NSString *) timeShift:(NSURL *)url newName: (NSString*)newName amountToShift: (float)shiftAmount;
 +(NSString *) pitchShift:(NSURL *)url newName: (NSString*)newName amountToShift: (int)shiftAmount;
++(void) convertToM4A:(NSURL *)url writeToPath: (NSString *)fileLocation;
 
 @end

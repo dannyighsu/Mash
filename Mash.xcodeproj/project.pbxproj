@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3711F0A31B6FFD9D00C75F2B /* AudioModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3711F0A21B6FFD9D00C75F2B /* AudioModule.mm */; };
 		3718EF291B57071D00AA5D26 /* Objective-C.h in Headers */ = {isa = PBXBuildFile; fileRef = 3718EF271B57071D00AA5D26 /* Objective-C.h */; };
 		3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718EF281B57071D00AA5D26 /* Objective-C.m */; };
 		371F863D1B67062F00BCBEDD /* MixerChannel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 371F863C1B67062F00BCBEDD /* MixerChannel.xib */; };
@@ -23,7 +24,6 @@
 		373F0F021B3DEFC500DE92AB /* tock.caf in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFB1B3DEFC500DE92AB /* tock.caf */; };
 		373F0F031B3DEFC500DE92AB /* Violins 1.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */; };
 		374CEFD71B508552007A7557 /* RecordToolsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374CEFD61B508552007A7557 /* RecordToolsController.swift */; };
-		376282F41B5EF89700C59774 /* AudioProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376282F31B5EF89700C59774 /* AudioProcessor.swift */; };
 		3770CED51B6AB46600A79F3A /* libSuperpoweredAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3770CED41B6AB46600A79F3A /* libSuperpoweredAudio.a */; };
 		3782615C1B4B139400FC89A0 /* ProjectPlayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3782615B1B4B139400FC89A0 /* ProjectPlayer.xib */; };
 		3782615E1B4B140C00FC89A0 /* ProjectPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3782615D1B4B140C00FC89A0 /* ProjectPlayer.swift */; };
@@ -60,7 +60,6 @@
 		37C12E241B69797300A4E3A3 /* SuperpoweredWhoosh.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C12E091B69797300A4E3A3 /* SuperpoweredWhoosh.h */; };
 		37C12E261B69876E00A4E3A3 /* ShareView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37C12E251B69876E00A4E3A3 /* ShareView.xib */; };
 		37C12E281B6988CB00A4E3A3 /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C12E271B6988CB00A4E3A3 /* ShareView.swift */; };
-		37C12E2C1B699B7200A4E3A3 /* AudioModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37C12E2B1B699B7200A4E3A3 /* AudioModule.mm */; };
 		37D420321B68345200A29F44 /* MixerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D420311B68345200A29F44 /* MixerController.swift */; };
 		37DE77251B436F4A00952987 /* User.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37DE77241B436F4A00952987 /* User.xib */; };
 		37DE77271B4370B200952987 /* FollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DE77261B4370B200952987 /* FollowingViewController.swift */; };
@@ -119,6 +118,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3711F0A21B6FFD9D00C75F2B /* AudioModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioModule.mm; sourceTree = "<group>"; };
 		3718EF271B57071D00AA5D26 /* Objective-C.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Objective-C.h"; sourceTree = "<group>"; };
 		3718EF281B57071D00AA5D26 /* Objective-C.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Objective-C.m"; sourceTree = "<group>"; };
 		371F863C1B67062F00BCBEDD /* MixerChannel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MixerChannel.xib; sourceTree = "<group>"; };
@@ -135,7 +135,6 @@
 		373F0EFB1B3DEFC500DE92AB /* tock.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = tock.caf; sourceTree = "<group>"; };
 		373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Violins 1.aif"; sourceTree = "<group>"; };
 		374CEFD61B508552007A7557 /* RecordToolsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordToolsController.swift; sourceTree = "<group>"; };
-		376282F31B5EF89700C59774 /* AudioProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioProcessor.swift; sourceTree = "<group>"; };
 		3770CED41B6AB46600A79F3A /* libSuperpoweredAudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSuperpoweredAudio.a; sourceTree = "<group>"; };
 		3782615B1B4B139400FC89A0 /* ProjectPlayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectPlayer.xib; sourceTree = "<group>"; };
 		3782615D1B4B140C00FC89A0 /* ProjectPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectPlayer.swift; sourceTree = "<group>"; };
@@ -176,7 +175,6 @@
 		37C12E091B69797300A4E3A3 /* SuperpoweredWhoosh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperpoweredWhoosh.h; sourceTree = "<group>"; };
 		37C12E251B69876E00A4E3A3 /* ShareView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShareView.xib; sourceTree = "<group>"; };
 		37C12E271B6988CB00A4E3A3 /* ShareView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
-		37C12E2B1B699B7200A4E3A3 /* AudioModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioModule.mm; sourceTree = "<group>"; };
 		37D420311B68345200A29F44 /* MixerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MixerController.swift; sourceTree = "<group>"; };
 		37DE77241B436F4A00952987 /* User.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = User.xib; sourceTree = "<group>"; };
 		37DE77261B4370B200952987 /* FollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowingViewController.swift; sourceTree = "<group>"; };
@@ -289,7 +287,6 @@
 			children = (
 				37E799851B3CC12D00D2E54D /* Mash-Bridging-Header.h */,
 				37A3C2C91B3CC00600F77F2A /* AppDelegate.swift */,
-				37C12E2B1B699B7200A4E3A3 /* AudioModule.mm */,
 				37A3C2D01B3CC00600F77F2A /* Images.xcassets */,
 				373F0EF51B3DEFC500DE92AB /* Audio */,
 				37E799BD1B3CC1D000D2E54D /* Classes */,
@@ -392,7 +389,6 @@
 		37E799BD1B3CC1D000D2E54D /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				376282F31B5EF89700C59774 /* AudioProcessor.swift */,
 				37E799CA1B3CC1D000D2E54D /* Channel.swift */,
 				37E799BE1B3CC1D000D2E54D /* Debug.swift */,
 				37E799C01B3CC1D000D2E54D /* HelperData.swift */,
@@ -441,11 +437,12 @@
 		37E799F31B3CC1F600D2E54D /* Objective-C */ = {
 			isa = PBXGroup;
 			children = (
-				37C12DEE1B69797300A4E3A3 /* Superpowered */,
-				3718EF271B57071D00AA5D26 /* Objective-C.h */,
-				3718EF281B57071D00AA5D26 /* Objective-C.m */,
+				3711F0A21B6FFD9D00C75F2B /* AudioModule.mm */,
 				37E799F41B3CC1F600D2E54D /* KeychainWrapper.h */,
 				37E799F51B3CC1F600D2E54D /* KeychainWrapper.m */,
+				3718EF271B57071D00AA5D26 /* Objective-C.h */,
+				3718EF281B57071D00AA5D26 /* Objective-C.m */,
+				37C12DEE1B69797300A4E3A3 /* Superpowered */,
 			);
 			path = "Objective-C";
 			sourceTree = "<group>";
@@ -685,7 +682,6 @@
 				37C12E281B6988CB00A4E3A3 /* ShareView.swift in Sources */,
 				37E799DB1B3CC1D000D2E54D /* HelperData.swift in Sources */,
 				37E799E51B3CC1D000D2E54D /* Channel.swift in Sources */,
-				37C12E2C1B699B7200A4E3A3 /* AudioModule.mm in Sources */,
 				37E799AE1B3CC1C600D2E54D /* NavigationController.swift in Sources */,
 				37E799DC1B3CC1D000D2E54D /* HelperFunctions.swift in Sources */,
 				37E799E01B3CC1D000D2E54D /* InstrumentCell.swift in Sources */,
@@ -708,6 +704,7 @@
 				37E799B51B3CC1C600D2E54D /* ProjectViewController.swift in Sources */,
 				3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */,
 				37E799B81B3CC1C600D2E54D /* SettingsViewController.swift in Sources */,
+				3711F0A31B6FFD9D00C75F2B /* AudioModule.mm in Sources */,
 				374CEFD71B508552007A7557 /* RecordToolsController.swift in Sources */,
 				37E799BB1B3CC1C600D2E54D /* TaggingViewController.swift in Sources */,
 				37E799B71B3CC1C600D2E54D /* SearchViewController.swift in Sources */,
@@ -724,7 +721,6 @@
 				37E799AA1B3CC1C600D2E54D /* ImportViewController.swift in Sources */,
 				3722ACEC1B4DF1FF008473C3 /* ImageCell.swift in Sources */,
 				37C12E1C1B69797300A4E3A3 /* SuperpoweredIOSAudioOutput.mm in Sources */,
-				376282F41B5EF89700C59774 /* AudioProcessor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

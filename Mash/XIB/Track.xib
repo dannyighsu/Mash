@@ -75,7 +75,7 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="eOi-my-olC">
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="eOi-my-olC">
                                 <rect key="frame" x="290" y="25" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>

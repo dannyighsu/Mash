@@ -15,6 +15,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     
     @IBOutlet weak var trackTable: UITableView!
     var results: [Track] = []
+    var allResults: [Track] = []
     var projectRecordings: [Track] = []
     var projectPlayers: [AVAudioPlayer] = []
     var audioPlayer: AVAudioPlayer? = nil
@@ -46,6 +47,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         self.navigationController?.navigationBarHidden = false
     }
     
+    // Table View Delegate
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -55,7 +57,9 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        
+        if indexPath.row == self.results.count - 1 {
+            self.loadNextData()
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -67,17 +71,18 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         track.userLabel.text = track.userText
         track.bpm = trackData.bpm
         track.format = trackData.format
-        track.trackURL = filePathString(track.titleText + track.format)
+        track.trackURL = filePathString(getS3Key(track))
         if !contains(self.downloadedTracks, indexPath.row) {
             track.activityView.startAnimating()
-            download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
+            download(getS3WaveformKey(track), filePathURL(getS3WaveformKey(track)), waveform_bucket) {
                 (result) in
                 dispatch_async(dispatch_get_main_queue()) {
                     track.activityView.stopAnimating()
-                    track.generateWaveform()
+                    if result != nil {
+                        track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
+                    }
                 }
             }
-            self.downloadedTracks.insert(indexPath.row)
         }
         
         track.instrumentImage.image = findImage(self.results[indexPath.row].instrumentFamilies)
@@ -96,19 +101,19 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let track = self.trackTable.cellForRowAtIndexPath(indexPath) as! Track
 
-        // FIXME: hacky
-        var i = 0
-        while !NSFileManager.defaultManager().fileExistsAtPath(track.trackURL) {
-            Debug.printnl("waiting...")
-            NSThread.sleepForTimeInterval(0.5)
-            if i == 5 {
-                raiseAlert("Error", self, "Unable to play track.")
-                return
+        track.activityView.startAnimating()
+        download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
+            (result) in
+            dispatch_async(dispatch_get_main_queue()) {
+                track.activityView.stopAnimating()
+                if result != nil {
+                    track.generateWaveform()
+                    self.playTracks(track)
+                }
             }
-            i += 1
         }
+        self.downloadedTracks.insert(indexPath.row)
         
-        self.playTracks(track)
         Debug.printl("Playing track \(track.titleText)", sender: self)
     }
     
@@ -126,6 +131,20 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.trackTable.dequeueReusableHeaderFooterViewWithIdentifier("MashResultsHeaderView") as! MashResultsHeaderView
         return header
+    }
+    
+    func loadNextData() {
+        var currentNumResults = self.results.count - 1
+        if currentNumResults == self.allResults.count - 1 {
+            return
+        }
+        for i in currentNumResults...currentNumResults + 15 {
+            if i >= self.allResults.count {
+                break
+            }
+            self.results.append(self.allResults[i])
+        }
+        self.trackTable.reloadData()
     }
     
     func playTracks(track: Track) {
