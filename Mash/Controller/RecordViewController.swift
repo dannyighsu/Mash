@@ -52,6 +52,10 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             Debug.printl("Error setting up session: \(error?.localizedDescription)", sender: self)
         }
         session.setActive(true, error: &error)
+        /*let output = session.currentRoute.outputs.first as! AVAudioSessionPortDescription
+        if output.portType == "Receiver" {
+        }*/
+        session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker, error: nil)
         if error != nil {
             Debug.printl("Error setting session active: \(error?.localizedDescription)", sender: self)
         }
@@ -66,11 +70,11 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.microphone?.startFetchingAudio()
         
         // Button targets
-        self.playButton.addTarget(self, action: "play:", forControlEvents: UIControlEvents.TouchDown)
-        self.recordButton.addTarget(self, action: "record:", forControlEvents: UIControlEvents.TouchDown)
-        self.stopButton.addTarget(self, action: "stop:", forControlEvents: UIControlEvents.TouchDown)
-        self.clearButton.addTarget(self, action: "clear:", forControlEvents: UIControlEvents.TouchDown)
-        self.saveButton.addTarget(self, action: "save:", forControlEvents: UIControlEvents.TouchDown)
+        self.playButton.addTarget(self, action: "play:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.recordButton.addTarget(self, action: "record:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.stopButton.addTarget(self, action: "stop:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.clearButton.addTarget(self, action: "clear:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.saveButton.addTarget(self, action: "save:", forControlEvents: UIControlEvents.TouchUpInside)
         
         // Configure toolsView table
         self.toolsView.delegate = self
@@ -138,8 +142,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     func stop(sender: AnyObject?) {
         if self.player != nil {
-            self.player!.pause()
             self.player!.seekToFrame(0)
+            self.player!.pause()
+            self.player!.currentTime = 0
             self.playButton.setImage(UIImage(named: "Play"), forState: UIControlState.Normal)
         }
     }
@@ -157,6 +162,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     }
     
     func save(sender: AnyObject?) {
+        if self.player == nil || self.audioFile == nil {
+            return
+        }
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("UploadViewController") as! UploadViewController
         controller.recording = self.audioFile
         controller.bpm = Int(60.0 / Double(self.metronome!.duration))

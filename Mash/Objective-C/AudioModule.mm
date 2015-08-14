@@ -146,5 +146,79 @@
     return outputFilePath;
 }
 
++(void) convertToM4A:(NSURL *)url writeToPath: (NSString *)fileLocation {
+    // Initialize asset reader
+    AVURLAsset *songAsset = [AVURLAsset URLAssetWithURL:url options:nil];
+    NSError *error = nil;
+    AVAssetReader *assetReader = [AVAssetReader assetReaderWithAsset:songAsset error:&error];
+    if (error) {
+        NSLog(@"error: %@", error);
+        return;
+    }
+    
+    AVAssetReaderOutput *readerOutput = [AVAssetReaderAudioMixOutput assetReaderAudioMixOutputWithAudioTracks: songAsset.tracks audioSettings:nil];
+    if (![assetReader canAddOutput:readerOutput]) {
+        NSLog(@"cannot add output");
+        return;
+    }
+    [assetReader addOutput:readerOutput];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:fileLocation]) {
+        [[NSFileManager defaultManager] removeItemAtPath:fileLocation error:nil];
+    }
+    NSURL *outputURL = [NSURL fileURLWithPath:fileLocation];
+    AVAssetWriter *writer = [AVAssetWriter assetWriterWithURL:outputURL fileType:AVFileTypeCoreAudioFormat error:&error];
+    if (error) {
+        NSLog(@"error: %@", error);
+        return;
+    }
+    
+    AudioChannelLayout channelLayout;
+    memset(&channelLayout, 0, sizeof(AudioChannelLayout));
+    channelLayout.mChannelLayoutTag = kAudioChannelLayoutTag_Stereo;
+    NSDictionary *outputSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [NSNumber numberWithInt:kAudioFormatLinearPCM], AVFormatIDKey,
+                                    [NSNumber numberWithFloat:44100.0], AVSampleRateKey,
+                                    [NSNumber numberWithInt:2], AVNumberOfChannelsKey,
+                                    [NSData dataWithBytes:&channelLayout length:sizeof(AudioChannelLayout)], AVChannelLayoutKey,
+                                    [NSNumber numberWithInt:16], AVLinearPCMBitDepthKey,
+                                    [NSNumber numberWithBool:NO], AVLinearPCMIsNonInterleaved,
+                                    [NSNumber numberWithBool:NO], AVLinearPCMIsFloatKey,
+                                    [NSNumber numberWithBool:NO], AVLinearPCMIsBigEndianKey,
+                                    nil];
+    AVAssetWriterInput *writerInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeAudio outputSettings:outputSettings];
+    if (![writer canAddInput:writerInput]) {
+        NSLog(@"cannott add writer input");
+        return;
+    }
+    [writer addInput:writerInput];
+    writerInput.expectsMediaDataInRealTime = NO;
+    [writer startWriting];
+    [assetReader startReading];
+    AVAssetTrack *track = [songAsset.tracks objectAtIndex:0];
+    CMTime startTime = CMTimeMake(0, track.naturalTimeScale);
+    [writer startSessionAtSourceTime:startTime];
+    
+    __block UInt64 convertedByteCount = 0;
+    dispatch_queue_t mediaInputQueue = dispatch_queue_create("mediaInputQueue", NULL);
+    [writerInput requestMediaDataWhenReadyOnQueue:mediaInputQueue usingBlock: ^ {
+        while (writerInput.readyForMoreMediaData) {
+            CMSampleBufferRef nextBuffer = [readerOutput copyNextSampleBuffer];
+            if (nextBuffer) {
+                // Convert next buffer
+                [writerInput appendSampleBuffer:nextBuffer];
+                convertedByteCount += CMSampleBufferGetTotalSampleSize(nextBuffer);
+            } else {
+                // Finish conversion
+                [writerInput markAsFinished];
+                [assetReader cancelReading];
+                NSDictionary *outputAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:fileLocation error:nil];
+                NSLog(@"File conversion successful: file size is %llu", [outputAttributes fileSize]);
+                break;
+            }
+        }
+    }];
+}
+
 
 @end

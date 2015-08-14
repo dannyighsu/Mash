@@ -86,20 +86,23 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         track.bpm = self.data[index].bpm
         track.instrumentImage.image = findImage(track.instrumentFamilies)
         track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
+        track.activityView.startAnimating()
+        download(getS3WaveformKey(track), filePathURL(getS3WaveformKey(track)), waveform_bucket) {
+            (result) in
+            dispatch_async(dispatch_get_main_queue()) {
+                track.activityView.stopAnimating()
+            }
+            if result != nil {
+                dispatch_async(dispatch_get_main_queue()) {
+                    track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
+                }
+            }
+        }
         return track
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        let track = cell as! Track
-        let index = indexPath.row
-        track.activityView.startAnimating()
-        download(getS3Key(track), filePathURL(track.titleText + track.format), track_bucket) {
-            (result) in
-            dispatch_async(dispatch_get_main_queue()) {
-                track.generateWaveform()
-                track.activityView.stopAnimating()
-            }
-        }
+        
     }
     
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -169,21 +172,20 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
         
-        // FIXME: hacky
-        var i = 0
-        while !NSFileManager.defaultManager().fileExistsAtPath(track.trackURL) {
-            Debug.printnl("waiting...")
-            NSThread.sleepForTimeInterval(0.5)
-            if i == 5 {
-                raiseAlert("Error", self, "Unable to play track.")
-                return
+        track.activityView.startAnimating()
+        download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
+            (result) in
+            dispatch_async(dispatch_get_main_queue()) {
+                track.activityView.stopAnimating()
+                tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                if result != nil {
+                    track.generateWaveform()
+                    self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
+                    self.audioPlayer!.play()
+                    Debug.printl("Playing track \(track.titleText)", sender: self)
+                }
             }
-            i += 1
         }
-        self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(track.titleText + track.format), error: nil)
-        self.audioPlayer!.play()
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        Debug.printl("Playing track \(track.titleText)", sender: self)
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
@@ -243,10 +245,12 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             if families.count != 0 {
                 family = families[0] as! String
             }
-            var url = (dict["song_name"] as! String) + (dict["format"] as! String)
+            var trackName = dict["song_name"] as! String
+            var format = dict["format"] as! String
+            var url = "\(self.user.handle!)~~\(trackName)\(format)"
             url = filePathString(url)
             
-            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: dict["song_name"] as! String, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["handle"] as! String, format: dict["format"] as! String)
+            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["handle"] as! String, format: format)
             
             self.data.append(track)
         }

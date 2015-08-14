@@ -85,6 +85,13 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.row == self.data.count - 1 {
+            self.loadNextData()
+        }
+    }
+    
+    func loadNextData() {
+        
     }
 
     // Check if project view exists in memory, if not, create one.
@@ -160,7 +167,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 let time = item["timestamp"] as! String
                 var user = User()
                 user.handle = follower
-                user.profile_pic_link = item["following_profile_pic_link"] as? String
+                user.profile_pic_key = "\(user.handle!)~~profile_pic.jpg"
                 let cell = HomeCell(frame: CGRectZero, eventText: event, userText: follower, timeText: time, user: user)
                 self.data.append(cell)
             } else if type == "recording" {
@@ -170,7 +177,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 let event = "\(recording)"
                 var follower = User()
                 follower.handle = user
-                follower.profile_pic_link = item["following_profile_pic_link"] as? String
+                follower.profile_pic_key = "\(follower.handle!)~~profile_pic.jpg"
                 let cell = HomeCell(frame: CGRectZero, eventText: event, userText: user, timeText: time, user: follower)
                 self.data.append(cell)
             }
