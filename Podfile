@@ -3,12 +3,12 @@
 
 # Uncomment this line to define a global platform for your project
 platform :ios, '8.0'
-use_frameworks!
 
 target 'Mash' do
+    pod 'OpenSSL'
+    pod 'gRPC'
     pod 'EZAudio'
     pod 'IQKeyboardManager'
-    pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :branch => "master"
     pod 'google-plus-ios-sdk'
     pod 'FBSDKCoreKit'
     pod 'FBSDKLoginKit'

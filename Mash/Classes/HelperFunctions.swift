@@ -85,7 +85,7 @@ func returnProjectView(navcontroller: UINavigationController) -> ProjectViewCont
 func hashPassword(input: String) -> String {
     var data: NSData = NSData(bytes: input, length: count(input))
     let hash = data.sha256()
-    return hash!.hexString
+    return ""//hash!.hexString
 }
 
 // Download from S3 bucket

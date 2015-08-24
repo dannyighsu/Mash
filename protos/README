@@ -1,0 +1,5 @@
+In order to build the packages, you go this folder, then run:
+
+protoc -I=. --cpp_out=. $PROTOBUFFER_SRC
+
+where PROTOBUFFER source is the path to the protobuf file.

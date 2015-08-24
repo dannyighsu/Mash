@@ -1,0 +1,154 @@
+syntax = "proto2";
+option cc_generic_services = false;
+
+package mash.mashservice;
+
+message RegisterRequest {
+	required string handle = 1;
+	required string email = 2;
+	required string password_hash = 3;
+	required string name = 4;
+	optional int32  register_agent = 5;
+	optional string profile_pic_link = 6;
+	optional string banner_pic_link = 7;
+}
+
+message RegisterResponse {
+	required bool success = 1;
+    required string login_token = 3;
+}
+
+message SignInRequest {
+	required string handle = 1;
+	required string password_hash = 2;
+}
+
+message SignInResponse {
+	optional uint32 userid = 1;
+	optional string email = 2;
+    optional string name = 3;
+    optional uint32 register_agent = 4;
+    optional string profile_pic_link = 5;
+    optional string banner_pic_link = 6;
+    optional string description = 7;
+    required string login_token = 8;
+    optional uint32 followers_count = 9;
+    optional uint32 following_count = 10;
+    optional uint32 track_count = 11;
+}
+
+message UserGetRequest {
+	required string login_token = 1;
+	required uint32 userid = 2;
+	required string query_handle = 3;
+	required uint32	query_userid = 4;
+}
+
+message UserGetResponse {
+	optional string email = 1;
+    optional string name = 2;
+    optional string profile_pic_link = 3;
+    optional string banner_pic_link = 4;
+    optional string description = 5;
+    optional uint32 followers_count = 6;
+    optional uint32 following_count = 7;
+    optional uint32 track_count = 8;
+    optional bool 	follow = 9;
+}
+
+message RecordingInfoRequest {
+	required string login_token = 1;
+    required uint32 userid = 2;
+	required uint32 recid = 3;
+}
+
+message RecordingGetResponse {
+    required string title = 1;
+	optional uint32 bpm = 2;
+    optional uint32 bar = 3;
+    optional string key = 4;
+    repeated string instrument = 5;
+    repeated string family = 6;
+    repeated string genre = 7;
+    repeated string subgenre = 8;
+    optional uint32 feel = 9;
+    optional bool   solo = 10;
+    optional string uploaded = 11;
+    optional string format = 12;
+    optional uint32 play_count = 13;
+    optional uint32 like_count = 14;
+}
+
+message FollowGetRequest {
+    required string login_token = 1;
+    required uint32 userid = 2;
+    required uint32 query_userid = 3;
+}
+
+message FollowGetResponse {
+    repeated UserPreview user = 1;
+}
+
+message UserDeleteRequest {
+	required string login_token = 1;
+    required uint32 userid = 2;
+	required uint32 query_userid = 3;
+}
+
+message UserPreview {
+    required uint32 userid = 1;
+    required string handle = 2;
+    required string name = 3;
+    optional string profile_pic_link = 4;
+}
+
+message UserFollowRequest {
+    required string login_token = 1;
+    required uint32 userid = 2;
+    required uint32 query_userid = 3;
+}
+
+message RecordingUploadRequest {
+    required uint32 userid = 1;
+    required string login_token = 2;
+    required string title = 3;
+    optional uint32 bpm = 4;
+    optional uint32 bar = 5;
+    optional string key = 6;
+    repeated string instrument = 7;
+    repeated string family = 8;
+    repeated string genre = 9;
+    repeated string subgenre = 10;
+    optional uint32 feel = 11;
+    optional string solo = 12;
+    optional string format = 13;
+    required string handle = 14;
+}
+
+message SuccessResponse {
+    required bool success = 1;
+}
+
+message RecordingSearchRequest {
+    required string login_token = 1;
+    required uint32 userid = 2;
+    required string query = 3;
+}
+
+service MashService {
+	rpc Register (RegisterRequest) returns (RegisterResponse);
+	rpc SignIn (SignInRequest) returns (SignInResponse);
+	rpc UserGet (UserGetRequest) returns (UserGetResponse);
+	rpc RecordingGet (RecordingInfoRequest) returns (RecordingGetResponse);
+    rpc FollowersGet (FollowGetRequest) returns (FollowGetResponse);
+    rpc FollowingsGet (FollowGetRequest) returns (FollowGetResponse);
+	rpc UserDelete (UserDeleteRequest) returns (SuccessResponse);
+    rpc RecordingDelete (RecordingInfoRequest) returns (SuccessResponse);
+    rpc UserFollow (UserFollowRequest) returns (SuccessResponse);
+    rpc UserUnfollow (UserFollowRequest) returns (SuccessResponse);
+    rpc RecordingUpload (RecordingUploadRequest) returns (SuccessResponse);
+    rpc RecordingPlay (RecordingInfoRequest) returns (SuccessResponse);
+    rpc RecordingLike (RecordingInfoRequest) returns (SuccessResponse);
+    rpc RecordingUnlike (RecordingInfoRequest) returns (SuccessResponse);
+}
+
