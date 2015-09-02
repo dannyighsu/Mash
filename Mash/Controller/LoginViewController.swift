@@ -89,53 +89,27 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     func authenticate(handle: String, password: String) {
         // Check authentication with database
         let passwordHash = hashPassword(password)
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/signin")!)
-        var params = ["handle": handle, "password_hash": passwordHash, "query_name": handle] as Dictionary
-        self.activityView.startAnimating()
-        httpPost(params, request) {
-            (data, statusCode, error) -> Void in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.activityView.stopAnimating()
-            }
+        
+        var request = SignInRequest()
+        request.handle = handle
+        request.passwordHash = passwordHash
+        
+        serverClient.signInWithRequest(request) {
+            (response, error) in
             if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
-                return
+                Debug.printl("Error: \(error)", sender: nil)
             } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("Error: \(error)", sender: self)
-                    return
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    return
-                } else if statusCode == HTTP_AUTH_FAIL {
-                    raiseAlert("Incorrect Username and/or Password.", self)
-                    return
-                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        [weak self] in
-                        var error: NSError? = nil
-                        var response = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary
-                        
-                        if error != nil {
-                            Debug.printl("Error: \(error)", sender: self)
-                        }
-                        current_user = User()
-                        var data = response["user"] as! NSDictionary
-                        current_user.handle = handle
-                        current_user.username = data["name"] as? String
-                        current_user.followers = String(data["followers_count"] as! Int)
-                        current_user.following = String(data["following_count"] as! Int)
-                        current_user.tracks = String(data["track_count"] as! Int)
-                        current_user.user_description = data["description"] as? String
-                        current_user.userid = data["id"] as? Int
-                        current_user.profile_pic_key = "\(current_user.handle!)~~profile_pic.jpg"
-                        current_user.banner_pic_key = "\(current_user.handle!)~~banner.jpg"
-                        self!.completeLogin(handle, password: password)
-                    }
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                    return
-                }
+                Debug.printl("\(response.data())", sender: self)
+                current_user = User()
+                current_user.loginToken = response.loginToken
+                current_user.userid = Int(response.userid)
+                current_user.followers = "\(response.followersCount)"
+                current_user.following = "\(response.followingCount)"
+                current_user.tracks = "\(response.trackCount)"
+                current_user.user_description = response.description
+                current_user.profile_pic_key = response.profilePicLink
+                current_user.banner_pic_key = response.bannerPicLink
+                self.completeLogin(handle, password: password)
             }
         }
     }

@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		3711F0A31B6FFD9D00C75F2B /* AudioModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3711F0A21B6FFD9D00C75F2B /* AudioModule.mm */; };
 		3718EF291B57071D00AA5D26 /* Objective-C.h in Headers */ = {isa = PBXBuildFile; fileRef = 3718EF271B57071D00AA5D26 /* Objective-C.h */; };
-		3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718EF281B57071D00AA5D26 /* Objective-C.m */; };
+		3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718EF281B57071D00AA5D26 /* Objective-C.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		371F14C71B8D23550044BE5B /* mashservice.proto in Resources */ = {isa = PBXBuildFile; fileRef = 371F14C61B8D23550044BE5B /* mashservice.proto */; };
 		371F863D1B67062F00BCBEDD /* MixerChannel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 371F863C1B67062F00BCBEDD /* MixerChannel.xib */; };
 		371F863F1B6708D900BCBEDD /* MixerChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F863E1B6708D900BCBEDD /* MixerChannel.swift */; };
 		3722ACE81B4DEDDE008473C3 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */; };
@@ -125,6 +126,7 @@
 		3711F0A21B6FFD9D00C75F2B /* AudioModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioModule.mm; sourceTree = "<group>"; };
 		3718EF271B57071D00AA5D26 /* Objective-C.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Objective-C.h"; sourceTree = "<group>"; };
 		3718EF281B57071D00AA5D26 /* Objective-C.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Objective-C.m"; sourceTree = "<group>"; };
+		371F14C61B8D23550044BE5B /* mashservice.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mashservice.proto; path = protos/mashservice.proto; sourceTree = SOURCE_ROOT; };
 		371F863C1B67062F00BCBEDD /* MixerChannel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MixerChannel.xib; sourceTree = "<group>"; };
 		371F863E1B6708D900BCBEDD /* MixerChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MixerChannel.swift; sourceTree = "<group>"; };
 		3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 		376CA7721B8BDC7B00ADD1E2 /* Server */ = {
 			isa = PBXGroup;
 			children = (
+				371F14C61B8D23550044BE5B /* mashservice.proto */,
 				376CA7731B8BDCA000ADD1E2 /* Mashservice.pbobjc.h */,
 				376CA7741B8BDCA000ADD1E2 /* Mashservice.pbobjc.m */,
 				376CA7751B8BDCA000ADD1E2 /* Mashservice.pbrpc.h */,
@@ -614,6 +617,7 @@
 				37E799EC1B3CC1D000D2E54D /* InstrumentCell.xib in Resources */,
 				3782615C1B4B139400FC89A0 /* ProjectPlayer.xib in Resources */,
 				37C12E261B69876E00A4E3A3 /* ShareView.xib in Resources */,
+				371F14C71B8D23550044BE5B /* mashservice.proto in Resources */,
 				37E799F21B3CC1D000D2E54D /* Track.xib in Resources */,
 				37DE77251B436F4A00952987 /* User.xib in Resources */,
 				373F0F011B3DEFC500DE92AB /* tick.caf in Resources */,
@@ -891,10 +895,6 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
-					"-framework",
-					"\"EZAudio\"",
-					"-framework",
-					"\"CryptoSwift\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mash/Mash-Bridging-Header.h";
@@ -927,10 +927,6 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
-					"-framework",
-					"\"EZAudio\"",
-					"-framework",
-					"\"CryptoSwift\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mash/Mash-Bridging-Header.h";

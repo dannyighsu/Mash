@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import EZAudio
 
 class UploadViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAlertViewDelegate {
 

@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 import AVFoundation
-import EZAudio
 import Photos
 
 class DashboardController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate {
@@ -205,6 +204,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func retrieveTracks() {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+        
+        // FIXME: wrong search request
+        var request = RecordingSearchRequest()
+        
+        /*
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
         var params = ["handle": handle, "password_hash": passwordHash, "query_name": self.user.handle!] as Dictionary
         httpPost(params, request) {
@@ -227,7 +231,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
                 }
             }
-        }
+        }*/
     }
 
     func updateTable(data: NSDictionary) {

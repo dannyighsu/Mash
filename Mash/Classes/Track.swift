@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import EZAudio
 
 class Track: UITableViewCell, EZAudioFileDelegate {
     

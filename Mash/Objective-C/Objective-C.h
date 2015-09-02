@@ -7,10 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <EZAudio/EZAudio.h>
 
 @interface Wrappers: NSObject
 
-+ (void)getWaveform:(EZAudioFile*) audioFile audioPlot:(EZAudioPlotGL*) audioPlot;
++ (NSString *)hexadecimalString:(NSData *) data;
 
 @end

@@ -11,6 +11,8 @@ import UIKit
 
 // Helper objects
 let db: String = "http://localhost:5010"
+let hostAddress: String = "placeholder"
+let serverClient: MashService = MashService(host: hostAddress)
 var keychainWrapper: KeychainWrapper = KeychainWrapper()
 var current_user = User()
 var user_following: [User] = []

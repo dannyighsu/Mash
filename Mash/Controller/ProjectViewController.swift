@@ -8,7 +8,6 @@
 
 import UIKit
 import AVFoundation
-import EZAudio
 
 class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate, MetronomeDelegate, ChannelDelegate {
 

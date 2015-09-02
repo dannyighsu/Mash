@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import EZAudio
 import AVFoundation
 
 class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlayerDelegate, EZAudioFileDelegate, UITableViewDelegate, UITableViewDataSource, MetronomeDelegate {

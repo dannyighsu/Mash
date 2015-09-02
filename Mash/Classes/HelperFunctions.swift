@@ -9,10 +9,6 @@
 import Foundation
 import Security
 import UIKit
-import AVFoundation
-import CryptoSwift
-import AWSCore
-import AWSS3
 
 // Returns UIImage corresponding to input string
 func findImage(instrument: [String]) -> UIImage {
@@ -84,8 +80,29 @@ func returnProjectView(navcontroller: UINavigationController) -> ProjectViewCont
 // Cryptographic Hash function for password hashes
 func hashPassword(input: String) -> String {
     var data: NSData = NSData(bytes: input, length: count(input))
-    let hash = data.sha256()
-    return ""//hash!.hexString
+    let hash = sha256(data)
+    return hash.toHexString().uppercaseString
+}
+
+func sha256(data : NSData) -> NSData {
+    var hash = [UInt8](count: Int(CC_SHA256_DIGEST_LENGTH), repeatedValue: 0)
+    CC_SHA256(data.bytes, CC_LONG(data.length), &hash)
+    let res = NSData(bytes: hash, length: Int(CC_SHA256_DIGEST_LENGTH))
+    return res
+}
+
+extension NSData {
+    public func toHexString() -> String {
+        let count = self.length / sizeof(UInt8)
+        var bytesArray = [UInt8](count: count, repeatedValue: 0)
+        self.getBytes(&bytesArray, length:count * sizeof(UInt8))
+        
+        var s:String = "";
+        for byte in bytesArray {
+            s = s + String(format:"%02x", byte)
+        }
+        return s
+    }
 }
 
 // Download from S3 bucket

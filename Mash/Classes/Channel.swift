@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import EZAudio
 
 protocol ChannelDelegate {
     func channelVolumeDidChange(channel: Channel, number: Int, value: Float)

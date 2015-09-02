@@ -23,6 +23,7 @@ class User: UITableViewCell {
     var tracks: String? = nil
     var user_description: String? = nil
     var userid: Int? = nil
+    var loginToken: String? = nil
     
     convenience init() {
         self.init(frame: CGRectZero)
