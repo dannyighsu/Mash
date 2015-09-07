@@ -107,7 +107,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             let userData = self.searchResults[indexPath.row] as! User
             user.handle = userData.handle
             user.username = userData.username
-            user.profile_pic_key = "\(user.handle!)~~profile_pic.jpg"
+            user.profilePicKey = "\(user.handle!)~~profile_pic.jpg"
             user.updateDisplays()
             return user
         }
@@ -200,7 +200,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             params = ["handle": handle, "password_hash": passwordHash, "song_name": searchText] as Dictionary
         } else {
             request = NSMutableURLRequest(URL: NSURL(string: "\(db)/search/user")!)
-            params = ["handle": handle, "password_hash": passwordHash, "user_id": "\(current_user.userid!)", "query_name": searchText] as Dictionary
+            params = ["handle": handle, "password_hash": passwordHash, "user_id": "\(currentUser.userid!)", "query_name": searchText] as Dictionary
         }
         self.activityView.startAnimating()
         httpPost(params, request) {
@@ -275,7 +275,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             var user = User()
             user.handle = dict["handle"] as? String
             user.username = dict["name"] as? String
-            user.profile_pic_key = "\(user.handle!)~~profile_pic.jpg"
+            user.profilePicKey = "\(user.handle!)~~profile_pic.jpg"
             self.allResults.append(user)
             if i < DEFAULT_DISPLAY_AMOUNT {
                 self.searchResults.append(user)

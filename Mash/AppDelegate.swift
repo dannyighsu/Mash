@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        AppDelegate.deleteFiles()
+        AppDelegate.clearData()
         
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
@@ -67,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             var currentTime = NSDate()
             var diff = currentTime.timeIntervalSinceDate(exitTime!)
             if diff > 120 {
-                AppDelegate.deleteFiles()
+                AppDelegate.clearData()
             }
         }
     }
@@ -101,7 +101,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return orientations
     }
     
-    class func deleteFiles() {
+    // Clear user data and downloaded files
+    class func clearData() {
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("hasLoginKey")
+        
         NSNotificationCenter.defaultCenter().postNotificationName("UpdateUINotification", object: nil)
         var dir = applicationDocumentsDirectory()
         var error: NSError? = nil

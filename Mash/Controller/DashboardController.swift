@@ -16,7 +16,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
     var audioPlayer: AVAudioPlayer? = nil
-    var user: User = current_user
+    var user: User = currentUser
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +35,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if self.user != current_user {
+        if self.user != currentUser {
             self.parentViewController?.navigationItem.setHidesBackButton(false, animated: false)
             self.navigationItem.title = self.user.display_name()
         } else {
@@ -117,9 +117,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         header.trackCount.layer.borderWidth = 0.2
         header.descriptionLabel.layer.borderWidth = 0.2
         
-        if self.user.handle != current_user.handle {
+        if self.user.handle != currentUser.handle {
             var following: Bool = false
-            for u in user_following {
+            for u in userFollowing {
                 if u.handle! == self.user.handle! {
                     following = true
                 }
@@ -144,15 +144,15 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let tap2 = UITapGestureRecognizer(target: self, action: "goToFollowing:")
         header.followingCount.addGestureRecognizer(tap2)
         
-        self.user.banner_pic(header.bannerImage)
-        self.user.profile_pic(header.profilePic)
+        self.user.setBannerPic(header.bannerImage)
+        self.user.setProfilePic(header.profilePic)
         var followers = NSMutableAttributedString(string: "  \(self.user.followers!)\n  FOLLOWERS")
         header.followerCount.attributedText = followers
         var following = NSMutableAttributedString(string: "  \(self.user.following!)\n  FOLLOWING")
         header.followingCount.attributedText = following
         var tracks = NSMutableAttributedString(string: "  \(self.user.tracks!)\n  TRACKS")
         header.trackCount.attributedText = tracks
-        header.descriptionLabel.text = "  \(self.user.user_description!)"
+        header.descriptionLabel.text = "  \(self.user.userDescription!)"
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -192,7 +192,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if self.user != current_user {
+        if self.user != currentUser {
             return
         }
         if editingStyle == UITableViewCellEditingStyle.Delete {
@@ -202,11 +202,20 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
 
     // Track management
     func retrieveTracks() {
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+        var request = UserRequest()
+        request.userid = UInt32(self.user.userid!)
+        request.loginToken = currentUser.loginToken
+        request.queryUserid = UInt32(self.user.userid!)
         
-        // FIXME: wrong search request
-        var request = RecordingSearchRequest()
+        serverClient.userRecordingsWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
+            } else {
+                self.updateTable(response)
+            }
+        }
         
         /*
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
@@ -234,29 +243,20 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }*/
     }
 
-    func updateTable(data: NSDictionary) {
+    func updateTable(data: UserRecordingsResponse) {
         self.data = []
-        var tracks = data["recordings"] as! NSArray
-        for t in tracks {
-            var dict = t as! NSDictionary
-            var instruments = dict["instrument"] as! NSArray
-            var instrument = ""
-            if instruments.count != 0 {
-                instrument = instruments[0] as! String
-            }
-            var families = dict["family"] as! NSArray
-            var family = ""
-            if families.count != 0 {
-                family = families[0] as! String
-            }
-            var trackName = dict["song_name"] as! String
-            var format = dict["format"] as! String
+        for t in data.recArray! {
+            var track = t as! RecordingResponse
+            var instruments = NSArray(array: track.instrumentArray)
+            var families = NSArray(array: track.familyArray)
+            var trackName = track.title
+            var format = track.format
             var url = "\(self.user.handle!)~~\(trackName)\(format)"
             url = filePathString(url)
             
-            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["handle"] as! String, format: format)
+            var trackData = Track(frame: CGRectZero, instruments: families as! [String], instrumentFamilies: families as! [String], titleText: track.handle!, bpm: Int(track.bpm), trackURL: url, user: track.handle!, format: track.format!)
             
-            self.data.append(track)
+            self.data.append(trackData)
         }
         dispatch_async(dispatch_get_main_queue()) {
             self.tracks.reloadData()
@@ -271,8 +271,25 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func deleteTrack(track: Track, indexPath: NSIndexPath) {
+        var request = RecordingRequest()
+        request.loginToken = currentUser.loginToken
+        request.userid = UInt32(currentUser.userid!)
+        request.recid = UInt32(track.id)
+        
+        serverClient.recordingDeleteWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("\(error)", sender: nil)
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.data.removeAtIndex(indexPath.row)
+                    self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+                }
+            }
+        }
+        /*
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = current_user.handle!
+        let handle = currentUser.handle!
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/delete/recordings")!)
         var params = ["handle": handle, "password_hash": passwordHash, "song_name": track.titleText] as Dictionary
         httpDelete(params, request) {
@@ -296,14 +313,14 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
                 }
             }
-        }
+        }*/
     }
 
     // Alert view delegate
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if alertView.title == "Change Display Name" {
             if buttonIndex == 1 {
-                self.update(alertView.textFieldAtIndex(0)!.text, inputType: "new_display_name")
+                self.update(alertView.textFieldAtIndex(0)!.text, inputType: "name")
             }
         } else if alertView.title == "Are you Sure?" {
             if buttonIndex == 1 {
@@ -343,8 +360,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         photo.requestContentEditingInputWithOptions(nil) {
             (contentInput, info) in
             var imageURL = contentInput.fullSizeImageURL
-            self.update("\(current_user.handle!)~~profile_pic.jpg", inputType: "new_profile_pic_link")
-            upload("\(current_user.handle!)~~profile_pic.jpg", imageURL, profile_bucket)
+            upload("\(currentUser.handle!)~~profile_pic.jpg", imageURL, profile_bucket)
         }
     }
     
@@ -357,8 +373,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         photo.requestContentEditingInputWithOptions(nil) {
             (contentInput, info) in
             var imageURL = contentInput.fullSizeImageURL
-            self.update("\(current_user.handle!)~~banner.jpg", inputType: "new_banner_pic_link")
-            upload("\(current_user.handle!)~~banner.jpg", imageURL, banner_bucket)
+            upload("\(currentUser.handle!)~~banner.jpg", imageURL, banner_bucket)
         }
     }
     
@@ -375,8 +390,32 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func update(input: String, inputType: String) {
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = current_user.handle
+        var request = UserUpdateRequest()
+        request.userid = UInt32(currentUser.userid!)
+        request.loginToken = currentUser.loginToken
+        switch (inputType) {
+            case "name":
+                request.name = input
+            case "userDescription":
+                request.userDescription = input
+            case "email":
+                request.email = input
+            case "passwordHash":
+                request.passwordHash = input
+            default:
+                Debug.printl("Error in update, input type is \(inputType)", sender: nil)
+        }
+        serverClient.userUpdateWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    User.updateSelf(self)
+                }
+            }
+        }
+        /*
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/update/user")!)
         var params = ["handle": handle!, "password_hash": passwordHash, inputType: input] as Dictionary
         httpPatch(params, request) {
@@ -397,7 +436,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
                 }
             }
-        }
+        }*/
     }
     
     func follow(sender: UIButton) {
@@ -416,8 +455,22 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func delete() {
+        var request = UserRequest()
+        request.loginToken = currentUser.loginToken
+        request.userid = UInt32(currentUser.userid!)
+        serverClient.userDeleteWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.logout()
+                }
+            }
+        }
+        /*
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = current_user.handle
+        let handle = currentUser.handle
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/delete/user")!)
         var params = ["handle": handle!, "password_hash": passwordHash] as Dictionary
         httpDelete(params, request) {
@@ -440,7 +493,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
                 }
             }
-        }
+        }*/
     }
     
     // Segues

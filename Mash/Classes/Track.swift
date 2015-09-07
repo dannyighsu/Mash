@@ -25,6 +25,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
     var trackURL: String = ""
     var bpm: Int = 0
     var format: String = ""
+    var id: Int = 0
     var audioFile: EZAudioFile? = nil
     
     convenience init(frame: CGRect, instruments: [String], titleText: String) {
@@ -86,7 +87,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         }
         
         // Export composition
-        var newTrack = filePathString("\(current_user.handle!)~~\(name).m4a")
+        var newTrack = filePathString("\(currentUser.handle!)~~\(name).m4a")
         if NSFileManager.defaultManager().fileExistsAtPath(newTrack) {
             NSFileManager.defaultManager().removeItemAtPath(newTrack, error: nil)
         }

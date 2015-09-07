@@ -154,8 +154,30 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
     }
 
     func finish(sender: AnyObject?) {
+        var request = RecordingUpdateRequest()
+        request.userid = UInt32(currentUser.userid!)
+        request.loginToken = currentUser.loginToken
+        request.title = "\(self.track!.titleText)"
+        request.instrumentArray = [self.instrumentField.text]
+        request.genreArray = [self.genreField.text]
+        request.subgenreArray = [self.subgenreField.text]
+        
+        serverClient.recordingUpdateWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.navigationController?.popViewControllerAnimated(true)
+                    let tabbarcontroller = self.navigationController?.viewControllers[2] as! TabBarController
+                    tabbarcontroller.selectedIndex = getTabBarController("dashboard")
+                }
+            }
+        }
+        
+        /*
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = current_user.handle
+        let handle = currentUser.handle
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/update/recording")!)
         var time = split(self.timeField.text!) {$0 == "/"}
         if count(time[1]) == 1 {
@@ -186,6 +208,7 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         self.navigationController?.popViewControllerAnimated(true)
         let tabbarcontroller = self.navigationController?.viewControllers[2] as! TabBarController
         tabbarcontroller.selectedIndex = getTabBarController("dashboard")
+        */
     }
     
 }

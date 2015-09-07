@@ -69,7 +69,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.userLabel.text = self.data[indexPath.row].userText
         cell.timeLabel.text = self.data[indexPath.row].timeText
         cell.timeLabel.text = cell.timeLabel.text!.substringWithRange(Range<String.Index>(start: cell.timeLabel.text!.startIndex, end: advance(cell.timeLabel.text!.endIndex, -13)))
-        self.data[indexPath.row].user!.profile_pic(cell.profileImage)
+        self.data[indexPath.row].user!.setProfilePic(cell.profileImage)
         cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFit
         cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
         cell.profileImage.layer.borderWidth = 0.5
@@ -126,37 +126,39 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func retrieveTracks() {
         self.activityView.startAnimating()
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/feed")!)
-        var params = ["handle": handle, "password_hash": passwordHash, "userid": String(current_user.userid!)] as Dictionary
-        httpPost(params, request) {
-            (data, statusCode, error) -> Void in
+        var request = FeedRequest()
+        request.userid = UInt32(currentUser.userid!)
+        request.loginToken = currentUser.loginToken
+        
+        serverClient.feedWithRequest(request) {
+            (response, error) in
             if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
+                Debug.printl("Error: \(error)", sender: nil)
             } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("HTTP Error: \(error)", sender: self)
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    
-                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    var error: NSError? = nil
-                    var response: AnyObject? = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error)
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.updateActivity(response as! NSDictionary)
-                    }
-                } else if statusCode == HTTP_SERVER_ERROR {
-                    Debug.printl("Internal server error.", sender: self)
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                }
+                self.updateActivity(response)
             }
         }
     }
     
-    func updateActivity(data: NSDictionary) {
-        self.data = []
+    func updateActivity(response: FeedResponse) {
+        for item in response.storyArray {
+            let story = item as! FeedResponse_Story
+            let recording = story.recStory.recording
+            let user = recording.handle
+            let title = recording.title
+            let time = recording.uploaded
+            let id = recording.recid
+            var follower = User()
+            follower.handle = user
+            follower.profilePicKey = "\(follower.handle!)~~profile_pic.jpg"
+            let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower)
+            self.data.append(cell)
+        }
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityFeed.reloadData()
+            self.activityView.stopAnimating()
+        }
+        /*self.data = []
         var activity = data["feed"] as! NSArray
         for item in activity {
             let type = item["type"] as! String
@@ -167,7 +169,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 let time = item["timestamp"] as! String
                 var user = User()
                 user.handle = follower
-                user.profile_pic_key = "\(user.handle!)~~profile_pic.jpg"
+                user.profilePicKey = "\(user.handle!)~~profile_pic.jpg"
                 let cell = HomeCell(frame: CGRectZero, eventText: event, userText: follower, timeText: time, user: user)
                 self.data.append(cell)
             } else if type == "recording" {
@@ -177,13 +179,13 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 let event = "\(recording)"
                 var follower = User()
                 follower.handle = user
-                follower.profile_pic_key = "\(follower.handle!)~~profile_pic.jpg"
+                follower.profilePicKey = "\(follower.handle!)~~profile_pic.jpg"
                 let cell = HomeCell(frame: CGRectZero, eventText: event, userText: user, timeText: time, user: follower)
                 self.data.append(cell)
             }
         }
         self.activityFeed.reloadData()
-        self.activityView.stopAnimating()
+        self.activityView.stopAnimating()*/
     }
     
     override func didReceiveMemoryWarning() {

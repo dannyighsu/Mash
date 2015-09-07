@@ -139,6 +139,37 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     // Upload Methods
     func uploadAction() {
+        var familyString = String(stringInterpolationSegment: self.instruments)
+        var request = RecordingUploadRequest()
+        request.userid = UInt32(currentUser.userid!)
+        request.loginToken = currentUser.loginToken
+        request.title = "\(self.titleTextField.text)"
+        request.bpm = 0
+        request.bar = 0
+        request.key = "None"
+        request.familyArray = [familyString]
+        request.instrumentArray = []
+        request.genreArray = []
+        request.subgenreArray = []
+        request.feel = 0
+        request.solo = true
+        request.format = ".m4a"
+        
+        serverClient.recordingUploadWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
+                    let key = "\(currentUser.handle!)~~\(self.titleTextField).m4a"
+                    upload(key, self.recording!.url, track_bucket)
+                    self.finish()
+                }
+            }
+        }
+        
+        /*
         let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
@@ -160,7 +191,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                 } else if statusCode == HTTP_SUCCESS {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.activityView.stopAnimating()
-                        let key = "\(current_user.handle!)~~\(self.titleTextField.text).m4a"
+                        let key = "\(currentUser.handle!)~~\(self.titleTextField.text).m4a"
                         upload(key, self.recording!.url, track_bucket)
                         self.finish()
                     }
@@ -171,7 +202,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                     return
                 }
             }
-        }
+        }*/
     }
     
     func saveWaveform(track: Track) {
@@ -183,7 +214,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func finish() {
         let taggingController = self.storyboard?.instantiateViewControllerWithIdentifier("TaggingViewController") as! TaggingViewController
-        taggingController.track = Track(frame: CGRectZero, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text, bpm: self.bpm!, trackURL: "\(current_user.handle!)~~\(self.titleTextField.text!).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
+        taggingController.track = Track(frame: CGRectZero, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text, bpm: self.bpm!, trackURL: "\(currentUser.handle!)~~\(self.titleTextField.text!).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
         self.saveWaveform(taggingController.track!)
         
         var index = 0

@@ -22,60 +22,60 @@
 - (ProtoRPC *)RPCToSignInWithRequest:(SignInRequest *)request handler:(void(^)(SignInResponse *response, NSError *error))handler;
 
 
-#pragma mark UserGet(UserGetRequest) returns (UserGetResponse)
+#pragma mark UserGet(UserRequest) returns (UserResponse)
 
-- (void)userGetWithRequest:(UserGetRequest *)request handler:(void(^)(UserGetResponse *response, NSError *error))handler;
+- (void)userGetWithRequest:(UserRequest *)request handler:(void(^)(UserResponse *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToUserGetWithRequest:(UserGetRequest *)request handler:(void(^)(UserGetResponse *response, NSError *error))handler;
-
-
-#pragma mark RecordingGet(RecordingInfoRequest) returns (RecordingGetResponse)
-
-- (void)recordingGetWithRequest:(RecordingInfoRequest *)request handler:(void(^)(RecordingGetResponse *response, NSError *error))handler;
-
-- (ProtoRPC *)RPCToRecordingGetWithRequest:(RecordingInfoRequest *)request handler:(void(^)(RecordingGetResponse *response, NSError *error))handler;
+- (ProtoRPC *)RPCToUserGetWithRequest:(UserRequest *)request handler:(void(^)(UserResponse *response, NSError *error))handler;
 
 
-#pragma mark FollowersGet(FollowGetRequest) returns (FollowGetResponse)
+#pragma mark RecordingGet(RecordingRequest) returns (RecordingResponse)
 
-- (void)followersGetWithRequest:(FollowGetRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler;
+- (void)recordingGetWithRequest:(RecordingRequest *)request handler:(void(^)(RecordingResponse *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToFollowersGetWithRequest:(FollowGetRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler;
-
-
-#pragma mark FollowingsGet(FollowGetRequest) returns (FollowGetResponse)
-
-- (void)followingsGetWithRequest:(FollowGetRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler;
-
-- (ProtoRPC *)RPCToFollowingsGetWithRequest:(FollowGetRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler;
+- (ProtoRPC *)RPCToRecordingGetWithRequest:(RecordingRequest *)request handler:(void(^)(RecordingResponse *response, NSError *error))handler;
 
 
-#pragma mark UserDelete(UserDeleteRequest) returns (SuccessResponse)
+#pragma mark FollowersGet(UserRequest) returns (FollowGetResponse)
 
-- (void)userDeleteWithRequest:(UserDeleteRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+- (void)followersGetWithRequest:(UserRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToUserDeleteWithRequest:(UserDeleteRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
-
-
-#pragma mark RecordingDelete(RecordingInfoRequest) returns (SuccessResponse)
-
-- (void)recordingDeleteWithRequest:(RecordingInfoRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
-
-- (ProtoRPC *)RPCToRecordingDeleteWithRequest:(RecordingInfoRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+- (ProtoRPC *)RPCToFollowersGetWithRequest:(UserRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler;
 
 
-#pragma mark UserFollow(UserFollowRequest) returns (SuccessResponse)
+#pragma mark FollowingsGet(UserRequest) returns (FollowGetResponse)
 
-- (void)userFollowWithRequest:(UserFollowRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+- (void)followingsGetWithRequest:(UserRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToUserFollowWithRequest:(UserFollowRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+- (ProtoRPC *)RPCToFollowingsGetWithRequest:(UserRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler;
 
 
-#pragma mark UserUnfollow(UserFollowRequest) returns (SuccessResponse)
+#pragma mark UserDelete(UserRequest) returns (SuccessResponse)
 
-- (void)userUnfollowWithRequest:(UserFollowRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+- (void)userDeleteWithRequest:(UserRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToUserUnfollowWithRequest:(UserFollowRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+- (ProtoRPC *)RPCToUserDeleteWithRequest:(UserRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+
+#pragma mark RecordingDelete(RecordingRequest) returns (SuccessResponse)
+
+- (void)recordingDeleteWithRequest:(RecordingRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToRecordingDeleteWithRequest:(RecordingRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+
+#pragma mark UserFollow(UserRequest) returns (SuccessResponse)
+
+- (void)userFollowWithRequest:(UserRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToUserFollowWithRequest:(UserRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+
+#pragma mark UserUnfollow(UserRequest) returns (SuccessResponse)
+
+- (void)userUnfollowWithRequest:(UserRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToUserUnfollowWithRequest:(UserRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
 
 
 #pragma mark RecordingUpload(RecordingUploadRequest) returns (SuccessResponse)
@@ -85,25 +85,53 @@
 - (ProtoRPC *)RPCToRecordingUploadWithRequest:(RecordingUploadRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
 
 
-#pragma mark RecordingPlay(RecordingInfoRequest) returns (SuccessResponse)
+#pragma mark RecordingPlay(RecordingRequest) returns (SuccessResponse)
 
-- (void)recordingPlayWithRequest:(RecordingInfoRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+- (void)recordingPlayWithRequest:(RecordingRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToRecordingPlayWithRequest:(RecordingInfoRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
-
-
-#pragma mark RecordingLike(RecordingInfoRequest) returns (SuccessResponse)
-
-- (void)recordingLikeWithRequest:(RecordingInfoRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
-
-- (ProtoRPC *)RPCToRecordingLikeWithRequest:(RecordingInfoRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+- (ProtoRPC *)RPCToRecordingPlayWithRequest:(RecordingRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
 
 
-#pragma mark RecordingUnlike(RecordingInfoRequest) returns (SuccessResponse)
+#pragma mark RecordingLike(RecordingRequest) returns (SuccessResponse)
 
-- (void)recordingUnlikeWithRequest:(RecordingInfoRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+- (void)recordingLikeWithRequest:(RecordingRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToRecordingUnlikeWithRequest:(RecordingInfoRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+- (ProtoRPC *)RPCToRecordingLikeWithRequest:(RecordingRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+
+#pragma mark RecordingUnlike(RecordingRequest) returns (SuccessResponse)
+
+- (void)recordingUnlikeWithRequest:(RecordingRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToRecordingUnlikeWithRequest:(RecordingRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+
+#pragma mark RecordingUpdate(RecordingUpdateRequest) returns (SuccessResponse)
+
+- (void)recordingUpdateWithRequest:(RecordingUpdateRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToRecordingUpdateWithRequest:(RecordingUpdateRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+
+#pragma mark UserUpdate(UserUpdateRequest) returns (SuccessResponse)
+
+- (void)userUpdateWithRequest:(UserUpdateRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToUserUpdateWithRequest:(UserUpdateRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+
+#pragma mark UserRecordings(UserRequest) returns (UserRecordingsResponse)
+
+- (void)userRecordingsWithRequest:(UserRequest *)request handler:(void(^)(UserRecordingsResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToUserRecordingsWithRequest:(UserRequest *)request handler:(void(^)(UserRecordingsResponse *response, NSError *error))handler;
+
+
+#pragma mark Feed(FeedRequest) returns (FeedResponse)
+
+- (void)feedWithRequest:(FeedRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToFeedWithRequest:(FeedRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler;
 
 
 @end

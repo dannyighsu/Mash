@@ -11,6 +11,11 @@
 
 CF_EXTERN_C_BEGIN
 
+@class FeedResponse_FollowStory;
+@class FeedResponse_RecordingStory;
+@class RecordingResponse;
+@class UserPreview;
+
 
 #pragma mark - MashserviceRoot
 
@@ -31,8 +36,6 @@ typedef GPB_ENUM(RegisterRequest_FieldNumber) {
   RegisterRequest_FieldNumber_PasswordHash = 3,
   RegisterRequest_FieldNumber_Name = 4,
   RegisterRequest_FieldNumber_RegisterAgent = 5,
-  RegisterRequest_FieldNumber_ProfilePicLink = 6,
-  RegisterRequest_FieldNumber_BannerPicLink = 7,
 };
 
 @interface RegisterRequest : GPBMessage
@@ -52,28 +55,22 @@ typedef GPB_ENUM(RegisterRequest_FieldNumber) {
 @property(nonatomic, readwrite) BOOL hasRegisterAgent;
 @property(nonatomic, readwrite) int32_t registerAgent;
 
-@property(nonatomic, readwrite) BOOL hasProfilePicLink;
-@property(nonatomic, readwrite, copy) NSString *profilePicLink;
-
-@property(nonatomic, readwrite) BOOL hasBannerPicLink;
-@property(nonatomic, readwrite, copy) NSString *bannerPicLink;
-
 @end
 
 #pragma mark - RegisterResponse
 
 typedef GPB_ENUM(RegisterResponse_FieldNumber) {
-  RegisterResponse_FieldNumber_Success = 1,
-  RegisterResponse_FieldNumber_LoginToken = 3,
+  RegisterResponse_FieldNumber_LoginToken = 1,
+  RegisterResponse_FieldNumber_Userid = 2,
 };
 
 @interface RegisterResponse : GPBMessage
 
-@property(nonatomic, readwrite) BOOL hasSuccess;
-@property(nonatomic, readwrite) BOOL success;
-
 @property(nonatomic, readwrite) BOOL hasLoginToken;
 @property(nonatomic, readwrite, copy) NSString *loginToken;
+
+@property(nonatomic, readwrite) BOOL hasUserid;
+@property(nonatomic, readwrite) uint32_t userid;
 
 @end
 
@@ -101,9 +98,7 @@ typedef GPB_ENUM(SignInResponse_FieldNumber) {
   SignInResponse_FieldNumber_Email = 2,
   SignInResponse_FieldNumber_Name = 3,
   SignInResponse_FieldNumber_RegisterAgent = 4,
-  SignInResponse_FieldNumber_ProfilePicLink = 5,
-  SignInResponse_FieldNumber_BannerPicLink = 6,
-  SignInResponse_FieldNumber_Description_p = 7,
+  SignInResponse_FieldNumber_UserDescription = 7,
   SignInResponse_FieldNumber_LoginToken = 8,
   SignInResponse_FieldNumber_FollowersCount = 9,
   SignInResponse_FieldNumber_FollowingCount = 10,
@@ -124,14 +119,8 @@ typedef GPB_ENUM(SignInResponse_FieldNumber) {
 @property(nonatomic, readwrite) BOOL hasRegisterAgent;
 @property(nonatomic, readwrite) uint32_t registerAgent;
 
-@property(nonatomic, readwrite) BOOL hasProfilePicLink;
-@property(nonatomic, readwrite, copy) NSString *profilePicLink;
-
-@property(nonatomic, readwrite) BOOL hasBannerPicLink;
-@property(nonatomic, readwrite, copy) NSString *bannerPicLink;
-
-@property(nonatomic, readwrite) BOOL hasDescription_p;
-@property(nonatomic, readwrite, copy) NSString *description_p;
+@property(nonatomic, readwrite) BOOL hasUserDescription;
+@property(nonatomic, readwrite, copy) NSString *userDescription;
 
 @property(nonatomic, readwrite) BOOL hasLoginToken;
 @property(nonatomic, readwrite, copy) NSString *loginToken;
@@ -147,46 +136,23 @@ typedef GPB_ENUM(SignInResponse_FieldNumber) {
 
 @end
 
-#pragma mark - UserGetRequest
+#pragma mark - UserResponse
 
-typedef GPB_ENUM(UserGetRequest_FieldNumber) {
-  UserGetRequest_FieldNumber_LoginToken = 1,
-  UserGetRequest_FieldNumber_Userid = 2,
-  UserGetRequest_FieldNumber_QueryHandle = 3,
-  UserGetRequest_FieldNumber_QueryUserid = 4,
+typedef GPB_ENUM(UserResponse_FieldNumber) {
+  UserResponse_FieldNumber_Handle = 1,
+  UserResponse_FieldNumber_Email = 2,
+  UserResponse_FieldNumber_Name = 3,
+  UserResponse_FieldNumber_UserDescription = 4,
+  UserResponse_FieldNumber_FollowersCount = 5,
+  UserResponse_FieldNumber_FollowingCount = 6,
+  UserResponse_FieldNumber_TrackCount = 7,
+  UserResponse_FieldNumber_Follow = 8,
 };
 
-@interface UserGetRequest : GPBMessage
+@interface UserResponse : GPBMessage
 
-@property(nonatomic, readwrite) BOOL hasLoginToken;
-@property(nonatomic, readwrite, copy) NSString *loginToken;
-
-@property(nonatomic, readwrite) BOOL hasUserid;
-@property(nonatomic, readwrite) uint32_t userid;
-
-@property(nonatomic, readwrite) BOOL hasQueryHandle;
-@property(nonatomic, readwrite, copy) NSString *queryHandle;
-
-@property(nonatomic, readwrite) BOOL hasQueryUserid;
-@property(nonatomic, readwrite) uint32_t queryUserid;
-
-@end
-
-#pragma mark - UserGetResponse
-
-typedef GPB_ENUM(UserGetResponse_FieldNumber) {
-  UserGetResponse_FieldNumber_Email = 1,
-  UserGetResponse_FieldNumber_Name = 2,
-  UserGetResponse_FieldNumber_ProfilePicLink = 3,
-  UserGetResponse_FieldNumber_BannerPicLink = 4,
-  UserGetResponse_FieldNumber_Description_p = 5,
-  UserGetResponse_FieldNumber_FollowersCount = 6,
-  UserGetResponse_FieldNumber_FollowingCount = 7,
-  UserGetResponse_FieldNumber_TrackCount = 8,
-  UserGetResponse_FieldNumber_Follow = 9,
-};
-
-@interface UserGetResponse : GPBMessage
+@property(nonatomic, readwrite) BOOL hasHandle;
+@property(nonatomic, readwrite, copy) NSString *handle;
 
 @property(nonatomic, readwrite) BOOL hasEmail;
 @property(nonatomic, readwrite, copy) NSString *email;
@@ -194,14 +160,8 @@ typedef GPB_ENUM(UserGetResponse_FieldNumber) {
 @property(nonatomic, readwrite) BOOL hasName;
 @property(nonatomic, readwrite, copy) NSString *name;
 
-@property(nonatomic, readwrite) BOOL hasProfilePicLink;
-@property(nonatomic, readwrite, copy) NSString *profilePicLink;
-
-@property(nonatomic, readwrite) BOOL hasBannerPicLink;
-@property(nonatomic, readwrite, copy) NSString *bannerPicLink;
-
-@property(nonatomic, readwrite) BOOL hasDescription_p;
-@property(nonatomic, readwrite, copy) NSString *description_p;
+@property(nonatomic, readwrite) BOOL hasUserDescription;
+@property(nonatomic, readwrite, copy) NSString *userDescription;
 
 @property(nonatomic, readwrite) BOOL hasFollowersCount;
 @property(nonatomic, readwrite) uint32_t followersCount;
@@ -217,15 +177,15 @@ typedef GPB_ENUM(UserGetResponse_FieldNumber) {
 
 @end
 
-#pragma mark - RecordingInfoRequest
+#pragma mark - RecordingRequest
 
-typedef GPB_ENUM(RecordingInfoRequest_FieldNumber) {
-  RecordingInfoRequest_FieldNumber_LoginToken = 1,
-  RecordingInfoRequest_FieldNumber_Userid = 2,
-  RecordingInfoRequest_FieldNumber_Recid = 3,
+typedef GPB_ENUM(RecordingRequest_FieldNumber) {
+  RecordingRequest_FieldNumber_LoginToken = 1,
+  RecordingRequest_FieldNumber_Userid = 2,
+  RecordingRequest_FieldNumber_Recid = 3,
 };
 
-@interface RecordingInfoRequest : GPBMessage
+@interface RecordingRequest : GPBMessage
 
 @property(nonatomic, readwrite) BOOL hasLoginToken;
 @property(nonatomic, readwrite, copy) NSString *loginToken;
@@ -238,26 +198,29 @@ typedef GPB_ENUM(RecordingInfoRequest_FieldNumber) {
 
 @end
 
-#pragma mark - RecordingGetResponse
+#pragma mark - RecordingResponse
 
-typedef GPB_ENUM(RecordingGetResponse_FieldNumber) {
-  RecordingGetResponse_FieldNumber_Title = 1,
-  RecordingGetResponse_FieldNumber_Bpm = 2,
-  RecordingGetResponse_FieldNumber_Bar = 3,
-  RecordingGetResponse_FieldNumber_Key = 4,
-  RecordingGetResponse_FieldNumber_InstrumentArray = 5,
-  RecordingGetResponse_FieldNumber_FamilyArray = 6,
-  RecordingGetResponse_FieldNumber_GenreArray = 7,
-  RecordingGetResponse_FieldNumber_SubgenreArray = 8,
-  RecordingGetResponse_FieldNumber_Feel = 9,
-  RecordingGetResponse_FieldNumber_Solo = 10,
-  RecordingGetResponse_FieldNumber_Uploaded = 11,
-  RecordingGetResponse_FieldNumber_Format = 12,
-  RecordingGetResponse_FieldNumber_PlayCount = 13,
-  RecordingGetResponse_FieldNumber_LikeCount = 14,
+typedef GPB_ENUM(RecordingResponse_FieldNumber) {
+  RecordingResponse_FieldNumber_Title = 1,
+  RecordingResponse_FieldNumber_Bpm = 2,
+  RecordingResponse_FieldNumber_Bar = 3,
+  RecordingResponse_FieldNumber_Key = 4,
+  RecordingResponse_FieldNumber_InstrumentArray = 5,
+  RecordingResponse_FieldNumber_FamilyArray = 6,
+  RecordingResponse_FieldNumber_GenreArray = 7,
+  RecordingResponse_FieldNumber_SubgenreArray = 8,
+  RecordingResponse_FieldNumber_Feel = 9,
+  RecordingResponse_FieldNumber_Solo = 10,
+  RecordingResponse_FieldNumber_Uploaded = 11,
+  RecordingResponse_FieldNumber_Format = 12,
+  RecordingResponse_FieldNumber_PlayCount = 13,
+  RecordingResponse_FieldNumber_LikeCount = 14,
+  RecordingResponse_FieldNumber_Recid = 15,
+  RecordingResponse_FieldNumber_Userid = 16,
+  RecordingResponse_FieldNumber_Handle = 17,
 };
 
-@interface RecordingGetResponse : GPBMessage
+@interface RecordingResponse : GPBMessage
 
 @property(nonatomic, readwrite) BOOL hasTitle;
 @property(nonatomic, readwrite, copy) NSString *title;
@@ -301,26 +264,27 @@ typedef GPB_ENUM(RecordingGetResponse_FieldNumber) {
 @property(nonatomic, readwrite) BOOL hasLikeCount;
 @property(nonatomic, readwrite) uint32_t likeCount;
 
-@end
-
-#pragma mark - FollowGetRequest
-
-typedef GPB_ENUM(FollowGetRequest_FieldNumber) {
-  FollowGetRequest_FieldNumber_LoginToken = 1,
-  FollowGetRequest_FieldNumber_Userid = 2,
-  FollowGetRequest_FieldNumber_QueryUserid = 3,
-};
-
-@interface FollowGetRequest : GPBMessage
-
-@property(nonatomic, readwrite) BOOL hasLoginToken;
-@property(nonatomic, readwrite, copy) NSString *loginToken;
+@property(nonatomic, readwrite) BOOL hasRecid;
+@property(nonatomic, readwrite) uint32_t recid;
 
 @property(nonatomic, readwrite) BOOL hasUserid;
 @property(nonatomic, readwrite) uint32_t userid;
 
-@property(nonatomic, readwrite) BOOL hasQueryUserid;
-@property(nonatomic, readwrite) uint32_t queryUserid;
+@property(nonatomic, readwrite) BOOL hasHandle;
+@property(nonatomic, readwrite, copy) NSString *handle;
+
+@end
+
+#pragma mark - UserRecordingsResponse
+
+typedef GPB_ENUM(UserRecordingsResponse_FieldNumber) {
+  UserRecordingsResponse_FieldNumber_RecArray = 1,
+};
+
+@interface UserRecordingsResponse : GPBMessage
+
+// |recArray| contains |RecordingResponse|
+@property(nonatomic, readwrite, strong) NSMutableArray *recArray;
 
 @end
 
@@ -337,34 +301,12 @@ typedef GPB_ENUM(FollowGetResponse_FieldNumber) {
 
 @end
 
-#pragma mark - UserDeleteRequest
-
-typedef GPB_ENUM(UserDeleteRequest_FieldNumber) {
-  UserDeleteRequest_FieldNumber_LoginToken = 1,
-  UserDeleteRequest_FieldNumber_Userid = 2,
-  UserDeleteRequest_FieldNumber_QueryUserid = 3,
-};
-
-@interface UserDeleteRequest : GPBMessage
-
-@property(nonatomic, readwrite) BOOL hasLoginToken;
-@property(nonatomic, readwrite, copy) NSString *loginToken;
-
-@property(nonatomic, readwrite) BOOL hasUserid;
-@property(nonatomic, readwrite) uint32_t userid;
-
-@property(nonatomic, readwrite) BOOL hasQueryUserid;
-@property(nonatomic, readwrite) uint32_t queryUserid;
-
-@end
-
 #pragma mark - UserPreview
 
 typedef GPB_ENUM(UserPreview_FieldNumber) {
   UserPreview_FieldNumber_Userid = 1,
   UserPreview_FieldNumber_Handle = 2,
   UserPreview_FieldNumber_Name = 3,
-  UserPreview_FieldNumber_ProfilePicLink = 4,
 };
 
 @interface UserPreview : GPBMessage
@@ -378,20 +320,17 @@ typedef GPB_ENUM(UserPreview_FieldNumber) {
 @property(nonatomic, readwrite) BOOL hasName;
 @property(nonatomic, readwrite, copy) NSString *name;
 
-@property(nonatomic, readwrite) BOOL hasProfilePicLink;
-@property(nonatomic, readwrite, copy) NSString *profilePicLink;
-
 @end
 
-#pragma mark - UserFollowRequest
+#pragma mark - UserRequest
 
-typedef GPB_ENUM(UserFollowRequest_FieldNumber) {
-  UserFollowRequest_FieldNumber_LoginToken = 1,
-  UserFollowRequest_FieldNumber_Userid = 2,
-  UserFollowRequest_FieldNumber_QueryUserid = 3,
+typedef GPB_ENUM(UserRequest_FieldNumber) {
+  UserRequest_FieldNumber_LoginToken = 1,
+  UserRequest_FieldNumber_Userid = 2,
+  UserRequest_FieldNumber_QueryUserid = 3,
 };
 
-@interface UserFollowRequest : GPBMessage
+@interface UserRequest : GPBMessage
 
 @property(nonatomic, readwrite) BOOL hasLoginToken;
 @property(nonatomic, readwrite, copy) NSString *loginToken;
@@ -420,7 +359,6 @@ typedef GPB_ENUM(RecordingUploadRequest_FieldNumber) {
   RecordingUploadRequest_FieldNumber_Feel = 11,
   RecordingUploadRequest_FieldNumber_Solo = 12,
   RecordingUploadRequest_FieldNumber_Format = 13,
-  RecordingUploadRequest_FieldNumber_Handle = 14,
 };
 
 @interface RecordingUploadRequest : GPBMessage
@@ -459,13 +397,59 @@ typedef GPB_ENUM(RecordingUploadRequest_FieldNumber) {
 @property(nonatomic, readwrite) uint32_t feel;
 
 @property(nonatomic, readwrite) BOOL hasSolo;
-@property(nonatomic, readwrite, copy) NSString *solo;
+@property(nonatomic, readwrite) BOOL solo;
 
 @property(nonatomic, readwrite) BOOL hasFormat;
 @property(nonatomic, readwrite, copy) NSString *format;
 
-@property(nonatomic, readwrite) BOOL hasHandle;
-@property(nonatomic, readwrite, copy) NSString *handle;
+@end
+
+#pragma mark - RecordingUpdateRequest
+
+typedef GPB_ENUM(RecordingUpdateRequest_FieldNumber) {
+  RecordingUpdateRequest_FieldNumber_Userid = 1,
+  RecordingUpdateRequest_FieldNumber_LoginToken = 2,
+  RecordingUpdateRequest_FieldNumber_Recid = 3,
+  RecordingUpdateRequest_FieldNumber_Title = 4,
+  RecordingUpdateRequest_FieldNumber_InstrumentArray = 5,
+  RecordingUpdateRequest_FieldNumber_FamilyArray = 6,
+  RecordingUpdateRequest_FieldNumber_GenreArray = 7,
+  RecordingUpdateRequest_FieldNumber_SubgenreArray = 8,
+  RecordingUpdateRequest_FieldNumber_Feel = 9,
+  RecordingUpdateRequest_FieldNumber_Solo = 10,
+};
+
+@interface RecordingUpdateRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasUserid;
+@property(nonatomic, readwrite) uint32_t userid;
+
+@property(nonatomic, readwrite) BOOL hasLoginToken;
+@property(nonatomic, readwrite, copy) NSString *loginToken;
+
+@property(nonatomic, readwrite) BOOL hasRecid;
+@property(nonatomic, readwrite) uint32_t recid;
+
+@property(nonatomic, readwrite) BOOL hasTitle;
+@property(nonatomic, readwrite, copy) NSString *title;
+
+// |instrumentArray| contains |NSString|
+@property(nonatomic, readwrite, strong) NSMutableArray *instrumentArray;
+
+// |familyArray| contains |NSString|
+@property(nonatomic, readwrite, strong) NSMutableArray *familyArray;
+
+// |genreArray| contains |NSString|
+@property(nonatomic, readwrite, strong) NSMutableArray *genreArray;
+
+// |subgenreArray| contains |NSString|
+@property(nonatomic, readwrite, strong) NSMutableArray *subgenreArray;
+
+@property(nonatomic, readwrite) BOOL hasFeel;
+@property(nonatomic, readwrite) uint32_t feel;
+
+@property(nonatomic, readwrite) BOOL hasSolo;
+@property(nonatomic, readwrite) BOOL solo;
 
 @end
 
@@ -502,6 +486,128 @@ typedef GPB_ENUM(RecordingSearchRequest_FieldNumber) {
 @property(nonatomic, readwrite, copy) NSString *query;
 
 @end
+
+#pragma mark - UserUpdateRequest
+
+typedef GPB_ENUM(UserUpdateRequest_FieldNumber) {
+  UserUpdateRequest_FieldNumber_Userid = 1,
+  UserUpdateRequest_FieldNumber_LoginToken = 2,
+  UserUpdateRequest_FieldNumber_Email = 3,
+  UserUpdateRequest_FieldNumber_PasswordHash = 4,
+  UserUpdateRequest_FieldNumber_Name = 5,
+  UserUpdateRequest_FieldNumber_UserDescription = 6,
+};
+
+@interface UserUpdateRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasUserid;
+@property(nonatomic, readwrite) uint32_t userid;
+
+@property(nonatomic, readwrite) BOOL hasLoginToken;
+@property(nonatomic, readwrite, copy) NSString *loginToken;
+
+@property(nonatomic, readwrite) BOOL hasEmail;
+@property(nonatomic, readwrite, copy) NSString *email;
+
+@property(nonatomic, readwrite) BOOL hasPasswordHash;
+@property(nonatomic, readwrite, copy) NSString *passwordHash;
+
+@property(nonatomic, readwrite) BOOL hasName;
+@property(nonatomic, readwrite, copy) NSString *name;
+
+@property(nonatomic, readwrite) BOOL hasUserDescription;
+@property(nonatomic, readwrite, copy) NSString *userDescription;
+
+@end
+
+#pragma mark - FeedRequest
+
+typedef GPB_ENUM(FeedRequest_FieldNumber) {
+  FeedRequest_FieldNumber_Userid = 1,
+  FeedRequest_FieldNumber_LoginToken = 2,
+};
+
+@interface FeedRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasUserid;
+@property(nonatomic, readwrite) uint32_t userid;
+
+@property(nonatomic, readwrite) BOOL hasLoginToken;
+@property(nonatomic, readwrite, copy) NSString *loginToken;
+
+@end
+
+#pragma mark - FeedResponse
+
+typedef GPB_ENUM(FeedResponse_FieldNumber) {
+  FeedResponse_FieldNumber_StoryArray = 1,
+};
+
+@interface FeedResponse : GPBMessage
+
+// |storyArray| contains |FeedResponse_Story|
+@property(nonatomic, readwrite, strong) NSMutableArray *storyArray;
+
+@end
+
+#pragma mark - FeedResponse_FollowStory
+
+typedef GPB_ENUM(FeedResponse_FollowStory_FieldNumber) {
+  FeedResponse_FollowStory_FieldNumber_Followed = 1,
+  FeedResponse_FollowStory_FieldNumber_Follower = 2,
+  FeedResponse_FollowStory_FieldNumber_Timestamp = 3,
+};
+
+@interface FeedResponse_FollowStory : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasFollowed;
+@property(nonatomic, readwrite, strong) UserPreview *followed;
+
+@property(nonatomic, readwrite) BOOL hasFollower;
+@property(nonatomic, readwrite, strong) UserPreview *follower;
+
+@property(nonatomic, readwrite) BOOL hasTimestamp;
+@property(nonatomic, readwrite, copy) NSString *timestamp;
+
+@end
+
+#pragma mark - FeedResponse_RecordingStory
+
+typedef GPB_ENUM(FeedResponse_RecordingStory_FieldNumber) {
+  FeedResponse_RecordingStory_FieldNumber_Recording = 1,
+};
+
+@interface FeedResponse_RecordingStory : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasRecording;
+@property(nonatomic, readwrite, strong) RecordingResponse *recording;
+
+@end
+
+#pragma mark - FeedResponse_Story
+
+typedef GPB_ENUM(FeedResponse_Story_FieldNumber) {
+  FeedResponse_Story_FieldNumber_RecStory = 1,
+  FeedResponse_Story_FieldNumber_FollowStory = 2,
+};
+
+typedef GPB_ENUM(FeedResponse_Story_Story_OneOfCase) {
+  FeedResponse_Story_Story_OneOfCase_GPBUnsetOneOfCase = 0,
+  FeedResponse_Story_Story_OneOfCase_RecStory = 1,
+  FeedResponse_Story_Story_OneOfCase_FollowStory = 2,
+};
+
+@interface FeedResponse_Story : GPBMessage
+
+@property(nonatomic, readonly) FeedResponse_Story_Story_OneOfCase storyOneOfCase;
+
+@property(nonatomic, readwrite, strong) FeedResponse_RecordingStory *recStory;
+
+@property(nonatomic, readwrite, strong) FeedResponse_FollowStory *followStory;
+
+@end
+
+void FeedResponse_Story_ClearStoryOneOfCase(FeedResponse_Story *message);
 
 CF_EXTERN_C_END
 

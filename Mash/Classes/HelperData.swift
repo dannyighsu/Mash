@@ -11,11 +11,11 @@ import UIKit
 
 // Helper objects
 let db: String = "http://localhost:5010"
-let hostAddress: String = "placeholder"
+let hostAddress: String = "http://localhost:50051"
 let serverClient: MashService = MashService(host: hostAddress)
 var keychainWrapper: KeychainWrapper = KeychainWrapper()
-var current_user = User()
-var user_following: [User] = []
+var currentUser = User()
+var userFollowing: [User] = []
 let track_bucket: String = "mash1-tracks"
 let profile_bucket: String = "mash-profiles"
 let banner_bucket: String = "mash-banners"

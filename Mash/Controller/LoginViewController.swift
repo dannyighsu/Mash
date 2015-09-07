@@ -32,6 +32,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
         
+        let handle = NSUserDefaults.standardUserDefaults().objectForKey("username") as? String
+        if handle != nil {
+            self.handleField.text = handle!
+        }
+
         let hasLoginKey = NSUserDefaults.standardUserDefaults().boolForKey("hasLoginKey")
         if hasLoginKey == true {
             let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
@@ -100,15 +105,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 Debug.printl("Error: \(error)", sender: nil)
             } else {
                 Debug.printl("\(response.data())", sender: self)
-                current_user = User()
-                current_user.loginToken = response.loginToken
-                current_user.userid = Int(response.userid)
-                current_user.followers = "\(response.followersCount)"
-                current_user.following = "\(response.followingCount)"
-                current_user.tracks = "\(response.trackCount)"
-                current_user.user_description = response.description
-                current_user.profile_pic_key = response.profilePicLink
-                current_user.banner_pic_key = response.bannerPicLink
+                currentUser = User()
+                currentUser.loginToken = response.loginToken
+                currentUser.userid = Int(response.userid)
+                currentUser.followers = "\(response.followersCount)"
+                currentUser.following = "\(response.followingCount)"
+                currentUser.tracks = "\(response.trackCount)"
+                currentUser.userDescription = response.description
+                currentUser.profilePicKey = "\(handle)~~profile_pic.jpg"
+                currentUser.bannerPicKey = "\(handle)~~banner.jpg"
                 self.completeLogin(handle, password: password)
             }
         }

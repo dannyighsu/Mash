@@ -113,8 +113,6 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         request.email = self.emailField.text!
         request.name = ""
         request.registerAgent = 0
-        request.profilePicLink = ""
-        request.bannerPicLink = ""
         serverClient.registerWithRequest(request) {
             (response, error) in
             if error != nil {
@@ -122,9 +120,9 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
             } else {
                 Debug.printl("\(response.data())", sender: self)
                 self.saveLoginItems()
-                current_user = User()
+                currentUser = User()
                 // FIXME: put user id
-                current_user.loginToken = response.loginToken
+                currentUser.loginToken = response.loginToken
                 User.getUsersFollowing()
                 User.updateSelf(nil)
                 var alert = UIAlertView()
