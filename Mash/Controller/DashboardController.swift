@@ -281,6 +281,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             if error != nil {
                 Debug.printl("\(error)", sender: nil)
             } else {
+                deleteFromBucket("\(currentUser.handle)~~\(track.titleText)\(track.format)", track_bucket)
+                
                 dispatch_async(dispatch_get_main_queue()) {
                     self.data.removeAtIndex(indexPath.row)
                     self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)

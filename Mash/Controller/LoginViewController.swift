@@ -103,6 +103,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)
+                raiseAlert("Incorrect Username and/or Password")
             } else {
                 Debug.printl("\(response.data())", sender: self)
                 currentUser = User()
@@ -111,7 +112,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 currentUser.followers = "\(response.followersCount)"
                 currentUser.following = "\(response.followingCount)"
                 currentUser.tracks = "\(response.trackCount)"
-                currentUser.userDescription = response.description
+                currentUser.userDescription = response.userDescription
                 currentUser.profilePicKey = "\(handle)~~profile_pic.jpg"
                 currentUser.bannerPicKey = "\(handle)~~banner.jpg"
                 self.completeLogin(handle, password: password)

@@ -108,6 +108,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                     var follower = User()
                     follower.handle = dict.handle
                     follower.username = dict.name
+                    follower.userid = Int(dict.userid)
                     follower.profilePicKey = "\(follower.handle!)~~profile_pic.jpg"
                     self.data.append(follower)
                 }

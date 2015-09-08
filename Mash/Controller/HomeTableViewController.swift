@@ -41,7 +41,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.parentViewController?.navigationItem.title = "Mash"
-        self.retrieveTracks()
+        self.retrieveActivity()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -124,7 +124,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.navigationController?.pushViewController(search, animated: false)
     }
 
-    func retrieveTracks() {
+    func retrieveActivity() {
         self.activityView.startAnimating()
         var request = FeedRequest()
         request.userid = UInt32(currentUser.userid!)
@@ -150,6 +150,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             let id = recording.recid
             var follower = User()
             follower.handle = user
+            follower.userid = Int(recording.userid)
             follower.profilePicKey = "\(follower.handle!)~~profile_pic.jpg"
             let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower)
             self.data.append(cell)

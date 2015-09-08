@@ -32,7 +32,7 @@ class Debug {
             if output == nil {
                 println(input)
             } else {
-                println(output! as String + " sent from \(sender)")
+                println(output! as String + " sent from \(sender!)")
             }
         }
     }

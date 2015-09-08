@@ -214,6 +214,25 @@ func upload(key: String, url: NSURL, bucket: String, completion: (result: AWSS3T
     }
 }
 
+// Delete item from S3 bucket
+func deleteFromBucket(key: String, bucket: String) {
+    let request: AWSS3DeleteObjectRequest = AWSS3DeleteObjectRequest.new()
+    request.bucket = bucket
+    request.key = key
+    
+    let s3 = AWSS3.defaultS3()
+    s3.deleteObject(request).continueWithBlock() {
+        (task: AWSTask!) -> AnyObject! in
+        if task.error != nil {
+            Debug.printl("Error: \(task.error)", sender: "helpers")
+            return nil
+        } else {
+            Debug.printl("File deleted successfully: \(task.result)", sender: "helpers")
+            return nil
+        }
+    }
+}
+
 // Returns AWSS3 bucket name
 func getS3Key(track: Track) -> String {
     return "\(track.userText)~~\(track.titleText)\(track.format)"
@@ -256,6 +275,15 @@ func filePathString(input: String?) -> String {
 }
 
 // Alert methods
+func raiseAlert(input: String) {
+    dispatch_async(dispatch_get_main_queue()) {
+        var alert = UIAlertView()
+        alert.title = input
+        alert.addButtonWithTitle("OK")
+        alert.show()
+    }
+}
+
 func raiseAlert(input: String, delegate: UIViewController) {
     dispatch_async(dispatch_get_main_queue()) {
         var alert = UIAlertView()
