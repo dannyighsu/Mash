@@ -182,7 +182,7 @@ func upload(key: String, url: NSURL, bucket: String) {
             }
         } else if (task.result != nil) {
             let uploadOutput: AWSS3TransferManagerUploadOutput = task.result as! AWSS3TransferManagerUploadOutput
-            Debug.printl("File uploaded succesfully", sender: "helpers")
+            Debug.printl("File uploaded successfully", sender: "helpers")
         }
         return nil
     }
@@ -207,7 +207,7 @@ func upload(key: String, url: NSURL, bucket: String, completion: (result: AWSS3T
             completion(result: nil)
         } else if (task.result != nil) {
             let uploadOutput: AWSS3TransferManagerUploadOutput = task.result as! AWSS3TransferManagerUploadOutput
-            Debug.printl("File uploaded succesfully", sender: "helpers")
+            Debug.printl("File uploaded successfully", sender: "helpers")
             completion(result: uploadOutput)
         }
         return nil

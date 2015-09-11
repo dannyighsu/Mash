@@ -34,9 +34,10 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         self.titleText = titleText
     }
 
-    convenience init(frame: CGRect, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, trackURL: String, user: String, format: String) {
+    convenience init(frame: CGRect, recid: Int, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, trackURL: String, user: String, format: String) {
         self.init(frame: frame)
         self.instruments = instruments
+        self.id = recid
         self.instrumentFamilies = instrumentFamilies
         self.titleText = titleText
         self.trackURL = trackURL

@@ -151,7 +151,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             var follower = User()
             follower.handle = user
             follower.userid = Int(recording.userid)
-            follower.profilePicKey = "\(follower.handle!)~~profile_pic.jpg"
             let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower)
             self.data.append(cell)
         }

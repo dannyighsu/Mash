@@ -92,15 +92,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     func authenticate(handle: String, password: String) {
-        // Check authentication with database
+        self.activityView.startAnimating()
         let passwordHash = hashPassword(password)
-        
         var request = SignInRequest()
         request.handle = handle
         request.passwordHash = passwordHash
         
         serverClient.signInWithRequest(request) {
             (response, error) in
+            self.activityView.stopAnimating()
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)
                 raiseAlert("Incorrect Username and/or Password")
@@ -113,8 +113,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 currentUser.following = "\(response.followingCount)"
                 currentUser.tracks = "\(response.trackCount)"
                 currentUser.userDescription = response.userDescription
-                currentUser.profilePicKey = "\(handle)~~profile_pic.jpg"
-                currentUser.bannerPicKey = "\(handle)~~banner.jpg"
                 self.completeLogin(handle, password: password)
             }
         }

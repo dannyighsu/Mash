@@ -107,7 +107,6 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             let userData = self.searchResults[indexPath.row] as! User
             user.handle = userData.handle
             user.username = userData.username
-            user.profilePicKey = "\(user.handle!)~~profile_pic.jpg"
             user.updateDisplays()
             return user
         }
@@ -256,7 +255,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             var url = "\(user)~~\(trackName)\(format)"
             url = filePathString(url)
             
-            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: user, format: format)
+            var track = Track(frame: CGRectZero, recid:0, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: user, format: format)
             
             self.allResults.append(track)
             if i < DEFAULT_DISPLAY_AMOUNT {
@@ -275,7 +274,6 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             var user = User()
             user.handle = dict["handle"] as? String
             user.username = dict["name"] as? String
-            user.profilePicKey = "\(user.handle!)~~profile_pic.jpg"
             self.allResults.append(user)
             if i < DEFAULT_DISPLAY_AMOUNT {
                 self.searchResults.append(user)

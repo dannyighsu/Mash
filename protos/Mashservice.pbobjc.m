@@ -1082,7 +1082,7 @@ typedef struct UserRequest_Storage {
         .name = "queryUserid",
         .number = UserRequest_FieldNumber_QueryUserid,
         .hasIndex = 2,
-        .flags = GPBFieldRequired,
+        .flags = GPBFieldOptional,
         .type = GPBTypeUInt32,
         .offset = offsetof(UserRequest_Storage, queryUserid),
         .defaultValue.valueUInt32 = 0U,

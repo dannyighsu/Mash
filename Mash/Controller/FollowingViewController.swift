@@ -36,7 +36,6 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.nameLabel?.setTitle(follower.display_name(), forState: UIControlState.Normal)
         cell.handle = follower.handle
         cell.username = follower.username
-        cell.profilePicKey = follower.profilePicKey
         follower.setProfilePic(cell.profilePicture!)
         cell.profilePicture?.layer.cornerRadius = cell.profilePicture!.frame.size.width / 2
         cell.profilePicture?.layer.borderWidth = 1.0
@@ -109,7 +108,6 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                     follower.handle = dict.handle
                     follower.username = dict.name
                     follower.userid = Int(dict.userid)
-                    follower.profilePicKey = "\(follower.handle!)~~profile_pic.jpg"
                     self.data.append(follower)
                 }
                 dispatch_async(dispatch_get_main_queue()) {

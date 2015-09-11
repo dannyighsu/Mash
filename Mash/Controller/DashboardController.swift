@@ -86,6 +86,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         track.instrumentImage.image = findImage(track.instrumentFamilies)
         track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
         track.activityView.startAnimating()
+        
         download(getS3WaveformKey(track), filePathURL(getS3WaveformKey(track)), waveform_bucket) {
             (result) in
             dispatch_async(dispatch_get_main_queue()) {
@@ -172,6 +173,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
         
         track.activityView.startAnimating()
+        println(getS3Key(track))
         download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
             (result) in
             dispatch_async(dispatch_get_main_queue()) {
@@ -251,10 +253,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             var families = NSArray(array: track.familyArray)
             var trackName = track.title
             var format = track.format
-            var url = "\(self.user.handle!)~~\(trackName)\(format)"
+            var url = "\(self.user.handle!)~~\(trackName)\(format!)"
+            var recid = Int(track.recid)
             url = filePathString(url)
             
-            var trackData = Track(frame: CGRectZero, instruments: families as! [String], instrumentFamilies: families as! [String], titleText: track.handle!, bpm: Int(track.bpm), trackURL: url, user: track.handle!, format: track.format!)
+            var trackData = Track(frame: CGRectZero, recid: recid, instruments: families as! [String], instrumentFamilies: families as! [String], titleText: track.title, bpm: Int(track.bpm), trackURL: url, user: self.user.handle!, format: track.format!)
             
             self.data.append(trackData)
         }
@@ -406,6 +409,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 request.passwordHash = input
             default:
                 Debug.printl("Error in update, input type is \(inputType)", sender: nil)
+                return
         }
         serverClient.userUpdateWithRequest(request) {
             (response, error) in
@@ -460,6 +464,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         var request = UserRequest()
         request.loginToken = currentUser.loginToken
         request.userid = UInt32(currentUser.userid!)
+        // FIXME: remove this line later
+        request.queryUserid = UInt32(currentUser.userid!)
+        
         serverClient.userDeleteWithRequest(request) {
             (response, error) in
             if error != nil {

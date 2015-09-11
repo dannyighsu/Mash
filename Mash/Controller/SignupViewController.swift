@@ -14,6 +14,8 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var handleField: UITextField!
+    
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,6 +109,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     }
 
     func register() {
+        self.activityView.startAnimating()
         var request = RegisterRequest()
         request.handle = self.handleField.text!
         request.passwordHash = hashPassword(self.passwordField.text!)
@@ -115,13 +118,14 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         request.registerAgent = 0
         serverClient.registerWithRequest(request) {
             (response, error) in
+            self.activityView.stopAnimating()
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
             } else {
                 Debug.printl("\(response.data())", sender: self)
                 self.saveLoginItems()
                 currentUser = User()
-                // FIXME: put user id
+                currentUser.userid = Int(response.userid)
                 currentUser.loginToken = response.loginToken
                 User.getUsersFollowing()
                 User.updateSelf(nil)

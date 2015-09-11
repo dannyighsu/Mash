@@ -16,8 +16,6 @@ class User: UITableViewCell {
     @IBOutlet weak var nameLabel: UIButton!
     var handle: String? = nil
     var username: String? = nil
-    var profilePicKey: String? = nil
-    var bannerPicKey: String? = nil
     var followers: String? = nil
     var following: String? = nil
     var tracks: String? = nil
@@ -29,25 +27,20 @@ class User: UITableViewCell {
         self.init(frame: CGRectZero)
         self.handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as? String
         self.username = ""
-        self.profilePicKey = ""
-        self.bannerPicKey = ""
         self.followers = "0"
         self.following = "0"
         self.tracks = "0"
         self.userDescription = ""
     }
     
-    convenience init(handle: String?, username: String?, profilePicKey: String?, bannerPicKey: String?, followers: String?, following: String?, tracks: String?, description: String?) {
+    convenience init(handle: String?, username: String?, followers: String?, following: String?, tracks: String?, description: String?) {
         self.init(frame: CGRectZero)
         self.handle = handle
         self.username = username
-        self.profilePicKey = profilePicKey
-        self.bannerPicKey = bannerPicKey
         self.followers = followers
         self.following = following
         self.tracks = tracks
         self.userDescription = description
-        self.setProfilePic(self.profilePicture)
         self.nameLabel.titleLabel?.text = self.display_name()
     }
     
@@ -59,32 +52,30 @@ class User: UITableViewCell {
     }
     
     func setProfilePic(imageView: UIImageView) {
-        if count(self.profilePicKey!) == 0 {
-            imageView.image = UIImage(named: "no_profile_pic")!
-            return
-        } else {
-            download("\(self.handle!)~~profile_pic.jpg", filePathURL(self.profilePicKey!), profile_bucket) {
-                (result) -> Void in
-                if result != nil {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        imageView.image = UIImage(contentsOfFile: filePathString(self.profilePicKey!))!
-                    }
+        download("\(self.handle!)~~profile_pic.jpg", filePathURL("\(self.handle!)~~profile_pic.jpg"), profile_bucket) {
+            (result) -> Void in
+            if result != nil {
+                dispatch_async(dispatch_get_main_queue()) {
+                    imageView.image = UIImage(contentsOfFile: filePathString("\(self.handle!)~~profile_pic.jpg"))!
+                }
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    imageView.image = UIImage(named: "no_profile_pic")
                 }
             }
         }
     }
     
     func setBannerPic(imageView: UIImageView) {
-        if count(self.bannerPicKey!) == 0 {
-            imageView.image = UIImage(named: "no_banner")!
-            return
-        } else {
-            download("\(self.handle!)~~banner.jpg", filePathURL(self.bannerPicKey!), banner_bucket) {
-                (result) -> Void in
-                if result != nil {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        imageView.image = UIImage(contentsOfFile: filePathString(self.bannerPicKey!))!
-                    }
+        download("\(self.handle!)~~banner.jpg", filePathURL("\(self.handle!)~~banner.jpg"), banner_bucket) {
+            (result) -> Void in
+            if result != nil {
+                dispatch_async(dispatch_get_main_queue()) {
+                    imageView.image = UIImage(contentsOfFile: filePathString("\(self.handle!)~~banner.jpg"))!
+                }
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    imageView.image = UIImage(named: "no_banner")
                 }
             }
         }
@@ -141,8 +132,6 @@ class User: UITableViewCell {
                 input.followers = "\(response.followersCount)"
                 input.following = "\(response.followingCount)"
                 input.tracks = "\(response.trackCount)"
-                input.bannerPicKey = "\(input.handle!)~~banner.jpg"
-                input.profilePicKey = "\(input.handle!)~~profile_pic.jpg"
                 
                 dispatch_async(dispatch_get_main_queue()) {
                     let controller = storyboard.instantiateViewControllerWithIdentifier("DashboardController") as! DashboardController
@@ -212,8 +201,6 @@ class User: UITableViewCell {
                 currentUser.followers = "\(response.followersCount)"
                 currentUser.following = "\(response.followingCount)"
                 currentUser.tracks = "\(response.trackCount)"
-                currentUser.bannerPicKey = "\(currentUser.handle!)~~banner.jpg"
-                currentUser.profilePicKey = "\(currentUser.handle!)~~profile_pic.jpg"
                 
                 dispatch_async(dispatch_get_main_queue()) {
                     if controller != nil {
@@ -379,7 +366,6 @@ class User: UITableViewCell {
                         user.handle = following.handle
                         user.username = following.name
                         user.userid = Int(following.userid)
-                        user.profilePicKey = "\(user.handle!)~~profile_pic.jpg"
                         result.append(user)
                     }
                     userFollowing = result

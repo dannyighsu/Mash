@@ -91,7 +91,6 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     // Download mash files
     func downloadAction(instrument: [String]) {
-        
         // Post data to server
         let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
@@ -151,7 +150,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
             var url = "\(user)~~\(trackName)\(format)"
             url = filePathString(url)
             
-            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: user, format: format)
+            var track = Track(frame: CGRectZero, recid: 0, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: user, format: format)
             
             controller.allResults.append(track)
             if i < DEFAULT_DISPLAY_AMOUNT {

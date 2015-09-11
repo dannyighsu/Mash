@@ -157,6 +157,7 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         var request = RecordingUpdateRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
+        request.recid = UInt32(self.track!.id)
         request.title = "\(self.track!.titleText)"
         request.instrumentArray = [self.instrumentField.text]
         request.genreArray = [self.genreField.text]

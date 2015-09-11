@@ -101,12 +101,10 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             return
         }
         
-        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        
-        checkForDuplicate(handle, passwordHash: passwordHash)
+        self.uploadAction()
     }
     
+    /*
     func checkForDuplicate(handle: String, passwordHash: String) {
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
         var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "query_name": handle, "song_name": self.titleTextField.text]
@@ -135,7 +133,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                 }
             }
         }
-    }
+    }*/
     
     // Upload Methods
     func uploadAction() {
@@ -146,7 +144,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         request.title = "\(self.titleTextField.text)"
         request.bpm = 0
         request.bar = 0
-        request.key = "None"
+        request.key = "X"
         request.familyArray = [familyString]
         request.instrumentArray = []
         request.genreArray = []
@@ -214,7 +212,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func finish() {
         let taggingController = self.storyboard?.instantiateViewControllerWithIdentifier("TaggingViewController") as! TaggingViewController
-        taggingController.track = Track(frame: CGRectZero, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text, bpm: self.bpm!, trackURL: "\(currentUser.handle!)~~\(self.titleTextField.text!).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
+        taggingController.track = Track(frame: CGRectZero, recid: 0, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text, bpm: self.bpm!, trackURL: "\(currentUser.handle!)~~\(self.titleTextField.text!).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
         self.saveWaveform(taggingController.track!)
         
         var index = 0
