@@ -107,6 +107,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             } else {
                 Debug.printl("\(response.data())", sender: self)
                 currentUser = User()
+                currentUser.handle = handle
                 currentUser.loginToken = response.loginToken
                 currentUser.userid = Int(response.userid)
                 currentUser.followers = "\(response.followersCount)"

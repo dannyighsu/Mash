@@ -211,9 +211,12 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func finish() {
-        let taggingController = self.storyboard?.instantiateViewControllerWithIdentifier("TaggingViewController") as! TaggingViewController
-        taggingController.track = Track(frame: CGRectZero, recid: 0, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text, bpm: self.bpm!, trackURL: "\(currentUser.handle!)~~\(self.titleTextField.text!).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
-        self.saveWaveform(taggingController.track!)
+        /*
+        let taggingController = self.storyboard?.instantiateViewControllerWithIdentifier("TaggingViewController") as! TaggingViewController*/
+        /*taggingController.time = self.timeSignature!
+        taggingController.bpm = String(self.bpm!)*/
+        let track = Track(frame: CGRectZero, recid: 0, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text, bpm: self.bpm!, trackURL: "\(currentUser.handle!)~~\(self.titleTextField.text!).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
+        self.saveWaveform(track)
         
         var index = 0
         for i in 0...self.navigationController!.viewControllers.count {
@@ -223,10 +226,12 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             }
         }
         
-        self.navigationController?.pushViewController(taggingController, animated: true)
-        self.navigationController!.viewControllers.removeAtIndex(index)
-        taggingController.time = self.timeSignature!
-        taggingController.bpm = String(self.bpm!)
+        /*self.navigationController?.pushViewController(taggingController, animated: true)
+        self.navigationController!.viewControllers.removeAtIndex(index)*/
+        self.navigationController?.popViewControllerAnimated(true)
+        let tabbarcontroller = self.navigationController?.viewControllers[2] as! TabBarController
+        tabbarcontroller.selectedIndex = getTabBarController("dashboard")
+        
 
     }
     
