@@ -31,8 +31,8 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = self.users.dequeueReusableCellWithIdentifier("User") as! User
-        var follower = self.data[indexPath.row]
+        let cell = self.users.dequeueReusableCellWithIdentifier("User") as! User
+        let follower = self.data[indexPath.row]
         cell.nameLabel?.setTitle(follower.display_name(), forState: UIControlState.Normal)
         cell.handle = follower.handle
         cell.username = follower.username
@@ -92,7 +92,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func getUserFollowing(user: User, type: String) {
-        var request = UserRequest()
+        let request = UserRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(self.user.userid!)
@@ -103,8 +103,8 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                 Debug.printl("Error: \(error)", sender: nil)
             } else {
                 for u in response.userArray {
-                    var dict = u as! UserPreview
-                    var follower = User()
+                    let dict = u as! UserPreview
+                    let follower = User()
                     follower.handle = dict.handle
                     follower.username = dict.name
                     follower.userid = Int(dict.userid)

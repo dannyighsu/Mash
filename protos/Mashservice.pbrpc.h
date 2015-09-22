@@ -1,4 +1,4 @@
-#import "Protos/mashservice.pbobjc.h"
+#import "Mashservice.pbobjc.h"
 
 #import <ProtoRPC/ProtoService.h>
 

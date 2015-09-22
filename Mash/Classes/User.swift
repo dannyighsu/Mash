@@ -45,14 +45,14 @@ class User: UITableViewCell {
     }
     
     func display_name() -> String? {
-        if count(self.username!) == 0 {
+        if (self.username!).characters.count == 0 {
             return self.handle
         }
         return self.username
     }
     
     func setProfilePic(imageView: UIImageView) {
-        download("\(self.handle!)~~profile_pic.jpg", filePathURL("\(self.handle!)~~profile_pic.jpg"), profile_bucket) {
+        download("\(self.handle!)~~profile_pic.jpg", url: filePathURL("\(self.handle!)~~profile_pic.jpg"), bucket: profile_bucket) {
             (result) -> Void in
             if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
@@ -67,7 +67,7 @@ class User: UITableViewCell {
     }
     
     func setBannerPic(imageView: UIImageView) {
-        download("\(self.handle!)~~banner.jpg", filePathURL("\(self.handle!)~~banner.jpg"), banner_bucket) {
+        download("\(self.handle!)~~banner.jpg", url: filePathURL("\(self.handle!)~~banner.jpg"), bucket: banner_bucket) {
             (result) -> Void in
             if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
@@ -116,7 +116,7 @@ class User: UITableViewCell {
 
     // Make get request for user and instantiate dashboard
     class func getUser(input: User, storyboard: UIStoryboard, navigationController: UINavigationController) {
-        var request = UserRequest()
+        let request = UserRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(input.userid!)
@@ -185,7 +185,7 @@ class User: UITableViewCell {
     }
     
     class func updateSelf(controller: DashboardController?) {
-        var request = UserRequest()
+        let request = UserRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(currentUser.userid!)
@@ -209,11 +209,11 @@ class User: UITableViewCell {
                         currentUser.setProfilePic(profile.profilePic)
                         currentUser.setBannerPic(profile.bannerImage)
                         profile.descriptionLabel.text = currentUser.userDescription
-                        var followers = NSMutableAttributedString(string: "  \(currentUser.followers!)\n  FOLLOWERS")
+                        let followers = NSMutableAttributedString(string: "  \(currentUser.followers!)\n  FOLLOWERS")
                         profile.followerCount.attributedText = followers
-                        var following = NSMutableAttributedString(string: "  \(currentUser.following!)\n  FOLLOWING")
+                        let following = NSMutableAttributedString(string: "  \(currentUser.following!)\n  FOLLOWING")
                         profile.followingCount.attributedText = following
-                        var tracks = NSMutableAttributedString(string: "  \(currentUser.tracks!)\n  TRACKS")
+                        let tracks = NSMutableAttributedString(string: "  \(currentUser.tracks!)\n  TRACKS")
                         profile.trackCount.attributedText = tracks
                     }
                 }
@@ -273,7 +273,7 @@ class User: UITableViewCell {
     }
     
     class func followUser(user: User, target: AnyObject) {
-        var request = UserRequest()
+        let request = UserRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(user.userid!)
@@ -326,7 +326,7 @@ class User: UITableViewCell {
     }
     
     class func unfollowUser(user: User, target: AnyObject) {
-        var request = UserRequest()
+        let request = UserRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(user.userid!)
@@ -348,7 +348,7 @@ class User: UITableViewCell {
     }
     
     class func getUsersFollowing() {
-        var request = UserRequest()
+        let request = UserRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(currentUser.userid!)
@@ -362,7 +362,7 @@ class User: UITableViewCell {
                     var result: [User] = []
                     for u in response.userArray {
                         let following = u as! UserPreview
-                        var user = User()
+                        let user = User()
                         user.handle = following.handle
                         user.username = following.name
                         user.userid = Int(following.userid)

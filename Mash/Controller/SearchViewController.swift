@@ -109,7 +109,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 track.format = trackData.format
                 track.bpm = trackData.bpm
                 track.activityView.startAnimating()
-                download(getS3WaveformKey(track), NSURL(fileURLWithPath: track.trackURL)!, waveform_bucket) {
+                download(getS3WaveformKey(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: waveform_bucket) {
                     (result) in
                     dispatch_async(dispatch_get_main_queue()) {
                         track.activityView.stopAnimating()
@@ -147,15 +147,15 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             self.audioPlayer!.stop()
         }
         if self.scope == 0 {
-            var track = self.tableView.cellForRowAtIndexPath(indexPath) as! Track
+            let track = self.tableView.cellForRowAtIndexPath(indexPath) as! Track
             track.activityView.startAnimating()
-            download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
+            download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
                 (result) in
                 dispatch_async(dispatch_get_main_queue()) {
                     track.generateWaveform()
                     track.activityView.stopAnimating()
                     self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
-                    self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
+                    self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
                     self.audioPlayer!.play()
                 }
             }
@@ -167,7 +167,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     func loadNextData() {
-        var currentNumResults = self.searchResults.count - 1
+        let currentNumResults = self.searchResults.count - 1
         if currentNumResults == self.allResults.count - 1 {
             return
         }
@@ -241,7 +241,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             params = ["handle": handle, "password_hash": passwordHash, "user_id": "\(currentUser.userid!)", "query_name": searchText] as Dictionary
         }
         self.activityView.startAnimating()
-        httpPost(params, request) {
+        httpPost(params, request: request) {
             (data, statusCode, error) -> Void in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
@@ -257,8 +257,14 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
                     
                     dispatch_async(dispatch_get_main_queue()) {
-                        var error: NSError? = nil
-                        var response: AnyObject? = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error)
+                        var response: AnyObject?
+                        do {
+                            response = try NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments)
+                        } catch _ as NSError {
+                            response = nil
+                        } catch {
+                            fatalError()
+                        }
                         if scope == 0 {
                             self.updateResults(response as! NSDictionary)
                         } else {
@@ -275,29 +281,29 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     func updateResults(data: NSDictionary) {
         self.allResults = []
         self.searchResults = []
-        var tracks = data["recordings"] as! NSArray
+        let tracks = data["recordings"] as! NSArray
         if tracks.count == 0 {
             return
         }
         for i in 0...tracks.count - 1 {
-            var dict = tracks[i] as! NSDictionary
-            var instruments = dict["instrument"] as! NSArray
+            let dict = tracks[i] as! NSDictionary
+            let instruments = dict["instrument"] as! NSArray
             var instrument = ""
             if instruments.count != 0 {
                 instrument = instruments[0] as! String
             }
-            var families = dict["family"] as! NSArray
+            let families = dict["family"] as! NSArray
             var family = ""
             if families.count != 0 {
                 family = families[0] as! String
             }
-            var trackName = dict["song_name"] as! String
-            var format = dict["format"] as! String
-            var user = dict["handle"] as! String
+            let trackName = dict["song_name"] as! String
+            let format = dict["format"] as! String
+            let user = dict["handle"] as! String
             var url = "\(user)~~\(trackName)\(format)"
             url = filePathString(url)
             
-            var track = Track(frame: CGRectZero, recid:0, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: user, format: format)
+            let track = Track(frame: CGRectZero, recid:0, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: user, format: format)
             
             self.allResults.append(track)
             if i < DEFAULT_DISPLAY_AMOUNT {
@@ -310,10 +316,10 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     func updateUserResults(data: NSDictionary) {
         self.searchResults = []
         self.allResults = []
-        var users = data["users"] as! NSArray
+        let users = data["users"] as! NSArray
         for i in 0...users.count - 1 {
-            var dict = users[i] as! NSDictionary
-            var user = User()
+            let dict = users[i] as! NSDictionary
+            let user = User()
             user.handle = dict["handle"] as? String
             user.username = dict["name"] as? String
             self.allResults.append(user)
@@ -325,7 +331,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     func addTrack(sender: UIButton) {
-        var track = sender.superview?.superview?.superview as! Track
+        let track = sender.superview?.superview?.superview as! Track
         ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
         let tabBarController = self.navigationController?.viewControllers[2] as! TabBarController
         tabBarController.selectedIndex = getTabBarController("project")

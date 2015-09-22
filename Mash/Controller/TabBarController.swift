@@ -33,8 +33,8 @@ class TabBarController: UITabBarController {
         return result
     }
     
-    override func supportedInterfaceOrientations() -> Int {
-        var result: Int
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        var result: UIInterfaceOrientationMask
         if self.selectedViewController!.respondsToSelector("supportedInterfaceOrientations") {
             result = self.selectedViewController!.supportedInterfaceOrientations()
         } else {
@@ -46,7 +46,7 @@ class TabBarController: UITabBarController {
     // Update view controllers on return from extended inactivity
     func update(sender: AnyObject?) {
         if self.navigationController!.viewControllers.count > 3 {
-            for i in 0...self.navigationController!.viewControllers.count - 3 {
+            for _ in 0...self.navigationController!.viewControllers.count - 3 {
                 self.navigationController!.popViewControllerAnimated(false)
             }
         }

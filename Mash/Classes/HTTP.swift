@@ -15,7 +15,7 @@ var previousRequestTime = CFAbsoluteTimeGetCurrent()
 
 func checkDuplicate(params: Dictionary<String, String>, request: NSMutableURLRequest!) -> Bool {
     var result = false
-    var timeDifference = CFAbsoluteTimeGetCurrent() - previousRequestTime
+    let timeDifference = CFAbsoluteTimeGetCurrent() - previousRequestTime
     if previousRequest != nil {
         if request.URL!.absoluteString == previousRequest!.URL!.absoluteString && timeDifference < 2 {
             result = true
@@ -28,26 +28,29 @@ func checkDuplicate(params: Dictionary<String, String>, request: NSMutableURLReq
 
 // Post request with JSON params
 func httpPost(params: Dictionary<String, String>, request: NSMutableURLRequest!, callback: (String, Int, String?) -> Void) {
-    if checkDuplicate(params, request) {
+    if checkDuplicate(params, request: request) {
         return
     }
-    var session = NSURLSession.sharedSession()
-    var err: NSError?
+    let session = NSURLSession.sharedSession()
     request.HTTPMethod = "POST"
-    request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
+    do {
+        request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
+    } catch _ as NSError {
+        request.HTTPBody = nil
+    }
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     request.addValue("application/json", forHTTPHeaderField: "Accept")
     
-    var task = session.dataTaskWithRequest(request) {
+    let task = session.dataTaskWithRequest(request) {
         (data, response, error) -> Void in
         Debug.printl("HTTP Error: \(error)", sender: "helpers")
         Debug.printl("HTTP Response: \(response)", sender: "helpers")
         if error != nil {
-            callback("", 0, error.localizedDescription)
+            callback("", 0, error!.localizedDescription)
         } else {
-            var dataResult = NSString(data: data, encoding: NSASCIIStringEncoding)!
-            var responseResult = response as! NSHTTPURLResponse
-            var statusCode = responseResult.statusCode
+            let dataResult = NSString(data: data!, encoding: NSASCIIStringEncoding)!
+            let responseResult = response as! NSHTTPURLResponse
+            let statusCode = responseResult.statusCode
             callback(dataResult as String, statusCode, nil)
         }
     }
@@ -56,26 +59,29 @@ func httpPost(params: Dictionary<String, String>, request: NSMutableURLRequest!,
 
 // Patch request with JSON params
 func httpPatch(params: Dictionary<String, String>, request: NSMutableURLRequest!, callback: (String, Int, String?) -> Void) {
-    if checkDuplicate(params, request) {
+    if checkDuplicate(params, request: request) {
         return
     }
-    var session = NSURLSession.sharedSession()
-    var err: NSError?
+    let session = NSURLSession.sharedSession()
     request.HTTPMethod = "PATCH"
-    request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
+    do {
+        request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
+    } catch _ as NSError {
+        request.HTTPBody = nil
+    }
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     request.addValue("application/json", forHTTPHeaderField: "Accept")
     
-    var task = session.dataTaskWithRequest(request) {
+    let task = session.dataTaskWithRequest(request) {
         (data, response, error) -> Void in
         Debug.printl("HTTP Error: \(error)", sender: "helpers")
         Debug.printl("HTTP Response: \(response)", sender: "helpers")
         if error != nil {
-            callback("", 0, error.localizedDescription)
+            callback("", 0, error!.localizedDescription)
         } else {
-            var dataResult = NSString(data: data, encoding: NSASCIIStringEncoding)!
-            var responseResult = response as! NSHTTPURLResponse
-            var statusCode = responseResult.statusCode
+            let dataResult = NSString(data: data!, encoding: NSASCIIStringEncoding)!
+            let responseResult = response as! NSHTTPURLResponse
+            let statusCode = responseResult.statusCode
             callback(dataResult as String, statusCode, nil)
         }
     }
@@ -84,26 +90,29 @@ func httpPatch(params: Dictionary<String, String>, request: NSMutableURLRequest!
 
 // Delete request
 func httpDelete(params: Dictionary<String, String>, request: NSMutableURLRequest!, callback: (String, Int, String?) -> Void) {
-    if checkDuplicate(params, request) {
+    if checkDuplicate(params, request: request) {
         return
     }
-    var session = NSURLSession.sharedSession()
-    var err: NSError?
+    let session = NSURLSession.sharedSession()
     request.HTTPMethod = "DELETE"
-    request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
+    do {
+        request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
+    } catch _ as NSError {
+        request.HTTPBody = nil
+    }
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     request.addValue("application/json", forHTTPHeaderField: "Accept")
     
-    var task = session.dataTaskWithRequest(request) {
+    let task = session.dataTaskWithRequest(request) {
         (data, response, error) -> Void in
         Debug.printl("HTTP Error: \(error)", sender: "helpers")
         Debug.printl("HTTP Response: \(response)", sender: "helpers")
         if error != nil {
-            callback("", 0, error.localizedDescription)
+            callback("", 0, error!.localizedDescription)
         } else {
-            var dataResult = NSString(data: data, encoding: NSASCIIStringEncoding)!
-            var responseResult = response as! NSHTTPURLResponse
-            var statusCode = responseResult.statusCode
+            let dataResult = NSString(data: data!, encoding: NSASCIIStringEncoding)!
+            let responseResult = response as! NSHTTPURLResponse
+            let statusCode = responseResult.statusCode
             callback(dataResult as String, statusCode, nil)
         }
     }
@@ -112,21 +121,20 @@ func httpDelete(params: Dictionary<String, String>, request: NSMutableURLRequest
 
 // Get request
 func httpGet(request: NSMutableURLRequest!, callback: (String, Int, String?) -> Void) {
-    var session = NSURLSession.sharedSession()
-    var err: NSError?
+    let session = NSURLSession.sharedSession()
     request.HTTPMethod = "GET"
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     
-    var task = session.dataTaskWithRequest(request) {
+    let task = session.dataTaskWithRequest(request) {
         (data, response, error) -> Void in
         Debug.printl("HTTP Error: \(error)", sender: "helpers")
         Debug.printl("HTTP Response: \(response)", sender: "helpers")
         if error != nil {
-            callback("", 0, error.localizedDescription)
+            callback("", 0, error!.localizedDescription)
         } else {
-            var dataResult = NSString(data: data, encoding: NSASCIIStringEncoding)!
-            var responseResult = response as! NSHTTPURLResponse
-            var statusCode = responseResult.statusCode
+            let dataResult = NSString(data: data!, encoding: NSASCIIStringEncoding)!
+            let responseResult = response as! NSHTTPURLResponse
+            let statusCode = responseResult.statusCode
             callback(dataResult as String, statusCode, nil)
         }
     }

@@ -22,7 +22,7 @@ class ShareView: UIView, UICollectionViewDataSource, UICollectionViewDelegate {
     
     class func createView(fileToBeShared: NSURL) -> ShareView {
         let view = NSBundle.mainBundle().loadNibNamed("ShareView", owner: nil, options: nil)
-        var shareView = view[0] as! ShareView
+        let shareView = view[0] as! ShareView
         shareView.fileURL = fileToBeShared
         let imagecell = UINib(nibName: "ImageCell", bundle: nil)
         shareView.sharingView.registerNib(imagecell, forCellWithReuseIdentifier: "ImageCell")

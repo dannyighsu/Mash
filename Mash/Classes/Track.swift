@@ -60,22 +60,20 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         self.audioPlot.shouldFill = true
         self.audioPlot.shouldMirror = true
         self.audioPlot.gain = 2.0
-        var data = self.audioFile!.getWaveformData()
+        let data = self.audioFile!.getWaveformData()
         self.audioPlot.updateBuffer(data.buffers[0], withBufferSize: data.bufferSize)
     }
     
     class func mixTracks(name: String, tracks: [Track], completion: (exportSession: AVAssetExportSession?) -> ()) {
-        var directory = applicationDocumentsDirectory()
-        var nextClipTime: CMTime = kCMTimeZero
-        var composition: AVMutableComposition = AVMutableComposition()
+        let composition: AVMutableComposition = AVMutableComposition()
         
         // Create track assets and insert into composition
         for (var i = 0; i < tracks.count; i++) {
-            var track: Track = tracks[i]
+            let track: Track = tracks[i]
             
-            var compositionTrack: AVMutableCompositionTrack = composition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID(kCMPersistentTrackID_Invalid))
-            var asset: AVAsset = AVURLAsset(URL: NSURL(fileURLWithPath: track.trackURL), options: nil)
-            var tracks: NSArray = asset.tracksWithMediaType(AVMediaTypeAudio)
+            let compositionTrack: AVMutableCompositionTrack = composition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID(kCMPersistentTrackID_Invalid))
+            let asset: AVAsset = AVURLAsset(URL: NSURL(fileURLWithPath: track.trackURL), options: nil)
+            let tracks: NSArray = asset.tracksWithMediaType(AVMediaTypeAudio)
             
             // Check if tracks are valid
             if tracks.count == 0 {
@@ -83,16 +81,22 @@ class Track: UITableViewCell, EZAudioFileDelegate {
                 return
             }
             
-            var clip: AVAssetTrack = tracks.objectAtIndex(0) as! AVAssetTrack
-            compositionTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), ofTrack: clip, atTime: kCMTimeZero, error: nil)
+            let clip: AVAssetTrack = tracks.objectAtIndex(0) as! AVAssetTrack
+            do {
+                try compositionTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), ofTrack: clip, atTime: kCMTimeZero)
+            } catch _ {
+            }
         }
         
         // Export composition
-        var newTrack = filePathString("\(currentUser.handle!)~~\(name).m4a")
+        let newTrack = filePathString("\(currentUser.handle!)~~\(name).m4a")
         if NSFileManager.defaultManager().fileExistsAtPath(newTrack) {
-            NSFileManager.defaultManager().removeItemAtPath(newTrack, error: nil)
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath(newTrack)
+            } catch _ {
+            }
         }
-        var exportSession: AVAssetExportSession? = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetAppleM4A)
+        let exportSession: AVAssetExportSession? = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetAppleM4A)
         if (exportSession == nil) {
             completion(exportSession: nil)
             return

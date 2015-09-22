@@ -46,15 +46,26 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         // Load AVAudioSession
         let session = AVAudioSession.sharedInstance()
         var error: NSError? = nil
-        session.setCategory(AVAudioSessionCategoryPlayAndRecord, error: &error)
+        do {
+            try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
             Debug.printl("Error setting up session: \(error?.localizedDescription)", sender: self)
         }
-        session.setActive(true, error: &error)
-        /*let output = session.currentRoute.outputs.first as! AVAudioSessionPortDescription
+        do {
+            try session.setActive(true)
+        } catch let error1 as NSError {
+            error = error1
+        }
+        do {
+            /*let output = session.currentRoute.outputs.first as! AVAudioSessionPortDescription
         if output.portType == "Receiver" {
         }*/
-        session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker, error: nil)
+            try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
+        } catch _ {
+        }
         if error != nil {
             Debug.printl("Error setting session active: \(error?.localizedDescription)", sender: self)
         }
@@ -108,8 +119,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         }
     }
     
-    override func supportedInterfaceOrientations() -> Int {
-        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.Portrait
     }
     
     // Button methods
@@ -185,12 +196,12 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     // Auxiliary methods
     func prepareRecording() {
-        var view = UIView(frame: self.view.frame)
+        let view = UIView(frame: self.view.frame)
         view.backgroundColor = UIColor(red: 40, green: 40, blue: 40, alpha: 0.6)
         view.alpha = 0.0
         
         self.beat = self.metronome!.timeSignature[0] + 1
-        var beatLabel = UILabel(frame: view.frame)
+        let beatLabel = UILabel(frame: view.frame)
         beatLabel.font = UIFont(name: "STHeitiSC-Light", size: 100)
         beatLabel.textColor = UIColor.blackColor()
         beatLabel.text = "\(self.beat)"
@@ -241,7 +252,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.player = EZAudioPlayer(audioFile: self.audioFile)
         self.player!.delegate = self
         self.player!.volume = self.volumeSlider.value
-        var data = self.audioFile!.getWaveformData()
+        let data = self.audioFile!.getWaveformData()
         self.audioPlot.updateBuffer(data.buffers[0], withBufferSize: data.bufferSize)
         
         /*self.audioFile?.getWaveformDataWithCompletionBlock() {
@@ -290,13 +301,13 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             [weak self] in
             self?.audioPlot.updateBuffer(buffer[0], withBufferSize: bufferSize)
             if self != nil && self!.recording {
-                var time = self!.recordingStartTime.timeIntervalSinceNow * -1
+                let time = self!.recordingStartTime.timeIntervalSinceNow * -1
                 var secondText = String(stringInterpolationSegment: Int(time))
                 if time < 10.0 {
                     secondText = "0\(secondText)"
                 }
                 var milliText = String(stringInterpolationSegment: time % 1)
-                milliText = milliText.substringWithRange(Range<String.Index>(start: advance(milliText.startIndex, 2), end: advance(milliText.startIndex, 4)))
+                milliText = milliText.substringWithRange(Range<String.Index>(start: milliText.startIndex.advancedBy(2), end: milliText.startIndex.advancedBy(4)))
                 self!.timeLabel.text = "\(secondText):\(milliText)"
             }
         }
@@ -330,7 +341,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 secondText = "0\(secondText)"
             }
             var milliText = String(stringInterpolationSegment: time % 1)
-            milliText = milliText.substringWithRange(Range<String.Index>(start: advance(milliText.startIndex, 2), end: advance(milliText.startIndex, 4)))
+            milliText = milliText.substringWithRange(Range<String.Index>(start: milliText.startIndex.advancedBy(2), end: milliText.startIndex.advancedBy(4)))
             self.timeLabel.text = "\(secondText):\(milliText)"
         }
     }
@@ -407,7 +418,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            var metronome = Metronome.createView()
+            let metronome = Metronome.createView()
             metronome.delegate = self
             metronome.backgroundColor = lightGray()
             self.metronome = metronome

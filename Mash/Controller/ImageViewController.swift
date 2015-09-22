@@ -48,7 +48,7 @@ class ImageViewController: UICollectionViewController, UICollectionViewDelegateF
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let dashboard = getTabBarController("dashboard", self.navigationController!) as! DashboardController
+        let dashboard = getTabBarController("dashboard", navcontroller: self.navigationController!) as! DashboardController
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! ImageCell
         self.navigationController?.popViewControllerAnimated(true)
         if self.type == "profile" {

@@ -68,7 +68,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.eventLabel.text = self.data[indexPath.row].eventText
         cell.userLabel.text = self.data[indexPath.row].userText
         cell.timeLabel.text = self.data[indexPath.row].timeText
-        cell.timeLabel.text = cell.timeLabel.text!.substringWithRange(Range<String.Index>(start: cell.timeLabel.text!.startIndex, end: advance(cell.timeLabel.text!.endIndex, -13)))
+        cell.timeLabel.text = cell.timeLabel.text!.substringWithRange(Range<String.Index>(start: cell.timeLabel.text!.startIndex, end: cell.timeLabel.text!.endIndex.advancedBy(-13)))
         self.data[indexPath.row].user!.setProfilePic(cell.profileImage)
         cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFit
         cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
@@ -79,7 +79,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! HomeCell
-        var user = User()
+        let user = User()
         user.handle = cell.userLabel.text
         User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
     }
@@ -126,7 +126,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func retrieveActivity() {
         self.activityView.startAnimating()
-        var request = FeedRequest()
+        let request = FeedRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         
@@ -147,8 +147,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             let user = recording.handle
             let title = recording.title
             let time = recording.uploaded
-            let id = recording.recid
-            var follower = User()
+            let follower = User()
             follower.handle = user
             follower.userid = Int(recording.userid)
             let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower)

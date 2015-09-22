@@ -95,12 +95,12 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         var instrumentString = String(stringInterpolationSegment: instrument)
-        instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
+        instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: instrumentString.startIndex.advancedBy(1), end: instrumentString.endIndex.advancedBy(-1)))
         
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/mash")!)
-        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "family": "{\(instrumentString)}"]
+        let request = NSMutableURLRequest(URL: NSURL(string: "\(db)/mash")!)
+        let params: [String: String] = ["handle": handle, "password_hash": passwordHash, "family": "{\(instrumentString)}"]
         self.activityView.startAnimating()
-        httpPost(params, request) {
+        httpPost(params, request: request) {
             (data, statusCode, error) -> Void in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
@@ -113,8 +113,14 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 } else if statusCode == HTTP_WRONG_MEDIA {
                     return
                 } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    var error: NSError? = nil
-                    var response: AnyObject? = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error)
+                    var response: AnyObject?
+                    do {
+                        response = try NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments)
+                    } catch _ as NSError {
+                        response = nil
+                    } catch {
+                        fatalError()
+                    }
                     dispatch_async(dispatch_get_main_queue()) {
                         self.finish(response as! NSDictionary)
                     }
@@ -130,27 +136,27 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     func finish(inputData: NSDictionary) {
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MashResultsController") as! MashResultsController
         controller.projectRecordings = self.recordings
-        var tracks = inputData["recordings"] as! NSArray
+        let tracks = inputData["recordings"] as! NSArray
         for i in 0...tracks.count - 1 {
-            var dict = tracks[i] as! NSDictionary
-            var instruments = dict["instrument"] as! NSArray
+            let dict = tracks[i] as! NSDictionary
+            let instruments = dict["instrument"] as! NSArray
             var instrument = ""
             if instruments.count != 0 {
                 instrument = instruments[0] as! String
             }
-            var families = dict["family"] as! NSArray
+            let families = dict["family"] as! NSArray
             var family = ""
             if families.count != 0 {
                 family = families[0] as! String
             }
             
-            var trackName = dict["song_name"] as! String
-            var format = dict["format"] as! String
-            var user = dict["handle"] as! String
+            let trackName = dict["song_name"] as! String
+            let format = dict["format"] as! String
+            let user = dict["handle"] as! String
             var url = "\(user)~~\(trackName)\(format)"
             url = filePathString(url)
             
-            var track = Track(frame: CGRectZero, recid: 0, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: user, format: format)
+            let track = Track(frame: CGRectZero, recid: 0, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: user, format: format)
             
             controller.allResults.append(track)
             if i < DEFAULT_DISPLAY_AMOUNT {

@@ -58,8 +58,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         self.parentViewController?.navigationItem.setHidesBackButton(true, animated: false)
     }
     
-    override func supportedInterfaceOrientations() -> Int {
-        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.Portrait
     }
     
     // Table View Delegate
@@ -87,7 +87,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
         track.activityView.startAnimating()
         
-        download(getS3WaveformKey(track), filePathURL(getS3WaveformKey(track)), waveform_bucket) {
+        download(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket) {
             (result) in
             dispatch_async(dispatch_get_main_queue()) {
                 track.activityView.stopAnimating()
@@ -147,11 +147,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         
         self.user.setBannerPic(header.bannerImage)
         self.user.setProfilePic(header.profilePic)
-        var followers = NSMutableAttributedString(string: "  \(self.user.followers!)\n  FOLLOWERS")
+        let followers = NSMutableAttributedString(string: "  \(self.user.followers!)\n  FOLLOWERS")
         header.followerCount.attributedText = followers
-        var following = NSMutableAttributedString(string: "  \(self.user.following!)\n  FOLLOWING")
+        let following = NSMutableAttributedString(string: "  \(self.user.following!)\n  FOLLOWING")
         header.followingCount.attributedText = following
-        var tracks = NSMutableAttributedString(string: "  \(self.user.tracks!)\n  TRACKS")
+        let tracks = NSMutableAttributedString(string: "  \(self.user.tracks!)\n  TRACKS")
         header.trackCount.attributedText = tracks
         header.descriptionLabel.text = "  \(self.user.userDescription!)"
     }
@@ -173,15 +173,15 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
         
         track.activityView.startAnimating()
-        println(getS3Key(track))
-        download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
+        print(getS3Key(track))
+        download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
             (result) in
             dispatch_async(dispatch_get_main_queue()) {
                 track.activityView.stopAnimating()
                 tableView.deselectRowAtIndexPath(indexPath, animated: true)
                 if result != nil {
                     track.generateWaveform()
-                    self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
+                    self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
                     self.audioPlayer!.play()
                     Debug.printl("Playing track \(track.titleText)", sender: self)
                 }
@@ -204,8 +204,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
 
     // Track management
     func retrieveTracks() {
-        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-        var request = UserRequest()
+        let request = UserRequest()
         request.userid = UInt32(self.user.userid!)
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(self.user.userid!)
@@ -248,16 +247,16 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func updateTable(data: UserRecordingsResponse) {
         self.data = []
         for t in data.recArray! {
-            var track = t as! RecordingResponse
-            var instruments = NSArray(array: track.instrumentArray)
-            var families = NSArray(array: track.familyArray)
-            var trackName = track.title
-            var format = track.format
+            let track = t as! RecordingResponse
+            let instruments = NSArray(array: track.instrumentArray)
+            let families = NSArray(array: track.familyArray)
+            let trackName = track.title
+            let format = track.format
             var url = "\(self.user.handle!)~~\(trackName)\(format!)"
-            var recid = Int(track.recid)
+            let recid = Int(track.recid)
             url = filePathString(url)
             
-            var trackData = Track(frame: CGRectZero, recid: recid, instruments: families as! [String], instrumentFamilies: families as! [String], titleText: track.title, bpm: Int(track.bpm), trackURL: url, user: self.user.handle!, format: track.format!)
+            let trackData = Track(frame: CGRectZero, recid: recid, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: track.title, bpm: Int(track.bpm), trackURL: url, user: self.user.handle!, format: track.format!)
             
             self.data.append(trackData)
         }
@@ -274,7 +273,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func deleteTrack(track: Track, indexPath: NSIndexPath) {
-        var request = RecordingRequest()
+        let request = RecordingRequest()
         request.loginToken = currentUser.loginToken
         request.userid = UInt32(currentUser.userid!)
         request.recid = UInt32(track.id)
@@ -284,7 +283,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             if error != nil {
                 Debug.printl("\(error)", sender: nil)
             } else {
-                deleteFromBucket("\(currentUser.handle)~~\(track.titleText)\(track.format)", track_bucket)
+                deleteFromBucket("\(currentUser.handle)~~\(track.titleText)\(track.format)", bucket: track_bucket)
                 
                 dispatch_async(dispatch_get_main_queue()) {
                     self.data.removeAtIndex(indexPath.row)
@@ -325,7 +324,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if alertView.title == "Change Display Name" {
             if buttonIndex == 1 {
-                self.update(alertView.textFieldAtIndex(0)!.text, inputType: "name")
+                self.update(alertView.textFieldAtIndex(0)!.text!, inputType: "name")
             }
         } else if alertView.title == "Are you Sure?" {
             if buttonIndex == 1 {
@@ -335,13 +334,13 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func deleteUser() {
-        var alert = UIAlertView(title: "Are you Sure?", message: "Delete your account?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "Yes")
+        let alert = UIAlertView(title: "Are you Sure?", message: "Delete your account?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "Yes")
         alert.show()
     }
     
     // Profile edititing
     func fetchPhotos(type: String) {
-        var photoResults = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: nil)
+        let photoResults = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: nil)
         /*var userAlbumOptions = PHFetchOptions.new()
         userAlbumOptions.predicate = NSPredicate(format: "estimatedAssetCount > 0")
         var userAlbums = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.Album, subtype: PHAssetCollectionSubtype.Any, options: userAlbumOptions)
@@ -361,11 +360,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func updateProfilePic(photo: PHAsset) {
-        let manager = PHImageManager.defaultManager()
         photo.requestContentEditingInputWithOptions(nil) {
             (contentInput, info) in
-            var imageURL = contentInput.fullSizeImageURL
-            upload("\(currentUser.handle!)~~profile_pic.jpg", imageURL, profile_bucket)
+            let imageURL = contentInput!.fullSizeImageURL
+            upload("\(currentUser.handle!)~~profile_pic.jpg", url: imageURL!, bucket: profile_bucket)
         }
     }
     
@@ -374,16 +372,15 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func updateBanner(photo: PHAsset) {
-        let manager = PHImageManager.defaultManager()
         photo.requestContentEditingInputWithOptions(nil) {
             (contentInput, info) in
-            var imageURL = contentInput.fullSizeImageURL
-            upload("\(currentUser.handle!)~~banner.jpg", imageURL, banner_bucket)
+            let imageURL = contentInput!.fullSizeImageURL
+            upload("\(currentUser.handle!)~~banner.jpg", url: imageURL!, bucket: banner_bucket)
         }
     }
     
     func changeName() {
-        var alert = UIAlertView(title: "Change Display Name", message: "Enter a new name.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
+        let alert = UIAlertView(title: "Change Display Name", message: "Enter a new name.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         alert.show()
     }
@@ -395,7 +392,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func update(input: String, inputType: String) {
-        var request = UserUpdateRequest()
+        let request = UserUpdateRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         switch (inputType) {
@@ -461,7 +458,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func delete() {
-        var request = UserRequest()
+        let request = UserRequest()
         request.loginToken = currentUser.loginToken
         request.userid = UInt32(currentUser.userid!)
         // FIXME: remove this line later

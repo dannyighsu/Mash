@@ -50,7 +50,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        if textField.text.isEmpty {
+        if textField.text!.isEmpty {
             Debug.printl("Text field is empty", sender: self)
             return false
         }
@@ -88,21 +88,25 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
 
     // Check for length & validity of text fields
     func signUpAction(sender: AnyObject?) {
-        if ((count(self.handleField.text!) < 1) || (count(self.passwordField.text!) < 1)) {
-            raiseAlert("Username and Password must have at least 1 character.", self)
+        if (((self.handleField.text!).characters.count < 1) || ((self.passwordField.text!).characters.count < 1)) {
+            raiseAlert("Username and Password must have at least 1 character.", delegate: self)
             return
-        } else if ((count(self.handleField.text!) > 40 || (count(self.passwordField.text!) > 40))) {
-            raiseAlert("Username and Password must be less than 40 characters long.", self)
+        } else if (((self.handleField.text!).characters.count > 40 || ((self.passwordField.text!).characters.count > 40))) {
+            raiseAlert("Username and Password must be less than 40 characters long.", delegate: self)
             return
         } else if self.handleField.text!.rangeOfString(" ") != nil {
-            raiseAlert("Username cannot contain spaces.", self)
+            raiseAlert("Username cannot contain spaces.", delegate: self)
         }
 
-        var error: NSError? = nil
-        var regex = NSRegularExpression(pattern: ".*@.*", options: nil, error: &error)
-        let matches = regex?.numberOfMatchesInString(self.emailField.text, options: nil, range: NSMakeRange(0, count(self.emailField.text)))
+        var regex: NSRegularExpression?
+        do {
+            regex = try NSRegularExpression(pattern: ".*@.*", options: [])
+        } catch _ as NSError {
+            regex = nil
+        }
+        let matches = regex?.numberOfMatchesInString(self.emailField.text!, options: [], range: NSMakeRange(0, self.emailField.text!.characters.count))
         if matches != 1 {
-            raiseAlert("Invalid email format.", self)
+            raiseAlert("Invalid email format.", delegate: self)
             return
         }
         self.register()
@@ -110,7 +114,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
 
     func register() {
         self.activityView.startAnimating()
-        var request = RegisterRequest()
+        let request = RegisterRequest()
         request.handle = self.handleField.text!
         request.passwordHash = hashPassword(self.passwordField.text!)
         request.email = self.emailField.text!
@@ -129,8 +133,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
                 currentUser.loginToken = response.loginToken
                 User.getUsersFollowing()
                 User.updateSelf(nil)
-                var alert = UIAlertView()
-                raiseAlert("Success!", self, "Welcome to Mash.")
+                raiseAlert("Success!", delegate: self, message: "Welcome to Mash.")
             }
         }
     }
@@ -142,7 +145,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     }
     
     func saveLoginItems() {
-        Debug.printl("Saving user " + self.handleField.text + " to NSUserDefaults.", sender: self)
+        Debug.printl("Saving user " + self.handleField.text! + " to NSUserDefaults.", sender: self)
         NSUserDefaults.standardUserDefaults().setValue(self.handleField.text, forKey: "username")
         keychainWrapper.mySetObject(self.passwordField.text, forKey: kSecValueData)
         keychainWrapper.writeToKeychain()

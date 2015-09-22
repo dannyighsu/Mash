@@ -63,12 +63,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     func signinAction(sender: AnyObject?) {
-        if ((count(self.handleField.text!) < 1) || (count(self.passwordField.text!) < 1)) {
-            raiseAlert("Incorrect Username and/or Password", self)
+        if (((self.handleField.text!).characters.count < 1) || ((self.passwordField.text!).characters.count < 1)) {
+            raiseAlert("Incorrect Username and/or Password", delegate: self)
             return
         }
         
-        authenticate(self.handleField.text, password: self.passwordField.text)
+        authenticate(self.handleField.text!, password: self.passwordField.text!)
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -76,8 +76,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.handleField.resignFirstResponder()
             self.passwordField.becomeFirstResponder()
         } else {
-            if textField.text.isEmpty {
-                raiseAlert("Please enter a password.", self)
+            if textField.text!.isEmpty {
+                raiseAlert("Please enter a password.", delegate: self)
                 return false
             }
             self.passwordField.resignFirstResponder()
@@ -94,7 +94,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     func authenticate(handle: String, password: String) {
         self.activityView.startAnimating()
         let passwordHash = hashPassword(password)
-        var request = SignInRequest()
+        let request = SignInRequest()
         request.handle = handle
         request.passwordHash = passwordHash
         
@@ -137,7 +137,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     func saveLoginItems() {
-        Debug.printl("Saving user " + self.handleField.text + " to NSUserDefaults.", sender: self)
+        Debug.printl("Saving user " + self.handleField.text! + " to NSUserDefaults.", sender: self)
         NSUserDefaults.standardUserDefaults().setValue(self.handleField.text, forKey: "username")
         keychainWrapper.mySetObject(self.passwordField.text, forKey: kSecValueData)
         keychainWrapper.writeToKeychain()

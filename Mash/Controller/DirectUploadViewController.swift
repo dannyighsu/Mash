@@ -32,9 +32,9 @@ class DirectUploadViewController: UIViewController {
     func submit(sender: AnyObject?) {
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
-        var params = ["name": handle, "password_hash": passwordHash, "song_name": "Beginning Kick", "bpm": "120", "bar": "404", "key": "0", "instrument": "3", "family": "3", "genre": "pop", "subgenre": "pop", "feel": "0", "effects": "", "theme": "", "solo": "0", "link": "https://s3.amazonaws.com/mash1/Beginning+Kick.aif"] as Dictionary
-        httpPost(params, request) {
+        let request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
+        let params = ["name": handle, "password_hash": passwordHash, "song_name": "Beginning Kick", "bpm": "120", "bar": "404", "key": "0", "instrument": "3", "family": "3", "genre": "pop", "subgenre": "pop", "feel": "0", "effects": "", "theme": "", "solo": "0", "link": "https://s3.amazonaws.com/mash1/Beginning+Kick.aif"] as Dictionary
+        httpPost(params, request: request) {
             (data, statusCode, error) -> Void in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
