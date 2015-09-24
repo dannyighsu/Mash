@@ -34,6 +34,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.searchController!.delegate = self
         self.searchController!.searchBar.delegate = self
         self.searchController!.searchBar.scopeButtonTitles = ["Recording", "User"]
+        self.searchController!.dimsBackgroundDuringPresentation = false
         
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
@@ -207,7 +208,9 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        self.suggestions = ["Hi"]
+        let searchStringArray = searchController.searchBar.text!.characters.split {$0 == ","}
+        let searchString = searchStringArray.last
+        print(searchString)
         self.completionTableView!.reloadData()
     }
     

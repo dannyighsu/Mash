@@ -85,7 +85,7 @@
 // The client ID of the home web server.  This will be returned as the
 // |audience| property of the JWT ID token.  For more info on the ID token:
 // https://developers.google.com/accounts/docs/OAuth2Login#obtainuserinfo
-@property(nonatomic, copy) NSString *homeServerClientID;
+@property(nonatomic, copy) NSString *homeserverID;
 
 // An OAuth2 authorization code for the home server.
 @property(nonatomic, strong, readonly) NSString *homeServerAuthorizationCode;

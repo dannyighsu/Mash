@@ -98,7 +98,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         request.handle = handle
         request.passwordHash = passwordHash
         
-        serverClient.signInWithRequest(request) {
+        server.signInWithRequest(request) {
             (response, error) in
             self.activityView.stopAnimating()
             if error != nil {

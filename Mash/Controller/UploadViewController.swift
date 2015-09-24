@@ -153,7 +153,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         request.solo = true
         request.format = ".m4a"
         
-        serverClient.recordingUploadWithRequest(request) {
+        server.recordingUploadWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)

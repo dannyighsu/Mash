@@ -121,7 +121,7 @@ class User: UITableViewCell {
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(input.userid!)
         
-        serverClient.userGetWithRequest(request) {
+        server.userGetWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: "user")
@@ -190,7 +190,7 @@ class User: UITableViewCell {
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(currentUser.userid!)
         
-        serverClient.userGetWithRequest(request) {
+        server.userGetWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: "user")
@@ -278,7 +278,7 @@ class User: UITableViewCell {
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(user.userid!)
         
-        serverClient.userFollowWithRequest(request) {
+        server.userFollowWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: "user")
@@ -331,7 +331,7 @@ class User: UITableViewCell {
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(user.userid!)
         
-        serverClient.userUnfollowWithRequest(request) {
+        server.userUnfollowWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: "user")
@@ -353,7 +353,7 @@ class User: UITableViewCell {
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(currentUser.userid!)
         
-        serverClient.followingsGetWithRequest(request) {
+        server.followingsGetWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: "user")

@@ -163,7 +163,7 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         request.genreArray = [self.genreField.text!]
         request.subgenreArray = [self.subgenreField.text!]
         
-        serverClient.recordingUpdateWithRequest(request) {
+        server.recordingUpdateWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)

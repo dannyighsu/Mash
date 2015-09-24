@@ -11,11 +11,14 @@
 
 @end
 
+#pragma mark - MashserviceRoot_FileDescriptor
+
 static GPBFileDescriptor *MashserviceRoot_FileDescriptor(void) {
   // This is called by +initialize so there is no need to worry
   // about thread safety of the singleton.
   static GPBFileDescriptor *descriptor = NULL;
   if (!descriptor) {
+    GPBDebugCheckRuntimeVersion();
     descriptor = [[GPBFileDescriptor alloc] initWithPackage:@"mash.mashservice"
                                                      syntax:GPBFileSyntaxProto2];
   }
@@ -32,19 +35,19 @@ static GPBFileDescriptor *MashserviceRoot_FileDescriptor(void) {
 @dynamic hasName, name;
 @dynamic hasRegisterAgent, registerAgent;
 
-typedef struct RegisterRequest_Storage {
+typedef struct RegisterRequest__storage_ {
   uint32_t _has_storage_[1];
   int32_t registerAgent;
   NSString *handle;
   NSString *email;
   NSString *passwordHash;
   NSString *name;
-} RegisterRequest_Storage;
+} RegisterRequest__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -52,10 +55,10 @@ typedef struct RegisterRequest_Storage {
         .number = RegisterRequest_FieldNumber_Handle,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(RegisterRequest_Storage, handle),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RegisterRequest__storage_, handle),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -63,10 +66,10 @@ typedef struct RegisterRequest_Storage {
         .number = RegisterRequest_FieldNumber_Email,
         .hasIndex = 1,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(RegisterRequest_Storage, email),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RegisterRequest__storage_, email),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -74,10 +77,10 @@ typedef struct RegisterRequest_Storage {
         .number = RegisterRequest_FieldNumber_PasswordHash,
         .hasIndex = 2,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(RegisterRequest_Storage, passwordHash),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RegisterRequest__storage_, passwordHash),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -85,10 +88,10 @@ typedef struct RegisterRequest_Storage {
         .number = RegisterRequest_FieldNumber_Name,
         .hasIndex = 3,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(RegisterRequest_Storage, name),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RegisterRequest__storage_, name),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -96,26 +99,29 @@ typedef struct RegisterRequest_Storage {
         .number = RegisterRequest_FieldNumber_RegisterAgent,
         .hasIndex = 4,
         .flags = GPBFieldOptional,
-        .type = GPBTypeInt32,
-        .offset = offsetof(RegisterRequest_Storage, registerAgent),
+        .dataType = GPBDataTypeInt32,
+        .offset = offsetof(RegisterRequest__storage_, registerAgent),
         .defaultValue.valueInt32 = 0,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[RegisterRequest class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(RegisterRequest_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[RegisterRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(RegisterRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -129,16 +135,16 @@ typedef struct RegisterRequest_Storage {
 @dynamic hasLoginToken, loginToken;
 @dynamic hasUserid, userid;
 
-typedef struct RegisterResponse_Storage {
+typedef struct RegisterResponse__storage_ {
   uint32_t _has_storage_[1];
   uint32_t userid;
   NSString *loginToken;
-} RegisterResponse_Storage;
+} RegisterResponse__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -146,10 +152,10 @@ typedef struct RegisterResponse_Storage {
         .number = RegisterResponse_FieldNumber_LoginToken,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(RegisterResponse_Storage, loginToken),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RegisterResponse__storage_, loginToken),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -157,26 +163,29 @@ typedef struct RegisterResponse_Storage {
         .number = RegisterResponse_FieldNumber_Userid,
         .hasIndex = 1,
         .flags = GPBFieldRequired,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RegisterResponse_Storage, userid),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RegisterResponse__storage_, userid),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[RegisterResponse class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(RegisterResponse_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[RegisterResponse class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(RegisterResponse__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -190,16 +199,16 @@ typedef struct RegisterResponse_Storage {
 @dynamic hasHandle, handle;
 @dynamic hasPasswordHash, passwordHash;
 
-typedef struct SignInRequest_Storage {
+typedef struct SignInRequest__storage_ {
   uint32_t _has_storage_[1];
   NSString *handle;
   NSString *passwordHash;
-} SignInRequest_Storage;
+} SignInRequest__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -207,10 +216,10 @@ typedef struct SignInRequest_Storage {
         .number = SignInRequest_FieldNumber_Handle,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(SignInRequest_Storage, handle),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(SignInRequest__storage_, handle),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -218,26 +227,29 @@ typedef struct SignInRequest_Storage {
         .number = SignInRequest_FieldNumber_PasswordHash,
         .hasIndex = 1,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(SignInRequest_Storage, passwordHash),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(SignInRequest__storage_, passwordHash),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[SignInRequest class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(SignInRequest_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[SignInRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(SignInRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -258,7 +270,7 @@ typedef struct SignInRequest_Storage {
 @dynamic hasFollowingCount, followingCount;
 @dynamic hasTrackCount, trackCount;
 
-typedef struct SignInResponse_Storage {
+typedef struct SignInResponse__storage_ {
   uint32_t _has_storage_[1];
   uint32_t userid;
   uint32_t registerAgent;
@@ -269,12 +281,12 @@ typedef struct SignInResponse_Storage {
   NSString *name;
   NSString *userDescription;
   NSString *loginToken;
-} SignInResponse_Storage;
+} SignInResponse__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -282,10 +294,10 @@ typedef struct SignInResponse_Storage {
         .number = SignInResponse_FieldNumber_Userid,
         .hasIndex = 0,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(SignInResponse_Storage, userid),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(SignInResponse__storage_, userid),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -293,10 +305,10 @@ typedef struct SignInResponse_Storage {
         .number = SignInResponse_FieldNumber_Email,
         .hasIndex = 1,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(SignInResponse_Storage, email),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(SignInResponse__storage_, email),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -304,10 +316,10 @@ typedef struct SignInResponse_Storage {
         .number = SignInResponse_FieldNumber_Name,
         .hasIndex = 2,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(SignInResponse_Storage, name),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(SignInResponse__storage_, name),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -315,10 +327,10 @@ typedef struct SignInResponse_Storage {
         .number = SignInResponse_FieldNumber_RegisterAgent,
         .hasIndex = 3,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(SignInResponse_Storage, registerAgent),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(SignInResponse__storage_, registerAgent),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -326,10 +338,10 @@ typedef struct SignInResponse_Storage {
         .number = SignInResponse_FieldNumber_UserDescription,
         .hasIndex = 4,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(SignInResponse_Storage, userDescription),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(SignInResponse__storage_, userDescription),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -337,10 +349,10 @@ typedef struct SignInResponse_Storage {
         .number = SignInResponse_FieldNumber_LoginToken,
         .hasIndex = 5,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(SignInResponse_Storage, loginToken),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(SignInResponse__storage_, loginToken),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -348,10 +360,10 @@ typedef struct SignInResponse_Storage {
         .number = SignInResponse_FieldNumber_FollowersCount,
         .hasIndex = 6,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(SignInResponse_Storage, followersCount),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(SignInResponse__storage_, followersCount),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -359,10 +371,10 @@ typedef struct SignInResponse_Storage {
         .number = SignInResponse_FieldNumber_FollowingCount,
         .hasIndex = 7,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(SignInResponse_Storage, followingCount),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(SignInResponse__storage_, followingCount),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -370,26 +382,29 @@ typedef struct SignInResponse_Storage {
         .number = SignInResponse_FieldNumber_TrackCount,
         .hasIndex = 8,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(SignInResponse_Storage, trackCount),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(SignInResponse__storage_, trackCount),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[SignInResponse class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(SignInResponse_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[SignInResponse class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(SignInResponse__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -409,7 +424,7 @@ typedef struct SignInResponse_Storage {
 @dynamic hasTrackCount, trackCount;
 @dynamic hasFollow, follow;
 
-typedef struct UserResponse_Storage {
+typedef struct UserResponse__storage_ {
   uint32_t _has_storage_[1];
   BOOL follow;
   uint32_t followersCount;
@@ -419,12 +434,12 @@ typedef struct UserResponse_Storage {
   NSString *email;
   NSString *name;
   NSString *userDescription;
-} UserResponse_Storage;
+} UserResponse__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -432,10 +447,10 @@ typedef struct UserResponse_Storage {
         .number = UserResponse_FieldNumber_Handle,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(UserResponse_Storage, handle),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserResponse__storage_, handle),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -443,10 +458,10 @@ typedef struct UserResponse_Storage {
         .number = UserResponse_FieldNumber_Email,
         .hasIndex = 1,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(UserResponse_Storage, email),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserResponse__storage_, email),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -454,10 +469,10 @@ typedef struct UserResponse_Storage {
         .number = UserResponse_FieldNumber_Name,
         .hasIndex = 2,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(UserResponse_Storage, name),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserResponse__storage_, name),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -465,10 +480,10 @@ typedef struct UserResponse_Storage {
         .number = UserResponse_FieldNumber_UserDescription,
         .hasIndex = 3,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(UserResponse_Storage, userDescription),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserResponse__storage_, userDescription),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -476,10 +491,10 @@ typedef struct UserResponse_Storage {
         .number = UserResponse_FieldNumber_FollowersCount,
         .hasIndex = 4,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(UserResponse_Storage, followersCount),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(UserResponse__storage_, followersCount),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -487,10 +502,10 @@ typedef struct UserResponse_Storage {
         .number = UserResponse_FieldNumber_FollowingCount,
         .hasIndex = 5,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(UserResponse_Storage, followingCount),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(UserResponse__storage_, followingCount),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -498,10 +513,10 @@ typedef struct UserResponse_Storage {
         .number = UserResponse_FieldNumber_TrackCount,
         .hasIndex = 6,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(UserResponse_Storage, trackCount),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(UserResponse__storage_, trackCount),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -509,26 +524,29 @@ typedef struct UserResponse_Storage {
         .number = UserResponse_FieldNumber_Follow,
         .hasIndex = 7,
         .flags = GPBFieldOptional,
-        .type = GPBTypeBool,
-        .offset = offsetof(UserResponse_Storage, follow),
+        .dataType = GPBDataTypeBool,
+        .offset = offsetof(UserResponse__storage_, follow),
         .defaultValue.valueBool = NO,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[UserResponse class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(UserResponse_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[UserResponse class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(UserResponse__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -543,17 +561,17 @@ typedef struct UserResponse_Storage {
 @dynamic hasUserid, userid;
 @dynamic hasRecid, recid;
 
-typedef struct RecordingRequest_Storage {
+typedef struct RecordingRequest__storage_ {
   uint32_t _has_storage_[1];
   uint32_t userid;
   uint32_t recid;
   NSString *loginToken;
-} RecordingRequest_Storage;
+} RecordingRequest__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -561,10 +579,10 @@ typedef struct RecordingRequest_Storage {
         .number = RecordingRequest_FieldNumber_LoginToken,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingRequest_Storage, loginToken),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingRequest__storage_, loginToken),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -572,10 +590,10 @@ typedef struct RecordingRequest_Storage {
         .number = RecordingRequest_FieldNumber_Userid,
         .hasIndex = 1,
         .flags = GPBFieldRequired,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingRequest_Storage, userid),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingRequest__storage_, userid),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -583,26 +601,29 @@ typedef struct RecordingRequest_Storage {
         .number = RecordingRequest_FieldNumber_Recid,
         .hasIndex = 2,
         .flags = GPBFieldRequired,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingRequest_Storage, recid),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingRequest__storage_, recid),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[RecordingRequest class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(RecordingRequest_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[RecordingRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(RecordingRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -617,10 +638,10 @@ typedef struct RecordingRequest_Storage {
 @dynamic hasBpm, bpm;
 @dynamic hasBar, bar;
 @dynamic hasKey, key;
-@dynamic instrumentArray;
-@dynamic familyArray;
-@dynamic genreArray;
-@dynamic subgenreArray;
+@dynamic instrumentArray, instrumentArray_Count;
+@dynamic familyArray, familyArray_Count;
+@dynamic genreArray, genreArray_Count;
+@dynamic subgenreArray, subgenreArray_Count;
 @dynamic hasFeel, feel;
 @dynamic hasSolo, solo;
 @dynamic hasUploaded, uploaded;
@@ -631,7 +652,7 @@ typedef struct RecordingRequest_Storage {
 @dynamic hasUserid, userid;
 @dynamic hasHandle, handle;
 
-typedef struct RecordingResponse_Storage {
+typedef struct RecordingResponse__storage_ {
   uint32_t _has_storage_[1];
   BOOL solo;
   uint32_t bpm;
@@ -650,12 +671,12 @@ typedef struct RecordingResponse_Storage {
   NSString *uploaded;
   NSString *format;
   NSString *handle;
-} RecordingResponse_Storage;
+} RecordingResponse__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -663,10 +684,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_Title,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingResponse_Storage, title),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingResponse__storage_, title),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -674,10 +695,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_Bpm,
         .hasIndex = 1,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingResponse_Storage, bpm),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingResponse__storage_, bpm),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -685,10 +706,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_Bar,
         .hasIndex = 2,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingResponse_Storage, bar),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingResponse__storage_, bar),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -696,10 +717,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_Key,
         .hasIndex = 3,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingResponse_Storage, key),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingResponse__storage_, key),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -707,10 +728,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_InstrumentArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingResponse_Storage, instrumentArray),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingResponse__storage_, instrumentArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -718,10 +739,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_FamilyArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingResponse_Storage, familyArray),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingResponse__storage_, familyArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -729,10 +750,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_GenreArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingResponse_Storage, genreArray),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingResponse__storage_, genreArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -740,10 +761,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_SubgenreArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingResponse_Storage, subgenreArray),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingResponse__storage_, subgenreArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -751,10 +772,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_Feel,
         .hasIndex = 8,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingResponse_Storage, feel),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingResponse__storage_, feel),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -762,10 +783,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_Solo,
         .hasIndex = 9,
         .flags = GPBFieldOptional,
-        .type = GPBTypeBool,
-        .offset = offsetof(RecordingResponse_Storage, solo),
+        .dataType = GPBDataTypeBool,
+        .offset = offsetof(RecordingResponse__storage_, solo),
         .defaultValue.valueBool = NO,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -773,10 +794,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_Uploaded,
         .hasIndex = 10,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingResponse_Storage, uploaded),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingResponse__storage_, uploaded),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -784,10 +805,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_Format,
         .hasIndex = 11,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingResponse_Storage, format),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingResponse__storage_, format),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -795,10 +816,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_PlayCount,
         .hasIndex = 12,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingResponse_Storage, playCount),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingResponse__storage_, playCount),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -806,10 +827,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_LikeCount,
         .hasIndex = 13,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingResponse_Storage, likeCount),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingResponse__storage_, likeCount),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -817,10 +838,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_Recid,
         .hasIndex = 14,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingResponse_Storage, recid),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingResponse__storage_, recid),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -828,10 +849,10 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_Userid,
         .hasIndex = 15,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingResponse_Storage, userid),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingResponse__storage_, userid),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -839,26 +860,29 @@ typedef struct RecordingResponse_Storage {
         .number = RecordingResponse_FieldNumber_Handle,
         .hasIndex = 16,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingResponse_Storage, handle),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingResponse__storage_, handle),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[RecordingResponse class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(RecordingResponse_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[RecordingResponse class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(RecordingResponse__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -869,17 +893,17 @@ typedef struct RecordingResponse_Storage {
 
 @implementation UserRecordingsResponse
 
-@dynamic recArray;
+@dynamic recArray, recArray_Count;
 
-typedef struct UserRecordingsResponse_Storage {
+typedef struct UserRecordingsResponse__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *recArray;
-} UserRecordingsResponse_Storage;
+} UserRecordingsResponse__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -887,26 +911,29 @@ typedef struct UserRecordingsResponse_Storage {
         .number = UserRecordingsResponse_FieldNumber_RecArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeMessage,
-        .offset = offsetof(UserRecordingsResponse_Storage, recArray),
+        .dataType = GPBDataTypeMessage,
+        .offset = offsetof(UserRecordingsResponse__storage_, recArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = GPBStringifySymbol(RecordingResponse),
+        .dataTypeSpecific.className = GPBStringifySymbol(RecordingResponse),
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[UserRecordingsResponse class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(UserRecordingsResponse_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[UserRecordingsResponse class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(UserRecordingsResponse__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -917,17 +944,17 @@ typedef struct UserRecordingsResponse_Storage {
 
 @implementation FollowGetResponse
 
-@dynamic userArray;
+@dynamic userArray, userArray_Count;
 
-typedef struct FollowGetResponse_Storage {
+typedef struct FollowGetResponse__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *userArray;
-} FollowGetResponse_Storage;
+} FollowGetResponse__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -935,26 +962,29 @@ typedef struct FollowGetResponse_Storage {
         .number = FollowGetResponse_FieldNumber_UserArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeMessage,
-        .offset = offsetof(FollowGetResponse_Storage, userArray),
+        .dataType = GPBDataTypeMessage,
+        .offset = offsetof(FollowGetResponse__storage_, userArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = GPBStringifySymbol(UserPreview),
+        .dataTypeSpecific.className = GPBStringifySymbol(UserPreview),
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[FollowGetResponse class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(FollowGetResponse_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[FollowGetResponse class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(FollowGetResponse__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -969,17 +999,17 @@ typedef struct FollowGetResponse_Storage {
 @dynamic hasHandle, handle;
 @dynamic hasName, name;
 
-typedef struct UserPreview_Storage {
+typedef struct UserPreview__storage_ {
   uint32_t _has_storage_[1];
   uint32_t userid;
   NSString *handle;
   NSString *name;
-} UserPreview_Storage;
+} UserPreview__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -987,10 +1017,10 @@ typedef struct UserPreview_Storage {
         .number = UserPreview_FieldNumber_Userid,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(UserPreview_Storage, userid),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(UserPreview__storage_, userid),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -998,10 +1028,10 @@ typedef struct UserPreview_Storage {
         .number = UserPreview_FieldNumber_Handle,
         .hasIndex = 1,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(UserPreview_Storage, handle),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserPreview__storage_, handle),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1009,26 +1039,29 @@ typedef struct UserPreview_Storage {
         .number = UserPreview_FieldNumber_Name,
         .hasIndex = 2,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(UserPreview_Storage, name),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserPreview__storage_, name),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[UserPreview class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(UserPreview_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[UserPreview class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(UserPreview__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -1043,17 +1076,17 @@ typedef struct UserPreview_Storage {
 @dynamic hasUserid, userid;
 @dynamic hasQueryUserid, queryUserid;
 
-typedef struct UserRequest_Storage {
+typedef struct UserRequest__storage_ {
   uint32_t _has_storage_[1];
   uint32_t userid;
   uint32_t queryUserid;
   NSString *loginToken;
-} UserRequest_Storage;
+} UserRequest__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -1061,10 +1094,10 @@ typedef struct UserRequest_Storage {
         .number = UserRequest_FieldNumber_LoginToken,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(UserRequest_Storage, loginToken),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserRequest__storage_, loginToken),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1072,10 +1105,10 @@ typedef struct UserRequest_Storage {
         .number = UserRequest_FieldNumber_Userid,
         .hasIndex = 1,
         .flags = GPBFieldRequired,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(UserRequest_Storage, userid),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(UserRequest__storage_, userid),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1083,26 +1116,29 @@ typedef struct UserRequest_Storage {
         .number = UserRequest_FieldNumber_QueryUserid,
         .hasIndex = 2,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(UserRequest_Storage, queryUserid),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(UserRequest__storage_, queryUserid),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[UserRequest class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(UserRequest_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[UserRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(UserRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -1119,15 +1155,15 @@ typedef struct UserRequest_Storage {
 @dynamic hasBpm, bpm;
 @dynamic hasBar, bar;
 @dynamic hasKey, key;
-@dynamic instrumentArray;
-@dynamic familyArray;
-@dynamic genreArray;
-@dynamic subgenreArray;
+@dynamic instrumentArray, instrumentArray_Count;
+@dynamic familyArray, familyArray_Count;
+@dynamic genreArray, genreArray_Count;
+@dynamic subgenreArray, subgenreArray_Count;
 @dynamic hasFeel, feel;
 @dynamic hasSolo, solo;
 @dynamic hasFormat, format;
 
-typedef struct RecordingUploadRequest_Storage {
+typedef struct RecordingUploadRequest__storage_ {
   uint32_t _has_storage_[1];
   BOOL solo;
   uint32_t userid;
@@ -1142,12 +1178,12 @@ typedef struct RecordingUploadRequest_Storage {
   NSMutableArray *genreArray;
   NSMutableArray *subgenreArray;
   NSString *format;
-} RecordingUploadRequest_Storage;
+} RecordingUploadRequest__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -1155,10 +1191,10 @@ typedef struct RecordingUploadRequest_Storage {
         .number = RecordingUploadRequest_FieldNumber_Userid,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingUploadRequest_Storage, userid),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingUploadRequest__storage_, userid),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1166,10 +1202,10 @@ typedef struct RecordingUploadRequest_Storage {
         .number = RecordingUploadRequest_FieldNumber_LoginToken,
         .hasIndex = 1,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingUploadRequest_Storage, loginToken),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingUploadRequest__storage_, loginToken),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1177,10 +1213,10 @@ typedef struct RecordingUploadRequest_Storage {
         .number = RecordingUploadRequest_FieldNumber_Title,
         .hasIndex = 2,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingUploadRequest_Storage, title),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingUploadRequest__storage_, title),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1188,10 +1224,10 @@ typedef struct RecordingUploadRequest_Storage {
         .number = RecordingUploadRequest_FieldNumber_Bpm,
         .hasIndex = 3,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingUploadRequest_Storage, bpm),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingUploadRequest__storage_, bpm),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1199,10 +1235,10 @@ typedef struct RecordingUploadRequest_Storage {
         .number = RecordingUploadRequest_FieldNumber_Bar,
         .hasIndex = 4,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingUploadRequest_Storage, bar),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingUploadRequest__storage_, bar),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1210,10 +1246,10 @@ typedef struct RecordingUploadRequest_Storage {
         .number = RecordingUploadRequest_FieldNumber_Key,
         .hasIndex = 5,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingUploadRequest_Storage, key),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingUploadRequest__storage_, key),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1221,10 +1257,10 @@ typedef struct RecordingUploadRequest_Storage {
         .number = RecordingUploadRequest_FieldNumber_InstrumentArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingUploadRequest_Storage, instrumentArray),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingUploadRequest__storage_, instrumentArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1232,10 +1268,10 @@ typedef struct RecordingUploadRequest_Storage {
         .number = RecordingUploadRequest_FieldNumber_FamilyArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingUploadRequest_Storage, familyArray),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingUploadRequest__storage_, familyArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1243,10 +1279,10 @@ typedef struct RecordingUploadRequest_Storage {
         .number = RecordingUploadRequest_FieldNumber_GenreArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingUploadRequest_Storage, genreArray),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingUploadRequest__storage_, genreArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1254,10 +1290,10 @@ typedef struct RecordingUploadRequest_Storage {
         .number = RecordingUploadRequest_FieldNumber_SubgenreArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingUploadRequest_Storage, subgenreArray),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingUploadRequest__storage_, subgenreArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1265,10 +1301,10 @@ typedef struct RecordingUploadRequest_Storage {
         .number = RecordingUploadRequest_FieldNumber_Feel,
         .hasIndex = 10,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingUploadRequest_Storage, feel),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingUploadRequest__storage_, feel),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1276,10 +1312,10 @@ typedef struct RecordingUploadRequest_Storage {
         .number = RecordingUploadRequest_FieldNumber_Solo,
         .hasIndex = 11,
         .flags = GPBFieldOptional,
-        .type = GPBTypeBool,
-        .offset = offsetof(RecordingUploadRequest_Storage, solo),
+        .dataType = GPBDataTypeBool,
+        .offset = offsetof(RecordingUploadRequest__storage_, solo),
         .defaultValue.valueBool = NO,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1287,26 +1323,29 @@ typedef struct RecordingUploadRequest_Storage {
         .number = RecordingUploadRequest_FieldNumber_Format,
         .hasIndex = 12,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingUploadRequest_Storage, format),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingUploadRequest__storage_, format),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[RecordingUploadRequest class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(RecordingUploadRequest_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[RecordingUploadRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(RecordingUploadRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -1321,14 +1360,14 @@ typedef struct RecordingUploadRequest_Storage {
 @dynamic hasLoginToken, loginToken;
 @dynamic hasRecid, recid;
 @dynamic hasTitle, title;
-@dynamic instrumentArray;
-@dynamic familyArray;
-@dynamic genreArray;
-@dynamic subgenreArray;
+@dynamic instrumentArray, instrumentArray_Count;
+@dynamic familyArray, familyArray_Count;
+@dynamic genreArray, genreArray_Count;
+@dynamic subgenreArray, subgenreArray_Count;
 @dynamic hasFeel, feel;
 @dynamic hasSolo, solo;
 
-typedef struct RecordingUpdateRequest_Storage {
+typedef struct RecordingUpdateRequest__storage_ {
   uint32_t _has_storage_[1];
   BOOL solo;
   uint32_t userid;
@@ -1340,12 +1379,12 @@ typedef struct RecordingUpdateRequest_Storage {
   NSMutableArray *familyArray;
   NSMutableArray *genreArray;
   NSMutableArray *subgenreArray;
-} RecordingUpdateRequest_Storage;
+} RecordingUpdateRequest__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -1353,10 +1392,10 @@ typedef struct RecordingUpdateRequest_Storage {
         .number = RecordingUpdateRequest_FieldNumber_Userid,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingUpdateRequest_Storage, userid),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingUpdateRequest__storage_, userid),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1364,10 +1403,10 @@ typedef struct RecordingUpdateRequest_Storage {
         .number = RecordingUpdateRequest_FieldNumber_LoginToken,
         .hasIndex = 1,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingUpdateRequest_Storage, loginToken),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingUpdateRequest__storage_, loginToken),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1375,10 +1414,10 @@ typedef struct RecordingUpdateRequest_Storage {
         .number = RecordingUpdateRequest_FieldNumber_Recid,
         .hasIndex = 2,
         .flags = GPBFieldRequired,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingUpdateRequest_Storage, recid),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingUpdateRequest__storage_, recid),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1386,10 +1425,10 @@ typedef struct RecordingUpdateRequest_Storage {
         .number = RecordingUpdateRequest_FieldNumber_Title,
         .hasIndex = 3,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingUpdateRequest_Storage, title),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingUpdateRequest__storage_, title),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1397,10 +1436,10 @@ typedef struct RecordingUpdateRequest_Storage {
         .number = RecordingUpdateRequest_FieldNumber_InstrumentArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingUpdateRequest_Storage, instrumentArray),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingUpdateRequest__storage_, instrumentArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1408,10 +1447,10 @@ typedef struct RecordingUpdateRequest_Storage {
         .number = RecordingUpdateRequest_FieldNumber_FamilyArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingUpdateRequest_Storage, familyArray),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingUpdateRequest__storage_, familyArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1419,10 +1458,10 @@ typedef struct RecordingUpdateRequest_Storage {
         .number = RecordingUpdateRequest_FieldNumber_GenreArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingUpdateRequest_Storage, genreArray),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingUpdateRequest__storage_, genreArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1430,10 +1469,10 @@ typedef struct RecordingUpdateRequest_Storage {
         .number = RecordingUpdateRequest_FieldNumber_SubgenreArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingUpdateRequest_Storage, subgenreArray),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingUpdateRequest__storage_, subgenreArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1441,10 +1480,10 @@ typedef struct RecordingUpdateRequest_Storage {
         .number = RecordingUpdateRequest_FieldNumber_Feel,
         .hasIndex = 8,
         .flags = GPBFieldOptional,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingUpdateRequest_Storage, feel),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingUpdateRequest__storage_, feel),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1452,26 +1491,29 @@ typedef struct RecordingUpdateRequest_Storage {
         .number = RecordingUpdateRequest_FieldNumber_Solo,
         .hasIndex = 9,
         .flags = GPBFieldOptional,
-        .type = GPBTypeBool,
-        .offset = offsetof(RecordingUpdateRequest_Storage, solo),
+        .dataType = GPBDataTypeBool,
+        .offset = offsetof(RecordingUpdateRequest__storage_, solo),
         .defaultValue.valueBool = NO,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[RecordingUpdateRequest class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(RecordingUpdateRequest_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[RecordingUpdateRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(RecordingUpdateRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -1484,15 +1526,15 @@ typedef struct RecordingUpdateRequest_Storage {
 
 @dynamic hasSuccess, success;
 
-typedef struct SuccessResponse_Storage {
+typedef struct SuccessResponse__storage_ {
   uint32_t _has_storage_[1];
   BOOL success;
-} SuccessResponse_Storage;
+} SuccessResponse__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -1500,26 +1542,29 @@ typedef struct SuccessResponse_Storage {
         .number = SuccessResponse_FieldNumber_Success,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
-        .type = GPBTypeBool,
-        .offset = offsetof(SuccessResponse_Storage, success),
+        .dataType = GPBDataTypeBool,
+        .offset = offsetof(SuccessResponse__storage_, success),
         .defaultValue.valueBool = NO,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[SuccessResponse class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(SuccessResponse_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[SuccessResponse class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(SuccessResponse__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -1534,17 +1579,17 @@ typedef struct SuccessResponse_Storage {
 @dynamic hasUserid, userid;
 @dynamic hasQuery, query;
 
-typedef struct RecordingSearchRequest_Storage {
+typedef struct RecordingSearchRequest__storage_ {
   uint32_t _has_storage_[1];
   uint32_t userid;
   NSString *loginToken;
   NSString *query;
-} RecordingSearchRequest_Storage;
+} RecordingSearchRequest__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -1552,10 +1597,10 @@ typedef struct RecordingSearchRequest_Storage {
         .number = RecordingSearchRequest_FieldNumber_LoginToken,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingSearchRequest_Storage, loginToken),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingSearchRequest__storage_, loginToken),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1563,10 +1608,10 @@ typedef struct RecordingSearchRequest_Storage {
         .number = RecordingSearchRequest_FieldNumber_Userid,
         .hasIndex = 1,
         .flags = GPBFieldRequired,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(RecordingSearchRequest_Storage, userid),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingSearchRequest__storage_, userid),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1574,26 +1619,29 @@ typedef struct RecordingSearchRequest_Storage {
         .number = RecordingSearchRequest_FieldNumber_Query,
         .hasIndex = 2,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(RecordingSearchRequest_Storage, query),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingSearchRequest__storage_, query),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[RecordingSearchRequest class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(RecordingSearchRequest_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[RecordingSearchRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(RecordingSearchRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -1611,7 +1659,7 @@ typedef struct RecordingSearchRequest_Storage {
 @dynamic hasName, name;
 @dynamic hasUserDescription, userDescription;
 
-typedef struct UserUpdateRequest_Storage {
+typedef struct UserUpdateRequest__storage_ {
   uint32_t _has_storage_[1];
   uint32_t userid;
   NSString *loginToken;
@@ -1619,12 +1667,12 @@ typedef struct UserUpdateRequest_Storage {
   NSString *passwordHash;
   NSString *name;
   NSString *userDescription;
-} UserUpdateRequest_Storage;
+} UserUpdateRequest__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -1632,10 +1680,10 @@ typedef struct UserUpdateRequest_Storage {
         .number = UserUpdateRequest_FieldNumber_Userid,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(UserUpdateRequest_Storage, userid),
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(UserUpdateRequest__storage_, userid),
         .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1643,10 +1691,10 @@ typedef struct UserUpdateRequest_Storage {
         .number = UserUpdateRequest_FieldNumber_LoginToken,
         .hasIndex = 1,
         .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(UserUpdateRequest_Storage, loginToken),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserUpdateRequest__storage_, loginToken),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1654,10 +1702,10 @@ typedef struct UserUpdateRequest_Storage {
         .number = UserUpdateRequest_FieldNumber_Email,
         .hasIndex = 2,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(UserUpdateRequest_Storage, email),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserUpdateRequest__storage_, email),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1665,10 +1713,10 @@ typedef struct UserUpdateRequest_Storage {
         .number = UserUpdateRequest_FieldNumber_PasswordHash,
         .hasIndex = 3,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(UserUpdateRequest_Storage, passwordHash),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserUpdateRequest__storage_, passwordHash),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1676,10 +1724,10 @@ typedef struct UserUpdateRequest_Storage {
         .number = UserUpdateRequest_FieldNumber_Name,
         .hasIndex = 4,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(UserUpdateRequest_Storage, name),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserUpdateRequest__storage_, name),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
@@ -1687,87 +1735,29 @@ typedef struct UserUpdateRequest_Storage {
         .number = UserUpdateRequest_FieldNumber_UserDescription,
         .hasIndex = 5,
         .flags = GPBFieldOptional,
-        .type = GPBTypeString,
-        .offset = offsetof(UserUpdateRequest_Storage, userDescription),
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserUpdateRequest__storage_, userDescription),
         .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
+        .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[UserUpdateRequest class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(UserUpdateRequest_Storage)
-                                             wireFormat:NO];
-  }
-  return descriptor;
-}
-
-@end
-
-#pragma mark - FeedRequest
-
-@implementation FeedRequest
-
-@dynamic hasUserid, userid;
-@dynamic hasLoginToken, loginToken;
-
-typedef struct FeedRequest_Storage {
-  uint32_t _has_storage_[1];
-  uint32_t userid;
-  NSString *loginToken;
-} FeedRequest_Storage;
-
-// This method is threadsafe because it is initially called
-// in +initialize for each subclass.
-+ (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
-  if (!descriptor) {
-    static GPBMessageFieldDescription fields[] = {
-      {
-        .name = "userid",
-        .number = FeedRequest_FieldNumber_Userid,
-        .hasIndex = 0,
-        .flags = GPBFieldRequired,
-        .type = GPBTypeUInt32,
-        .offset = offsetof(FeedRequest_Storage, userid),
-        .defaultValue.valueUInt32 = 0U,
-        .typeSpecific.className = NULL,
-        .fieldOptions = NULL,
-      },
-      {
-        .name = "loginToken",
-        .number = FeedRequest_FieldNumber_LoginToken,
-        .hasIndex = 1,
-        .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(FeedRequest_Storage, loginToken),
-        .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
-        .fieldOptions = NULL,
-      },
-    };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[FeedRequest class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(FeedRequest_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[UserUpdateRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(UserUpdateRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
@@ -1778,17 +1768,17 @@ typedef struct FeedRequest_Storage {
 
 @implementation FeedResponse
 
-@dynamic storyArray;
+@dynamic storyArray, storyArray_Count;
 
-typedef struct FeedResponse_Storage {
+typedef struct FeedResponse__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *storyArray;
-} FeedResponse_Storage;
+} FeedResponse__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
 + (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
+  static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
@@ -1796,226 +1786,34 @@ typedef struct FeedResponse_Storage {
         .number = FeedResponse_FieldNumber_StoryArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
-        .type = GPBTypeMessage,
-        .offset = offsetof(FeedResponse_Storage, storyArray),
+        .dataType = GPBDataTypeMessage,
+        .offset = offsetof(FeedResponse__storage_, storyArray),
         .defaultValue.valueMessage = nil,
-        .typeSpecific.className = GPBStringifySymbol(FeedResponse_Story),
+        .dataTypeSpecific.className = GPBStringifySymbol(RecordingResponse),
         .fieldOptions = NULL,
       },
     };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[FeedResponse class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(FeedResponse_Storage)
-                                             wireFormat:NO];
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[FeedResponse class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(FeedResponse__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
   }
   return descriptor;
 }
 
 @end
 
-#pragma mark - FeedResponse_FollowStory
-
-@implementation FeedResponse_FollowStory
-
-@dynamic hasFollowed, followed;
-@dynamic hasFollower, follower;
-@dynamic hasTimestamp, timestamp;
-
-typedef struct FeedResponse_FollowStory_Storage {
-  uint32_t _has_storage_[1];
-  UserPreview *followed;
-  UserPreview *follower;
-  NSString *timestamp;
-} FeedResponse_FollowStory_Storage;
-
-// This method is threadsafe because it is initially called
-// in +initialize for each subclass.
-+ (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
-  if (!descriptor) {
-    static GPBMessageFieldDescription fields[] = {
-      {
-        .name = "followed",
-        .number = FeedResponse_FollowStory_FieldNumber_Followed,
-        .hasIndex = 0,
-        .flags = GPBFieldRequired,
-        .type = GPBTypeMessage,
-        .offset = offsetof(FeedResponse_FollowStory_Storage, followed),
-        .defaultValue.valueMessage = nil,
-        .typeSpecific.className = GPBStringifySymbol(UserPreview),
-        .fieldOptions = NULL,
-      },
-      {
-        .name = "follower",
-        .number = FeedResponse_FollowStory_FieldNumber_Follower,
-        .hasIndex = 1,
-        .flags = GPBFieldRequired,
-        .type = GPBTypeMessage,
-        .offset = offsetof(FeedResponse_FollowStory_Storage, follower),
-        .defaultValue.valueMessage = nil,
-        .typeSpecific.className = GPBStringifySymbol(UserPreview),
-        .fieldOptions = NULL,
-      },
-      {
-        .name = "timestamp",
-        .number = FeedResponse_FollowStory_FieldNumber_Timestamp,
-        .hasIndex = 2,
-        .flags = GPBFieldRequired,
-        .type = GPBTypeString,
-        .offset = offsetof(FeedResponse_FollowStory_Storage, timestamp),
-        .defaultValue.valueString = nil,
-        .typeSpecific.className = NULL,
-        .fieldOptions = NULL,
-      },
-    };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[FeedResponse_FollowStory class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(FeedResponse_FollowStory_Storage)
-                                             wireFormat:NO];
-  }
-  return descriptor;
-}
-
-@end
-
-#pragma mark - FeedResponse_RecordingStory
-
-@implementation FeedResponse_RecordingStory
-
-@dynamic hasRecording, recording;
-
-typedef struct FeedResponse_RecordingStory_Storage {
-  uint32_t _has_storage_[1];
-  RecordingResponse *recording;
-} FeedResponse_RecordingStory_Storage;
-
-// This method is threadsafe because it is initially called
-// in +initialize for each subclass.
-+ (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
-  if (!descriptor) {
-    static GPBMessageFieldDescription fields[] = {
-      {
-        .name = "recording",
-        .number = FeedResponse_RecordingStory_FieldNumber_Recording,
-        .hasIndex = 0,
-        .flags = GPBFieldRequired,
-        .type = GPBTypeMessage,
-        .offset = offsetof(FeedResponse_RecordingStory_Storage, recording),
-        .defaultValue.valueMessage = nil,
-        .typeSpecific.className = GPBStringifySymbol(RecordingResponse),
-        .fieldOptions = NULL,
-      },
-    };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[FeedResponse_RecordingStory class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:NULL
-                                             oneofCount:0
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(FeedResponse_RecordingStory_Storage)
-                                             wireFormat:NO];
-  }
-  return descriptor;
-}
-
-@end
-
-#pragma mark - FeedResponse_Story
-
-@implementation FeedResponse_Story
-
-@dynamic storyOneOfCase;
-@dynamic recStory;
-@dynamic followStory;
-
-typedef struct FeedResponse_Story_Storage {
-  uint32_t _has_storage_[2];
-  FeedResponse_RecordingStory *recStory;
-  FeedResponse_FollowStory *followStory;
-} FeedResponse_Story_Storage;
-
-// This method is threadsafe because it is initially called
-// in +initialize for each subclass.
-+ (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = NULL;
-  if (!descriptor) {
-    static GPBMessageOneofDescription oneofs[] = {
-      {
-        .name = "story",
-        .index = -1,
-      },
-    };
-    static GPBMessageFieldDescription fields[] = {
-      {
-        .name = "recStory",
-        .number = FeedResponse_Story_FieldNumber_RecStory,
-        .hasIndex = -1,
-        .flags = GPBFieldOptional,
-        .type = GPBTypeMessage,
-        .offset = offsetof(FeedResponse_Story_Storage, recStory),
-        .defaultValue.valueMessage = nil,
-        .typeSpecific.className = GPBStringifySymbol(FeedResponse_RecordingStory),
-        .fieldOptions = NULL,
-      },
-      {
-        .name = "followStory",
-        .number = FeedResponse_Story_FieldNumber_FollowStory,
-        .hasIndex = -1,
-        .flags = GPBFieldOptional,
-        .type = GPBTypeMessage,
-        .offset = offsetof(FeedResponse_Story_Storage, followStory),
-        .defaultValue.valueMessage = nil,
-        .typeSpecific.className = GPBStringifySymbol(FeedResponse_FollowStory),
-        .fieldOptions = NULL,
-      },
-    };
-    descriptor = [GPBDescriptor allocDescriptorForClass:[FeedResponse_Story class]
-                                              rootClass:[MashserviceRoot class]
-                                                   file:MashserviceRoot_FileDescriptor()
-                                                 fields:fields
-                                             fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                                 oneofs:oneofs
-                                             oneofCount:sizeof(oneofs) / sizeof(GPBMessageOneofDescription)
-                                                  enums:NULL
-                                              enumCount:0
-                                                 ranges:NULL
-                                             rangeCount:0
-                                            storageSize:sizeof(FeedResponse_Story_Storage)
-                                             wireFormat:NO];
-  }
-  return descriptor;
-}
-
-@end
-
-void FeedResponse_Story_ClearStoryOneOfCase(FeedResponse_Story *message) {
-  GPBDescriptor *descriptor = [message descriptor];
-  GPBOneofDescriptor *oneof = descriptor->oneofs_[0];
-  GPBMaybeClearOneof(message, oneof, 0);
-}
 
 // @@protoc_insertion_point(global_scope)

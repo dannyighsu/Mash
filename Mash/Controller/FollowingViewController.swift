@@ -97,7 +97,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(self.user.userid!)
         
-        serverClient.followersGetWithRequest(request) {
+        server.followersGetWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)

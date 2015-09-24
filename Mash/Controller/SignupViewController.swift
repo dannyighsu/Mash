@@ -120,7 +120,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         request.email = self.emailField.text!
         request.name = ""
         request.registerAgent = 0
-        serverClient.registerWithRequest(request) {
+        server.registerWithRequest(request) {
             (response, error) in
             self.activityView.stopAnimating()
             if error != nil {

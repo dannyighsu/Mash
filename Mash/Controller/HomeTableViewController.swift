@@ -130,7 +130,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         
-        serverClient.feedWithRequest(request) {
+        server.feedWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)

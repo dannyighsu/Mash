@@ -209,7 +209,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(self.user.userid!)
         
-        serverClient.userRecordingsWithRequest(request) {
+        server.userRecordingsWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)
@@ -278,7 +278,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         request.userid = UInt32(currentUser.userid!)
         request.recid = UInt32(track.id)
         
-        serverClient.recordingDeleteWithRequest(request) {
+        server.recordingDeleteWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("\(error)", sender: nil)
@@ -408,7 +408,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 Debug.printl("Error in update, input type is \(inputType)", sender: nil)
                 return
         }
-        serverClient.userUpdateWithRequest(request) {
+        server.userUpdateWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)
@@ -464,7 +464,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         // FIXME: remove this line later
         request.queryUserid = UInt32(currentUser.userid!)
         
-        serverClient.userDeleteWithRequest(request) {
+        server.userDeleteWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)

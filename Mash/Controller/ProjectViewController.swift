@@ -332,7 +332,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         request.loginToken = currentUser.loginToken
         request.
         
-        serverClient.recordingUploadWithRequest(request) {
+        server.recordingUploadWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)")
@@ -425,7 +425,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         request.solo = true
         request.format = ".m4a"
         
-        serverClient.recordingUploadWithRequest(request) {
+        server.recordingUploadWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)

@@ -1,10 +1,9 @@
-#import "Mashservice.pbobjc.h"
+#import "protos/Mashservice.pbobjc.h"
 
 #import <ProtoRPC/ProtoService.h>
+#import <RxLibrary/GRXWriteable.h>
+#import <RxLibrary/GRXWriter.h>
 
-
-@protocol GRXWriteable;
-@protocol GRXWriter;
 
 @protocol MashService <NSObject>
 
@@ -20,6 +19,13 @@
 - (void)signInWithRequest:(SignInRequest *)request handler:(void(^)(SignInResponse *response, NSError *error))handler;
 
 - (ProtoRPC *)RPCToSignInWithRequest:(SignInRequest *)request handler:(void(^)(SignInResponse *response, NSError *error))handler;
+
+
+#pragma mark SignOut(UserRequest) returns (SuccessResponse)
+
+- (void)signOutWithRequest:(UserRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToSignOutWithRequest:(UserRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
 
 
 #pragma mark UserGet(UserRequest) returns (UserResponse)
@@ -127,11 +133,11 @@
 - (ProtoRPC *)RPCToUserRecordingsWithRequest:(UserRequest *)request handler:(void(^)(UserRecordingsResponse *response, NSError *error))handler;
 
 
-#pragma mark Feed(FeedRequest) returns (FeedResponse)
+#pragma mark Feed(UserRequest) returns (FeedResponse)
 
-- (void)feedWithRequest:(FeedRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler;
+- (void)feedWithRequest:(UserRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToFeedWithRequest:(FeedRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler;
+- (ProtoRPC *)RPCToFeedWithRequest:(UserRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler;
 
 
 @end
