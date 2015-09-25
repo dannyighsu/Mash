@@ -30,17 +30,21 @@
 
 #import <Foundation/Foundation.h>
 
-@class GPBField;
+@class GPBUnknownField;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface GPBUnknownFieldSet : NSObject<NSCopying>
 
 - (BOOL)hasField:(int32_t)number;
-- (GPBField *)getField:(int32_t)number;
+- (nullable GPBUnknownField *)getField:(int32_t)number;
 - (NSUInteger)countOfFields;
 
-- (void)addField:(GPBField *)field;
+- (void)addField:(GPBUnknownField *)field;
 
 // Returns an NSArray of the GPBFields sorted by the field numbers.
 - (NSArray *)sortedFields;
 
 @end
+
+NS_ASSUME_NONNULL_END

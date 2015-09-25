@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import AVFoundation
 
-class SearchViewController: UITableViewController, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating {
+class SearchViewController: UITableViewController, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UITextFieldDelegate {
 
     var completionTableView: UITableView? = nil
     var searchController: UISearchController?
@@ -21,7 +21,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     // Holds all search results
     var allResults: [AnyObject] = []
     // Holds current suggestion results
-    var suggestions: [String] = []
+    var suggestions: [[String]] = []
+    var tags: [[String]] = []
     // Current search scope
     var scope: Int = 0
     
@@ -55,6 +56,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.tableView.registerNib(user, forCellReuseIdentifier: "User")
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        self.tableView.separatorStyle = .None
         
         self.tableView.tableHeaderView = self.searchController?.searchBar
         self.definesPresentationContext = true
@@ -129,8 +131,9 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 return user
             }
         } else {
-            let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "Default")
-            cell.textLabel!.text = self.suggestions[indexPath.row]
+            let cell = SuggestionCell(style: UITableViewCellStyle.Default, reuseIdentifier: "SuggestionCell")
+            cell.textLabel!.text = self.suggestions[indexPath.row].first
+            cell.type = self.suggestions[indexPath.row].last!
             return cell
         }
     }
@@ -144,26 +147,42 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if self.audioPlayer != nil {
-            self.audioPlayer!.stop()
-        }
-        if self.scope == 0 {
-            let track = self.tableView.cellForRowAtIndexPath(indexPath) as! Track
-            track.activityView.startAnimating()
-            download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
-                (result) in
-                dispatch_async(dispatch_get_main_queue()) {
-                    track.generateWaveform()
-                    track.activityView.stopAnimating()
-                    self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
-                    self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
-                    self.audioPlayer!.play()
+        if tableView == self.tableView {
+            if self.audioPlayer != nil {
+                self.audioPlayer!.stop()
+            }
+            if self.scope == 0 {
+                let track = self.tableView.cellForRowAtIndexPath(indexPath) as! Track
+                track.activityView.startAnimating()
+                download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
+                    (result) in
+                    dispatch_async(dispatch_get_main_queue()) {
+                        track.generateWaveform()
+                        track.activityView.stopAnimating()
+                        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                        self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
+                        self.audioPlayer!.play()
+                    }
                 }
+            } else {
+                let user = self.tableView.cellForRowAtIndexPath(indexPath) as! User
+                User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
+                self.tableView.cellForRowAtIndexPath(indexPath)!.selected = false
             }
         } else {
-            let user = self.tableView.cellForRowAtIndexPath(indexPath) as! User
-            User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
-            self.tableView.cellForRowAtIndexPath(indexPath)!.selected = false
+            let cell = tableView.cellForRowAtIndexPath(indexPath) as! SuggestionCell
+            let inputString = cell.textLabel!.text!
+            let type = cell.type
+            
+            if self.searchController!.searchBar.text != nil {
+                var searchStringArray = searchController!.searchBar.text!.characters.split {$0 == ","}.map(String.init)
+                searchStringArray[searchStringArray.count - 1] = inputString
+                self.searchController!.searchBar.text = searchStringArray.joinWithSeparator(",") + ","
+            } else {
+                self.searchController!.searchBar.text = inputString
+                self.tags.append([inputString, type])
+            }
+            self.completionTableView!.hidden = true
         }
     }
     
@@ -181,6 +200,16 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.tableView.reloadData()
     }
     
+    // Text Field Delegate
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        let text = textField.text
+        if text == nil {
+            return true
+        }
+        self.completionSearchTextFilter(text!)
+        return true
+    }
+    
     // Search Bar & Controller
     func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         self.scope = selectedScope
@@ -189,13 +218,31 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     func searchBar(searchBar: UISearchBar, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        self.completionTableView!.hidden = false
-        //self.completionTableView!.frame = CGRect(x: self.completionTableView!.frame.minX, y: self.completionTableView!.frame.maxY - self.searchController!.searchBar.frame.size.height, width: self.completionTableView!.frame.size.width, height: self.completionTableView!.frame.size.height - self.searchController!.searchBar.frame.size.height)
-        self.completionTableView!.center.y = self.view.center.y + (self.searchController!.searchBar.frame.size.height/2)
-        self.completionSearchTextFilter(text)
+        // Handle odd case where search text is just ","
+        if searchBar.text == "," {
+            return true
+        }
+        
+        if range.length == 1 {
+            if searchBar.text!.characters.last == "," {
+                var newTags = searchBar.text!.characters.split {$0 == ","}.map(String.init)
+                newTags.removeLast()
+                self.tags.removeLast()
+                if newTags.count == 0 {
+                    searchBar.text = ""
+                } else {
+                    searchBar.text = newTags.joinWithSeparator(",") + ","
+                }
+                return false
+            }
+            return true
+        } else if self.completionTableView!.hidden == true {
+            self.completionTableView!.hidden = false
+            self.completionTableView!.center.y = self.view.center.y + (self.searchController!.searchBar.frame.size.height/2)
+        }
         return true
     }
-    
+
     func searchController(controller: UISearchController, shouldReloadTableForSearchString searchString: String!) -> Bool {
         if searchString == "" {
             return false
@@ -208,10 +255,42 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        let searchStringArray = searchController.searchBar.text!.characters.split {$0 == ","}
-        let searchString = searchStringArray.last
-        print(searchString)
-        self.completionTableView!.reloadData()
+        let searchStringArray = searchController.searchBar.text!.characters.split {$0 == ","}.map(String.init)
+        if searchStringArray.count > 0 {
+            let searchString = searchStringArray.last!
+            if searchString == "" {
+                return
+            }
+            let re = try! NSRegularExpression(pattern: "\(searchString).*", options: [.CaseInsensitive])
+            
+            var result: [[String]] = []
+            for (familyName, familyArray) in instrumentArray {
+                let matches = re.matchesInString(familyName, options: [], range: NSRange(location: 0, length: familyName.characters.count))
+                if matches.count > 0 {
+                    result.append([familyName, "family"])
+                }
+                for instr in familyArray {
+                    let matches = re.matchesInString(instr, options: [], range: NSRange(location: 0, length: instr.characters.count))
+                    if matches.count > 0 {
+                        result.append([instr, "instrument"])
+                    }
+                }
+            }
+            for (genreName, subgenreArray) in genreArray {
+                let matches = re.matchesInString(genreName, options: [], range: NSRange(location: 0, length: genreName.characters.count))
+                if matches.count > 0 {
+                    result.append([genreName, "genre"])
+                }
+                for subgenre in subgenreArray {
+                    let matches = re.matchesInString(subgenre, options: [], range: NSRange(location: 0, length: subgenre.characters.count))
+                    if matches.count > 0 {
+                        result.append([subgenre, "subgenre"])
+                    }
+                }
+            }
+            self.suggestions = result
+            self.completionTableView!.reloadData()
+        }
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
@@ -219,7 +298,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         if searchString == "" {
             return
         }
-        self.searchTextFilter(searchString!)
+        self.searchTextFilter()
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
@@ -230,7 +309,39 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         
     }
 
-    func searchTextFilter(searchText: String) {
+    func searchTextFilter() {
+        let request = SearchTagRequest()
+        request.userid = UInt32(currentUser.userid!)
+        request.loginToken = currentUser.loginToken
+        for tag in self.tags {
+            let string = tag[0]
+            let type = tag[1]
+            switch (type) {
+                case "instrument":
+                    request.instrumentArray.addObject(string)
+                case "family":
+                    request.familyArray.addObject(string)
+                case "genre":
+                    request.genreArray.addObject(string)
+                case "subgenre":
+                    request.subgenreArray.addObject(string)
+                default:
+                    // FIXME: consider adding a misc search section to request?
+                    Debug.printl("Unrecognized search string: \(type): \(string)", sender: self)
+            }
+        }
+        
+        server.searchTagWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: self)
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.updateResults(response)
+                }
+            }
+        }
+        /*
         let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         var request: NSMutableURLRequest
@@ -278,10 +389,22 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
                 }
             }
-        }
+        }*/
     }
     
-    func updateResults(data: NSDictionary) {
+    func updateResults(response: Recordings) {
+        self.allResults = []
+        self.searchResults = []
+        for i in 0...response.recordingArray.count {
+            let rec = response.recordingArray[i] as! RecordingResponse
+            let track = Track(frame: CGRectZero, recid: Int(rec.recid), instruments: rec.instrumentArray.copy() as! [String], instrumentFamilies: rec.familyArray.copy() as! [String], titleText: rec.title, bpm: Int(rec.bpm), trackURL: getS3Key(rec.handle, title: rec.title, format: rec.format), user: rec.handle, format: rec.format)
+            self.allResults.append(track)
+            if i < DEFAULT_DISPLAY_AMOUNT {
+                self.searchResults.append(track)
+            }
+        }
+        self.tableView.reloadData()
+        /*
         self.allResults = []
         self.searchResults = []
         let tracks = data["recordings"] as! NSArray
@@ -312,8 +435,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             if i < DEFAULT_DISPLAY_AMOUNT {
                 self.searchResults.append(track)
             }
-        }
-        self.tableView.reloadData()
+        }*/
     }
     
     func updateUserResults(data: NSDictionary) {
@@ -344,5 +466,11 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     func back(sender: AnyObject?) {
         self.navigationController?.popViewControllerAnimated(false)
     }
+    
+}
+
+class SuggestionCell: UITableViewCell {
+    
+    var type: String = ""
     
 }

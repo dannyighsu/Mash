@@ -111,7 +111,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Clear user data and downloaded files
     class func clearData() {
         NSUserDefaults.standardUserDefaults().removeObjectForKey("hasLoginKey")
-        
         NSNotificationCenter.defaultCenter().postNotificationName("UpdateUINotification", object: nil)
         let dir = applicationDocumentsDirectory()
         var error: NSError? = nil

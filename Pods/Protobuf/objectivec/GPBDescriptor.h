@@ -30,13 +30,15 @@
 
 #import <Foundation/Foundation.h>
 
-#import "GPBTypes.h"
+#import "GPBRuntimeTypes.h"
 
 @class GPBEnumDescriptor;
 @class GPBFieldDescriptor;
 @class GPBFieldOptions;
 @class GPBFileDescriptor;
 @class GPBOneofDescriptor;
+
+NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, GPBFileSyntax) {
   GPBFileSyntaxUnknown = 0,
@@ -53,20 +55,20 @@ typedef NS_ENUM(NSInteger, GPBFieldType) {
 @interface GPBDescriptor : NSObject<NSCopying>
 
 @property(nonatomic, readonly, copy) NSString *name;
-@property(nonatomic, readonly, strong) NSArray *fields;
-@property(nonatomic, readonly, strong) NSArray *oneofs;
-@property(nonatomic, readonly, strong) NSArray *enums;
-@property(nonatomic, readonly) const GPBExtensionRange *extensionRanges;
+@property(nonatomic, readonly, strong, nullable) NSArray *fields;
+@property(nonatomic, readonly, strong, nullable) NSArray *oneofs;
+@property(nonatomic, readonly, strong, nullable) NSArray *enums;
+@property(nonatomic, readonly, nullable) const GPBExtensionRange *extensionRanges;
 @property(nonatomic, readonly) NSUInteger extensionRangesCount;
 @property(nonatomic, readonly, assign) GPBFileDescriptor *file;
 
 @property(nonatomic, readonly, getter=isWireFormat) BOOL wireFormat;
 @property(nonatomic, readonly) Class messageClass;
 
-- (GPBFieldDescriptor *)fieldWithNumber:(uint32_t)fieldNumber;
-- (GPBFieldDescriptor *)fieldWithName:(NSString *)name;
-- (GPBOneofDescriptor *)oneofWithName:(NSString *)name;
-- (GPBEnumDescriptor *)enumWithName:(NSString *)name;
+- (nullable GPBFieldDescriptor *)fieldWithNumber:(uint32_t)fieldNumber;
+- (nullable GPBFieldDescriptor *)fieldWithName:(NSString *)name;
+- (nullable GPBOneofDescriptor *)oneofWithName:(NSString *)name;
+- (nullable GPBEnumDescriptor *)enumWithName:(NSString *)name;
 
 @end
 
@@ -81,39 +83,39 @@ typedef NS_ENUM(NSInteger, GPBFieldType) {
 @property(nonatomic, readonly) NSString *name;
 @property(nonatomic, readonly) NSArray *fields;
 
-- (GPBFieldDescriptor *)fieldWithNumber:(uint32_t)fieldNumber;
-- (GPBFieldDescriptor *)fieldWithName:(NSString *)name;
+- (nullable GPBFieldDescriptor *)fieldWithNumber:(uint32_t)fieldNumber;
+- (nullable GPBFieldDescriptor *)fieldWithName:(NSString *)name;
 @end
 
 @interface GPBFieldDescriptor : NSObject
 
 @property(nonatomic, readonly, copy) NSString *name;
 @property(nonatomic, readonly) uint32_t number;
-@property(nonatomic, readonly) GPBType type;
+@property(nonatomic, readonly) GPBDataType dataType;
 @property(nonatomic, readonly) BOOL hasDefaultValue;
-@property(nonatomic, readonly) GPBValue defaultValue;
+@property(nonatomic, readonly) GPBGenericValue defaultValue;
 @property(nonatomic, readonly, getter=isRequired) BOOL required;
 @property(nonatomic, readonly, getter=isOptional) BOOL optional;
 @property(nonatomic, readonly) GPBFieldType fieldType;
 // If it is a map, the value type is in -type.
-@property(nonatomic, readonly) GPBType mapKeyType;
+@property(nonatomic, readonly) GPBDataType mapKeyDataType;
 @property(nonatomic, readonly, getter=isPackable) BOOL packable;
 
-@property(nonatomic, readonly, assign) GPBOneofDescriptor *containingOneof;
+@property(nonatomic, readonly, assign, nullable) GPBOneofDescriptor *containingOneof;
 
-@property(nonatomic, readonly) GPBFieldOptions *fieldOptions;
+@property(nonatomic, readonly, nullable) GPBFieldOptions *fieldOptions;
 
 // Message properties
-@property(nonatomic, readonly, assign) Class msgClass;
+@property(nonatomic, readonly, assign, nullable) Class msgClass;
 
 // Enum properties
-@property(nonatomic, readonly, strong) GPBEnumDescriptor *enumDescriptor;
+@property(nonatomic, readonly, strong, nullable) GPBEnumDescriptor *enumDescriptor;
 
 - (BOOL)isValidEnumValue:(int32_t)value;
 
 // For now, this will return nil if it doesn't know the name to use for
 // TextFormat.
-- (NSString *)textFormatName;
+- (nullable NSString *)textFormatName;
 
 @end
 
@@ -122,19 +124,23 @@ typedef NS_ENUM(NSInteger, GPBFieldType) {
 @property(nonatomic, readonly, copy) NSString *name;
 @property(nonatomic, readonly) GPBEnumValidationFunc enumVerifier;
 
-- (NSString *)enumNameForValue:(int32_t)number;
-- (BOOL)getValue:(int32_t *)outValue forEnumName:(NSString *)name;
+- (nullable NSString *)enumNameForValue:(int32_t)number;
+- (BOOL)getValue:(nullable int32_t *)outValue forEnumName:(NSString *)name;
 
-- (NSString *)textFormatNameForValue:(int32_t)number;
+- (nullable NSString *)textFormatNameForValue:(int32_t)number;
 
 @end
 
-@interface GPBExtensionDescriptor : NSObject
+@interface GPBExtensionDescriptor : NSObject<NSCopying>
 @property(nonatomic, readonly) uint32_t fieldNumber;
-@property(nonatomic, readonly) GPBType type;
+@property(nonatomic, readonly) Class containingMessageClass;
+@property(nonatomic, readonly) GPBDataType dataType;
 @property(nonatomic, readonly, getter=isRepeated) BOOL repeated;
 @property(nonatomic, readonly, getter=isPackable) BOOL packable;
 @property(nonatomic, readonly, assign) Class msgClass;
 @property(nonatomic, readonly) NSString *singletonName;
-@property(nonatomic, readonly, strong) GPBEnumDescriptor *enumDescriptor;
+@property(nonatomic, readonly, strong, nullable) GPBEnumDescriptor *enumDescriptor;
+@property(nonatomic, readonly) id defaultValue;
 @end
+
+NS_ASSUME_NONNULL_END

@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+// FIXME: HTTP currently throws errors due to no SSL, so this file is commented out.
+/*
 // Previous request parameters for duplicate requests
 var previousRequest: NSMutableURLRequest? = nil
 var previousRequestTime = CFAbsoluteTimeGetCurrent()
@@ -139,4 +141,4 @@ func httpGet(request: NSMutableURLRequest!, callback: (String, Int, String?) -> 
         }
     }
     task.resume()
-}
+}*/

@@ -249,4 +249,16 @@ static NSString *const kServiceName = @"MashService";
              responseClass:[FeedResponse class]
         responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
 }
+#pragma mark SearchTag(SearchTagRequest) returns (Recordings)
+
+- (void)searchTagWithRequest:(SearchTagRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler{
+  [[self RPCToSearchTagWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToSearchTagWithRequest:(SearchTagRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler{
+  return [self RPCToMethod:@"SearchTag"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[Recordings class]
+        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+}
 @end

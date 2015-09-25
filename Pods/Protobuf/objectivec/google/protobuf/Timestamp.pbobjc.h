@@ -11,6 +11,7 @@
 
 CF_EXTERN_C_BEGIN
 
+NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - GPBTimestampRoot
 
@@ -76,11 +77,12 @@ typedef GPB_ENUM(GPBTimestamp_FieldNumber) {
 //     Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
 //         .setNanos((int) ((millis % 1000) * 1000000)).build();
 //
-// Example 5: Compute Timestamp from Python `datetime.datetime`.
 //
-//     now = datetime.datetime.utcnow()
-//     seconds = int(time.mktime(now.timetuple()))
-//     nanos = now.microsecond * 1000
+// Example 5: Compute Timestamp from current time in Python.
+//
+//     now = time.time()
+//     seconds = int(now)
+//     nanos = int((now - seconds) * 10**9)
 //     timestamp = Timestamp(seconds=seconds, nanos=nanos)
 @interface GPBTimestamp : GPBMessage
 
@@ -96,6 +98,8 @@ typedef GPB_ENUM(GPBTimestamp_FieldNumber) {
 @property(nonatomic, readwrite) int32_t nanos;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END
 

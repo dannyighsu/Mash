@@ -140,6 +140,13 @@
 - (ProtoRPC *)RPCToFeedWithRequest:(UserRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler;
 
 
+#pragma mark SearchTag(SearchTagRequest) returns (Recordings)
+
+- (void)searchTagWithRequest:(SearchTagRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToSearchTagWithRequest:(SearchTagRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler;
+
+
 @end
 
 // Basic service implementation, over gRPC, that only does marshalling and parsing.

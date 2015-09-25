@@ -91,6 +91,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     // Download mash files
     func downloadAction(instrument: [String]) {
+        /*
         // Post data to server
         let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
@@ -130,7 +131,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     return
                 }
             }
-        }
+        }*/
     }
     
     func finish(inputData: NSDictionary) {

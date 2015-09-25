@@ -238,9 +238,30 @@ func getS3Key(track: Track) -> String {
     return "\(track.userText)~~\(track.titleText)\(track.format)"
 }
 
+func getS3Key(user: String, title: String, format: String) -> String {
+    return "\(user)~~\(title)\(format)"
+}
+
 // Returns AWSS3 waveform bucket name
 func getS3WaveformKey(track: Track) -> String {
     return "\(track.userText)~~\(track.titleText)_waveform.jpg"
+}
+
+// Parse DB time stamp
+func parseTimeStamp(timestamp: String) -> String {
+    let dateFormatter = NSDateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    dateFormatter.timeZone = NSTimeZone(name: "UTC")
+    let date: NSDate? = dateFormatter.dateFromString(timestamp)
+    return stringFromTimeInterval(date!.timeIntervalSinceNow)
+}
+
+func stringFromTimeInterval(interval: NSTimeInterval) -> String {
+    let interval = Int(interval)
+    let seconds = interval % 60
+    let minutes = (interval / 60) % 60
+    let hours = (interval / 3600)
+    return String(format: "%02d:%02d:%02d", -hours, -minutes, -seconds)
 }
 
 // Returns directory to application's documents

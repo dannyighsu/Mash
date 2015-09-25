@@ -28,9 +28,11 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "GPBTypes.h"
+#import "GPBRuntimeTypes.h"
 
 CF_EXTERN_C_BEGIN
+
+NS_ASSUME_NONNULL_BEGIN
 
 typedef enum {
   GPBWireFormatVarint = 0,
@@ -52,7 +54,7 @@ uint32_t GPBWireFormatMakeTag(uint32_t fieldNumber, GPBWireFormat wireType)
 GPBWireFormat GPBWireFormatGetTagWireType(uint32_t tag) __attribute__((const));
 uint32_t GPBWireFormatGetTagFieldNumber(uint32_t tag) __attribute__((const));
 
-GPBWireFormat GPBWireFormatForType(GPBType type, BOOL isPacked)
+GPBWireFormat GPBWireFormatForType(GPBDataType dataType, BOOL isPacked)
     __attribute__((const));
 
 #define GPBWireFormatMessageSetItemTag \
@@ -64,5 +66,7 @@ GPBWireFormat GPBWireFormatForType(GPBType type, BOOL isPacked)
 #define GPBWireFormatMessageSetMessageTag               \
   (GPBWireFormatMakeTag(GPBWireFormatMessageSetMessage, \
                         GPBWireFormatLengthDelimited))
+
+NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END

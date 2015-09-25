@@ -559,6 +559,77 @@ typedef GPB_ENUM(FeedResponse_FieldNumber) {
 
 @end
 
+#pragma mark - Recordings
+
+typedef GPB_ENUM(Recordings_FieldNumber) {
+  Recordings_FieldNumber_RecordingArray = 1,
+};
+
+@interface Recordings : GPBMessage
+
+// |recordingArray| contains |RecordingResponse|
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray *recordingArray;
+@property(nonatomic, readonly) NSUInteger recordingArray_Count;
+
+@end
+
+#pragma mark - SearchTagRequest
+
+typedef GPB_ENUM(SearchTagRequest_FieldNumber) {
+  SearchTagRequest_FieldNumber_Userid = 1,
+  SearchTagRequest_FieldNumber_LoginToken = 2,
+  SearchTagRequest_FieldNumber_LBpm = 3,
+  SearchTagRequest_FieldNumber_HBpm = 4,
+  SearchTagRequest_FieldNumber_Bar = 5,
+  SearchTagRequest_FieldNumber_Key = 6,
+  SearchTagRequest_FieldNumber_InstrumentArray = 7,
+  SearchTagRequest_FieldNumber_FamilyArray = 8,
+  SearchTagRequest_FieldNumber_GenreArray = 9,
+  SearchTagRequest_FieldNumber_SubgenreArray = 10,
+  SearchTagRequest_FieldNumber_Solo = 11,
+};
+
+@interface SearchTagRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasUserid;
+@property(nonatomic, readwrite) uint32_t userid;
+
+@property(nonatomic, readwrite) BOOL hasLoginToken;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *loginToken;
+
+@property(nonatomic, readwrite) BOOL hasLBpm;
+@property(nonatomic, readwrite) uint32_t lBpm;
+
+@property(nonatomic, readwrite) BOOL hasHBpm;
+@property(nonatomic, readwrite) uint32_t hBpm;
+
+@property(nonatomic, readwrite) BOOL hasBar;
+@property(nonatomic, readwrite) uint32_t bar;
+
+@property(nonatomic, readwrite) BOOL hasKey;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *key;
+
+// |instrumentArray| contains |NSString|
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray *instrumentArray;
+@property(nonatomic, readonly) NSUInteger instrumentArray_Count;
+
+// |familyArray| contains |NSString|
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray *familyArray;
+@property(nonatomic, readonly) NSUInteger familyArray_Count;
+
+// |genreArray| contains |NSString|
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray *genreArray;
+@property(nonatomic, readonly) NSUInteger genreArray_Count;
+
+// |subgenreArray| contains |NSString|
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray *subgenreArray;
+@property(nonatomic, readonly) NSUInteger subgenreArray_Count;
+
+@property(nonatomic, readwrite) BOOL hasSolo;
+@property(nonatomic, readwrite) BOOL solo;
+
+@end
+
 NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END

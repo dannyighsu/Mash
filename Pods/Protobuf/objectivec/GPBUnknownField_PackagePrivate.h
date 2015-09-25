@@ -30,22 +30,20 @@
 
 #import <Foundation/Foundation.h>
 
-#import "GPBExtensionField.h"
+#import "GPBUnknownField.h"
 
-struct GPBExtensionDescription;
+@class GPBCodedOutputStream;
 
-@interface GPBExtensionField ()
+@interface GPBUnknownField ()
 
-- (void)mergeFromCodedInputStream:(GPBCodedInputStream *)input
-                extensionRegistry:(GPBExtensionRegistry *)extensionRegistry
-                          message:(GPBMessage *)message;
+- (instancetype)initWithNumber:(int32_t)number;
 
-- (instancetype)initWithDescription:(struct GPBExtensionDescription *)description;
+- (void)writeToOutput:(GPBCodedOutputStream *)output;
+- (size_t)serializedSize;
 
-- (size_t)computeSerializedSizeIncludingTag:(id)value;
-- (void)writeValue:(id)value
-    includingTagToCodedOutputStream:(GPBCodedOutputStream *)output;
+- (void)writeAsMessageSetExtensionToOutput:(GPBCodedOutputStream *)output;
+- (size_t)serializedSizeAsMessageSetExtension;
 
-- (NSComparisonResult)compareByFieldNumber:(GPBExtensionField *)other;
+- (void)mergeFromField:(GPBUnknownField *)other;
 
 @end

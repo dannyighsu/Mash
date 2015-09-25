@@ -30,20 +30,21 @@
 
 #import <Foundation/Foundation.h>
 
-#import "GPBField.h"
+#import "GPBDescriptor.h"
 
+@class GPBCodedInputStream;
 @class GPBCodedOutputStream;
+@class GPBExtensionRegistry;
 
-@interface GPBField ()
+void GPBExtensionMergeFromInputStream(GPBExtensionDescriptor *extension,
+                                      BOOL isPackedOnStream,
+                                      GPBCodedInputStream *input,
+                                      GPBExtensionRegistry *extensionRegistry,
+                                      GPBMessage *message);
 
-- (instancetype)initWithNumber:(int32_t)number;
+size_t GPBComputeExtensionSerializedSizeIncludingTag(
+    GPBExtensionDescriptor *extension, id value);
 
-- (void)writeToOutput:(GPBCodedOutputStream *)output;
-- (size_t)serializedSize;
-
-- (void)writeAsMessageSetExtensionToOutput:(GPBCodedOutputStream *)output;
-- (size_t)serializedSizeAsMessageSetExtension;
-
-- (void)mergeFromField:(GPBField *)other;
-
-@end
+void GPBWriteExtensionValueToOutputStream(GPBExtensionDescriptor *extension,
+                                          id value,
+                                          GPBCodedOutputStream *output);

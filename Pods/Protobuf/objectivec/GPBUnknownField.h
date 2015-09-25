@@ -35,7 +35,9 @@
 @class GPBUInt64Array;
 @class GPBUnknownFieldSet;
 
-@interface GPBField : NSObject<NSCopying>
+NS_ASSUME_NONNULL_BEGIN
+
+@interface GPBUnknownField : NSObject<NSCopying>
 
 @property(nonatomic, readonly, assign) int32_t number;
 
@@ -43,8 +45,8 @@
 @property(nonatomic, readonly, strong) GPBUInt64Array *varintList;
 @property(nonatomic, readonly, strong) GPBUInt32Array *fixed32List;
 @property(nonatomic, readonly, strong) GPBUInt64Array *fixed64List;
-@property(nonatomic, readonly, strong) NSArray *lengthDelimitedList;
-@property(nonatomic, readonly, strong) NSArray *groupList;
+@property(nonatomic, readonly, strong) NSArray *lengthDelimitedList;  // NSData
+@property(nonatomic, readonly, strong) NSArray *groupList;  // GPBUnknownFieldSet
 
 // Only one of these should be used per Field.
 - (void)addVarint:(uint64_t)value;
@@ -54,3 +56,5 @@
 - (void)addGroup:(GPBUnknownFieldSet *)value;
 
 @end
+
+NS_ASSUME_NONNULL_END

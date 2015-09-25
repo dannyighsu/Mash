@@ -30,6 +30,7 @@ class DirectUploadViewController: UIViewController {
     }
     
     func submit(sender: AnyObject?) {
+        /*
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
@@ -52,6 +53,7 @@ class DirectUploadViewController: UIViewController {
                 }
             }
         }
+        */
     }
     
     func back(sender: AnyObject?) {

@@ -30,8 +30,10 @@
 
 #import <Foundation/Foundation.h>
 
-#import "google/protobuf/Timestamp.pbobjc.h"
 #import "google/protobuf/Duration.pbobjc.h"
+#import "google/protobuf/Timestamp.pbobjc.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 // Extension to GPBTimestamp to work with standard Foundation time/date types.
 @interface GPBTimestamp (GBPWellKnownTypes)
@@ -46,3 +48,5 @@
 @property(nonatomic, readwrite) NSTimeInterval timeIntervalSince1970;
 - (instancetype)initWithTimeIntervalSince1970:(NSTimeInterval)timeIntervalSince1970;
 @end
+
+NS_ASSUME_NONNULL_END

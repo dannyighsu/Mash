@@ -34,57 +34,57 @@
 #import "GRXWriteable.h"
 
 @implementation GRXWriteable {
-  GRXValueHandler _valueHandler;
-  GRXCompletionHandler _completionHandler;
+    GRXValueHandler _valueHandler;
+    GRXCompletionHandler _completionHandler;
 }
 
-+ (instancetype)writeableWithSingleValueHandler:(GRXSingleValueHandler)handler {
-  if (!handler) {
-    return [[self alloc] init];
-  }
-  return [[self alloc] initWithValueHandler:^(id value) {
-    handler(value, nil);
-  } completionHandler:^(NSError *errorOrNil) {
-    if (errorOrNil) {
-      handler(nil, errorOrNil);
++ (instancetype)writeableWithSingleHandler:(GRXSingleHandler)handler {
+    if (!handler) {
+        return [[self alloc] init];
     }
-  }];
+    return [[self alloc] initWithValueHandler:^(id value) {
+        handler(value, nil);
+    } completionHandler:^(NSError *errorOrNil) {
+        if (errorOrNil) {
+            handler(nil, errorOrNil);
+        }
+    }];
 }
 
-+ (instancetype)writeableWithStreamHandler:(GRXStreamHandler)handler {
-  if (!handler) {
-    return [[self alloc] init];
-  }
-  return [[self alloc] initWithValueHandler:^(id value) {
-    handler(NO, value, nil);
-  } completionHandler:^(NSError *errorOrNil) {
-    handler(YES, nil, errorOrNil);
-  }];
++ (instancetype)writeableWithEventHandler:(GRXEventHandler)handler {
+    if (!handler) {
+        return [[self alloc] init];
+    }
+    return [[self alloc] initWithValueHandler:^(id value) {
+        handler(NO, value, nil);
+    } completionHandler:^(NSError *errorOrNil) {
+        handler(YES, nil, errorOrNil);
+    }];
 }
 
 - (instancetype)init {
-  return [self initWithValueHandler:nil completionHandler:nil];
+    return [self initWithValueHandler:nil completionHandler:nil];
 }
 
 // Designated initializer
 - (instancetype)initWithValueHandler:(GRXValueHandler)valueHandler
                    completionHandler:(GRXCompletionHandler)completionHandler {
-  if ((self = [super init])) {
-    _valueHandler = valueHandler;
-    _completionHandler = completionHandler;
-  }
-  return self;
+    if ((self = [super init])) {
+        _valueHandler = valueHandler;
+        _completionHandler = completionHandler;
+    }
+    return self;
 }
 
 - (void)writeValue:(id)value {
-  if (_valueHandler) {
-    _valueHandler(value);
-  }
+    if (_valueHandler) {
+        _valueHandler(value);
+    }
 }
 
 - (void)writesFinishedWithError:(NSError *)errorOrNil {
-  if (_completionHandler) {
-    _completionHandler(errorOrNil);
-  }
+    if (_completionHandler) {
+        _completionHandler(errorOrNil);
+    }
 }
 @end

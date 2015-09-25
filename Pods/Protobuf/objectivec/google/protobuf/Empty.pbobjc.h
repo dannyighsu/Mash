@@ -11,6 +11,7 @@
 
 CF_EXTERN_C_BEGIN
 
+NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - GPBEmptyRoot
 
@@ -32,9 +33,13 @@ CF_EXTERN_C_BEGIN
 //     service Foo {
 //       rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);
 //     }
+//
+// The JSON representation for `Empty` is empty JSON object `{}`.
 @interface GPBEmpty : GPBMessage
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END
 

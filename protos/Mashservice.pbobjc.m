@@ -1815,5 +1815,243 @@ typedef struct FeedResponse__storage_ {
 
 @end
 
+#pragma mark - Recordings
+
+@implementation Recordings
+
+@dynamic recordingArray, recordingArray_Count;
+
+typedef struct Recordings__storage_ {
+  uint32_t _has_storage_[1];
+  NSMutableArray *recordingArray;
+} Recordings__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "recordingArray",
+        .number = Recordings_FieldNumber_RecordingArray,
+        .hasIndex = GPBNoHasBit,
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeMessage,
+        .offset = offsetof(Recordings__storage_, recordingArray),
+        .defaultValue.valueMessage = nil,
+        .dataTypeSpecific.className = GPBStringifySymbol(RecordingResponse),
+        .fieldOptions = NULL,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[Recordings class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(Recordings__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - SearchTagRequest
+
+@implementation SearchTagRequest
+
+@dynamic hasUserid, userid;
+@dynamic hasLoginToken, loginToken;
+@dynamic hasLBpm, lBpm;
+@dynamic hasHBpm, hBpm;
+@dynamic hasBar, bar;
+@dynamic hasKey, key;
+@dynamic instrumentArray, instrumentArray_Count;
+@dynamic familyArray, familyArray_Count;
+@dynamic genreArray, genreArray_Count;
+@dynamic subgenreArray, subgenreArray_Count;
+@dynamic hasSolo, solo;
+
+typedef struct SearchTagRequest__storage_ {
+  uint32_t _has_storage_[1];
+  BOOL solo;
+  uint32_t userid;
+  uint32_t lBpm;
+  uint32_t hBpm;
+  uint32_t bar;
+  NSString *loginToken;
+  NSString *key;
+  NSMutableArray *instrumentArray;
+  NSMutableArray *familyArray;
+  NSMutableArray *genreArray;
+  NSMutableArray *subgenreArray;
+} SearchTagRequest__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "userid",
+        .number = SearchTagRequest_FieldNumber_Userid,
+        .hasIndex = 0,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(SearchTagRequest__storage_, userid),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "loginToken",
+        .number = SearchTagRequest_FieldNumber_LoginToken,
+        .hasIndex = 1,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(SearchTagRequest__storage_, loginToken),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "lBpm",
+        .number = SearchTagRequest_FieldNumber_LBpm,
+        .hasIndex = 2,
+        .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(SearchTagRequest__storage_, lBpm),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "hBpm",
+        .number = SearchTagRequest_FieldNumber_HBpm,
+        .hasIndex = 3,
+        .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(SearchTagRequest__storage_, hBpm),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "bar",
+        .number = SearchTagRequest_FieldNumber_Bar,
+        .hasIndex = 4,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(SearchTagRequest__storage_, bar),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "key",
+        .number = SearchTagRequest_FieldNumber_Key,
+        .hasIndex = 5,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(SearchTagRequest__storage_, key),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "instrumentArray",
+        .number = SearchTagRequest_FieldNumber_InstrumentArray,
+        .hasIndex = GPBNoHasBit,
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(SearchTagRequest__storage_, instrumentArray),
+        .defaultValue.valueMessage = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "familyArray",
+        .number = SearchTagRequest_FieldNumber_FamilyArray,
+        .hasIndex = GPBNoHasBit,
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(SearchTagRequest__storage_, familyArray),
+        .defaultValue.valueMessage = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "genreArray",
+        .number = SearchTagRequest_FieldNumber_GenreArray,
+        .hasIndex = GPBNoHasBit,
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(SearchTagRequest__storage_, genreArray),
+        .defaultValue.valueMessage = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "subgenreArray",
+        .number = SearchTagRequest_FieldNumber_SubgenreArray,
+        .hasIndex = GPBNoHasBit,
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(SearchTagRequest__storage_, subgenreArray),
+        .defaultValue.valueMessage = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "solo",
+        .number = SearchTagRequest_FieldNumber_Solo,
+        .hasIndex = 10,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeBool,
+        .offset = offsetof(SearchTagRequest__storage_, solo),
+        .defaultValue.valueBool = NO,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+#if GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    const char *extraTextFormatInfo = NULL;
+#else
+    static const char *extraTextFormatInfo = "\002\003\004\000\004\004\000";
+#endif  // GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[SearchTagRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(SearchTagRequest__storage_)
+                                    wireFormat:NO
+                           extraTextFormatInfo:extraTextFormatInfo];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 
 // @@protoc_insertion_point(global_scope)

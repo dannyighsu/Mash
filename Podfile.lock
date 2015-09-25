@@ -45,7 +45,7 @@ PODS:
   - gRPC/RxLibrary (0.6.0)
   - IQKeyboardManager (3.2.4)
   - OpenSSL (1.0.204)
-  - Protobuf (3.0.0-alpha-3)
+  - Protobuf (3.0.0-alpha-4.1)
   - TPCircularBuffer (0.0.1)
 
 DEPENDENCIES:
@@ -72,7 +72,7 @@ SPEC CHECKSUMS:
   gRPC: 2b65b35bdb80b2dac889399afb6706ab10d85d51
   IQKeyboardManager: 555b1231fefafb21b19278d7cca72986a27b748b
   OpenSSL: 576b352e6e6e60793ca133c6785736e3cbc31a09
-  Protobuf: c823c03c19e1c6f3ff6688551e31f3fa76fd46cb
+  Protobuf: a0f3b369ce888d47735a5ec1c40b1bc31cbad46b
   TPCircularBuffer: 949e9632b9fb99b7274d7b2296ee22bff5841e35
 
 COCOAPODS: 0.38.2

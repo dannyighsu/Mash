@@ -103,7 +103,7 @@ message RecordingUploadRequest {
     repeated string genre = 9;
     repeated string subgenre = 10;
     optional uint32 feel = 11;
-    optional bool solo = 12;
+    optional bool   solo = 12;
     optional string format = 13;
 }
 
@@ -158,6 +158,24 @@ message FeedResponse {
     repeated RecordingResponse story = 1;
 }
 
+message Recordings {
+    repeated RecordingResponse recording = 1;
+}
+
+message SearchTagRequest {
+    required uint32 userid = 1;
+    required string login_token = 2;
+    optional uint32 lBpm = 3;
+    optional uint32 hBpm = 4;
+    optional uint32 bar = 5;
+    optional string key = 6;
+    repeated string instrument = 7;
+    repeated string family = 8;
+    repeated string genre = 9;
+    repeated string subgenre = 10;
+    optional bool   solo = 11;
+}
+
 service MashService {
 	rpc Register (RegisterRequest) returns (RegisterResponse);
 	rpc SignIn (SignInRequest) returns (SignInResponse);
@@ -178,4 +196,5 @@ service MashService {
     rpc UserUpdate (UserUpdateRequest) returns (SuccessResponse);
     rpc UserRecordings (UserRequest) returns (UserRecordingsResponse);
     rpc Feed (UserRequest) returns (FeedResponse);
+    rpc SearchTag (SearchTagRequest) returns (Recordings);
 }

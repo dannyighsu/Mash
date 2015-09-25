@@ -36,7 +36,7 @@
 #import <CoreFoundation/CoreFoundation.h>
 
 #import "GPBDescriptor.h"
-#import "GPBExtensionField.h"
+#import "GPBExtensionRegistry.h"
 #import "GPBUtilities_PackagePrivate.h"
 
 @interface GPBExtensionDescriptor (GPBRootObject)
@@ -98,6 +98,7 @@ static CFHashCode GPBRootExtensionKeyHash(const void *value) {
 
 static OSSpinLock gExtensionSingletonDictionaryLock_ = OS_SPINLOCK_INIT;
 static CFMutableDictionaryRef gExtensionSingletonDictionary = NULL;
+static GPBExtensionRegistry *gDefaultExtensionRegistry = NULL;
 
 + (void)initialize {
   // Ensure the global is started up.
@@ -114,6 +115,7 @@ static CFMutableDictionaryRef gExtensionSingletonDictionary = NULL;
     gExtensionSingletonDictionary =
         CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &keyCallBacks,
                                   &kCFTypeDictionaryValueCallBacks);
+    gDefaultExtensionRegistry = [[GPBExtensionRegistry alloc] init];
   }
 
   if ([self superclass] == [GPBRootObject class]) {
@@ -127,17 +129,17 @@ static CFMutableDictionaryRef gExtensionSingletonDictionary = NULL;
 + (GPBExtensionRegistry *)extensionRegistry {
   // Is overridden in all the subclasses that provide extensions to provide the
   // per class one.
-  return nil;
+  return gDefaultExtensionRegistry;
 }
 
-+ (void)globallyRegisterExtension:(GPBExtensionField *)field {
-  const char *key = [field.descriptor singletonNameC];
++ (void)globallyRegisterExtension:(GPBExtensionDescriptor *)field {
+  const char *key = [field singletonNameC];
   OSSpinLockLock(&gExtensionSingletonDictionaryLock_);
   CFDictionarySetValue(gExtensionSingletonDictionary, key, field);
   OSSpinLockUnlock(&gExtensionSingletonDictionaryLock_);
 }
 
-GPB_INLINE id ExtensionForName(id self, SEL _cmd) {
+static id ExtensionForName(id self, SEL _cmd) {
   // Really fast way of doing "classname_selName".
   // This came up as a hotspot (creation of NSString *) when accessing a
   // lot of extensions.
