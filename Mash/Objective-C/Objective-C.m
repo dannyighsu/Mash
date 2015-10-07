@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Objective-C.h"
+#import "Mash-Swift.h"
 
 @implementation Wrappers
 
@@ -32,5 +33,28 @@
     
     return [NSString stringWithString:hexString];
 }
+
+void exceptionHandler(NSException *exception) {
+    NSLog(@"App crashed with exception.");
+    // Perhaps we can log out here.
+    /*
+    if currentUser.handle!.characters.count > 0 {
+        let request = UserRequest()
+        request.loginToken = currentUser.loginToken
+        request.userid = UInt32(currentUser.userid!)
+        
+        server.signOutWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: self)
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("hasLoginKey")
+                }
+            }
+        }
+    }*/
+}
+NSUncaughtExceptionHandler *exceptionHandlerPtr = &exceptionHandler;
 
 @end

@@ -12,4 +12,7 @@
 
 + (NSString *)hexadecimalString:(NSData *) data;
 
+void exceptionHandler(NSException *exception);
+extern NSUncaughtExceptionHandler *exceptionHandlerPtr;
+
 @end

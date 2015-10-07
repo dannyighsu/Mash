@@ -11,6 +11,9 @@
 
 CF_EXTERN_C_BEGIN
 
+@class RecordingResponse;
+@class UserPreview;
+
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - MashserviceRoot
@@ -538,38 +541,27 @@ typedef GPB_ENUM(FeedResponse_FieldNumber) {
 
 @interface FeedResponse : GPBMessage
 
-// repeated Story story = 1;
-// message  Story {
-//     oneof story {
-//         RecordingStory rec_story = 1;
-//         FollowStory follow_story= 2;
-//     }
-// }
-// message FollowStory {
-//     required UserPreview followed = 1;
-//     required UserPreview follower = 2;
-//     required string timestamp = 3;
-// }
-// message RecordingStory {
-//     required RecordingResponse recording = 1;
-// }
+//repeated FeedStory story = 1;
 // |storyArray| contains |RecordingResponse|
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray *storyArray;
 @property(nonatomic, readonly) NSUInteger storyArray_Count;
 
 @end
 
-#pragma mark - Recordings
+#pragma mark - FeedStory
 
-typedef GPB_ENUM(Recordings_FieldNumber) {
-  Recordings_FieldNumber_RecordingArray = 1,
+typedef GPB_ENUM(FeedStory_FieldNumber) {
+  FeedStory_FieldNumber_Recording = 1,
+  FeedStory_FieldNumber_User = 2,
 };
 
-@interface Recordings : GPBMessage
+@interface FeedStory : GPBMessage
 
-// |recordingArray| contains |RecordingResponse|
-@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray *recordingArray;
-@property(nonatomic, readonly) NSUInteger recordingArray_Count;
+@property(nonatomic, readwrite) BOOL hasRecording;
+@property(nonatomic, readwrite, strong, null_resettable) RecordingResponse *recording;
+
+@property(nonatomic, readwrite) BOOL hasUser;
+@property(nonatomic, readwrite, strong, null_resettable) UserPreview *user;
 
 @end
 
@@ -627,6 +619,20 @@ typedef GPB_ENUM(SearchTagRequest_FieldNumber) {
 
 @property(nonatomic, readwrite) BOOL hasSolo;
 @property(nonatomic, readwrite) BOOL solo;
+
+@end
+
+#pragma mark - Recordings
+
+typedef GPB_ENUM(Recordings_FieldNumber) {
+  Recordings_FieldNumber_RecordingArray = 1,
+};
+
+@interface Recordings : GPBMessage
+
+// |recordingArray| contains |RecordingResponse|
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray *recordingArray;
+@property(nonatomic, readonly) NSUInteger recordingArray_Count;
 
 @end
 

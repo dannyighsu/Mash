@@ -579,6 +579,11 @@
 					37A3C2C31B3CC00600F77F2A = {
 						CreatedOnToolsVersion = 6.3.2;
 						DevelopmentTeam = AA375B8UFT;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					37A3C2D81B3CC00600F77F2A = {
 						CreatedOnToolsVersion = 6.3.2;
@@ -882,6 +887,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.7.1\"",
@@ -902,6 +908,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Mash.$(PRODUCT_NAME:rfc1034identifier)WithMe";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mash/Mash-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = Pods/Headers/Public;
@@ -916,6 +923,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.7.1\"",
@@ -936,6 +944,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Mash.$(PRODUCT_NAME:rfc1034identifier)WithMe";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mash/Mash-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = Pods/Headers/Public;

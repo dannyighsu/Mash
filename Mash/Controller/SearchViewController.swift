@@ -111,11 +111,9 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 track.userLabel.text = track.userText
                 track.format = trackData.format
                 track.bpm = trackData.bpm
-                track.activityView.startAnimating()
                 download(getS3WaveformKey(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: waveform_bucket) {
                     (result) in
                     dispatch_async(dispatch_get_main_queue()) {
-                        track.activityView.stopAnimating()
                         if result != nil {
                             track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
                         }
@@ -157,8 +155,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
                     (result) in
                     dispatch_async(dispatch_get_main_queue()) {
-                        track.generateWaveform()
                         track.activityView.stopAnimating()
+                        track.generateWaveform()
                         self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
                         self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
                         self.audioPlayer!.play()
@@ -180,8 +178,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 self.searchController!.searchBar.text = searchStringArray.joinWithSeparator(",") + ","
             } else {
                 self.searchController!.searchBar.text = inputString
-                self.tags.append([inputString, type])
             }
+            self.tags.append([inputString, type])
             self.completionTableView!.hidden = true
         }
     }
@@ -298,6 +296,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         if searchString == "" {
             return
         }
+        self.completionTableView!.hidden = true
         self.searchTextFilter()
     }
     
@@ -310,6 +309,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
 
     func searchTextFilter() {
+        self.activityView.startAnimating()
         let request = SearchTagRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
@@ -337,6 +337,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 Debug.printl("Error: \(error)", sender: self)
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
                     self.updateResults(response)
                 }
             }
@@ -395,7 +396,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     func updateResults(response: Recordings) {
         self.allResults = []
         self.searchResults = []
-        for i in 0...response.recordingArray.count {
+        for i in 0...response.recordingArray.count - 1 {
             let rec = response.recordingArray[i] as! RecordingResponse
             let track = Track(frame: CGRectZero, recid: Int(rec.recid), instruments: rec.instrumentArray.copy() as! [String], instrumentFamilies: rec.familyArray.copy() as! [String], titleText: rec.title, bpm: Int(rec.bpm), trackURL: getS3Key(rec.handle, title: rec.title, format: rec.format), user: rec.handle, format: rec.format)
             self.allResults.append(track)

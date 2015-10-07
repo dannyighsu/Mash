@@ -36,7 +36,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        AppDelegate.clearData()
+        // Set exception handler
+        NSSetUncaughtExceptionHandler(exceptionHandlerPtr)
+        
+        // Set up notifications
+        let types = UIUserNotificationType.Badge.union(UIUserNotificationType.Sound.union(UIUserNotificationType.Alert))
+        let settings = UIUserNotificationSettings(forTypes: types, categories: nil)
+        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+        UIApplication.sharedApplication().registerForRemoteNotifications()
         
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
@@ -66,7 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if exitTime != nil {
             let currentTime = NSDate()
             let diff = currentTime.timeIntervalSinceDate(exitTime!)
-            if diff > 120 {
+            if diff > 240 {
                 AppDelegate.clearData()
             }
         }
@@ -74,22 +81,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        let dir = applicationDocumentsDirectory()
-        var error: NSError? = nil
-        let fileManager = NSFileManager.defaultManager()
-        for file in try! fileManager.contentsOfDirectoryAtPath(dir as String) {
-            var success: Bool
-            do {
-                try fileManager.removeItemAtPath(NSString(format: "%@/%@", dir, file ) as String)
-                success = true
-            } catch let error1 as NSError {
-                error = error1
-                success = false
-            }
-            if (!success || error != nil) {
-                Debug.printl("removal of file failed", sender: nil)
-            } else {
-                Debug.printl("removed file", sender: nil)
+        AppDelegate.clearData()
+        
+        // Call the logout function if currentUser exists
+        if currentUser.handle!.characters.count > 0 {
+            let request = UserRequest()
+            request.loginToken = currentUser.loginToken
+            request.userid = UInt32(currentUser.userid!)
+            
+            server.signOutWithRequest(request) {
+                (response, error) in
+                if error != nil {
+                    Debug.printl("Error: \(error)", sender: self)
+                } else {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        NSUserDefaults.standardUserDefaults().removeObjectForKey("hasLoginKey")
+                    }
+                }
             }
         }
     }
@@ -108,14 +116,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return orientations
     }
     
-    // Clear user data and downloaded files
+    // Notification registry
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        
+    }
+    
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        // TODO: handle error
+        Debug.printl("Failed to register for notifications with error: \(error)", sender: nil)
+    }
+    
+    // Clear user data and downloaded files, excepting profile files
     class func clearData() {
-        NSUserDefaults.standardUserDefaults().removeObjectForKey("hasLoginKey")
+        if NSUserDefaults.standardUserDefaults().objectForKey("hasLoginkey") != nil {
+            NSUserDefaults.standardUserDefaults().removeObjectForKey("hasLoginKey")
+        }
         NSNotificationCenter.defaultCenter().postNotificationName("UpdateUINotification", object: nil)
         let dir = applicationDocumentsDirectory()
         var error: NSError? = nil
         let fileManager = NSFileManager.defaultManager()
         for file in try! fileManager.contentsOfDirectoryAtPath(dir as String) {
+            // Check if file is a user profile file
+            let profpic = try! NSRegularExpression(pattern: ".*\(currentUser.handle!)~~profile_pic.jpg", options: [])
+            let bannerpic = try! NSRegularExpression(pattern: ".*\(currentUser.handle!)~~banner_pic.jpg", options: [])
+            let profcount = profpic.matchesInString(file, options: [], range: NSRange(location: 0, length: file.characters.count))
+            let bannercount = bannerpic.matchesInString(file, options: [], range: NSRange(location: 0, length: file.characters.count))
+            if profcount.count > 0 || bannercount.count > 0 {
+                continue
+            }
+            
+            // If not, then remove file
             var success: Bool
             do {
                 try fileManager.removeItemAtPath(NSString(format: "%@/%@", dir, file ) as String)
@@ -131,6 +161,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
+
 }
 

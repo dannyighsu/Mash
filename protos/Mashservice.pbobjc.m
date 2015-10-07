@@ -1815,16 +1815,18 @@ typedef struct FeedResponse__storage_ {
 
 @end
 
-#pragma mark - Recordings
+#pragma mark - FeedStory
 
-@implementation Recordings
+@implementation FeedStory
 
-@dynamic recordingArray, recordingArray_Count;
+@dynamic hasRecording, recording;
+@dynamic hasUser, user;
 
-typedef struct Recordings__storage_ {
+typedef struct FeedStory__storage_ {
   uint32_t _has_storage_[1];
-  NSMutableArray *recordingArray;
-} Recordings__storage_;
+  RecordingResponse *recording;
+  UserPreview *user;
+} FeedStory__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -1833,19 +1835,30 @@ typedef struct Recordings__storage_ {
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
-        .name = "recordingArray",
-        .number = Recordings_FieldNumber_RecordingArray,
-        .hasIndex = GPBNoHasBit,
-        .flags = GPBFieldRepeated,
+        .name = "recording",
+        .number = FeedStory_FieldNumber_Recording,
+        .hasIndex = 0,
+        .flags = GPBFieldRequired,
         .dataType = GPBDataTypeMessage,
-        .offset = offsetof(Recordings__storage_, recordingArray),
+        .offset = offsetof(FeedStory__storage_, recording),
         .defaultValue.valueMessage = nil,
         .dataTypeSpecific.className = GPBStringifySymbol(RecordingResponse),
         .fieldOptions = NULL,
       },
+      {
+        .name = "user",
+        .number = FeedStory_FieldNumber_User,
+        .hasIndex = 1,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeMessage,
+        .offset = offsetof(FeedStory__storage_, user),
+        .defaultValue.valueMessage = nil,
+        .dataTypeSpecific.className = GPBStringifySymbol(UserPreview),
+        .fieldOptions = NULL,
+      },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[Recordings class]
+        [GPBDescriptor allocDescriptorForClass:[FeedStory class]
                                      rootClass:[MashserviceRoot class]
                                           file:MashserviceRoot_FileDescriptor()
                                         fields:fields
@@ -1856,7 +1869,7 @@ typedef struct Recordings__storage_ {
                                      enumCount:0
                                         ranges:NULL
                                     rangeCount:0
-                                   storageSize:sizeof(Recordings__storage_)
+                                   storageSize:sizeof(FeedStory__storage_)
                                     wireFormat:NO];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
@@ -2045,6 +2058,57 @@ typedef struct SearchTagRequest__storage_ {
                                    storageSize:sizeof(SearchTagRequest__storage_)
                                     wireFormat:NO
                            extraTextFormatInfo:extraTextFormatInfo];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - Recordings
+
+@implementation Recordings
+
+@dynamic recordingArray, recordingArray_Count;
+
+typedef struct Recordings__storage_ {
+  uint32_t _has_storage_[1];
+  NSMutableArray *recordingArray;
+} Recordings__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "recordingArray",
+        .number = Recordings_FieldNumber_RecordingArray,
+        .hasIndex = GPBNoHasBit,
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeMessage,
+        .offset = offsetof(Recordings__storage_, recordingArray),
+        .defaultValue.valueMessage = nil,
+        .dataTypeSpecific.className = GPBStringifySymbol(RecordingResponse),
+        .fieldOptions = NULL,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[Recordings class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(Recordings__storage_)
+                                    wireFormat:NO];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }

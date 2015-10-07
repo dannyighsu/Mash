@@ -147,12 +147,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         
         self.user.setBannerPic(header.bannerImage)
         self.user.setProfilePic(header.profilePic)
-        let followers = NSMutableAttributedString(string: "  \(self.user.followers!)\n  FOLLOWERS")
-        header.followerCount.attributedText = followers
-        let following = NSMutableAttributedString(string: "  \(self.user.following!)\n  FOLLOWING")
-        header.followingCount.attributedText = following
-        let tracks = NSMutableAttributedString(string: "  \(self.user.tracks!)\n  TRACKS")
-        header.trackCount.attributedText = tracks
+        header.followerCount.text = "  \(self.user.followers!)\n  FOLLOWERS"
+        header.followingCount.text = "  \(self.user.following!)\n  FOLLOWING"
+        header.trackCount.text = "  \(self.user.tracks!)\n  TRACKS"
         header.descriptionLabel.text = "  \(self.user.userDescription!)"
     }
     

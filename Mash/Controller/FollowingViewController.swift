@@ -15,6 +15,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     var data: [User] = []
     var user: User = currentUser
     var type: String? = nil
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +29,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.activityView.startAnimating()
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -112,6 +114,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                 }
                 dispatch_async(dispatch_get_main_queue()) {
                     self.users.reloadData()
+                    self.activityView.stopAnimating()
                 }
             }
         }

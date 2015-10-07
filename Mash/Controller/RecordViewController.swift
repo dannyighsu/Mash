@@ -10,20 +10,15 @@ import Foundation
 import UIKit
 import AVFoundation
 
-class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlayerDelegate, EZAudioFileDelegate, UITableViewDelegate, UITableViewDataSource, MetronomeDelegate {
+class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlayerDelegate, EZAudioFileDelegate,MetronomeDelegate {
     
     @IBOutlet weak var audioPlot: EZAudioPlotGL!
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var clearButton: UIButton!
-    @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var audioPlotBar: UIView!
     @IBOutlet weak var stopButton: UIButton!
-    @IBOutlet weak var toolsView: UITableView!
-    @IBOutlet weak var volumeSlider: UISlider!
-    @IBOutlet weak var speakerImage: UIButton!
-    @IBOutlet weak var recordingCoverView: UIView!
+    //@IBOutlet weak var recordingCoverView: UIView!
 
     var microphone: EZMicrophone? = nil
     var player: EZAudioPlayer? = nil
@@ -35,10 +30,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var beat: Int = 5
     var beatLabel: UILabel? = nil
     var countoffView: UIView? = nil
-    var toolsViewFrame: CGRect? = nil
-    var swipeArrow: UIImageView? = nil
-    var upTap: UITapGestureRecognizer? = nil
-    var downTap: UITapGestureRecognizer? = nil
+    var volumeSlider: UISlider!
+    var speakerImage: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,32 +67,23 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.audioPlot.backgroundColor = darkGray()
         self.audioPlot.color = lightBlue()
         self.drawBufferPlot()
-        self.recordingCoverView.hidden = true
+        //self.recordingCoverView.hidden = true
         
         self.microphone = EZMicrophone(delegate: self)
         self.microphone?.startFetchingAudio()
+        
+        // Set up nav buttons
+        self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItemStyle.Plain, target: self, action: "save:")
+        self.parentViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Clear", style: UIBarButtonItemStyle.Plain, target: self, action: "clear:")
         
         // Button targets
         self.playButton.addTarget(self, action: "play:", forControlEvents: UIControlEvents.TouchUpInside)
         self.recordButton.addTarget(self, action: "record:", forControlEvents: UIControlEvents.TouchUpInside)
         self.stopButton.addTarget(self, action: "stop:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.clearButton.addTarget(self, action: "clear:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.saveButton.addTarget(self, action: "save:", forControlEvents: UIControlEvents.TouchUpInside)
-        
-        // Configure toolsView table
-        self.toolsView.delegate = self
-        self.toolsView.dataSource = self
-        self.toolsView.allowsSelection = false
-        let swipebar = UINib(nibName: "SwipeBar", bundle: nil)
-        self.toolsView.registerNib(swipebar, forHeaderFooterViewReuseIdentifier: "SwipeBar")
-        self.toolsView.scrollEnabled = false
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        /*self.parentViewController?.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Tools", style: UIBarButtonItemStyle.Plain, target: self, action: "showTools:"), animated: false)
-        self.parentViewController?.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)*/
-        self.toolsViewFrame = self.toolsView.frame
         let value = UIInterfaceOrientation.Portrait.rawValue
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
     }
@@ -223,10 +207,11 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.recorder?.closeAudioFile()
         self.openAudio()
         self.recording = false
-        UIView.animateWithDuration(0.3, animations: { self.recordingCoverView.alpha = 0.0 }) {
+        self.recordButton.setImage(UIImage(named: "Record_button"), forState: UIControlState.Normal)
+        /*UIView.animateWithDuration(0.3, animations: { self.recordingCoverView.alpha = 0.0 }) {
             (completion: Bool) in
             self.recordingCoverView.hidden = true
-        }
+        }*/
     }
     
     func drawRollingPlot() {
@@ -265,34 +250,34 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     func invalidateButtons() {
         self.playButton.userInteractionEnabled = false
-        self.clearButton.userInteractionEnabled = false
         self.stopButton.userInteractionEnabled = false
     }
     
     func validateButtons() {
         self.playButton.userInteractionEnabled = true
-        self.clearButton.userInteractionEnabled = true
         self.stopButton.userInteractionEnabled = true
     }
     
     func showTools(sender: AnyObject?) {
+        /*
         UIView.animateWithDuration(0.5, animations: { self.toolsView.frame = self.view.frame }) {
             (completed: Bool) in
             self.swipeArrow?.image = UIImage(named: "swipe_arrow")
             self.swipeArrow?.removeGestureRecognizer(self.upTap!)
             self.swipeArrow?.addGestureRecognizer(self.downTap!)
             self.toolsView.scrollEnabled = true
-        }
+        }*/
     }
     
     func hideTools(sender: AnyObject?) {
+        /*
         UIView.animateWithDuration(0.5, animations: { self.toolsView.frame = self.toolsViewFrame! }) {
             (completed: Bool) in
             self.swipeArrow?.image = UIImage(named: "swipe_arrow_2")
             self.swipeArrow?.removeGestureRecognizer(self.downTap!)
             self.swipeArrow?.addGestureRecognizer(self.upTap!)
             self.toolsView.scrollEnabled = false
-        }
+        }*/
     }
     
     // Microphone Delegate
@@ -360,14 +345,17 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             self.beat -= 1
             self.beatLabel!.text = "\(self.beat)"
         } else if self.beat == 1 {
+            
+            // Start recording
             self.drawRollingPlot()
             self.recorder = EZRecorder(URL: filePathURL(nil), clientFormat: self.microphone!.audioStreamBasicDescription(), fileType: EZRecorderFileType.M4A)
             self.microphone?.startFetchingAudio()
             self.recordingStartTime = NSDate()
             self.recording = true
             self.beat = 0
-            self.recordingCoverView.hidden = false
-            self.recordingCoverView.alpha = 0.7
+            //self.recordingCoverView.hidden = false
+            //self.recordingCoverView.alpha = 0.7
+            self.recordButton.setImage(UIImage(named: "Record_stop"), forState: UIControlState.Normal)
             UIView.animateWithDuration(0.3, animations: { self.countoffView!.alpha = 0.0 }) {
                 (completed: Bool) in
                 self.countoffView?.removeFromSuperview()
@@ -383,6 +371,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.showTools(nil)
     }
     
+    /*
     // TableView Delegate
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("SwipeBar") as! SwipeBar
@@ -433,6 +422,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             return 100.0
         }
         return 60.0
-    }
+    }*/
 
 }
