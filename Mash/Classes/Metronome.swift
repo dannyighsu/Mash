@@ -37,6 +37,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     var previousVolume: Float = 0.8
     var wasManuallyTriggered: Bool = false
     var timer: CADisplayLink? = nil
+    var picker: UIPickerView? = nil
     
     required init?(coder aDecoder: NSCoder) {
         self.duration = 0.50
@@ -89,6 +90,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         picker.delegate = metronome
         picker.dataSource = metronome
         picker.backgroundColor = lightGray()
+        metronome.picker = picker
 
         metronome.timeSigField.inputView = picker
         return metronome
@@ -124,7 +126,6 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     func textFieldDidEndEditing(textField: UITextField) {
         if textField == self.tempoField {
             let input = self.tempoField.text
-            
             if input!.characters.count == 0 {
                 let originalValue = Int(60.0 / Double(self.duration))
                 self.tempoField.text = String(stringInterpolationSegment: originalValue)
@@ -133,6 +134,16 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
             
             let value = Int(input!)
             self.setTempo(value!)
+        } else if textField == self.timeSigField {
+            let value = textField.text!
+            if value == "None" {
+                self.timeSignature[0] = 1
+                self.timeSignature[1] = 4
+            } else {
+                var valSplit = value.characters.split {$0 == "/"}.map { String($0) }
+                self.timeSignature[0] = Int(valSplit[0])!
+                self.timeSignature[1] = Int(valSplit[1])!
+            }
         }
     }
     
@@ -148,13 +159,8 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let value = timeSignatureArray[row]
         if value == "None" {
-            self.timeSignature[0] = 1
-            self.timeSignature[1] = 4
             self.timeSigField.text = "None"
         } else {
-            var valSplit = value.characters.split {$0 == "/"}.map { String($0) }
-            self.timeSignature[0] = Int(valSplit[0])!
-            self.timeSignature[1] = Int(valSplit[1])!
             self.timeSigField.text = value
         }
     }
@@ -169,6 +175,16 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1
+    }
+    
+    // For external fields
+    func externalTimeSigFieldEdit(editedField: UITextField) {
+        editedField.inputView = self.picker
+        self.timeSigField = editedField
+    }
+    
+    func externalTempoFieldEdit(editedField: UITextField) {
+        self.tempoField = editedField
     }
     
     // Metronome functions

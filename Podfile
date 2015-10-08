@@ -17,6 +17,7 @@ target 'Mash' do
     source 'https://github.com/CocoaPods/Specs.git'
     pod 'AWSCore'
     pod 'AWSS3'
+    pod 'CustomIOSAlertView', '~> 0.9.3'
 end
 
 target 'MashTests' do

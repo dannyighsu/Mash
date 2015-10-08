@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import AVFoundation
 
-class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlayerDelegate, EZAudioFileDelegate,MetronomeDelegate {
+class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlayerDelegate, EZAudioFileDelegate,MetronomeDelegate, CustomIOSAlertViewDelegate, UIAlertViewDelegate {
     
     @IBOutlet weak var audioPlot: EZAudioPlotGL!
     @IBOutlet weak var recordButton: UIButton!
@@ -18,7 +18,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var audioPlotBar: UIView!
     @IBOutlet weak var stopButton: UIButton!
-    //@IBOutlet weak var recordingCoverView: UIView!
+    @IBOutlet weak var volumeButton: UIButton!
+    @IBOutlet weak var tempoButton: UIButton!
+    @IBOutlet weak var timeButton: UIButton!
 
     var microphone: EZMicrophone? = nil
     var player: EZAudioPlayer? = nil
@@ -30,8 +32,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var beat: Int = 5
     var beatLabel: UILabel? = nil
     var countoffView: UIView? = nil
-    var volumeSlider: UISlider!
-    var speakerImage: UIButton!
+    var tempoAlert: UIAlertView? = nil
+    var timeAlert: UIAlertView? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,15 +55,18 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             error = error1
         }
         do {
-            /*let output = session.currentRoute.outputs.first as! AVAudioSessionPortDescription
-        if output.portType == "Receiver" {
-        }*/
             try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
         } catch _ {
         }
         if error != nil {
             Debug.printl("Error setting session active: \(error?.localizedDescription)", sender: self)
         }
+        
+        // Set up metronome
+        let metronome = Metronome.createView()
+        metronome.delegate = self
+        metronome.backgroundColor = lightGray()
+        self.metronome = metronome
 
         // Configure EZAudio
         self.audioPlot.backgroundColor = darkGray()
@@ -80,6 +85,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.playButton.addTarget(self, action: "play:", forControlEvents: UIControlEvents.TouchUpInside)
         self.recordButton.addTarget(self, action: "record:", forControlEvents: UIControlEvents.TouchUpInside)
         self.stopButton.addTarget(self, action: "stop:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.volumeButton.addTarget(self, action: "showVolume:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.timeButton.addTarget(self, action: "showTime:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.tempoButton.addTarget(self, action: "showTempo:", forControlEvents: UIControlEvents.TouchUpInside)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -127,10 +135,10 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         }
         if self.player!.isPlaying {
             self.player!.pause()
-            self.playButton.setImage(UIImage(named: "Play"), forState: UIControlState.Normal)
+            self.playButton.setImage(UIImage(named: "Play_2"), forState: UIControlState.Normal)
         } else if !self.player!.isPlaying {
             self.player!.play()
-            self.playButton.setImage(UIImage(named: "Pause"), forState: UIControlState.Normal)
+            self.playButton.setImage(UIImage(named: "Pause_2"), forState: UIControlState.Normal)
         }
     }
     
@@ -139,7 +147,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             self.player!.seekToFrame(0)
             self.player!.pause()
             self.player!.currentTime = 0
-            self.playButton.setImage(UIImage(named: "Play"), forState: UIControlState.Normal)
+            self.playButton.setImage(UIImage(named: "Play_2"), forState: UIControlState.Normal)
         }
     }
     
@@ -167,14 +175,10 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     }
     
     // Slider methods
-    @IBAction func volumeDidChange(sender: UISlider) {
+    func volumeDidChange(sender: UISlider) {
         if self.player != nil {
-            self.player!.volume = sender.value
-            if sender.value == 0 {
-                self.speakerImage.setImage(UIImage(named: "speaker_white_2"), forState: UIControlState.Normal)
-            } else {
-                self.speakerImage.setImage(UIImage(named: "speaker_white"), forState: UIControlState.Normal)
-            }
+            self.metronome!.tickPlayer!.volume = sender.value
+            self.metronome!.tockPlayer!.volume = sender.value
         }
     }
     
@@ -236,7 +240,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.audioFile = EZAudioFile(URL: filePathURL(nil), delegate: self)
         self.player = EZAudioPlayer(audioFile: self.audioFile)
         self.player!.delegate = self
-        self.player!.volume = self.volumeSlider.value
         let data = self.audioFile!.getWaveformData()
         self.audioPlot.updateBuffer(data.buffers[0], withBufferSize: data.bufferSize)
         
@@ -258,26 +261,78 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.stopButton.userInteractionEnabled = true
     }
     
-    func showTools(sender: AnyObject?) {
-        /*
-        UIView.animateWithDuration(0.5, animations: { self.toolsView.frame = self.view.frame }) {
-            (completed: Bool) in
-            self.swipeArrow?.image = UIImage(named: "swipe_arrow")
-            self.swipeArrow?.removeGestureRecognizer(self.upTap!)
-            self.swipeArrow?.addGestureRecognizer(self.downTap!)
-            self.toolsView.scrollEnabled = true
-        }*/
+    // Custom alert view delegate
+    func customIOS7dialogButtonTouchUpInside(alertView: AnyObject!, clickedButtonAtIndex buttonIndex: Int) {
+        alertView.close()
     }
     
-    func hideTools(sender: AnyObject?) {
-        /*
-        UIView.animateWithDuration(0.5, animations: { self.toolsView.frame = self.toolsViewFrame! }) {
-            (completed: Bool) in
-            self.swipeArrow?.image = UIImage(named: "swipe_arrow_2")
-            self.swipeArrow?.removeGestureRecognizer(self.downTap!)
-            self.swipeArrow?.addGestureRecognizer(self.upTap!)
-            self.toolsView.scrollEnabled = false
-        }*/
+    func alertView(alertView: UIAlertView, didDismissWithButtonIndex buttonIndex: Int) {
+        if alertView.title == "Set Time Signature" {
+            self.metronome!.textFieldDidEndEditing(alertView.textFieldAtIndex(0)!)
+            self.timeButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
+            
+        } else if alertView.title == "Set Tempo" {
+            self.metronome!.textFieldDidEndEditing(alertView.textFieldAtIndex(0)!)
+            self.tempoButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
+        }
+    }
+    
+    func showVolume(sender: UIButton) {
+        let slider = UISlider(frame: CGRectZero)
+        slider.addTarget(self, action: "volumeDidChange:", forControlEvents: UIControlEvents.ValueChanged)
+        slider.value = self.metronome!.tickPlayer!.volume
+        
+        let title = UILabel(frame: CGRectZero)
+        title.text = "Set Volume"
+        title.textAlignment = NSTextAlignment.Center
+        
+        let metronomeView = CustomIOSAlertView(frame: CGRectZero)
+        metronomeView.buttonTitles = ["Close"]
+        metronomeView.addSubview(slider)
+        metronomeView.addSubview(title)
+        metronomeView.delegate = self
+        metronomeView.show()
+
+        slider.frame = CGRect(x: metronomeView.frame.midX, y: metronomeView.frame.midY, width: metronomeView.frame.width/1.5, height: 3.0)
+        title.frame = CGRect(x: 0.0, y: 0.0, width: 75.0, height: 30.0)
+        title.center = CGPoint(x: metronomeView.center.x, y: metronomeView.center.y - 40.0)
+        slider.center = metronomeView.center
+        metronomeView.bringSubviewToFront(slider)
+        metronomeView.bringSubviewToFront(title)
+    }
+    
+    func showTime(sender: UIButton) {
+        if self.timeAlert == nil {
+            let alert = UIAlertView(title: "Set Time Signature", message: "", delegate: self, cancelButtonTitle: "Close")
+            alert.alertViewStyle = .PlainTextInput
+            alert.textFieldAtIndex(0)?.textAlignment = .Center
+            alert.textFieldAtIndex(0)?.text = self.timeButton.titleLabel?.text
+            self.metronome!.externalTimeSigFieldEdit(alert.textFieldAtIndex(0)!)
+            for i in 0...timeSignatureArray.count-1 {
+                if timeSignatureArray[i] == self.timeButton.titleLabel!.text! {
+                    self.metronome!.picker!.selectRow(i, inComponent: 0, animated: true)
+                }
+            }
+            alert.show()
+            self.timeAlert = alert
+        } else {
+            self.timeAlert!.show()
+        }
+    }
+    
+    func showTempo(sender: UIButton) {
+        if self.tempoAlert == nil {
+            let alert = UIAlertView(title: "Set Tempo", message: "", delegate: self, cancelButtonTitle: "Close")
+            alert.alertViewStyle = .PlainTextInput
+            alert.textFieldAtIndex(0)?.textAlignment = .Center
+            alert.textFieldAtIndex(0)?.text = self.tempoButton.titleLabel?.text
+            alert.textFieldAtIndex(0)?.keyboardType = .NumberPad
+            self.metronome!.externalTempoFieldEdit(alert.textFieldAtIndex(0)!)
+            alert.show()
+            self.tempoAlert = alert
+        } else {
+            self.tempoAlert!.show()
+        }
     }
     
     // Microphone Delegate
@@ -361,14 +416,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 self.countoffView?.removeFromSuperview()
             }
         }
-    }
-    
-    func timeFieldDidBeginEditing(metronome: Metronome) {
-        self.showTools(nil)
-    }
-    
-    func tempoFieldDidBeginEditing(metronome: Metronome) {
-        self.showTools(nil)
     }
     
     /*

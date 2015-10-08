@@ -10,6 +10,7 @@
 #import "FBSDKLoginKit/FBSDKLoginKit.h"
 #import "EZAudio/EZAudio.h"
 #import <CommonCrypto/CommonDigest.h>
+#import "CustomIOSAlertView/CustomIOSAlertView.h"
 #import "Mashservice.pbobjc.h"
 #import "Mashservice.pbrpc.h"
 

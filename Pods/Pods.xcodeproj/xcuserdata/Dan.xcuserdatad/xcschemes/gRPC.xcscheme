@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "106048AE4458E16583DCDA76"
+               BlueprintIdentifier = "730BF8C5A713E555C498CE33"
                BuildableName = "libgRPC.a"
                BlueprintName = "gRPC"
                ReferencedContainer = "container:Pods.xcodeproj">

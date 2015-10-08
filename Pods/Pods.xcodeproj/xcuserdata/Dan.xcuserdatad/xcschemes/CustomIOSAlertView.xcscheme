@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "894F93295E84AB62A5987ED5"
-               BuildableName = "libEZAudio.a"
-               BlueprintName = "EZAudio"
+               BlueprintIdentifier = "3F74BBC54AD0016112C107BE"
+               BuildableName = "libCustomIOSAlertView.a"
+               BlueprintName = "CustomIOSAlertView"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
