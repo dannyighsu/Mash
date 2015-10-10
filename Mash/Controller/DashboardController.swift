@@ -40,6 +40,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             self.navigationItem.title = self.user.display_name()
         } else {
             self.parentViewController?.navigationItem.title = self.user.display_name()
+            User.updateSelf(self)
         }
         self.retrieveTracks()
     }
@@ -48,6 +49,25 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidAppear(animated)
         let value = UIInterfaceOrientation.Portrait.rawValue
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
+        var editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "goToSettings:")
+        if self.user.handle != currentUser.handle {
+            var following: Bool = false
+            for u in userFollowing {
+                if u.handle! == self.user.handle! {
+                    following = true
+                }
+            }
+            if following {
+                editButton = UIBarButtonItem(title: "Unfollow", style: .Plain, target: self, action: "unfollow:")
+            } else {
+                editButton = UIBarButtonItem(title: "Follow", style: .Plain, target: self, action: "follow:")
+            }
+        }
+        if self.user == currentUser {
+            self.parentViewController?.navigationItem.rightBarButtonItem = editButton
+        } else {
+            self.navigationItem.rightBarButtonItem = editButton
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -56,6 +76,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             self.audioPlayer!.stop()
         }
         self.parentViewController?.navigationItem.setHidesBackButton(true, animated: false)
+        if self.user == currentUser {
+            self.parentViewController?.navigationItem.rightBarButtonItem = nil
+        } else {
+            self.navigationItem.rightBarButtonItem = nil
+        }
     }
     
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
@@ -116,29 +141,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         header.followerCount.layer.borderWidth = 0.2
         header.followingCount.layer.borderWidth = 0.2
         header.trackCount.layer.borderWidth = 0.2
-        header.descriptionLabel.layer.borderWidth = 0.2
+        //header.descriptionLabel.layer.borderWidth = 0.2
         
-        if self.user.handle != currentUser.handle {
-            var following: Bool = false
-            for u in userFollowing {
-                if u.handle! == self.user.handle! {
-                    following = true
-                }
-            }
-            if following {
-                header.editButton.setTitle("Unfollow", forState: UIControlState.Normal)
-                header.editButton.backgroundColor = lightGray()
-                header.editButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
-            } else {
-                header.editButton.setTitle("Follow", forState: UIControlState.Normal)
-                header.editButton.backgroundColor = lightBlue()
-                header.editButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
-            }
-            header.editButton.titleLabel!.textAlignment = .Center
-        } else {
-            header.editButton.setTitle("Edit Profile", forState: UIControlState.Normal)
-            header.editButton.addTarget(self, action: "goToSettings:", forControlEvents: UIControlEvents.TouchUpInside)
-        }
+        header.editButton.setTitle(self.user.display_name(), forState: .Normal)
+        // TODO: implement
+        header.locationButon.setTitle("Berkeley, CA", forState: .Normal)
         
         let tap1 = UITapGestureRecognizer(target: self, action: "goToFollowers:")
         header.followerCount.addGestureRecognizer(tap1)
@@ -150,7 +157,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         header.followerCount.text = "  \(self.user.followers!)\n  FOLLOWERS"
         header.followingCount.text = "  \(self.user.following!)\n  FOLLOWING"
         header.trackCount.text = "  \(self.user.tracks!)\n  TRACKS"
-        header.descriptionLabel.text = "  \(self.user.userDescription!)"
+        //header.descriptionLabel.text = "  \(self.user.userDescription!)"
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -441,10 +448,20 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func follow(sender: UIButton) {
         self.user.follow(nil)
+        if self.user == currentUser {
+            self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Unfollow", style: .Plain, target: self, action: "unfollow:")
+        } else {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Unfollow", style: .Plain, target: self, action: "unfollow:")
+        }
     }
     
     func unfollow(sender: UIButton) {
         self.user.unfollow(nil)
+        if self.user == currentUser {
+            self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Follow", style: .Plain, target: self, action: "follow:")
+        } else {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Follow", style: .Plain, target: self, action: "follow:")
+        }
     }
     
     func logout() {

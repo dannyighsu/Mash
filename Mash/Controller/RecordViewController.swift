@@ -17,10 +17,10 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var audioPlotBar: UIView!
-    @IBOutlet weak var stopButton: UIButton!
     @IBOutlet weak var volumeButton: UIButton!
     @IBOutlet weak var tempoButton: UIButton!
     @IBOutlet weak var timeButton: UIButton!
+    @IBOutlet weak var metronomeButton: UIButton!
 
     var microphone: EZMicrophone? = nil
     var player: EZAudioPlayer? = nil
@@ -34,6 +34,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var countoffView: UIView? = nil
     var tempoAlert: UIAlertView? = nil
     var timeAlert: UIAlertView? = nil
+    var muted: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,23 +78,23 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.microphone = EZMicrophone(delegate: self)
         self.microphone?.startFetchingAudio()
         
-        // Set up nav buttons
-        self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItemStyle.Plain, target: self, action: "save:")
-        self.parentViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Clear", style: UIBarButtonItemStyle.Plain, target: self, action: "clear:")
-        
         // Button targets
         self.playButton.addTarget(self, action: "play:", forControlEvents: UIControlEvents.TouchUpInside)
         self.recordButton.addTarget(self, action: "record:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.stopButton.addTarget(self, action: "stop:", forControlEvents: UIControlEvents.TouchUpInside)
         self.volumeButton.addTarget(self, action: "showVolume:", forControlEvents: UIControlEvents.TouchUpInside)
         self.timeButton.addTarget(self, action: "showTime:", forControlEvents: UIControlEvents.TouchUpInside)
         self.tempoButton.addTarget(self, action: "showTempo:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.metronomeButton.addTarget(self, action: "muteMetronome:", forControlEvents: UIControlEvents.TouchUpInside)
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         let value = UIInterfaceOrientation.Portrait.rawValue
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
+        
+        // Set up nav buttons
+        self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItemStyle.Plain, target: self, action: "save:")
+        self.parentViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Clear", style: UIBarButtonItemStyle.Plain, target: self, action: "clear:")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -109,6 +110,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         if self.recording {
             self.record(nil)
         }
+        self.parentViewController?.navigationItem.rightBarButtonItem = nil
+        self.parentViewController?.navigationItem.leftBarButtonItem = nil
     }
     
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
@@ -211,7 +214,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.recorder?.closeAudioFile()
         self.openAudio()
         self.recording = false
-        self.recordButton.setImage(UIImage(named: "Record_button"), forState: UIControlState.Normal)
+        UIView.transitionWithView(self.recordButton.imageView!, duration: 0.5, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { self.recordButton.setImage(UIImage(named: "Record_button"), forState: .Normal) }, completion: nil)
+        
         /*UIView.animateWithDuration(0.3, animations: { self.recordingCoverView.alpha = 0.0 }) {
             (completion: Bool) in
             self.recordingCoverView.hidden = true
@@ -253,12 +257,10 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     func invalidateButtons() {
         self.playButton.userInteractionEnabled = false
-        self.stopButton.userInteractionEnabled = false
     }
     
     func validateButtons() {
         self.playButton.userInteractionEnabled = true
-        self.stopButton.userInteractionEnabled = true
     }
     
     // Custom alert view delegate
@@ -294,7 +296,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         metronomeView.show()
 
         slider.frame = CGRect(x: metronomeView.frame.midX, y: metronomeView.frame.midY, width: metronomeView.frame.width/1.5, height: 3.0)
-        title.frame = CGRect(x: 0.0, y: 0.0, width: 75.0, height: 30.0)
+        title.frame = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 30.0)
         title.center = CGPoint(x: metronomeView.center.x, y: metronomeView.center.y - 40.0)
         slider.center = metronomeView.center
         metronomeView.bringSubviewToFront(slider)
@@ -372,7 +374,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             if time == 0 {
                 self.timeLabel.text = "00:00"
                 if self.audioFile != nil {
-                    self.play(nil)
+                    //self.play(nil)
+                    self.playButton.setImage(UIImage(named: "Play_2"), forState: .Normal)
                 }
                 return
             }
@@ -410,11 +413,22 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             self.beat = 0
             //self.recordingCoverView.hidden = false
             //self.recordingCoverView.alpha = 0.7
-            self.recordButton.setImage(UIImage(named: "Record_stop"), forState: UIControlState.Normal)
+            UIView.transitionWithView(self.recordButton.imageView!, duration: 0.5, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { self.recordButton.setImage(UIImage(named: "Record_stop"), forState: .Normal) }, completion: nil)
             UIView.animateWithDuration(0.3, animations: { self.countoffView!.alpha = 0.0 }) {
                 (completed: Bool) in
                 self.countoffView?.removeFromSuperview()
             }
+        }
+    }
+    
+    func muteMetronome(sender: UIButton) {
+        self.metronome!.muteAudio(nil)
+        if self.muted {
+            sender.setImage(UIImage(named: "metronome_2"), forState: .Normal)
+            self.muted = false
+        } else {
+            sender.setImage(UIImage(named: "metronome_black"), forState: .Normal)
+            self.muted = true
         }
     }
     

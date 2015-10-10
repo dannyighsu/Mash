@@ -208,7 +208,7 @@ class User: UITableViewCell {
                         let profile = controller!.tracks.headerViewForSection(0) as! Profile
                         currentUser.setProfilePic(profile.profilePic)
                         currentUser.setBannerPic(profile.bannerImage)
-                        profile.descriptionLabel.text = currentUser.userDescription
+                        //profile.descriptionLabel.text = currentUser.userDescription
                         let followers = NSMutableAttributedString(string: "  \(currentUser.followers!)\n  FOLLOWERS")
                         profile.followerCount.attributedText = followers
                         let following = NSMutableAttributedString(string: "  \(currentUser.following!)\n  FOLLOWING")

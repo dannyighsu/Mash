@@ -37,6 +37,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
         let follower = self.data[indexPath.row]
         cell.nameLabel?.setTitle(follower.display_name(), forState: UIControlState.Normal)
         cell.handle = follower.handle
+        cell.userid = follower.userid
         cell.username = follower.username
         follower.setProfilePic(cell.profilePicture!)
         cell.profilePicture?.layer.cornerRadius = cell.profilePicture!.frame.size.width / 2
@@ -59,7 +60,11 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        User.getUser(tableView.cellForRowAtIndexPath(indexPath) as! User, storyboard: self.storyboard!, navigationController: self.navigationController!)
+        let user = tableView.cellForRowAtIndexPath(indexPath) as! User
+        if user.handle == currentUser.handle {
+            return
+        }
+        User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
         tableView.cellForRowAtIndexPath(indexPath)!.selected = false
     }
     
@@ -98,23 +103,44 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(self.user.userid!)
-        
-        server.followersGetWithRequest(request) {
-            (response, error) in
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: nil)
-            } else {
-                for u in response.userArray {
-                    let dict = u as! UserPreview
-                    let follower = User()
-                    follower.handle = dict.handle
-                    follower.username = dict.name
-                    follower.userid = Int(dict.userid)
-                    self.data.append(follower)
+        if type == "followers" {
+            server.followersGetWithRequest(request) {
+                (response, error) in
+                if error != nil {
+                    Debug.printl("Error: \(error)", sender: nil)
+                } else {
+                    for u in response.userArray {
+                        let dict = u as! UserPreview
+                        let follower = User()
+                        follower.handle = dict.handle
+                        follower.username = dict.name
+                        follower.userid = Int(dict.userid)
+                        self.data.append(follower)
+                    }
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.users.reloadData()
+                        self.activityView.stopAnimating()
+                    }
                 }
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.users.reloadData()
-                    self.activityView.stopAnimating()
+            }
+        } else {
+            server.followingsGetWithRequest(request) {
+                (response, error) in
+                if error != nil {
+                    Debug.printl("Error: \(error)", sender: nil)
+                } else {
+                    for u in response.userArray {
+                        let dict = u as! UserPreview
+                        let follower = User()
+                        follower.handle = dict.handle
+                        follower.username = dict.name
+                        follower.userid = Int(dict.userid)
+                        self.data.append(follower)
+                    }
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.users.reloadData()
+                        self.activityView.stopAnimating()
+                    }
                 }
             }
         }
