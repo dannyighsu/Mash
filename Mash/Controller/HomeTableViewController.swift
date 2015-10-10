@@ -69,6 +69,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.eventLabel.text = self.displayData[indexPath.row].eventText
         cell.userLabel.text = self.displayData[indexPath.row].userText
         cell.timeLabel.text = self.displayData[indexPath.row].timeText
+        cell.user = self.displayData[indexPath.row].user
         cell.timeLabel.text = parseTimeStamp(cell.timeLabel.text!)
         self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
         cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFit

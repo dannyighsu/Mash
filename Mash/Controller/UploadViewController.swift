@@ -42,7 +42,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.activityView.center = self.view.center
         
         self.audioPlot.color = lightBlue()
-        self.audioPlot.backgroundColor = offWhite()
+        self.audioPlot.backgroundColor = darkGray()
         self.audioPlot.plotType = .Buffer
         self.audioPlot.shouldFill = true
         self.audioPlot.shouldMirror = true
@@ -137,15 +137,14 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     // Upload Methods
     func uploadAction() {
-        let familyString = String(stringInterpolationSegment: self.instruments)
         let request = RecordingUploadRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
-        request.title = "\(self.titleTextField.text)"
+        request.title = "\(self.titleTextField.text!)"
         request.bpm = 0
         request.bar = 0
         request.key = "X"
-        request.familyArray = [familyString]
+        request.familyArray = NSMutableArray(array: self.instruments)
         request.instrumentArray = []
         request.genreArray = []
         request.subgenreArray = []
@@ -160,7 +159,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()
-                    let key = "\(currentUser.handle!)~~\(self.titleTextField).m4a"
+                    let key = "\(currentUser.handle!)~~\(self.titleTextField.text!).m4a"
                     upload(key, url: self.recording!.url, bucket: track_bucket)
                     self.finish()
                 }

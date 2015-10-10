@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import AVFoundation
 import Photos
+import QuartzCore
 
 class DashboardController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate {
     
@@ -22,6 +23,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidLoad()
         self.tracks.delegate = self
         self.tracks.dataSource = self
+        self.tracks.backgroundColor = darkGray()
+        self.tracks.separatorStyle = .None
         
         // Register profile and track nibs
         let profile = UINib(nibName: "Profile", bundle: nil)
@@ -37,9 +40,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewWillAppear(animated)
         if self.user != currentUser {
             self.parentViewController?.navigationItem.setHidesBackButton(false, animated: false)
-            self.navigationItem.title = self.user.display_name()
+            self.navigationItem.title = "Profile"
         } else {
-            self.parentViewController?.navigationItem.title = self.user.display_name()
+            self.parentViewController?.navigationItem.title = "Profile"
             User.updateSelf(self)
         }
         self.retrieveTracks()
@@ -99,13 +102,17 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let track = tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
         let index = indexPath.row
-        track.backgroundColor = offWhite()
+        track.backgroundColor = UIColor.clearColor()
+        track.instrumentImage.backgroundColor = UIColor(red: 200, green: 200, blue: 200, alpha: 0.6)
+        track.userLabel.textColor = UIColor.whiteColor()
+        track.title.textColor = UIColor.whiteColor()
         track.title.text = self.data[index].titleText
         track.titleText = track.title.text!
         track.format = self.data[index].format
         track.userText = self.data[index].userText
         track.userLabel.text = track.userText
         track.instruments = self.data[index].instruments
+        track.instrumentFamilies = self.data[index].instrumentFamilies
         track.trackURL = self.data[index].trackURL
         track.bpm = self.data[index].bpm
         track.instrumentImage.image = findImage(track.instrumentFamilies)
@@ -158,6 +165,12 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         header.followingCount.text = "  \(self.user.following!)\n  FOLLOWING"
         header.trackCount.text = "  \(self.user.tracks!)\n  TRACKS"
         //header.descriptionLabel.text = "  \(self.user.userDescription!)"
+        
+        // Add gradient to banner
+        let gradient: CAGradientLayer = CAGradientLayer()
+        gradient.frame = header.bounds
+        gradient.colors = [UIColor.clearColor().CGColor, UIColor.clearColor().CGColor, darkGray().CGColor]
+        header.bannerImage.layer.insertSublayer(gradient, atIndex: 0)
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -177,7 +190,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
         
         track.activityView.startAnimating()
-        print(getS3Key(track))
         download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
             (result) in
             dispatch_async(dispatch_get_main_queue()) {

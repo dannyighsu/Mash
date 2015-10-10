@@ -203,9 +203,9 @@ class User: UITableViewCell {
                 currentUser.tracks = "\(response.trackCount)"
                 
                 dispatch_async(dispatch_get_main_queue()) {
-                    if controller != nil {
-                        controller!.parentViewController?.navigationItem.title! = currentUser.display_name()!
+                    if controller != nil && controller!.tracks.headerViewForSection(0) != nil {
                         let profile = controller!.tracks.headerViewForSection(0) as! Profile
+                        profile.editButton.setTitle(currentUser.display_name()!, forState: .Normal)
                         currentUser.setProfilePic(profile.profilePic)
                         currentUser.setBannerPic(profile.bannerImage)
                         //profile.descriptionLabel.text = currentUser.userDescription
