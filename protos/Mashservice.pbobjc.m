@@ -1815,6 +1815,70 @@ typedef struct FeedResponse__storage_ {
 
 @end
 
+#pragma mark - FeedRequest
+
+@implementation FeedRequest
+
+@dynamic hasUser, user;
+@dynamic hasScroll, scroll;
+
+typedef struct FeedRequest__storage_ {
+  uint32_t _has_storage_[1];
+  uint32_t scroll;
+  UserRequest *user;
+} FeedRequest__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "user",
+        .number = FeedRequest_FieldNumber_User,
+        .hasIndex = 0,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeMessage,
+        .offset = offsetof(FeedRequest__storage_, user),
+        .defaultValue.valueMessage = nil,
+        .dataTypeSpecific.className = GPBStringifySymbol(UserRequest),
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "scroll",
+        .number = FeedRequest_FieldNumber_Scroll,
+        .hasIndex = 1,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(FeedRequest__storage_, scroll),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[FeedRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(FeedRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 #pragma mark - FeedStory
 
 @implementation FeedStory

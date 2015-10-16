@@ -133,11 +133,11 @@
 - (ProtoRPC *)RPCToUserRecordingsWithRequest:(UserRequest *)request handler:(void(^)(UserRecordingsResponse *response, NSError *error))handler;
 
 
-#pragma mark Feed(UserRequest) returns (FeedResponse)
+#pragma mark Feed(FeedRequest) returns (FeedResponse)
 
-- (void)feedWithRequest:(UserRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler;
+- (void)feedWithRequest:(FeedRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToFeedWithRequest:(UserRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler;
+- (ProtoRPC *)RPCToFeedWithRequest:(FeedRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler;
 
 
 #pragma mark SearchTag(SearchTagRequest) returns (Recordings)

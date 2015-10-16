@@ -13,6 +13,7 @@ CF_EXTERN_C_BEGIN
 
 @class RecordingResponse;
 @class UserPreview;
+@class UserRequest;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -545,6 +546,23 @@ typedef GPB_ENUM(FeedResponse_FieldNumber) {
 // |storyArray| contains |RecordingResponse|
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray *storyArray;
 @property(nonatomic, readonly) NSUInteger storyArray_Count;
+
+@end
+
+#pragma mark - FeedRequest
+
+typedef GPB_ENUM(FeedRequest_FieldNumber) {
+  FeedRequest_FieldNumber_User = 1,
+  FeedRequest_FieldNumber_Scroll = 2,
+};
+
+@interface FeedRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasUser;
+@property(nonatomic, readwrite, strong, null_resettable) UserRequest *user;
+
+@property(nonatomic, readwrite) BOOL hasScroll;
+@property(nonatomic, readwrite) uint32_t scroll;
 
 @end
 

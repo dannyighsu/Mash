@@ -138,10 +138,10 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         }
         if self.player!.isPlaying {
             self.player!.pause()
-            self.playButton.setImage(UIImage(named: "Play_2"), forState: UIControlState.Normal)
+            UIView.transitionWithView(self.playButton.imageView!, duration: 0.3, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { self.playButton.setImage(UIImage(named: "Play_2"), forState: .Normal) }, completion: nil)
         } else if !self.player!.isPlaying {
             self.player!.play()
-            self.playButton.setImage(UIImage(named: "Pause_2"), forState: UIControlState.Normal)
+            UIView.transitionWithView(self.playButton.imageView!, duration: 0.3, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { self.playButton.setImage(UIImage(named: "Pause_2"), forState: .Normal) }, completion: nil)
         }
     }
     
@@ -150,7 +150,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             self.player!.seekToFrame(0)
             self.player!.pause()
             self.player!.currentTime = 0
-            self.playButton.setImage(UIImage(named: "Play_2"), forState: UIControlState.Normal)
+            UIView.transitionWithView(self.playButton.imageView!, duration: 0.3, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { self.playButton.setImage(UIImage(named: "Play_2"), forState: .Normal) }, completion: nil)
         }
     }
     

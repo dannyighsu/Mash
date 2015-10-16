@@ -139,9 +139,10 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func retrieveActivity() {
         self.activityView.startAnimating()
-        let request = UserRequest()
-        request.userid = UInt32(currentUser.userid!)
-        request.loginToken = currentUser.loginToken
+        let request = FeedRequest()
+        request.user = UserRequest()
+        request.user.userid = UInt32(currentUser.userid!)
+        request.user.loginToken = currentUser.loginToken
         
         server.feedWithRequest(request) {
             (response, error) in

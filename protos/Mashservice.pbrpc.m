@@ -237,13 +237,13 @@ static NSString *const kServiceName = @"MashService";
              responseClass:[UserRecordingsResponse class]
         responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
 }
-#pragma mark Feed(UserRequest) returns (FeedResponse)
+#pragma mark Feed(FeedRequest) returns (FeedResponse)
 
-- (void)feedWithRequest:(UserRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler{
+- (void)feedWithRequest:(FeedRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler{
   [[self RPCToFeedWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToFeedWithRequest:(UserRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler{
+- (ProtoRPC *)RPCToFeedWithRequest:(FeedRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler{
   return [self RPCToMethod:@"Feed"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[FeedResponse class]

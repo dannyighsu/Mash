@@ -144,6 +144,11 @@ message FeedResponse {
     //repeated FeedStory story = 1;
 }
 
+message FeedRequest {
+    required UserRequest user = 1;
+    optional uint32      scroll  = 2;
+}
+
 message FeedStory {
     required RecordingResponse recording = 1;
     required UserPreview user = 2;
@@ -186,6 +191,6 @@ service MashService {
     rpc RecordingUpdate (RecordingUpdateRequest) returns (SuccessResponse);
     rpc UserUpdate (UserUpdateRequest) returns (SuccessResponse);
     rpc UserRecordings (UserRequest) returns (UserRecordingsResponse);
-    rpc Feed (UserRequest) returns (FeedResponse);
+    rpc Feed (FeedRequest) returns (FeedResponse);
     rpc SearchTag (SearchTagRequest) returns (Recordings);
 }
