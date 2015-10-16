@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import EZAudio
 
 class UploadViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAlertViewDelegate {
 
@@ -37,18 +36,18 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.doneButton.addTarget(self, action: "checkInput:", forControlEvents: UIControlEvents.TouchDown)
         self.cancelButton.addTarget(self, action: "cancel:", forControlEvents: UIControlEvents.TouchDown)
         
-        self.audioPlayer = AVAudioPlayer(contentsOfURL: recording!.url, error: nil)
+        self.audioPlayer = try? AVAudioPlayer(contentsOfURL: recording!.url)
         
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
         
         self.audioPlot.color = lightBlue()
-        self.audioPlot.backgroundColor = offWhite()
+        self.audioPlot.backgroundColor = darkGray()
         self.audioPlot.plotType = .Buffer
         self.audioPlot.shouldFill = true
         self.audioPlot.shouldMirror = true
         self.audioPlot.gain = 2.0
-        var data = self.recording!.getWaveformData()
+        let data = self.recording!.getWaveformData()
         self.audioPlot.updateBuffer(data.buffers[0], withBufferSize: data.bufferSize)
     }
     
@@ -68,7 +67,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
-        if contains(self.instruments, cell.instrument) {
+        if self.instruments.contains(cell.instrument) {
             return
         }
         self.instruments.append(cell.instrument)
@@ -91,7 +90,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     // Pre-Upload Checks
     func checkInput(sender: AnyObject?) {
         // Check if title exists, if not, send alert.
-        if self.titleTextField.text.isEmpty {
+        if self.titleTextField.text!.isEmpty {
             let alert = UIAlertView(title: "Invalid Title", message: "Please Name Your Track", delegate: self, cancelButtonTitle: "OK")
             alert.show()
             return
@@ -102,12 +101,10 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             return
         }
         
-        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        
-        checkForDuplicate(handle, passwordHash: passwordHash)
+        self.uploadAction()
     }
     
+    /*
     func checkForDuplicate(handle: String, passwordHash: String) {
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
         var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "query_name": handle, "song_name": self.titleTextField.text]
@@ -136,10 +133,40 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                 }
             }
         }
-    }
+    }*/
     
     // Upload Methods
     func uploadAction() {
+        let request = RecordingUploadRequest()
+        request.userid = UInt32(currentUser.userid!)
+        request.loginToken = currentUser.loginToken
+        request.title = "\(self.titleTextField.text!)"
+        request.bpm = 0
+        request.bar = 0
+        request.key = "X"
+        request.familyArray = NSMutableArray(array: self.instruments)
+        request.instrumentArray = []
+        request.genreArray = []
+        request.subgenreArray = []
+        request.feel = 0
+        request.solo = true
+        request.format = ".m4a"
+        
+        server.recordingUploadWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
+                    let key = "\(currentUser.handle!)~~\(self.titleTextField.text!).m4a"
+                    upload(key, url: self.recording!.url, bucket: track_bucket)
+                    self.finish()
+                }
+            }
+        }
+        
+        /*
         let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
@@ -161,7 +188,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                 } else if statusCode == HTTP_SUCCESS {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.activityView.stopAnimating()
-                        let key = "\(current_user.handle!)~~\(self.titleTextField.text).m4a"
+                        let key = "\(currentUser.handle!)~~\(self.titleTextField.text).m4a"
                         upload(key, self.recording!.url, track_bucket)
                         self.finish()
                     }
@@ -172,33 +199,24 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                     return
                 }
             }
-        }
+        }*/
     }
     
     func saveWaveform(track: Track) {
-        track.titleText = self.titleTextField.text
-        var waveform = takeShotOfView(self.audioPlot)
-        UIImageJPEGRepresentation(waveform, 1.0).writeToFile(filePathString(getS3WaveformKey(track)), atomically: true)
-        upload(getS3WaveformKey(track), filePathURL(getS3WaveformKey(track)), waveform_bucket)
+        track.titleText = self.titleTextField.text!
+        let waveform = takeShotOfView(self.audioPlot)
+        UIImageJPEGRepresentation(waveform, 1.0)!.writeToFile(filePathString(getS3WaveformKey(track)), atomically: true)
+        upload(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket)
     }
     
     func finish() {
-        let taggingController = self.storyboard?.instantiateViewControllerWithIdentifier("TaggingViewController") as! TaggingViewController
-        taggingController.track = Track(frame: CGRectZero, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text, bpm: self.bpm!, trackURL: "\(current_user.handle!)~~\(self.titleTextField.text!).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
-        self.saveWaveform(taggingController.track!)
+        let track = Track(frame: CGRectZero, recid: 0, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, trackURL: "\(currentUser.handle!)~~\(self.titleTextField.text!).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
+        self.saveWaveform(track)
         
-        var index = 0
-        for i in 0...self.navigationController!.viewControllers.count {
-            if self.navigationController!.viewControllers[i] as? UploadViewController != nil {
-                index = i
-                break
-            }
-        }
+        self.navigationController?.popViewControllerAnimated(true)
+        let tabbarcontroller = self.navigationController?.viewControllers[2] as! TabBarController
+        tabbarcontroller.selectedIndex = getTabBarController("dashboard")
         
-        self.navigationController?.pushViewController(taggingController, animated: true)
-        self.navigationController!.viewControllers.removeAtIndex(index)
-        taggingController.time = self.timeSignature!
-        taggingController.bpm = String(self.bpm!)
 
     }
     

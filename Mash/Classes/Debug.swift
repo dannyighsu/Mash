@@ -15,7 +15,7 @@ class Debug {
     
     class func printnl(input: String) {
         if debug {
-            print(input)
+            print(input, terminator: "")
         }
     }
     
@@ -24,15 +24,15 @@ class Debug {
             return
         }
         if input == nil {
-            println("nil")
+            print("nil")
         } else if sender == nil {
-            println(input!)
+            print(input!)
         } else {
-            var output = input as? String
+            let output = input as? String
             if output == nil {
-                println(input)
+                print(input)
             } else {
-                println(output! as String + " sent from \(sender)")
+                print(output! as String + " sent from \(sender!)")
             }
         }
     }

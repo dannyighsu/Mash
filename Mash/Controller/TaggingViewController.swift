@@ -81,9 +81,9 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
     
     func textFieldDidEndEditing(textField: UITextField) {
         if textField == self.tempoField {
-            if textField.text.toInt() > 200 {
+            if Int(textField.text!) > 200 {
                 textField.text = "200"
-            } else if textField.text.toInt() < 40 {
+            } else if Int(textField.text!) < 40 {
                 textField.text = "40"
             }
         }
@@ -95,13 +95,13 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         } else if pickerView == self.genreField.inputView {
             return genreArray.count
         } else if pickerView == self.subgenreField.inputView {
-            var genre = self.genreField.text
-            if count(genre) > 0 {
-                return genreArray[genre]!.count
+            let genre = self.genreField.text
+            if genre!.characters.count > 0 {
+                return genreArray[genre!]!.count
             }
             return 1
         } else if pickerView == self.instrumentField.inputView {
-            var instrumentFamily = self.track!.instrumentFamilies[0] // Fix this for multi instr
+            let instrumentFamily = self.track!.instrumentFamilies[0] // Fix this for multi instr
             return instrumentArray[instrumentFamily]!.count
         } else {
             return timeSignatureArray.count
@@ -112,20 +112,20 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if pickerView == self.keyField.inputView {
             return keysArray[row]
         } else if pickerView == self.genreField.inputView {
             return Array(genreArray.keys)[row]
         } else if pickerView == self.subgenreField.inputView {
-            var genre = self.genreField.text
-            if count(genre) > 0 {
-                var subgenres = genreArray[genre]
+            let genre = self.genreField.text
+            if genre!.characters.count > 0 {
+                var subgenres = genreArray[genre!]
                 return subgenres![row]
             }
             return ""
         } else if pickerView == self.instrumentField.inputView {
-            var instrumentFamily = self.track!.instrumentFamilies[0] // Fix this for multi instr
+            let instrumentFamily = self.track!.instrumentFamilies[0] // Fix this for multi instr
             return instrumentArray[instrumentFamily]![row]
         } else {
             return timeSignatureArray[row]
@@ -138,15 +138,15 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         } else if pickerView == self.genreField.inputView {
             self.genreField.text = Array(genreArray.keys)[row]
         } else if pickerView == self.subgenreField.inputView {
-            var genre = self.genreField.text
-            if count(genre) > 0 {
-                var subgenres = genreArray[genre]
+            let genre = self.genreField.text
+            if genre!.characters.count > 0 {
+                var subgenres = genreArray[genre!]
                 self.subgenreField.text = subgenres![row]
             } else {
                 self.subgenreField.text = ""
             }
         } else if pickerView == self.instrumentField.inputView {
-            var instrumentFamily = self.track!.instrumentFamilies[0] // Fix this for multi instr
+            let instrumentFamily = self.track!.instrumentFamilies[0] // Fix this for multi instr
             self.instrumentField.text = instrumentArray[instrumentFamily]![row]
         } else {
             self.timeField.text = timeSignatureArray[row]
@@ -154,8 +154,31 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
     }
 
     func finish(sender: AnyObject?) {
+        let request = RecordingUpdateRequest()
+        request.userid = UInt32(currentUser.userid!)
+        request.loginToken = currentUser.loginToken
+        request.recid = UInt32(self.track!.id)
+        request.title = "\(self.track!.titleText)"
+        request.instrumentArray = [self.instrumentField.text!]
+        request.genreArray = [self.genreField.text!]
+        request.subgenreArray = [self.subgenreField.text!]
+        
+        server.recordingUpdateWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.navigationController?.popViewControllerAnimated(true)
+                    let tabbarcontroller = self.navigationController?.viewControllers[2] as! TabBarController
+                    tabbarcontroller.selectedIndex = getTabBarController("dashboard")
+                }
+            }
+        }
+        
+        /*
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = current_user.handle
+        let handle = currentUser.handle
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/update/recording")!)
         var time = split(self.timeField.text!) {$0 == "/"}
         if count(time[1]) == 1 {
@@ -186,6 +209,7 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         self.navigationController?.popViewControllerAnimated(true)
         let tabbarcontroller = self.navigationController?.viewControllers[2] as! TabBarController
         tabbarcontroller.selectedIndex = getTabBarController("dashboard")
+        */
     }
     
 }

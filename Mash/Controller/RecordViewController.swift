@@ -8,23 +8,19 @@
 
 import Foundation
 import UIKit
-import EZAudio
 import AVFoundation
 
-class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlayerDelegate, EZAudioFileDelegate, UITableViewDelegate, UITableViewDataSource, MetronomeDelegate {
+class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlayerDelegate, EZAudioFileDelegate,MetronomeDelegate, CustomIOSAlertViewDelegate, UIAlertViewDelegate {
     
     @IBOutlet weak var audioPlot: EZAudioPlotGL!
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var clearButton: UIButton!
-    @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var audioPlotBar: UIView!
-    @IBOutlet weak var stopButton: UIButton!
-    @IBOutlet weak var toolsView: UITableView!
-    @IBOutlet weak var volumeSlider: UISlider!
-    @IBOutlet weak var speakerImage: UIButton!
-    @IBOutlet weak var recordingCoverView: UIView!
+    @IBOutlet weak var volumeButton: UIButton!
+    @IBOutlet weak var tempoButton: UIButton!
+    @IBOutlet weak var timeButton: UIButton!
+    @IBOutlet weak var metronomeButton: UIButton!
 
     var microphone: EZMicrophone? = nil
     var player: EZAudioPlayer? = nil
@@ -36,10 +32,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var beat: Int = 5
     var beatLabel: UILabel? = nil
     var countoffView: UIView? = nil
-    var toolsViewFrame: CGRect? = nil
-    var swipeArrow: UIImageView? = nil
-    var upTap: UITapGestureRecognizer? = nil
-    var downTap: UITapGestureRecognizer? = nil
+    var tempoAlert: UIAlertView? = nil
+    var timeAlert: UIAlertView? = nil
+    var muted: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,24 +42,38 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         // Load AVAudioSession
         let session = AVAudioSession.sharedInstance()
         var error: NSError? = nil
-        session.setCategory(AVAudioSessionCategoryPlayAndRecord, error: &error)
+        do {
+            try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
             Debug.printl("Error setting up session: \(error?.localizedDescription)", sender: self)
         }
-        session.setActive(true, error: &error)
-        /*let output = session.currentRoute.outputs.first as! AVAudioSessionPortDescription
-        if output.portType == "Receiver" {
-        }*/
-        session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker, error: nil)
+        do {
+            try session.setActive(true)
+        } catch let error1 as NSError {
+            error = error1
+        }
+        do {
+            try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
+        } catch _ {
+        }
         if error != nil {
             Debug.printl("Error setting session active: \(error?.localizedDescription)", sender: self)
         }
+        
+        // Set up metronome
+        let metronome = Metronome.createView()
+        metronome.delegate = self
+        metronome.backgroundColor = lightGray()
+        self.metronome = metronome
 
         // Configure EZAudio
         self.audioPlot.backgroundColor = darkGray()
         self.audioPlot.color = lightBlue()
         self.drawBufferPlot()
-        self.recordingCoverView.hidden = true
+        //self.recordingCoverView.hidden = true
         
         self.microphone = EZMicrophone(delegate: self)
         self.microphone?.startFetchingAudio()
@@ -72,26 +81,20 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         // Button targets
         self.playButton.addTarget(self, action: "play:", forControlEvents: UIControlEvents.TouchUpInside)
         self.recordButton.addTarget(self, action: "record:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.stopButton.addTarget(self, action: "stop:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.clearButton.addTarget(self, action: "clear:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.saveButton.addTarget(self, action: "save:", forControlEvents: UIControlEvents.TouchUpInside)
-        
-        // Configure toolsView table
-        self.toolsView.delegate = self
-        self.toolsView.dataSource = self
-        self.toolsView.allowsSelection = false
-        let swipebar = UINib(nibName: "SwipeBar", bundle: nil)
-        self.toolsView.registerNib(swipebar, forHeaderFooterViewReuseIdentifier: "SwipeBar")
-        self.toolsView.scrollEnabled = false
+        self.volumeButton.addTarget(self, action: "showVolume:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.timeButton.addTarget(self, action: "showTime:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.tempoButton.addTarget(self, action: "showTempo:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.metronomeButton.addTarget(self, action: "muteMetronome:", forControlEvents: UIControlEvents.TouchUpInside)
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        /*self.parentViewController?.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Tools", style: UIBarButtonItemStyle.Plain, target: self, action: "showTools:"), animated: false)
-        self.parentViewController?.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)*/
-        self.toolsViewFrame = self.toolsView.frame
         let value = UIInterfaceOrientation.Portrait.rawValue
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
+        
+        // Set up nav buttons
+        self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItemStyle.Plain, target: self, action: "save:")
+        self.parentViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Clear", style: UIBarButtonItemStyle.Plain, target: self, action: "clear:")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -107,10 +110,12 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         if self.recording {
             self.record(nil)
         }
+        self.parentViewController?.navigationItem.rightBarButtonItem = nil
+        self.parentViewController?.navigationItem.leftBarButtonItem = nil
     }
     
-    override func supportedInterfaceOrientations() -> Int {
-        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.Portrait
     }
     
     // Button methods
@@ -133,10 +138,10 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         }
         if self.player!.isPlaying {
             self.player!.pause()
-            self.playButton.setImage(UIImage(named: "Play"), forState: UIControlState.Normal)
+            UIView.transitionWithView(self.playButton.imageView!, duration: 0.3, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { self.playButton.setImage(UIImage(named: "Play_2"), forState: .Normal) }, completion: nil)
         } else if !self.player!.isPlaying {
             self.player!.play()
-            self.playButton.setImage(UIImage(named: "Pause"), forState: UIControlState.Normal)
+            UIView.transitionWithView(self.playButton.imageView!, duration: 0.3, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { self.playButton.setImage(UIImage(named: "Pause_2"), forState: .Normal) }, completion: nil)
         }
     }
     
@@ -145,7 +150,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             self.player!.seekToFrame(0)
             self.player!.pause()
             self.player!.currentTime = 0
-            self.playButton.setImage(UIImage(named: "Play"), forState: UIControlState.Normal)
+            UIView.transitionWithView(self.playButton.imageView!, duration: 0.3, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { self.playButton.setImage(UIImage(named: "Play_2"), forState: .Normal) }, completion: nil)
         }
     }
     
@@ -173,25 +178,21 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     }
     
     // Slider methods
-    @IBAction func volumeDidChange(sender: UISlider) {
+    func volumeDidChange(sender: UISlider) {
         if self.player != nil {
-            self.player!.volume = sender.value
-            if sender.value == 0 {
-                self.speakerImage.setImage(UIImage(named: "speaker_white_2"), forState: UIControlState.Normal)
-            } else {
-                self.speakerImage.setImage(UIImage(named: "speaker_white"), forState: UIControlState.Normal)
-            }
+            self.metronome!.tickPlayer!.volume = sender.value
+            self.metronome!.tockPlayer!.volume = sender.value
         }
     }
     
     // Auxiliary methods
     func prepareRecording() {
-        var view = UIView(frame: self.view.frame)
+        let view = UIView(frame: self.view.frame)
         view.backgroundColor = UIColor(red: 40, green: 40, blue: 40, alpha: 0.6)
         view.alpha = 0.0
         
         self.beat = self.metronome!.timeSignature[0] + 1
-        var beatLabel = UILabel(frame: view.frame)
+        let beatLabel = UILabel(frame: view.frame)
         beatLabel.font = UIFont(name: "STHeitiSC-Light", size: 100)
         beatLabel.textColor = UIColor.blackColor()
         beatLabel.text = "\(self.beat)"
@@ -213,10 +214,12 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.recorder?.closeAudioFile()
         self.openAudio()
         self.recording = false
-        UIView.animateWithDuration(0.3, animations: { self.recordingCoverView.alpha = 0.0 }) {
+        UIView.transitionWithView(self.recordButton.imageView!, duration: 0.5, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { self.recordButton.setImage(UIImage(named: "Record_button"), forState: .Normal) }, completion: nil)
+        
+        /*UIView.animateWithDuration(0.3, animations: { self.recordingCoverView.alpha = 0.0 }) {
             (completion: Bool) in
             self.recordingCoverView.hidden = true
-        }
+        }*/
     }
     
     func drawRollingPlot() {
@@ -241,8 +244,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.audioFile = EZAudioFile(URL: filePathURL(nil), delegate: self)
         self.player = EZAudioPlayer(audioFile: self.audioFile)
         self.player!.delegate = self
-        self.player!.volume = self.volumeSlider.value
-        var data = self.audioFile!.getWaveformData()
+        let data = self.audioFile!.getWaveformData()
         self.audioPlot.updateBuffer(data.buffers[0], withBufferSize: data.bufferSize)
         
         /*self.audioFile?.getWaveformDataWithCompletionBlock() {
@@ -255,33 +257,83 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     func invalidateButtons() {
         self.playButton.userInteractionEnabled = false
-        self.clearButton.userInteractionEnabled = false
-        self.stopButton.userInteractionEnabled = false
     }
     
     func validateButtons() {
         self.playButton.userInteractionEnabled = true
-        self.clearButton.userInteractionEnabled = true
-        self.stopButton.userInteractionEnabled = true
     }
     
-    func showTools(sender: AnyObject?) {
-        UIView.animateWithDuration(0.5, animations: { self.toolsView.frame = self.view.frame }) {
-            (completed: Bool) in
-            self.swipeArrow?.image = UIImage(named: "swipe_arrow")
-            self.swipeArrow?.removeGestureRecognizer(self.upTap!)
-            self.swipeArrow?.addGestureRecognizer(self.downTap!)
-            self.toolsView.scrollEnabled = true
+    // Custom alert view delegate
+    func customIOS7dialogButtonTouchUpInside(alertView: AnyObject!, clickedButtonAtIndex buttonIndex: Int) {
+        alertView.close()
+    }
+    
+    func alertView(alertView: UIAlertView, didDismissWithButtonIndex buttonIndex: Int) {
+        if alertView.title == "Set Time Signature" {
+            self.metronome!.textFieldDidEndEditing(alertView.textFieldAtIndex(0)!)
+            self.timeButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
+            
+        } else if alertView.title == "Set Tempo" {
+            self.metronome!.textFieldDidEndEditing(alertView.textFieldAtIndex(0)!)
+            self.tempoButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
         }
     }
     
-    func hideTools(sender: AnyObject?) {
-        UIView.animateWithDuration(0.5, animations: { self.toolsView.frame = self.toolsViewFrame! }) {
-            (completed: Bool) in
-            self.swipeArrow?.image = UIImage(named: "swipe_arrow_2")
-            self.swipeArrow?.removeGestureRecognizer(self.downTap!)
-            self.swipeArrow?.addGestureRecognizer(self.upTap!)
-            self.toolsView.scrollEnabled = false
+    func showVolume(sender: UIButton) {
+        let slider = UISlider(frame: CGRectZero)
+        slider.addTarget(self, action: "volumeDidChange:", forControlEvents: UIControlEvents.ValueChanged)
+        slider.value = self.metronome!.tickPlayer!.volume
+        
+        let title = UILabel(frame: CGRectZero)
+        title.text = "Set Volume"
+        title.textAlignment = NSTextAlignment.Center
+        
+        let metronomeView = CustomIOSAlertView(frame: CGRectZero)
+        metronomeView.buttonTitles = ["Close"]
+        metronomeView.addSubview(slider)
+        metronomeView.addSubview(title)
+        metronomeView.delegate = self
+        metronomeView.show()
+
+        slider.frame = CGRect(x: metronomeView.frame.midX, y: metronomeView.frame.midY, width: metronomeView.frame.width/1.5, height: 3.0)
+        title.frame = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 30.0)
+        title.center = CGPoint(x: metronomeView.center.x, y: metronomeView.center.y - 40.0)
+        slider.center = metronomeView.center
+        metronomeView.bringSubviewToFront(slider)
+        metronomeView.bringSubviewToFront(title)
+    }
+    
+    func showTime(sender: UIButton) {
+        if self.timeAlert == nil {
+            let alert = UIAlertView(title: "Set Time Signature", message: "", delegate: self, cancelButtonTitle: "Close")
+            alert.alertViewStyle = .PlainTextInput
+            alert.textFieldAtIndex(0)?.textAlignment = .Center
+            alert.textFieldAtIndex(0)?.text = self.timeButton.titleLabel?.text
+            self.metronome!.externalTimeSigFieldEdit(alert.textFieldAtIndex(0)!)
+            for i in 0...timeSignatureArray.count-1 {
+                if timeSignatureArray[i] == self.timeButton.titleLabel!.text! {
+                    self.metronome!.picker!.selectRow(i, inComponent: 0, animated: true)
+                }
+            }
+            alert.show()
+            self.timeAlert = alert
+        } else {
+            self.timeAlert!.show()
+        }
+    }
+    
+    func showTempo(sender: UIButton) {
+        if self.tempoAlert == nil {
+            let alert = UIAlertView(title: "Set Tempo", message: "", delegate: self, cancelButtonTitle: "Close")
+            alert.alertViewStyle = .PlainTextInput
+            alert.textFieldAtIndex(0)?.textAlignment = .Center
+            alert.textFieldAtIndex(0)?.text = self.tempoButton.titleLabel?.text
+            alert.textFieldAtIndex(0)?.keyboardType = .NumberPad
+            self.metronome!.externalTempoFieldEdit(alert.textFieldAtIndex(0)!)
+            alert.show()
+            self.tempoAlert = alert
+        } else {
+            self.tempoAlert!.show()
         }
     }
     
@@ -291,13 +343,13 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             [weak self] in
             self?.audioPlot.updateBuffer(buffer[0], withBufferSize: bufferSize)
             if self != nil && self!.recording {
-                var time = self!.recordingStartTime.timeIntervalSinceNow * -1
+                let time = self!.recordingStartTime.timeIntervalSinceNow * -1
                 var secondText = String(stringInterpolationSegment: Int(time))
                 if time < 10.0 {
                     secondText = "0\(secondText)"
                 }
                 var milliText = String(stringInterpolationSegment: time % 1)
-                milliText = milliText.substringWithRange(Range<String.Index>(start: advance(milliText.startIndex, 2), end: advance(milliText.startIndex, 4)))
+                milliText = milliText.substringWithRange(Range<String.Index>(start: milliText.startIndex.advancedBy(2), end: milliText.startIndex.advancedBy(4)))
                 self!.timeLabel.text = "\(secondText):\(milliText)"
             }
         }
@@ -322,7 +374,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             if time == 0 {
                 self.timeLabel.text = "00:00"
                 if self.audioFile != nil {
-                    self.play(nil)
+                    //self.play(nil)
+                    self.playButton.setImage(UIImage(named: "Play_2"), forState: .Normal)
                 }
                 return
             }
@@ -331,7 +384,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 secondText = "0\(secondText)"
             }
             var milliText = String(stringInterpolationSegment: time % 1)
-            milliText = milliText.substringWithRange(Range<String.Index>(start: advance(milliText.startIndex, 2), end: advance(milliText.startIndex, 4)))
+            milliText = milliText.substringWithRange(Range<String.Index>(start: milliText.startIndex.advancedBy(2), end: milliText.startIndex.advancedBy(4)))
             self.timeLabel.text = "\(secondText):\(milliText)"
         }
     }
@@ -350,14 +403,17 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             self.beat -= 1
             self.beatLabel!.text = "\(self.beat)"
         } else if self.beat == 1 {
+            
+            // Start recording
             self.drawRollingPlot()
             self.recorder = EZRecorder(URL: filePathURL(nil), clientFormat: self.microphone!.audioStreamBasicDescription(), fileType: EZRecorderFileType.M4A)
             self.microphone?.startFetchingAudio()
             self.recordingStartTime = NSDate()
             self.recording = true
             self.beat = 0
-            self.recordingCoverView.hidden = false
-            self.recordingCoverView.alpha = 0.7
+            //self.recordingCoverView.hidden = false
+            //self.recordingCoverView.alpha = 0.7
+            UIView.transitionWithView(self.recordButton.imageView!, duration: 0.5, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { self.recordButton.setImage(UIImage(named: "Record_stop"), forState: .Normal) }, completion: nil)
             UIView.animateWithDuration(0.3, animations: { self.countoffView!.alpha = 0.0 }) {
                 (completed: Bool) in
                 self.countoffView?.removeFromSuperview()
@@ -365,14 +421,18 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         }
     }
     
-    func timeFieldDidBeginEditing(metronome: Metronome) {
-        self.showTools(nil)
+    func muteMetronome(sender: UIButton) {
+        self.metronome!.muteAudio(nil)
+        if self.muted {
+            sender.setImage(UIImage(named: "metronome_2"), forState: .Normal)
+            self.muted = false
+        } else {
+            sender.setImage(UIImage(named: "metronome_black"), forState: .Normal)
+            self.muted = true
+        }
     }
     
-    func tempoFieldDidBeginEditing(metronome: Metronome) {
-        self.showTools(nil)
-    }
-    
+    /*
     // TableView Delegate
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("SwipeBar") as! SwipeBar
@@ -408,7 +468,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            var metronome = Metronome.createView()
+            let metronome = Metronome.createView()
             metronome.delegate = self
             metronome.backgroundColor = lightGray()
             self.metronome = metronome
@@ -423,6 +483,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             return 100.0
         }
         return 60.0
-    }
+    }*/
 
 }

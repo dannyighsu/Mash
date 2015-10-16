@@ -8,14 +8,14 @@
 
 import Foundation
 import UIKit
-import FBSDKCoreKit
-import FBSDKLoginKit
 
 class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDelegate {
     
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var handleField: UITextField!
+    
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +50,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        if textField.text.isEmpty {
+        if textField.text!.isEmpty {
             Debug.printl("Text field is empty", sender: self)
             return false
         }
@@ -88,60 +88,52 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
 
     // Check for length & validity of text fields
     func signUpAction(sender: AnyObject?) {
-        if ((count(self.handleField.text!) < 1) || (count(self.passwordField.text!) < 1)) {
-            self.raiseAlert("Username and Password must have at least 1 character.")
+        if (((self.handleField.text!).characters.count < 1) || ((self.passwordField.text!).characters.count < 1)) {
+            raiseAlert("Username and Password must have at least 1 character.", delegate: self)
             return
-        } else if ((count(self.handleField.text!) > 40 || (count(self.passwordField.text!) > 40))) {
-            self.raiseAlert("Username and Password must be less than 40 characters long.")
+        } else if (((self.handleField.text!).characters.count > 40 || ((self.passwordField.text!).characters.count > 40))) {
+            raiseAlert("Username and Password must be less than 40 characters long.", delegate: self)
             return
         } else if self.handleField.text!.rangeOfString(" ") != nil {
-            self.raiseAlert("Username cannot contain spaces.")
+            raiseAlert("Username cannot contain spaces.", delegate: self)
         }
 
-        var error: NSError? = nil
-        var regex = NSRegularExpression(pattern: ".*@.*", options: nil, error: &error)
-        let matches = regex?.numberOfMatchesInString(self.emailField.text, options: nil, range: NSMakeRange(0, count(self.emailField.text)))
+        var regex: NSRegularExpression?
+        do {
+            regex = try NSRegularExpression(pattern: ".*@.*", options: [])
+        } catch _ as NSError {
+            regex = nil
+        }
+        let matches = regex?.numberOfMatchesInString(self.emailField.text!, options: [], range: NSMakeRange(0, self.emailField.text!.characters.count))
         if matches != 1 {
-            self.raiseAlert("Invalid email format.")
+            raiseAlert("Invalid email format.", delegate: self)
             return
         }
         self.register()
     }
 
     func register() {
-        // Register with database
-        let passwordHash = hashPassword(self.passwordField.text)
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/register")!)
-        var params = ["handle": self.handleField.text!, "password_hash": passwordHash, "email": self.emailField.text!, "username": "", "register_agent": "0", "profile_pic_link": "", "banner_pic_link": ""] as Dictionary
-        httpPost(params, request) {
-            (data, statusCode, error) -> Void in
+        self.activityView.startAnimating()
+        let request = RegisterRequest()
+        request.handle = self.handleField.text!
+        request.passwordHash = hashPassword(self.passwordField.text!)
+        request.email = self.emailField.text!
+        request.name = ""
+        request.registerAgent = 0
+        server.registerWithRequest(request) {
+            (response, error) in
+            self.activityView.stopAnimating()
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
             } else {
-                Debug.printl("Response: \(data)", sender: self)
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("Error: \(error)", sender: self)
-                    return
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    return
-                } else if statusCode == HTTP_KEY_IN_USE {
-                    self.raiseAlert("Incorrect Username and/or Password.")
-                    return
-                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    var error: NSError? = nil
-                    var response = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary
-                    self.saveLoginItems()
-                    current_user = User()
-                    current_user.userid = response["id"] as? Int
-                    User.getUsersFollowing()
-                    User.updateSelf(nil)
-                    var alert = UIAlertView()
-                    self.raiseAlert("Success!", message: "Welcome to Mash.")
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                    return
-                }
+                Debug.printl("\(response.data())", sender: self)
+                self.saveLoginItems()
+                currentUser = User()
+                currentUser.userid = Int(response.userid)
+                currentUser.loginToken = response.loginToken
+                User.getUsersFollowing()
+                User.updateSelf(nil)
+                raiseAlert("Success!", delegate: self, message: "Welcome to Mash.")
             }
         }
     }
@@ -153,7 +145,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     }
     
     func saveLoginItems() {
-        Debug.printl("Saving user " + self.handleField.text + " to NSUserDefaults.", sender: self)
+        Debug.printl("Saving user " + self.handleField.text! + " to NSUserDefaults.", sender: self)
         NSUserDefaults.standardUserDefaults().setValue(self.handleField.text, forKey: "username")
         keychainWrapper.mySetObject(self.passwordField.text, forKey: kSecValueData)
         keychainWrapper.writeToKeychain()
@@ -168,27 +160,6 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         
         Debug.printl("User has successfully logged out - popping to root view controller.", sender: self)
         self.navigationController?.popToRootViewControllerAnimated(true)
-    }
-    
-    func raiseAlert(input: String) {
-        dispatch_async(dispatch_get_main_queue()) {
-            var alert = UIAlertView()
-            alert.title = input
-            alert.addButtonWithTitle("OK")
-            alert.delegate = self
-            alert.show()
-        }
-    }
-    
-    func raiseAlert(input: String, message: String) {
-        dispatch_async(dispatch_get_main_queue()) {
-            var alert = UIAlertView()
-            alert.title = input
-            alert.message = message
-            alert.addButtonWithTitle("OK")
-            alert.delegate = self
-            alert.show()
-        }
     }
 
 }

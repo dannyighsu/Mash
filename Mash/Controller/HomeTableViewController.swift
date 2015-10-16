@@ -13,6 +13,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     @IBOutlet var activityFeed: UITableView!
     var data: [HomeCell] = []
+    var displayData: [HomeCell] = []
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     
     override func viewDidLoad() {
@@ -41,7 +42,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.parentViewController?.navigationItem.title = "Mash"
-        self.retrieveTracks()
+        self.retrieveActivity()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -56,7 +57,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // TableView delegate
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.data.count
+        return self.displayData.count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -65,11 +66,12 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell") as! HomeCell
-        cell.eventLabel.text = self.data[indexPath.row].eventText
-        cell.userLabel.text = self.data[indexPath.row].userText
-        cell.timeLabel.text = self.data[indexPath.row].timeText
-        cell.timeLabel.text = cell.timeLabel.text!.substringWithRange(Range<String.Index>(start: cell.timeLabel.text!.startIndex, end: advance(cell.timeLabel.text!.endIndex, -13)))
-        self.data[indexPath.row].user!.profile_pic(cell.profileImage)
+        cell.eventLabel.text = self.displayData[indexPath.row].eventText
+        cell.userLabel.text = self.displayData[indexPath.row].userText
+        cell.timeLabel.text = self.displayData[indexPath.row].timeText
+        cell.user = self.displayData[indexPath.row].user
+        cell.timeLabel.text = parseTimeStamp(cell.timeLabel.text!)
+        self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
         cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFit
         cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
         cell.profileImage.layer.borderWidth = 0.5
@@ -79,19 +81,30 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! HomeCell
-        var user = User()
+        let user = User()
         user.handle = cell.userLabel.text
+        user.userid = cell.user!.userid
         User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == self.data.count - 1 {
+        if indexPath.row == self.displayData.count - 1 {
             self.loadNextData()
         }
     }
     
     func loadNextData() {
-        
+        let currentNumResults = self.displayData.count - 1
+        if currentNumResults == self.data.count - 1 {
+            return
+        }
+        for i in currentNumResults...currentNumResults + 15 {
+            if i >= self.data.count {
+                break
+            }
+            self.displayData.append(self.data[i])
+        }
+        self.activityFeed.reloadData()
     }
 
     // Check if project view exists in memory, if not, create one.
@@ -124,39 +137,49 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.navigationController?.pushViewController(search, animated: false)
     }
 
-    func retrieveTracks() {
+    func retrieveActivity() {
         self.activityView.startAnimating()
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/feed")!)
-        var params = ["handle": handle, "password_hash": passwordHash, "userid": String(current_user.userid!)] as Dictionary
-        httpPost(params, request) {
-            (data, statusCode, error) -> Void in
+        let request = FeedRequest()
+        request.user = UserRequest()
+        request.user.userid = UInt32(currentUser.userid!)
+        request.user.loginToken = currentUser.loginToken
+        
+        server.feedWithRequest(request) {
+            (response, error) in
             if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
+                Debug.printl("Error: \(error)", sender: nil)
             } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("HTTP Error: \(error)", sender: self)
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    
-                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    var error: NSError? = nil
-                    var response: AnyObject? = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error)
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.updateActivity(response as! NSDictionary)
-                    }
-                } else if statusCode == HTTP_SERVER_ERROR {
-                    Debug.printl("Internal server error.", sender: self)
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                }
+                print("done")
+                self.updateActivity(response)
             }
         }
     }
     
-    func updateActivity(data: NSDictionary) {
+    func updateActivity(response: FeedResponse) {
         self.data = []
+        self.displayData = []
+        
+        for i in 0...response.storyArray.count - 1 {
+            let recording = response.storyArray[i] as! RecordingResponse
+            let user = recording.handle
+            let title = recording.title
+            let time = recording.uploaded
+            let userid = recording.userid
+            let follower = User()
+            follower.handle = user
+            follower.userid = Int(userid)
+            let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower)
+            self.data.append(cell)
+            if i < DEFAULT_DISPLAY_AMOUNT {
+                self.displayData.append(cell)
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityFeed.reloadData()
+            self.activityView.stopAnimating()
+        }
+        /*self.data = []
         var activity = data["feed"] as! NSArray
         for item in activity {
             let type = item["type"] as! String
@@ -167,7 +190,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 let time = item["timestamp"] as! String
                 var user = User()
                 user.handle = follower
-                user.profile_pic_key = "\(user.handle!)~~profile_pic.jpg"
+                user.profilePicKey = "\(user.handle!)~~profile_pic.jpg"
                 let cell = HomeCell(frame: CGRectZero, eventText: event, userText: follower, timeText: time, user: user)
                 self.data.append(cell)
             } else if type == "recording" {
@@ -177,13 +200,13 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 let event = "\(recording)"
                 var follower = User()
                 follower.handle = user
-                follower.profile_pic_key = "\(follower.handle!)~~profile_pic.jpg"
+                follower.profilePicKey = "\(follower.handle!)~~profile_pic.jpg"
                 let cell = HomeCell(frame: CGRectZero, eventText: event, userText: user, timeText: time, user: follower)
                 self.data.append(cell)
             }
         }
         self.activityFeed.reloadData()
-        self.activityView.stopAnimating()
+        self.activityView.stopAnimating()*/
     }
     
     override func didReceiveMemoryWarning() {

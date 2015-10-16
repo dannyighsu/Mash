@@ -1,6 +1,0 @@
-framework module FBSDKLoginKit {
-  umbrella header "Pods-Mash-FBSDKLoginKit-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -1,0 +1,196 @@
+syntax = "proto2";
+option cc_generic_services = false;
+
+package mash.mashservice;
+
+message RegisterRequest {
+    required string handle = 1;
+    required string email = 2;
+    required string password_hash = 3;
+    required string name = 4;
+    optional int32  register_agent = 5;
+}
+
+message RegisterResponse {
+    required string login_token = 1;
+    required uint32 userid = 2;
+}
+
+message SignInRequest {
+	required string handle = 1;
+	required string password_hash = 2;
+}
+
+message SignInResponse {
+    optional uint32 userid = 1;
+    optional string email = 2;
+    optional string name = 3;
+    optional uint32 register_agent = 4;
+    optional string user_description = 7;
+    required string login_token = 8;
+    optional uint32 followers_count = 9;
+    optional uint32 following_count = 10;
+    optional uint32 track_count = 11;
+}
+
+message UserResponse {
+    required string handle = 1;
+    optional string email = 2;
+    optional string name = 3;
+    optional string user_description = 4;
+    optional uint32 followers_count = 5;
+    optional uint32 following_count = 6;
+    optional uint32 track_count = 7;
+    optional bool 	follow = 8;
+}
+
+message RecordingRequest {
+    required string login_token = 1;
+    required uint32 userid = 2;
+    required uint32 recid = 3;
+}
+
+message RecordingResponse {
+    required string title = 1;
+    optional uint32 bpm = 2;
+    optional uint32 bar = 3;
+    optional string key = 4;
+    repeated string instrument = 5;
+    repeated string family = 6;
+    repeated string genre = 7;
+    repeated string subgenre = 8;
+    optional uint32 feel = 9;
+    optional bool   solo = 10;
+    optional string uploaded = 11;
+    optional string format = 12;
+    optional uint32 play_count = 13;
+    optional uint32 like_count = 14;
+    optional uint32 recid = 15;
+    optional uint32 userid = 16;
+    optional string handle = 17;
+}
+
+message UserRecordingsResponse {
+    repeated RecordingResponse rec = 1;
+}
+
+message FollowGetResponse {
+    repeated UserPreview user = 1;
+}
+
+
+message UserPreview {
+    required uint32 userid = 1;
+    required string handle = 2;
+    required string name = 3;
+}
+
+message UserRequest {
+    required string login_token = 1;
+    required uint32 userid = 2;
+    optional uint32 query_userid = 3;
+}
+
+message RecordingUploadRequest {
+    required uint32 userid = 1;
+    required string login_token = 2;
+    required string title = 3;
+    optional uint32 bpm = 4;
+    optional uint32 bar = 5;
+    optional string key = 6;
+    repeated string instrument = 7;
+    repeated string family = 8;
+    repeated string genre = 9;
+    repeated string subgenre = 10;
+    optional uint32 feel = 11;
+    optional bool   solo = 12;
+    optional string format = 13;
+}
+
+message RecordingUpdateRequest {
+    required uint32 userid = 1;
+    required string login_token = 2;
+    required uint32 recid = 3;
+    optional string title = 4;
+    repeated string instrument = 5;
+    repeated string family = 6;
+    repeated string genre = 7;
+    repeated string subgenre = 8;
+    optional uint32 feel = 9;
+    optional bool   solo = 10;
+}
+
+message SuccessResponse {
+    required bool success = 1;
+}
+
+message RecordingSearchRequest {
+    required string login_token = 1;
+    required uint32 userid = 2;
+    required string query = 3;
+}
+
+message UserUpdateRequest {
+    required uint32 userid = 1;
+    required string login_token = 2;
+    optional string email = 3;
+    optional string password_hash = 4;
+    optional string name = 5;
+    optional string user_description = 6;
+}
+
+message FeedResponse {
+    repeated RecordingResponse story = 1;
+    //repeated FeedStory story = 1;
+}
+
+message FeedRequest {
+    required UserRequest user = 1;
+    optional uint32      scroll  = 2;
+}
+
+message FeedStory {
+    required RecordingResponse recording = 1;
+    required UserPreview user = 2;
+}
+
+message SearchTagRequest {
+    required uint32 userid = 1;
+    required string login_token = 2;
+    optional uint32 lBpm = 3;
+    optional uint32 hBpm = 4;
+    optional uint32 bar = 5;
+    optional string key = 6;
+    repeated string instrument = 7;
+    repeated string family = 8;
+    repeated string genre = 9;
+    repeated string subgenre = 10;
+    optional bool   solo = 11;
+}
+
+message Recordings {
+    repeated RecordingResponse recording = 1;
+}
+
+service MashService {
+    rpc Register (RegisterRequest) returns (RegisterResponse);
+    rpc SignIn (SignInRequest) returns (SignInResponse);
+    rpc SignOut (UserRequest) returns (SuccessResponse);
+    rpc UserGet (UserRequest) returns (UserResponse);
+    rpc RecordingGet (RecordingRequest) returns (RecordingResponse);
+    rpc FollowersGet (UserRequest) returns (FollowGetResponse);
+    rpc FollowingsGet (UserRequest) returns (FollowGetResponse);
+    rpc UserDelete (UserRequest) returns (SuccessResponse);
+    rpc RecordingDelete (RecordingRequest) returns (SuccessResponse);
+    rpc UserFollow (UserRequest) returns (SuccessResponse);
+    rpc UserUnfollow (UserRequest) returns (SuccessResponse);
+    rpc RecordingUpload (RecordingUploadRequest) returns (SuccessResponse);
+    rpc RecordingPlay (RecordingRequest) returns (SuccessResponse);
+    rpc RecordingLike (RecordingRequest) returns (SuccessResponse);
+    rpc RecordingUnlike (RecordingRequest) returns (SuccessResponse);
+    rpc RecordingUpdate (RecordingUpdateRequest) returns (SuccessResponse);
+    rpc UserUpdate (UserUpdateRequest) returns (SuccessResponse);
+    rpc UserRecordings (UserRequest) returns (UserRecordingsResponse);
+    rpc Feed (FeedRequest) returns (FeedResponse);
+    rpc SearchTag (SearchTagRequest) returns (Recordings);
+}

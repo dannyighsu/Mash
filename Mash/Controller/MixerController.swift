@@ -15,13 +15,13 @@ class MixerController: UIViewController, UITableViewDelegate, UITableViewDataSou
     var audioPlayer: ProjectPlayer
     
     // Should never be called
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         self.audioPlayer = ProjectPlayer()
         super.init(coder: aDecoder)
     }
     
     convenience init(coder aDecoder: NSCoder, audioPlayer: ProjectPlayer) {
-        self.init(coder: aDecoder)
+        self.init(coder: aDecoder)!
         self.audioPlayer = audioPlayer
     }
     

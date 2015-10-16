@@ -28,8 +28,8 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     var delegate: MetronomeDelegate?
     var duration: CGFloat
     var soundPlayerThread: NSThread?
-    var tickPlayer: AVAudioPlayer
-    var tockPlayer: AVAudioPlayer
+    var tickPlayer: AVAudioPlayer?
+    var tockPlayer: AVAudioPlayer?
     var timeSignature: [Int]
     var beat: Int
     var isPlaying: Bool
@@ -37,8 +37,9 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     var previousVolume: Float = 0.8
     var wasManuallyTriggered: Bool = false
     var timer: CADisplayLink? = nil
+    var picker: UIPickerView? = nil
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         self.duration = 0.50
         self.timeSignature = [4, 4]
         self.soundPlayerThread = nil
@@ -46,12 +47,22 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         self.isPlaying = false
         self.muted = false
         
-        var tickURL = NSBundle.mainBundle().URLForResource("tick", withExtension: ".caf")
-        var tockURL = NSBundle.mainBundle().URLForResource("tock", withExtension: ".caf")
+        let tickURL = NSBundle.mainBundle().URLForResource("tick", withExtension: ".caf")
+        let tockURL = NSBundle.mainBundle().URLForResource("tock", withExtension: ".caf")
         var error:NSError? = nil
         
-        self.tickPlayer = AVAudioPlayer(contentsOfURL: tickURL, error: &error)
-        self.tockPlayer = AVAudioPlayer(contentsOfURL: tockURL, error: &error)
+        do {
+            self.tickPlayer = try AVAudioPlayer(contentsOfURL: tickURL!)
+        } catch let error1 as NSError {
+            error = error1
+            self.tickPlayer = nil
+        }
+        do {
+            self.tockPlayer = try AVAudioPlayer(contentsOfURL: tockURL!)
+        } catch let error1 as NSError {
+            error = error1
+            self.tockPlayer = nil
+        }
         
         if error != nil {
             Debug.printl("Audio player error: \(error!.localizedDescription)", sender: "Metronome")
@@ -75,18 +86,19 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         metronome.tempoSlider.value = 120
         metronome.speakerImage.addTarget(metronome, action: "muteAudio:", forControlEvents: UIControlEvents.TouchDown)
         
-        var picker = UIPickerView(frame: CGRectZero)
+        let picker = UIPickerView(frame: CGRectZero)
         picker.delegate = metronome
         picker.dataSource = metronome
         picker.backgroundColor = lightGray()
+        metronome.picker = picker
 
         metronome.timeSigField.inputView = picker
         return metronome
     }
     
     @IBAction func volumeDidChange(sender: UISlider) {
-        self.tickPlayer.volume = sender.value
-        self.tockPlayer.volume = sender.value
+        self.tickPlayer!.volume = sender.value
+        self.tockPlayer!.volume = sender.value
         if sender.value == 0 {
             self.speakerImage.setImage(UIImage(named: "speaker_white_2"), forState: UIControlState.Normal)
         } else {
@@ -113,16 +125,25 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     // Text Field Delegate
     func textFieldDidEndEditing(textField: UITextField) {
         if textField == self.tempoField {
-            var input = self.tempoField.text
-            
-            if count(input) == 0 {
+            let input = self.tempoField.text
+            if input!.characters.count == 0 {
                 let originalValue = Int(60.0 / Double(self.duration))
                 self.tempoField.text = String(stringInterpolationSegment: originalValue)
                 return
             }
             
-            var value = input.toInt()
+            let value = Int(input!)
             self.setTempo(value!)
+        } else if textField == self.timeSigField {
+            let value = textField.text!
+            if value == "None" {
+                self.timeSignature[0] = 1
+                self.timeSignature[1] = 4
+            } else {
+                var valSplit = value.characters.split {$0 == "/"}.map { String($0) }
+                self.timeSignature[0] = Int(valSplit[0])!
+                self.timeSignature[1] = Int(valSplit[1])!
+            }
         }
     }
     
@@ -136,20 +157,15 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
 
     // Picker View Delegate
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        var value = timeSignatureArray[row]
+        let value = timeSignatureArray[row]
         if value == "None" {
-            self.timeSignature[0] = 1
-            self.timeSignature[1] = 4
             self.timeSigField.text = "None"
         } else {
-            var valSplit = split(value) {$0 == "/"}
-            self.timeSignature[0] = valSplit[0].toInt()!
-            self.timeSignature[1] = valSplit[1].toInt()!
             self.timeSigField.text = value
         }
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return timeSignatureArray[row]
     }
     
@@ -159,6 +175,16 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1
+    }
+    
+    // For external fields
+    func externalTimeSigFieldEdit(editedField: UITextField) {
+        editedField.inputView = self.picker
+        self.timeSigField = editedField
+    }
+    
+    func externalTempoFieldEdit(editedField: UITextField) {
+        self.tempoField = editedField
     }
     
     // Metronome functions
@@ -202,7 +228,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
             dispatch_async(dispatch_get_global_queue(priority, 0)) {
                 self.playSound()
             }
-            var curtainTime: NSDate = NSDate(timeIntervalSinceNow: NSTimeInterval(self.duration))
+            let curtainTime: NSDate = NSDate(timeIntervalSinceNow: NSTimeInterval(self.duration))
             var currentTime: NSDate = NSDate()
             
             while (continuePlaying && currentTime.compare(curtainTime) != NSComparisonResult.OrderedDescending) {
@@ -221,19 +247,19 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
             }
         }
         if self.beat == 0 {
-            self.tickPlayer.stop()
-            self.tickPlayer.currentTime = 0
-            self.tickPlayer.play()
+            self.tickPlayer!.stop()
+            self.tickPlayer!.currentTime = 0
+            self.tickPlayer!.play()
             self.beat += 1
         } else if self.beat == self.timeSignature[0] - 1 {
-            self.tockPlayer.stop()
-            self.tockPlayer.currentTime = 0
-            self.tockPlayer.play()
+            self.tockPlayer!.stop()
+            self.tockPlayer!.currentTime = 0
+            self.tockPlayer!.play()
             self.beat = 0
         } else {
-            self.tockPlayer.stop()
-            self.tockPlayer.currentTime = 0
-            self.tockPlayer.play()
+            self.tockPlayer!.stop()
+            self.tockPlayer!.currentTime = 0
+            self.tockPlayer!.play()
             self.beat += 1
         }
     }

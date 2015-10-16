@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		3711F0A31B6FFD9D00C75F2B /* AudioModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3711F0A21B6FFD9D00C75F2B /* AudioModule.mm */; };
 		3718EF291B57071D00AA5D26 /* Objective-C.h in Headers */ = {isa = PBXBuildFile; fileRef = 3718EF271B57071D00AA5D26 /* Objective-C.h */; };
-		3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718EF281B57071D00AA5D26 /* Objective-C.m */; };
+		3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718EF281B57071D00AA5D26 /* Objective-C.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		371F14C71B8D23550044BE5B /* mashservice.proto in Resources */ = {isa = PBXBuildFile; fileRef = 371F14C61B8D23550044BE5B /* mashservice.proto */; };
 		371F863D1B67062F00BCBEDD /* MixerChannel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 371F863C1B67062F00BCBEDD /* MixerChannel.xib */; };
 		371F863F1B6708D900BCBEDD /* MixerChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F863E1B6708D900BCBEDD /* MixerChannel.swift */; };
 		3722ACE81B4DEDDE008473C3 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */; };
@@ -24,6 +25,10 @@
 		373F0F021B3DEFC500DE92AB /* tock.caf in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFB1B3DEFC500DE92AB /* tock.caf */; };
 		373F0F031B3DEFC500DE92AB /* Violins 1.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */; };
 		374CEFD71B508552007A7557 /* RecordToolsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374CEFD61B508552007A7557 /* RecordToolsController.swift */; };
+		376CA7771B8BDCA000ADD1E2 /* Mashservice.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 376CA7731B8BDCA000ADD1E2 /* Mashservice.pbobjc.h */; };
+		376CA7781B8BDCA000ADD1E2 /* Mashservice.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 376CA7741B8BDCA000ADD1E2 /* Mashservice.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		376CA7791B8BDCA000ADD1E2 /* Mashservice.pbrpc.h in Headers */ = {isa = PBXBuildFile; fileRef = 376CA7751B8BDCA000ADD1E2 /* Mashservice.pbrpc.h */; };
+		376CA77A1B8BDCA000ADD1E2 /* Mashservice.pbrpc.m in Sources */ = {isa = PBXBuildFile; fileRef = 376CA7761B8BDCA000ADD1E2 /* Mashservice.pbrpc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		3770CED51B6AB46600A79F3A /* libSuperpoweredAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3770CED41B6AB46600A79F3A /* libSuperpoweredAudio.a */; };
 		3782615C1B4B139400FC89A0 /* ProjectPlayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3782615B1B4B139400FC89A0 /* ProjectPlayer.xib */; };
 		3782615E1B4B140C00FC89A0 /* ProjectPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3782615D1B4B140C00FC89A0 /* ProjectPlayer.swift */; };
@@ -104,7 +109,7 @@
 		37E799F11B3CC1D000D2E54D /* Channel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D71B3CC1D000D2E54D /* Channel.xib */; };
 		37E799F21B3CC1D000D2E54D /* Track.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D81B3CC1D000D2E54D /* Track.xib */; };
 		37E799FC1B3CC1F600D2E54D /* KeychainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E799F51B3CC1F600D2E54D /* KeychainWrapper.m */; };
-		F183417BACCA4D316DF84567 /* Pods_Mash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8DF6AC8CCE7D187FEEE8D82 /* Pods_Mash.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		EDBAE700D5BBFB5785DF766E /* libPods-Mash.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B37CA755709BC5D0E106BC64 /* libPods-Mash.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +126,7 @@
 		3711F0A21B6FFD9D00C75F2B /* AudioModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioModule.mm; sourceTree = "<group>"; };
 		3718EF271B57071D00AA5D26 /* Objective-C.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Objective-C.h"; sourceTree = "<group>"; };
 		3718EF281B57071D00AA5D26 /* Objective-C.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Objective-C.m"; sourceTree = "<group>"; };
+		371F14C61B8D23550044BE5B /* mashservice.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mashservice.proto; path = protos/mashservice.proto; sourceTree = SOURCE_ROOT; };
 		371F863C1B67062F00BCBEDD /* MixerChannel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MixerChannel.xib; sourceTree = "<group>"; };
 		371F863E1B6708D900BCBEDD /* MixerChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MixerChannel.swift; sourceTree = "<group>"; };
 		3722ACE71B4DEDDE008473C3 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
@@ -135,6 +141,10 @@
 		373F0EFB1B3DEFC500DE92AB /* tock.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = tock.caf; sourceTree = "<group>"; };
 		373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Violins 1.aif"; sourceTree = "<group>"; };
 		374CEFD61B508552007A7557 /* RecordToolsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordToolsController.swift; sourceTree = "<group>"; };
+		376CA7731B8BDCA000ADD1E2 /* Mashservice.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mashservice.pbobjc.h; path = protos/Mashservice.pbobjc.h; sourceTree = SOURCE_ROOT; };
+		376CA7741B8BDCA000ADD1E2 /* Mashservice.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Mashservice.pbobjc.m; path = protos/Mashservice.pbobjc.m; sourceTree = SOURCE_ROOT; };
+		376CA7751B8BDCA000ADD1E2 /* Mashservice.pbrpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mashservice.pbrpc.h; path = protos/Mashservice.pbrpc.h; sourceTree = SOURCE_ROOT; };
+		376CA7761B8BDCA000ADD1E2 /* Mashservice.pbrpc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Mashservice.pbrpc.m; path = protos/Mashservice.pbrpc.m; sourceTree = SOURCE_ROOT; };
 		3770CED41B6AB46600A79F3A /* libSuperpoweredAudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSuperpoweredAudio.a; sourceTree = "<group>"; };
 		3782615B1B4B139400FC89A0 /* ProjectPlayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectPlayer.xib; sourceTree = "<group>"; };
 		3782615D1B4B140C00FC89A0 /* ProjectPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectPlayer.swift; sourceTree = "<group>"; };
@@ -223,9 +233,9 @@
 		37E799F51B3CC1F600D2E54D /* KeychainWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainWrapper.m; sourceTree = "<group>"; };
 		65A069C569B0565C12B1DE57 /* Pods-Mash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mash.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mash/Pods-Mash.debug.xcconfig"; sourceTree = "<group>"; };
 		8E5C7599631EC276A2A7DA6C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B37CA755709BC5D0E106BC64 /* libPods-Mash.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mash.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC856ADAFC521A5BEAA61FB7 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		E4E894392ADA22295075FEFC /* Pods-Mash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mash.release.xcconfig"; path = "Pods/Target Support Files/Pods-Mash/Pods-Mash.release.xcconfig"; sourceTree = "<group>"; };
-		E8DF6AC8CCE7D187FEEE8D82 /* Pods_Mash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,8 +243,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F183417BACCA4D316DF84567 /* Pods_Mash.framework in Frameworks */,
 				3770CED51B6AB46600A79F3A /* libSuperpoweredAudio.a in Frameworks */,
+				EDBAE700D5BBFB5785DF766E /* libPods-Mash.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +270,18 @@
 				373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */,
 			);
 			path = Audio;
+			sourceTree = "<group>";
+		};
+		376CA7721B8BDC7B00ADD1E2 /* Server */ = {
+			isa = PBXGroup;
+			children = (
+				371F14C61B8D23550044BE5B /* mashservice.proto */,
+				376CA7731B8BDCA000ADD1E2 /* Mashservice.pbobjc.h */,
+				376CA7741B8BDCA000ADD1E2 /* Mashservice.pbobjc.m */,
+				376CA7751B8BDCA000ADD1E2 /* Mashservice.pbrpc.h */,
+				376CA7761B8BDCA000ADD1E2 /* Mashservice.pbrpc.m */,
+			);
+			name = Server;
 			sourceTree = "<group>";
 		};
 		37A3C2BB1B3CC00600F77F2A = {
@@ -294,6 +316,7 @@
 				37A3C2D21B3CC00600F77F2A /* LaunchScreen.xib */,
 				37A3C2CD1B3CC00600F77F2A /* Main.storyboard */,
 				37E799F31B3CC1F600D2E54D /* Objective-C */,
+				376CA7721B8BDC7B00ADD1E2 /* Server */,
 				37A3C2C71B3CC00600F77F2A /* Supporting Files */,
 				37E799CD1B3CC1D000D2E54D /* XIB */,
 			);
@@ -461,7 +484,7 @@
 		9E4DCA1CF72F167AB114291D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E8DF6AC8CCE7D187FEEE8D82 /* Pods_Mash.framework */,
+				B37CA755709BC5D0E106BC64 /* libPods-Mash.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -482,7 +505,9 @@
 				37C12E241B69797300A4E3A3 /* SuperpoweredWhoosh.h in Headers */,
 				37C12E1E1B69797300A4E3A3 /* SuperpoweredRecorder.h in Headers */,
 				37C12E191B69797300A4E3A3 /* SuperpoweredFX.h in Headers */,
+				376CA7791B8BDCA000ADD1E2 /* Mashservice.pbrpc.h in Headers */,
 				3718EF291B57071D00AA5D26 /* Objective-C.h in Headers */,
+				376CA7771B8BDCA000ADD1E2 /* Mashservice.pbobjc.h in Headers */,
 				37C12E201B69797300A4E3A3 /* SuperpoweredReverb.h in Headers */,
 				37C12E211B69797300A4E3A3 /* SuperpoweredRoll.h in Headers */,
 				37C12E111B69797300A4E3A3 /* SuperpoweredAudioBuffers.h in Headers */,
@@ -506,12 +531,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 37A3C2E31B3CC00600F77F2A /* Build configuration list for PBXNativeTarget "Mash" */;
 			buildPhases = (
-				373F0F061B3E0A6900DE92AB /* Headers */,
 				614E7FAD15FE5D9D673AEA95 /* Check Pods Manifest.lock */,
+				373F0F061B3E0A6900DE92AB /* Headers */,
 				37A3C2C01B3CC00600F77F2A /* Sources */,
 				37A3C2C11B3CC00600F77F2A /* Frameworks */,
 				37A3C2C21B3CC00600F77F2A /* Resources */,
-				9EF959724F37EC28A5723B2B /* Embed Pods Frameworks */,
 				5971647D680A39E7A81B0F88 /* Copy Pods Resources */,
 			);
 			buildRules = (
@@ -547,12 +571,19 @@
 		37A3C2BC1B3CC00600F77F2A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Mash;
 				TargetAttributes = {
 					37A3C2C31B3CC00600F77F2A = {
 						CreatedOnToolsVersion = 6.3.2;
 						DevelopmentTeam = AA375B8UFT;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					37A3C2D81B3CC00600F77F2A = {
 						CreatedOnToolsVersion = 6.3.2;
@@ -593,6 +624,7 @@
 				37E799EC1B3CC1D000D2E54D /* InstrumentCell.xib in Resources */,
 				3782615C1B4B139400FC89A0 /* ProjectPlayer.xib in Resources */,
 				37C12E261B69876E00A4E3A3 /* ShareView.xib in Resources */,
+				371F14C71B8D23550044BE5B /* mashservice.proto in Resources */,
 				37E799F21B3CC1D000D2E54D /* Track.xib in Resources */,
 				37DE77251B436F4A00952987 /* User.xib in Resources */,
 				373F0F011B3DEFC500DE92AB /* tick.caf in Resources */,
@@ -652,21 +684,6 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		9EF959724F37EC28A5723B2B /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Mash/Pods-Mash-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -683,6 +700,7 @@
 				37E799DB1B3CC1D000D2E54D /* HelperData.swift in Sources */,
 				37E799E51B3CC1D000D2E54D /* Channel.swift in Sources */,
 				37E799AE1B3CC1C600D2E54D /* NavigationController.swift in Sources */,
+				376CA7781B8BDCA000ADD1E2 /* Mashservice.pbobjc.m in Sources */,
 				37E799DC1B3CC1D000D2E54D /* HelperFunctions.swift in Sources */,
 				37E799E01B3CC1D000D2E54D /* InstrumentCell.swift in Sources */,
 				37E799D91B3CC1D000D2E54D /* Debug.swift in Sources */,
@@ -721,6 +739,7 @@
 				37E799AA1B3CC1C600D2E54D /* ImportViewController.swift in Sources */,
 				3722ACEC1B4DF1FF008473C3 /* ImageCell.swift in Sources */,
 				37C12E1C1B69797300A4E3A3 /* SuperpoweredIOSAudioOutput.mm in Sources */,
+				376CA77A1B8BDCA000ADD1E2 /* Mashservice.pbrpc.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -784,7 +803,8 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "./**";
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = .;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -803,9 +823,9 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"./**",
+					.,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -837,7 +857,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "./**";
+				FRAMEWORK_SEARCH_PATHS = .;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -849,9 +869,9 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"./**",
+					.,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "Pods/Headers/Public/**";
@@ -867,14 +887,15 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$PODS_FRAMEWORK_BUILD_PATH\"",
 					"\"$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.7.1\"",
 					"\"$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.7.1\"",
 				);
 				GCC_INPUT_FILETYPE = automatic;
 				INFOPLIST_FILE = Mash/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -884,12 +905,10 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
-					"-framework",
-					"\"EZAudio\"",
-					"-framework",
-					"\"CryptoSwift\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Mash.$(PRODUCT_NAME:rfc1034identifier)WithMe";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mash/Mash-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = Pods/Headers/Public;
@@ -904,14 +923,15 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$PODS_FRAMEWORK_BUILD_PATH\"",
 					"\"$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.7.1\"",
 					"\"$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.7.1\"",
 				);
 				GCC_INPUT_FILETYPE = automatic;
 				INFOPLIST_FILE = Mash/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -921,12 +941,10 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
-					"-framework",
-					"\"EZAudio\"",
-					"-framework",
-					"\"CryptoSwift\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Mash.$(PRODUCT_NAME:rfc1034identifier)WithMe";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mash/Mash-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = Pods/Headers/Public;
@@ -947,6 +965,7 @@
 				);
 				INFOPLIST_FILE = MashTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Mash.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mash.app/Mash";
 			};
@@ -962,6 +981,7 @@
 				);
 				INFOPLIST_FILE = MashTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Mash.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mash.app/Mash";
 			};

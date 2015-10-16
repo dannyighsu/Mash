@@ -9,20 +9,22 @@
 import Foundation
 import UIKit
 import AVFoundation
-import EZAudio
 import Photos
+import QuartzCore
 
 class DashboardController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate {
     
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
     var audioPlayer: AVAudioPlayer? = nil
-    var user: User = current_user
+    var user: User = currentUser
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tracks.delegate = self
         self.tracks.dataSource = self
+        self.tracks.backgroundColor = darkGray()
+        self.tracks.separatorStyle = .None
         
         // Register profile and track nibs
         let profile = UINib(nibName: "Profile", bundle: nil)
@@ -36,11 +38,12 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if self.user != current_user {
+        if self.user != currentUser {
             self.parentViewController?.navigationItem.setHidesBackButton(false, animated: false)
-            self.navigationItem.title = self.user.display_name()
+            self.navigationItem.title = "Profile"
         } else {
-            self.parentViewController?.navigationItem.title = self.user.display_name()
+            self.parentViewController?.navigationItem.title = "Profile"
+            User.updateSelf(self)
         }
         self.retrieveTracks()
     }
@@ -49,6 +52,25 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidAppear(animated)
         let value = UIInterfaceOrientation.Portrait.rawValue
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
+        var editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "goToSettings:")
+        if self.user.handle != currentUser.handle {
+            var following: Bool = false
+            for u in userFollowing {
+                if u.handle! == self.user.handle! {
+                    following = true
+                }
+            }
+            if following {
+                editButton = UIBarButtonItem(title: "Unfollow", style: .Plain, target: self, action: "unfollow:")
+            } else {
+                editButton = UIBarButtonItem(title: "Follow", style: .Plain, target: self, action: "follow:")
+            }
+        }
+        if self.user == currentUser {
+            self.parentViewController?.navigationItem.rightBarButtonItem = editButton
+        } else {
+            self.navigationItem.rightBarButtonItem = editButton
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -57,10 +79,15 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             self.audioPlayer!.stop()
         }
         self.parentViewController?.navigationItem.setHidesBackButton(true, animated: false)
+        if self.user == currentUser {
+            self.parentViewController?.navigationItem.rightBarButtonItem = nil
+        } else {
+            self.navigationItem.rightBarButtonItem = nil
+        }
     }
     
-    override func supportedInterfaceOrientations() -> Int {
-        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.Portrait
     }
     
     // Table View Delegate
@@ -75,19 +102,24 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let track = tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
         let index = indexPath.row
-        track.backgroundColor = offWhite()
+        track.backgroundColor = UIColor.clearColor()
+        track.instrumentImage.backgroundColor = UIColor(red: 200, green: 200, blue: 200, alpha: 0.6)
+        track.userLabel.textColor = UIColor.whiteColor()
+        track.title.textColor = UIColor.whiteColor()
         track.title.text = self.data[index].titleText
         track.titleText = track.title.text!
         track.format = self.data[index].format
         track.userText = self.data[index].userText
         track.userLabel.text = track.userText
         track.instruments = self.data[index].instruments
+        track.instrumentFamilies = self.data[index].instrumentFamilies
         track.trackURL = self.data[index].trackURL
         track.bpm = self.data[index].bpm
         track.instrumentImage.image = findImage(track.instrumentFamilies)
         track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
         track.activityView.startAnimating()
-        download(getS3WaveformKey(track), filePathURL(getS3WaveformKey(track)), waveform_bucket) {
+        
+        download(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket) {
             (result) in
             dispatch_async(dispatch_get_main_queue()) {
                 track.activityView.stopAnimating()
@@ -116,44 +148,29 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         header.followerCount.layer.borderWidth = 0.2
         header.followingCount.layer.borderWidth = 0.2
         header.trackCount.layer.borderWidth = 0.2
-        header.descriptionLabel.layer.borderWidth = 0.2
+        //header.descriptionLabel.layer.borderWidth = 0.2
         
-        if self.user.handle != current_user.handle {
-            var following: Bool = false
-            for u in user_following {
-                if u.handle! == self.user.handle! {
-                    following = true
-                }
-            }
-            if following {
-                header.editButton.setTitle("Unfollow", forState: UIControlState.Normal)
-                header.editButton.backgroundColor = lightGray()
-                header.editButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
-            } else {
-                header.editButton.setTitle("Follow", forState: UIControlState.Normal)
-                header.editButton.backgroundColor = lightBlue()
-                header.editButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
-            }
-            header.editButton.titleLabel!.textAlignment = .Center
-        } else {
-            header.editButton.setTitle("Edit Profile", forState: UIControlState.Normal)
-            header.editButton.addTarget(self, action: "goToSettings:", forControlEvents: UIControlEvents.TouchUpInside)
-        }
+        header.editButton.setTitle(self.user.display_name(), forState: .Normal)
+        // TODO: implement
+        header.locationButon.setTitle("Berkeley, CA", forState: .Normal)
         
         let tap1 = UITapGestureRecognizer(target: self, action: "goToFollowers:")
         header.followerCount.addGestureRecognizer(tap1)
         let tap2 = UITapGestureRecognizer(target: self, action: "goToFollowing:")
         header.followingCount.addGestureRecognizer(tap2)
         
-        self.user.banner_pic(header.bannerImage)
-        self.user.profile_pic(header.profilePic)
-        var followers = NSMutableAttributedString(string: "  \(self.user.followers!)\n  FOLLOWERS")
-        header.followerCount.attributedText = followers
-        var following = NSMutableAttributedString(string: "  \(self.user.following!)\n  FOLLOWING")
-        header.followingCount.attributedText = following
-        var tracks = NSMutableAttributedString(string: "  \(self.user.tracks!)\n  TRACKS")
-        header.trackCount.attributedText = tracks
-        header.descriptionLabel.text = "  \(self.user.user_description!)"
+        self.user.setBannerPic(header.bannerImage)
+        self.user.setProfilePic(header.profilePic)
+        header.followerCount.text = "  \(self.user.followers!)\n  FOLLOWERS"
+        header.followingCount.text = "  \(self.user.following!)\n  FOLLOWING"
+        header.trackCount.text = "  \(self.user.tracks!)\n  TRACKS"
+        //header.descriptionLabel.text = "  \(self.user.userDescription!)"
+        
+        // Add gradient to banner
+        let gradient: CAGradientLayer = CAGradientLayer()
+        gradient.frame = header.bounds
+        gradient.colors = [UIColor.clearColor().CGColor, UIColor.clearColor().CGColor, darkGray().CGColor]
+        header.bannerImage.layer.insertSublayer(gradient, atIndex: 0)
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -173,14 +190,14 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
         
         track.activityView.startAnimating()
-        download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
+        download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
             (result) in
             dispatch_async(dispatch_get_main_queue()) {
                 track.activityView.stopAnimating()
                 tableView.deselectRowAtIndexPath(indexPath, animated: true)
                 if result != nil {
                     track.generateWaveform()
-                    self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
+                    self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
                     self.audioPlayer!.play()
                     Debug.printl("Playing track \(track.titleText)", sender: self)
                 }
@@ -193,7 +210,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if self.user != current_user {
+        if self.user != currentUser {
             return
         }
         if editingStyle == UITableViewCellEditingStyle.Delete {
@@ -203,8 +220,21 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
 
     // Track management
     func retrieveTracks() {
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+        let request = UserRequest()
+        request.userid = UInt32(self.user.userid!)
+        request.loginToken = currentUser.loginToken
+        request.queryUserid = UInt32(self.user.userid!)
+        
+        server.userRecordingsWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
+            } else {
+                self.updateTable(response)
+            }
+        }
+        
+        /*
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
         var params = ["handle": handle, "password_hash": passwordHash, "query_name": self.user.handle!] as Dictionary
         httpPost(params, request) {
@@ -227,32 +257,24 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
                 }
             }
-        }
+        }*/
     }
 
-    func updateTable(data: NSDictionary) {
+    func updateTable(data: UserRecordingsResponse) {
         self.data = []
-        var tracks = data["recordings"] as! NSArray
-        for t in tracks {
-            var dict = t as! NSDictionary
-            var instruments = dict["instrument"] as! NSArray
-            var instrument = ""
-            if instruments.count != 0 {
-                instrument = instruments[0] as! String
-            }
-            var families = dict["family"] as! NSArray
-            var family = ""
-            if families.count != 0 {
-                family = families[0] as! String
-            }
-            var trackName = dict["song_name"] as! String
-            var format = dict["format"] as! String
-            var url = "\(self.user.handle!)~~\(trackName)\(format)"
+        for t in data.recArray! {
+            let track = t as! RecordingResponse
+            let instruments = NSArray(array: track.instrumentArray)
+            let families = NSArray(array: track.familyArray)
+            let trackName = track.title
+            let format = track.format
+            var url = "\(self.user.handle!)~~\(trackName)\(format!)"
+            let recid = Int(track.recid)
             url = filePathString(url)
             
-            var track = Track(frame: CGRectZero, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: dict["handle"] as! String, format: format)
+            let trackData = Track(frame: CGRectZero, recid: recid, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: track.title, bpm: Int(track.bpm), trackURL: url, user: self.user.handle!, format: track.format!)
             
-            self.data.append(track)
+            self.data.append(trackData)
         }
         dispatch_async(dispatch_get_main_queue()) {
             self.tracks.reloadData()
@@ -267,8 +289,27 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func deleteTrack(track: Track, indexPath: NSIndexPath) {
+        let request = RecordingRequest()
+        request.loginToken = currentUser.loginToken
+        request.userid = UInt32(currentUser.userid!)
+        request.recid = UInt32(track.id)
+        
+        server.recordingDeleteWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("\(error)", sender: nil)
+            } else {
+                deleteFromBucket("\(currentUser.handle)~~\(track.titleText)\(track.format)", bucket: track_bucket)
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.data.removeAtIndex(indexPath.row)
+                    self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+                }
+            }
+        }
+        /*
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = current_user.handle!
+        let handle = currentUser.handle!
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/delete/recordings")!)
         var params = ["handle": handle, "password_hash": passwordHash, "song_name": track.titleText] as Dictionary
         httpDelete(params, request) {
@@ -292,14 +333,14 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
                 }
             }
-        }
+        }*/
     }
 
     // Alert view delegate
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if alertView.title == "Change Display Name" {
             if buttonIndex == 1 {
-                self.update(alertView.textFieldAtIndex(0)!.text, inputType: "new_display_name")
+                self.update(alertView.textFieldAtIndex(0)!.text!, inputType: "name")
             }
         } else if alertView.title == "Are you Sure?" {
             if buttonIndex == 1 {
@@ -309,13 +350,13 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func deleteUser() {
-        var alert = UIAlertView(title: "Are you Sure?", message: "Delete your account?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "Yes")
+        let alert = UIAlertView(title: "Are you Sure?", message: "Delete your account?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "Yes")
         alert.show()
     }
     
     // Profile edititing
     func fetchPhotos(type: String) {
-        var photoResults = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: nil)
+        let photoResults = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: nil)
         /*var userAlbumOptions = PHFetchOptions.new()
         userAlbumOptions.predicate = NSPredicate(format: "estimatedAssetCount > 0")
         var userAlbums = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.Album, subtype: PHAssetCollectionSubtype.Any, options: userAlbumOptions)
@@ -335,12 +376,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func updateProfilePic(photo: PHAsset) {
-        let manager = PHImageManager.defaultManager()
         photo.requestContentEditingInputWithOptions(nil) {
             (contentInput, info) in
-            var imageURL = contentInput.fullSizeImageURL
-            self.update("\(current_user.handle!)~~profile_pic.jpg", inputType: "new_profile_pic_link")
-            upload("\(current_user.handle!)~~profile_pic.jpg", imageURL, profile_bucket)
+            let imageURL = contentInput!.fullSizeImageURL
+            upload("\(currentUser.handle!)~~profile_pic.jpg", url: imageURL!, bucket: profile_bucket)
         }
     }
     
@@ -349,17 +388,15 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func updateBanner(photo: PHAsset) {
-        let manager = PHImageManager.defaultManager()
         photo.requestContentEditingInputWithOptions(nil) {
             (contentInput, info) in
-            var imageURL = contentInput.fullSizeImageURL
-            self.update("\(current_user.handle!)~~banner.jpg", inputType: "new_banner_pic_link")
-            upload("\(current_user.handle!)~~banner.jpg", imageURL, banner_bucket)
+            let imageURL = contentInput!.fullSizeImageURL
+            upload("\(currentUser.handle!)~~banner.jpg", url: imageURL!, bucket: banner_bucket)
         }
     }
     
     func changeName() {
-        var alert = UIAlertView(title: "Change Display Name", message: "Enter a new name.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
+        let alert = UIAlertView(title: "Change Display Name", message: "Enter a new name.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         alert.show()
     }
@@ -371,8 +408,33 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func update(input: String, inputType: String) {
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = current_user.handle
+        let request = UserUpdateRequest()
+        request.userid = UInt32(currentUser.userid!)
+        request.loginToken = currentUser.loginToken
+        switch (inputType) {
+            case "name":
+                request.name = input
+            case "userDescription":
+                request.userDescription = input
+            case "email":
+                request.email = input
+            case "passwordHash":
+                request.passwordHash = input
+            default:
+                Debug.printl("Error in update, input type is \(inputType)", sender: nil)
+                return
+        }
+        server.userUpdateWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    User.updateSelf(self)
+                }
+            }
+        }
+        /*
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/update/user")!)
         var params = ["handle": handle!, "password_hash": passwordHash, inputType: input] as Dictionary
         httpPatch(params, request) {
@@ -393,15 +455,25 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
                 }
             }
-        }
+        }*/
     }
     
     func follow(sender: UIButton) {
         self.user.follow(nil)
+        if self.user == currentUser {
+            self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Unfollow", style: .Plain, target: self, action: "unfollow:")
+        } else {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Unfollow", style: .Plain, target: self, action: "unfollow:")
+        }
     }
     
     func unfollow(sender: UIButton) {
         self.user.unfollow(nil)
+        if self.user == currentUser {
+            self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Follow", style: .Plain, target: self, action: "follow:")
+        } else {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Follow", style: .Plain, target: self, action: "follow:")
+        }
     }
     
     func logout() {
@@ -412,8 +484,25 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func delete() {
+        let request = UserRequest()
+        request.loginToken = currentUser.loginToken
+        request.userid = UInt32(currentUser.userid!)
+        // FIXME: remove this line later
+        request.queryUserid = UInt32(currentUser.userid!)
+        
+        server.userDeleteWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.logout()
+                }
+            }
+        }
+        /*
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = current_user.handle
+        let handle = currentUser.handle
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/delete/user")!)
         var params = ["handle": handle!, "password_hash": passwordHash] as Dictionary
         httpDelete(params, request) {
@@ -436,7 +525,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
                 }
             }
-        }
+        }*/
     }
     
     // Segues

@@ -4,6 +4,15 @@
 
 #import "KeychainWrapper.h"
 #import "Objective-C.h"
+#import "AWSCore/AWSCore.h"
+#import "AWSS3/AWSS3.h"
+#import "FBSDKCoreKit/FBSDKCoreKit.h"
+#import "FBSDKLoginKit/FBSDKLoginKit.h"
+#import "EZAudio/EZAudio.h"
+#import <CommonCrypto/CommonDigest.h>
+#import "CustomIOSAlertView/CustomIOSAlertView.h"
+#import "Mashservice.pbobjc.h"
+#import "Mashservice.pbrpc.h"
 
 @interface AudioModule : NSObject
 

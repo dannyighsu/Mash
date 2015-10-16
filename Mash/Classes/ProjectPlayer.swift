@@ -145,7 +145,13 @@ class ProjectPlayer: UITableViewHeaderFooterView {
     // Auxiliary
     func addTrack(trackURL: String) {
         var error: NSError? = nil
-        let player = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: trackURL), error: &error)
+        let player: AVAudioPlayer!
+        do {
+            player = try AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: trackURL))
+        } catch let error1 as NSError {
+            error = error1
+            player = nil
+        }
         if player == nil {
             Debug.printl("Error playing file: \(error)", sender: "helpers")
             return

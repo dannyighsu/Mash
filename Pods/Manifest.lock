@@ -1,69 +1,81 @@
 PODS:
-  - AWSCore (2.2.2)
-  - AWSS3 (2.2.2):
-    - AWSCore (= 2.2.2)
+  - AWSCore (2.2.4)
+  - AWSS3 (2.2.4):
+    - AWSCore (= 2.2.4)
   - Bolts (1.2.0):
     - Bolts/AppLinks (= 1.2.0)
     - Bolts/Tasks (= 1.2.0)
   - Bolts/AppLinks (1.2.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.2.0)
-  - CryptoSwift (0.0.11)
+  - CustomIOSAlertView (0.9.3)
   - EZAudio (1.1.1):
     - EZAudio/Full (= 1.1.1)
   - EZAudio/Core (1.1.1)
   - EZAudio/Full (1.1.1):
     - EZAudio/Core
     - TPCircularBuffer (~> 0.0)
-  - FBSDKCoreKit (4.4.0):
+  - FBSDKCoreKit (4.5.1):
     - Bolts (~> 1.1)
-    - FBSDKCoreKit/arc (= 4.4.0)
-    - FBSDKCoreKit/no-arc (= 4.4.0)
-  - FBSDKCoreKit/arc (4.4.0):
+    - FBSDKCoreKit/arc (= 4.5.1)
+    - FBSDKCoreKit/no-arc (= 4.5.1)
+  - FBSDKCoreKit/arc (4.5.1):
     - Bolts (~> 1.1)
-  - FBSDKCoreKit/no-arc (4.4.0):
+  - FBSDKCoreKit/no-arc (4.5.1):
     - Bolts (~> 1.1)
     - FBSDKCoreKit/arc
-  - FBSDKLoginKit (4.4.0):
+  - FBSDKLoginKit (4.5.1):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.4.0):
+  - FBSDKShareKit (4.5.1):
     - FBSDKCoreKit
   - google-plus-ios-sdk (1.7.1)
+  - gRPC (0.6.0):
+    - gRPC/C-Core (= 0.6.0)
+    - gRPC/GRPCClient (= 0.6.0)
+    - gRPC/ProtoRPC (= 0.6.0)
+    - gRPC/RxLibrary (= 0.6.0)
+  - gRPC/C-Core (0.6.0):
+    - OpenSSL (~> 1.0.200)
+  - gRPC/GRPCClient (0.6.0):
+    - gRPC/C-Core
+    - gRPC/RxLibrary
+  - gRPC/ProtoRPC (0.6.0):
+    - gRPC/GRPCClient
+    - gRPC/RxLibrary
+    - Protobuf (~> 3.0.0-alpha-3)
+  - gRPC/RxLibrary (0.6.0)
   - IQKeyboardManager (3.2.4)
+  - OpenSSL (1.0.204)
+  - Protobuf (3.0.0-alpha-4.1)
   - TPCircularBuffer (0.0.1)
 
 DEPENDENCIES:
   - AWSCore
   - AWSS3
-  - CryptoSwift (from `https://github.com/krzyzanowskim/CryptoSwift`, branch `master`)
+  - CustomIOSAlertView (~> 0.9.3)
   - EZAudio
   - FBSDKCoreKit
   - FBSDKLoginKit
   - FBSDKShareKit
   - google-plus-ios-sdk
+  - gRPC
   - IQKeyboardManager
-
-EXTERNAL SOURCES:
-  CryptoSwift:
-    :branch: master
-    :git: https://github.com/krzyzanowskim/CryptoSwift
-
-CHECKOUT OPTIONS:
-  CryptoSwift:
-    :commit: f146411a7c28824d244d9d766d9d85212ddc72bb
-    :git: https://github.com/krzyzanowskim/CryptoSwift
+  - OpenSSL
 
 SPEC CHECKSUMS:
-  AWSCore: 3e969334460cc7ba16504fb2e074f59f95880800
-  AWSS3: 4f89fcc0ef11303f94f561310979a0d2ec816fff
+  AWSCore: 483fa0f25c8508e3364f818e9b941c6204619afa
+  AWSS3: da758d5a95e65bb9e6e718245c1a86b6f63de9ae
   Bolts: d176cb1e0012175589e389a9db49b85e27787576
-  CryptoSwift: 0ab68b71eaff076bddb1de4e5ac9f85f61c023e2
+  CustomIOSAlertView: 94d2401e34fcfb0ac0134679d6947f5e251b0446
   EZAudio: 63cd1f0d1b1261f76955dab204a10af067ffb689
-  FBSDKCoreKit: 75bdd75c980e811db218488d99dd93b7740f4474
-  FBSDKLoginKit: 02a9254a4c132412fa03577b0d53e936d068a7fb
-  FBSDKShareKit: a42865f20ba2d1cc548c4d0f73ad22cff6377ddb
+  FBSDKCoreKit: f335eaf6865e1e1597dee1debfb533045500da47
+  FBSDKLoginKit: 225cc9a388a92916ee3f3bb14422017b6e44b65b
+  FBSDKShareKit: 642034ac9f30793dfd897851b724bb4281750266
   google-plus-ios-sdk: 47adbe03ea904bdb7aa1c0eca282a23c4686e1bc
+  gRPC: 2b65b35bdb80b2dac889399afb6706ab10d85d51
   IQKeyboardManager: 555b1231fefafb21b19278d7cca72986a27b748b
+  OpenSSL: 576b352e6e6e60793ca133c6785736e3cbc31a09
+  Protobuf: a0f3b369ce888d47735a5ec1c40b1bc31cbad46b
   TPCircularBuffer: 949e9632b9fb99b7274d7b2296ee22bff5841e35
 
-COCOAPODS: 0.37.2
+COCOAPODS: 0.38.2

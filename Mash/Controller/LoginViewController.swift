@@ -32,6 +32,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
         
+        let handle = NSUserDefaults.standardUserDefaults().objectForKey("username") as? String
+        if handle != nil {
+            self.handleField.text = handle!
+        }
+
         let hasLoginKey = NSUserDefaults.standardUserDefaults().boolForKey("hasLoginKey")
         if hasLoginKey == true {
             let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
@@ -58,12 +63,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     func signinAction(sender: AnyObject?) {
-        if ((count(self.handleField.text!) < 1) || (count(self.passwordField.text!) < 1)) {
-            raiseAlert("Incorrect Username and/or Password", self)
+        if (((self.handleField.text!).characters.count < 1) || ((self.passwordField.text!).characters.count < 1)) {
+            raiseAlert("Incorrect Username and/or Password", delegate: self)
             return
         }
         
-        authenticate(self.handleField.text, password: self.passwordField.text)
+        authenticate(self.handleField.text!, password: self.passwordField.text!)
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -71,8 +76,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.handleField.resignFirstResponder()
             self.passwordField.becomeFirstResponder()
         } else {
-            if textField.text.isEmpty {
-                raiseAlert("Please enter a password.", self)
+            if textField.text!.isEmpty {
+                raiseAlert("Please enter a password.", delegate: self)
                 return false
             }
             self.passwordField.resignFirstResponder()
@@ -87,55 +92,29 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     func authenticate(handle: String, password: String) {
-        // Check authentication with database
-        let passwordHash = hashPassword(password)
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/signin")!)
-        var params = ["handle": handle, "password_hash": passwordHash, "query_name": handle] as Dictionary
         self.activityView.startAnimating()
-        httpPost(params, request) {
-            (data, statusCode, error) -> Void in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.activityView.stopAnimating()
-            }
+        let passwordHash = hashPassword(password)
+        let request = SignInRequest()
+        request.handle = handle
+        request.passwordHash = passwordHash
+        
+        server.signInWithRequest(request) {
+            (response, error) in
+            self.activityView.stopAnimating()
             if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
-                return
+                Debug.printl("Error: \(error)", sender: nil)
+                raiseAlert("Incorrect Username and/or Password")
             } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("Error: \(error)", sender: self)
-                    return
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    return
-                } else if statusCode == HTTP_AUTH_FAIL {
-                    raiseAlert("Incorrect Username and/or Password.", self)
-                    return
-                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        [weak self] in
-                        var error: NSError? = nil
-                        var response = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary
-                        
-                        if error != nil {
-                            Debug.printl("Error: \(error)", sender: self)
-                        }
-                        current_user = User()
-                        var data = response["user"] as! NSDictionary
-                        current_user.handle = handle
-                        current_user.username = data["name"] as? String
-                        current_user.followers = String(data["followers_count"] as! Int)
-                        current_user.following = String(data["following_count"] as! Int)
-                        current_user.tracks = String(data["track_count"] as! Int)
-                        current_user.user_description = data["description"] as? String
-                        current_user.userid = data["id"] as? Int
-                        current_user.profile_pic_key = "\(current_user.handle!)~~profile_pic.jpg"
-                        current_user.banner_pic_key = "\(current_user.handle!)~~banner.jpg"
-                        self!.completeLogin(handle, password: password)
-                    }
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                    return
-                }
+                Debug.printl("\(response.data())", sender: self)
+                currentUser = User()
+                currentUser.handle = handle
+                currentUser.loginToken = response.loginToken
+                currentUser.userid = Int(response.userid)
+                currentUser.followers = "\(response.followersCount)"
+                currentUser.following = "\(response.followingCount)"
+                currentUser.tracks = "\(response.trackCount)"
+                currentUser.userDescription = response.userDescription
+                self.completeLogin(handle, password: password)
             }
         }
     }
@@ -158,7 +137,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     func saveLoginItems() {
-        Debug.printl("Saving user " + self.handleField.text + " to NSUserDefaults.", sender: self)
+        Debug.printl("Saving user " + self.handleField.text! + " to NSUserDefaults.", sender: self)
         NSUserDefaults.standardUserDefaults().setValue(self.handleField.text, forKey: "username")
         keychainWrapper.mySetObject(self.passwordField.text, forKey: kSecValueData)
         keychainWrapper.writeToKeychain()

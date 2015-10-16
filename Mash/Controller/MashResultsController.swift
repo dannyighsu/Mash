@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 import AVFoundation
-import EZAudio
 
 class MashResultsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate {
     
@@ -33,7 +32,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         self.trackTable.registerNib(profile, forHeaderFooterViewReuseIdentifier: "MashResultsHeaderView")
         
         for track in projectRecordings {
-            self.projectPlayers.append(AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil))
+            self.projectPlayers.append(try! AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL)))
         }
     }
     
@@ -72,9 +71,9 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         track.bpm = trackData.bpm
         track.format = trackData.format
         track.trackURL = filePathString(getS3Key(track))
-        if !contains(self.downloadedTracks, indexPath.row) {
+        if !self.downloadedTracks.contains(indexPath.row) {
             track.activityView.startAnimating()
-            download(getS3WaveformKey(track), filePathURL(getS3WaveformKey(track)), waveform_bucket) {
+            download(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket) {
                 (result) in
                 dispatch_async(dispatch_get_main_queue()) {
                     track.activityView.stopAnimating()
@@ -102,7 +101,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         let track = self.trackTable.cellForRowAtIndexPath(indexPath) as! Track
 
         track.activityView.startAnimating()
-        download(getS3Key(track), NSURL(fileURLWithPath: track.trackURL)!, track_bucket) {
+        download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
             (result) in
             dispatch_async(dispatch_get_main_queue()) {
                 track.activityView.stopAnimating()
@@ -134,7 +133,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func loadNextData() {
-        var currentNumResults = self.results.count - 1
+        let currentNumResults = self.results.count - 1
         if currentNumResults == self.allResults.count - 1 {
             return
         }
@@ -148,20 +147,18 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func playTracks(track: Track) {
-        let header = self.trackTable.headerViewForSection(0) as! MashResultsHeaderView
         if self.projectPlayers[0].playing {
             self.stopPlaying(nil)
         }
         
         if track.bpm != self.projectRecordings[0].bpm {
-            var shiftAmount: Float = Float(self.projectRecordings[0].bpm) / Float(track.bpm)
+            let shiftAmount: Float = Float(self.projectRecordings[0].bpm) / Float(track.bpm)
             let newURL = AudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: "new_\(track.titleText)", amountToShift: shiftAmount)
             track.trackURL = newURL
             track.bpm = self.projectRecordings[0].bpm
         }
         
-        var error: NSError? = nil
-        self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL), error: nil)
+        self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
         self.audioPlayer!.play()
         for player in self.projectPlayers {
             player.play()
@@ -173,7 +170,6 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         for (var i = 0; i < self.projectPlayers.count; i++) {
             self.projectPlayers[i].stop()
             self.projectPlayers[i].currentTime = 0
-            let header = self.trackTable.headerViewForSection(0) as! MashResultsHeaderView
         }
     }
     
@@ -182,8 +178,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func done(sender: UIButton) {
-        var track = sender.superview?.superview?.superview as! Track
-        let project = returnProjectView(self.navigationController!) as ProjectViewController!
+        let track = sender.superview?.superview?.superview as! Track
         ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
         self.navigationController?.popViewControllerAnimated(true)
     }

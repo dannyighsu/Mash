@@ -8,7 +8,6 @@
 
 import UIKit
 import AVFoundation
-import EZAudio
 
 class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate, MetronomeDelegate, ChannelDelegate {
 
@@ -86,8 +85,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         return true
     }
     
-    override func supportedInterfaceOrientations() -> Int {
-        return Int(UIInterfaceOrientationMask.LandscapeRight.rawValue)
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.LandscapeRight
     }
     
     override func prefersStatusBarHidden() -> Bool {
@@ -126,7 +125,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             if trackNumber >= self.audioPlayer!.audioPlayers.count {
                 return
             }
-            var muted = self.audioPlayer!.muteTrack(trackNumber)
+            let muted = self.audioPlayer!.muteTrack(trackNumber)
             let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Channel
             if muted {
                 track.speakerButton.setImage(UIImage(named: "speaker_white_2"), forState: UIControlState.Normal)
@@ -157,15 +156,15 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         } else if alertView.title == "Saving your Mash" {
             if buttonIndex == 1 {
-                var title = alertView.textFieldAtIndex(0)!.text
+                let title = alertView.textFieldAtIndex(0)!.text
                 self.audioPlayer!.titleLabel.text = title
-                self.uploadSavedTrack(title)
+                self.uploadSavedTrack(title!)
             }
         } else if alertView.title == "Sharing your Mash" {
             if buttonIndex == 1 {
-                var title = alertView.textFieldAtIndex(0)!.text
+                let title = alertView.textFieldAtIndex(0)!.text
                 self.audioPlayer!.titleLabel.text = title
-                self.shareTrack(title)
+                self.shareTrack(title!)
             }
         }
     }
@@ -208,12 +207,10 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     // Track management
     func removeTrack(sender: UISwipeGestureRecognizer?) {
         let track = sender?.view as! Channel
-        var trackIndex: Int? = nil
         Debug.printl("Removing track \(track)", sender: self)
         for (var i = 0; i < self.data.count; i++) {
             if self.data[i].titleText == track.trackTitle.text {
                 self.data.removeAtIndex(i)
-                trackIndex = i
             }
         }
         
@@ -244,10 +241,10 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     // Preferences methods
     func save() {
         if self.data.count < 1 {
-            raiseAlert("Error", self, "There must be a track in your project to save.")
+            raiseAlert("Error", delegate: self, message: "There must be a track in your project to save.")
             return
         }
-        var alert = UIAlertView(title: "Saving your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
+        let alert = UIAlertView(title: "Saving your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         alert.textFieldAtIndex(0)?.text = self.audioPlayer!.titleLabel.text
         alert.show()
@@ -257,7 +254,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         Track.mixTracks(name, tracks: self.data) {
             (exportSession) in
             if exportSession == nil || exportSession!.status == AVAssetExportSessionStatus.Failed {
-                raiseAlert("Error exporting file.", self)
+                raiseAlert("Error exporting file.", delegate: self)
             } else {
                 Debug.printl("File export of track \(name) completed", sender: self)
                 self.checkForDuplicate(name)
@@ -269,10 +266,10 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func share() {
         if self.data.count < 1 {
-            raiseAlert("Error", self, "There must be a track in your project to share.")
+            raiseAlert("Error", delegate: self, message: "There must be a track in your project to share.")
             return
         }
-        var alert = UIAlertView(title: "Sharing your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
+        let alert = UIAlertView(title: "Sharing your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         alert.textFieldAtIndex(0)?.text = self.audioPlayer!.titleLabel.text
         alert.show()
@@ -282,11 +279,11 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         Track.mixTracks(name, tracks: self.data) {
             (exportSession) in
             if exportSession == nil || exportSession!.status == AVAssetExportSessionStatus.Failed {
-                raiseAlert("Error exporting file.", self)
+                raiseAlert("Error exporting file.", delegate: self)
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
-                    var sharingObjects = [filePathURL("\(current_user.handle!)~~\(name).m4a")]
-                    var activityController = UIActivityViewController(activityItems: sharingObjects, applicationActivities: nil)
+                    let sharingObjects = [filePathURL("\(currentUser.handle!)~~\(name).m4a")]
+                    let activityController = UIActivityViewController(activityItems: sharingObjects, applicationActivities: nil)
                     self.presentViewController(activityController, animated: true, completion: nil)
                 }
             }
@@ -295,7 +292,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func mash() {
         if (self.data.count == 0) {
-            var alert = UIAlertView(title: "Error", message: "You have no tracks in your project.", delegate: self, cancelButtonTitle: "OK")
+            let alert = UIAlertView(title: "Error", message: "You have no tracks in your project.", delegate: self, cancelButtonTitle: "OK")
             alert.show()
             return
         }
@@ -313,19 +310,46 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func newProject() {
         Debug.printl("Creating new project view", sender: self)
-        let thisController = self
-        var projectViewIndex = getTabBarController("project")
+        let newProjectView = self.storyboard!.instantiateViewControllerWithIdentifier("ProjectViewController") as! ProjectViewController
         let tabBarController = self.navigationController?.viewControllers[2] as! TabBarController
-        var newTabBarController: NSMutableArray = NSMutableArray()
+        tabBarController.viewControllers!.removeAtIndex(getTabBarController(("project")))
+        tabBarController.viewControllers!.insert(newProjectView, atIndex: getTabBarController("project"))
+        /*let tabBarController = self.navigationController?.viewControllers[2] as! TabBarController
+        var newTabBarController: [UIViewController] = []
         newTabBarController.addObjectsFromArray(tabBarController.viewControllers!)
         let newProjectView = self.storyboard?.instantiateViewControllerWithIdentifier("ProjectViewController") as! ProjectViewController
         newTabBarController.replaceObjectAtIndex(projectViewIndex, withObject: newProjectView)
-        tabBarController.setViewControllers(newTabBarController as [AnyObject], animated: true)
+        tabBarController.setViewControllers(newTabBarController as? [UIViewController], animated: true)*/
     }
     
     // Upload functions
     func checkForDuplicate(name: String) {
-        let handle = current_user.handle!
+        self.uploadAction(filePathString("\(currentUser.handle!)~~\(name).m4a"), name: name)
+
+        /*
+        var request = RecordingUploadRequest()
+        request.userid = UInt32(currentUser.userid!)
+        request.loginToken = currentUser.loginToken
+        request.
+        
+        server.recordingUploadWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)")
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
+                    let alert = UIAlertView(title: "Track exists.", message: "Please choose a different title.", delegate: self, cancelButtonTitle: "Ok")
+                    alert.show()
+                }
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
+                }
+            }
+        }*/
+        
+        /*
+        let handle = currentUser.handle!
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
         var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "query_name": handle, "song_name": name]
@@ -356,22 +380,20 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                     alert.show()
                 }
             }
-        }
+        }*/
     }
     
     func uploadAction(url: String, name: String) {
-        upload("\(current_user.handle!)~~\(name).m4a", NSURL(fileURLWithPath: url)!, track_bucket)
+        upload("\(currentUser.handle!)~~\(name).m4a", url: NSURL(fileURLWithPath: url), bucket: track_bucket)
         
         // FIXME: Using waveform of first track for now
-        let waveformKey = "\(current_user.handle!)~~\(name)_waveform.jpg"
+        let waveformKey = "\(currentUser.handle!)~~\(name)_waveform.jpg"
         let track = self.tracks.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! Channel
-        var waveform = takeShotOfView(track.audioPlot)
-        UIImageJPEGRepresentation(waveform, 1.0).writeToFile(filePathString(waveformKey), atomically: true)
-        upload(waveformKey, filePathURL(waveformKey), waveform_bucket)
+        let waveform = takeShotOfView(track.audioPlot)
+        UIImageJPEGRepresentation(waveform, 1.0)!.writeToFile(filePathString(waveformKey), atomically: true)
+        upload(waveformKey, url: filePathURL(waveformKey), bucket: waveform_bucket)
         
         // Post data to server
-        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
         var instruments: [String] = []
         var families: [String] = []
         
@@ -384,10 +406,43 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         }
         var instrumentString = String(stringInterpolationSegment: instruments)
-        instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
+        instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: instrumentString.startIndex.advancedBy(1), end: instrumentString.endIndex.advancedBy(-1)))
         var familyString = String(stringInterpolationSegment: families)
-        familyString = familyString.substringWithRange(Range<String.Index>(start: advance(familyString.startIndex, 1), end: advance(familyString.endIndex, -1)))
+        familyString = familyString.substringWithRange(Range<String.Index>(start: familyString.startIndex.advancedBy(1), end: familyString.endIndex.advancedBy(-1)))
         
+        let request = RecordingUploadRequest()
+        request.userid = UInt32(currentUser.userid!)
+        request.loginToken = currentUser.loginToken
+        request.title = name
+        request.bpm = 0
+        request.bar = 0
+        request.key = "None"
+        request.instrumentArray = [instrumentString]
+        request.familyArray = [familyString]
+        request.genreArray = []
+        request.subgenreArray = []
+        request.feel = 0
+        request.solo = true
+        request.format = ".m4a"
+        
+        server.recordingUploadWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
+                    let alert = UIAlertView(title: "Track exists.", message: "Please choose a different title.", delegate: self, cancelButtonTitle: "Ok")
+                    alert.show()
+                }
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    let alert = UIAlertView(title: "Success!", message: "Your Mash has been Saved.", delegate: self, cancelButtonTitle: "OK")
+                    alert.show()
+                }
+            }
+        }
+        
+        /*
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
         var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "title": name, "bpm": "0", "bar": "0", "key": "0", "instrument": "{\(instrumentString)}", "family": "{\(familyString)}", "genre": "{}", "subgenre": "{}", "feel": "0", "solo": "0", "format": ".m4a"]
         
@@ -409,7 +464,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
                 }
             }
-        }
+        }*/
     }
     
     class func importTracks(tracks: [Track], navigationController: UINavigationController?, storyboard: UIStoryboard?) {
@@ -439,12 +494,12 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         project!.activityView.startAnimating()
         
         for track in tracks {
-            var URL = NSURL(fileURLWithPath: track.trackURL)!
-            download(getS3Key(track), URL, track_bucket) {
+            let URL = NSURL(fileURLWithPath: track.trackURL)
+            download(getS3Key(track), url: URL, bucket: track_bucket) {
                 (result) in
                 
                 if track.bpm != project!.bpm {
-                    var shiftAmount: Float = Float(project!.bpm) / Float(track.bpm)
+                    let shiftAmount: Float = Float(project!.bpm) / Float(track.bpm)
                     let newURL = AudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: "new_\(track.titleText)", amountToShift: shiftAmount)
                     track.trackURL = newURL
                     track.bpm = project!.bpm

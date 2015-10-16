@@ -8,8 +8,6 @@
 
 import Foundation
 import UIKit
-import FBSDKCoreKit
-import FBSDKLoginKit
 
 class EntryViewController: UIViewController {
 
@@ -34,7 +32,7 @@ class EntryViewController: UIViewController {
         // Check for login key
         let hasLoginKey = NSUserDefaults.standardUserDefaults().boolForKey("hasLoginKey")
         if hasLoginKey == true {
-            var login = self.storyboard?.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+            let login = self.storyboard?.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
             self.navigationController?.pushViewController(login, animated: false)
             let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
             let password = keychainWrapper.myObjectForKey("v_Data") as! String
@@ -48,7 +46,7 @@ class EntryViewController: UIViewController {
     }
     
     func facebookLogin(sender: AnyObject?) {
-        var login = FBSDKLoginManager()
+        let login = FBSDKLoginManager()
         login.logInWithReadPermissions(["email", "public_profile"]) {
             (result: FBSDKLoginManagerLoginResult!, error: NSError!) -> Void in
             if error != nil {
@@ -62,7 +60,6 @@ class EntryViewController: UIViewController {
     }
     
     func login(permissions: FBSDKLoginManagerLoginResult) {
-        var accessToken = permissions.token
         if permissions.grantedPermissions.contains("email") && permissions.grantedPermissions.contains("public_profile") {
             FBSDKGraphRequest(graphPath: "me", parameters: nil).startWithCompletionHandler() {
                 (connection, result, error) -> Void in

@@ -1,0 +1,44 @@
+{
+  "name": "MashServer",
+  "version": "0.0.1",
+  "license": "New BSD",
+  "authors": {
+    "Daniel Hsu": "dannyighsu@gmail.com"
+  },
+  "homepage": "https://mashwith.me",
+  "source": {
+    "git": "https://github.com/dannyighsu/Mash.git"
+  },
+  "summary": "Mash server.",
+  "platforms": {
+    "ios": "8.3"
+  },
+  "prepare_command": "protoc --objc_out=. --objcgrpc_out=. ./protos/*.proto",
+  "subspecs": [
+    {
+      "name": "Messages",
+      "source_files": "protos/*.pbobjc.{h,m}",
+      "header_mappings_dir": ".",
+      "requires_arc": false,
+      "dependencies": {
+        "Protobuf": [
+          "~> 3.0.0-alpha-3"
+        ]
+      }
+    },
+    {
+      "name": "Services",
+      "source_files": "protos/*.pbrpc.{h,m}",
+      "header_mappings_dir": ".",
+      "requires_arc": true,
+      "dependencies": {
+        "gRPC": [
+          "~> 0.5"
+        ],
+        "MashServer/Messages": [
+
+        ]
+      }
+    }
+  ]
+}

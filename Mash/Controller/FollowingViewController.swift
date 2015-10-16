@@ -13,8 +13,9 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBOutlet weak var users: UITableView!
     var data: [User] = []
-    var user: User = current_user
+    var user: User = currentUser
     var type: String? = nil
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,21 +29,22 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.activityView.startAnimating()
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = self.users.dequeueReusableCellWithIdentifier("User") as! User
-        var follower = self.data[indexPath.row]
+        let cell = self.users.dequeueReusableCellWithIdentifier("User") as! User
+        let follower = self.data[indexPath.row]
         cell.nameLabel?.setTitle(follower.display_name(), forState: UIControlState.Normal)
         cell.handle = follower.handle
+        cell.userid = follower.userid
         cell.username = follower.username
-        cell.profile_pic_key = follower.profile_pic_key
-        follower.profile_pic(cell.profilePicture!)
+        follower.setProfilePic(cell.profilePicture!)
         cell.profilePicture?.layer.cornerRadius = cell.profilePicture!.frame.size.width / 2
         cell.profilePicture?.layer.borderWidth = 1.0
         cell.profilePicture?.layer.masksToBounds = true
         var following: Bool = false
-        for u in user_following {
+        for u in userFollowing {
             if u.handle! == follower.handle! {
                 following = true
             }
@@ -58,7 +60,11 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        User.getUser(tableView.cellForRowAtIndexPath(indexPath) as! User, storyboard: self.storyboard!, navigationController: self.navigationController!)
+        let user = tableView.cellForRowAtIndexPath(indexPath) as! User
+        if user.handle == currentUser.handle {
+            return
+        }
+        User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
         tableView.cellForRowAtIndexPath(indexPath)!.selected = false
     }
     
@@ -93,8 +99,55 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func getUserFollowing(user: User, type: String) {
+        let request = UserRequest()
+        request.userid = UInt32(currentUser.userid!)
+        request.loginToken = currentUser.loginToken
+        request.queryUserid = UInt32(self.user.userid!)
+        if type == "followers" {
+            server.followersGetWithRequest(request) {
+                (response, error) in
+                if error != nil {
+                    Debug.printl("Error: \(error)", sender: nil)
+                } else {
+                    for u in response.userArray {
+                        let dict = u as! UserPreview
+                        let follower = User()
+                        follower.handle = dict.handle
+                        follower.username = dict.name
+                        follower.userid = Int(dict.userid)
+                        self.data.append(follower)
+                    }
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.users.reloadData()
+                        self.activityView.stopAnimating()
+                    }
+                }
+            }
+        } else {
+            server.followingsGetWithRequest(request) {
+                (response, error) in
+                if error != nil {
+                    Debug.printl("Error: \(error)", sender: nil)
+                } else {
+                    for u in response.userArray {
+                        let dict = u as! UserPreview
+                        let follower = User()
+                        follower.handle = dict.handle
+                        follower.username = dict.name
+                        follower.userid = Int(dict.userid)
+                        self.data.append(follower)
+                    }
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.users.reloadData()
+                        self.activityView.stopAnimating()
+                    }
+                }
+            }
+        }
+        
+        /*
         let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = current_user.handle
+        let handle = currentUser.handle
         var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/user/\(type)")!)
         var params = ["handle": handle!, "password_hash": passwordHash, "query_name": user.handle!] as Dictionary
         httpPost(params, request) {
@@ -118,7 +171,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                             var follower = User()
                             follower.handle = dict["handle"] as? String
                             follower.username = dict["name"] as? String
-                            follower.profile_pic_key = "\(follower.handle!)~~profile_pic.jpg"
+                            follower.profilePicKey = "\(follower.handle!)~~profile_pic.jpg"
                             self.data.append(follower)
                         }
                         self.users.reloadData()
@@ -129,7 +182,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                     Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
                 }
             }
-        }
+        }*/
     }
 
 }

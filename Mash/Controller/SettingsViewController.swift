@@ -97,10 +97,22 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
 
     // Log out
     func logout() {
-        NSUserDefaults.standardUserDefaults().removeObjectForKey("hasLoginKey")
-        NSUserDefaults.standardUserDefaults().removeObjectForKey("username")
-        Debug.printl("User has successfully logged out - popping to root view controller.", sender: self)
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        let request = UserRequest()
+        request.loginToken = currentUser.loginToken
+        request.userid = UInt32(currentUser.userid!)
+        
+        server.signOutWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: self)
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("hasLoginKey")
+                    Debug.printl("User has successfully logged out - popping to root view controller.", sender: self)
+                    self.navigationController?.popToRootViewControllerAnimated(true)
+                }
+            }
+        }
     }
 
 }

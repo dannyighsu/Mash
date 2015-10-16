@@ -9,10 +9,6 @@
 import Foundation
 import Security
 import UIKit
-import AVFoundation
-import CryptoSwift
-import AWSCore
-import AWSS3
 
 // Returns UIImage corresponding to input string
 func findImage(instrument: [String]) -> UIImage {
@@ -57,15 +53,15 @@ func getTabBarController(input: String, navcontroller: UINavigationController) -
     let tabBarController = navcontroller.viewControllers[2] as! TabBarController
     let controllers = tabBarController.viewControllers!
     if input == "home" {
-        return controllers[0] as! UIViewController
+        return controllers[0] 
     } else if input == "explore" {
-        return controllers[1] as! UIViewController
+        return controllers[1] 
     } else if input == "record" {
-        return controllers[2] as! UIViewController
+        return controllers[2] 
     } else if input == "project" {
-        return controllers[3] as! UIViewController
+        return controllers[3] 
     } else {
-        return controllers[4] as! UIViewController
+        return controllers[4] 
     }
 }
 
@@ -83,9 +79,30 @@ func returnProjectView(navcontroller: UINavigationController) -> ProjectViewCont
 
 // Cryptographic Hash function for password hashes
 func hashPassword(input: String) -> String {
-    var data: NSData = NSData(bytes: input, length: count(input))
-    let hash = data.sha256()
-    return hash!.hexString
+    let data: NSData = NSData(bytes: input, length: input.characters.count)
+    let hash = sha256(data)
+    return hash.toHexString().uppercaseString
+}
+
+func sha256(data : NSData) -> NSData {
+    var hash = [UInt8](count: Int(CC_SHA256_DIGEST_LENGTH), repeatedValue: 0)
+    CC_SHA256(data.bytes, CC_LONG(data.length), &hash)
+    let res = NSData(bytes: hash, length: Int(CC_SHA256_DIGEST_LENGTH))
+    return res
+}
+
+extension NSData {
+    public func toHexString() -> String {
+        let count = self.length / sizeof(UInt8)
+        var bytesArray = [UInt8](count: count, repeatedValue: 0)
+        self.getBytes(&bytesArray, length:count * sizeof(UInt8))
+        
+        var s:String = "";
+        for byte in bytesArray {
+            s = s + String(format:"%02x", byte)
+        }
+        return s
+    }
 }
 
 // Download from S3 bucket
@@ -93,7 +110,7 @@ func download(key: String, url: NSURL, bucket: String) {
     if NSFileManager.defaultManager().fileExistsAtPath(url.path!) {
         return
     }
-    let request: AWSS3TransferManagerDownloadRequest = AWSS3TransferManagerDownloadRequest.new()
+    let request: AWSS3TransferManagerDownloadRequest = AWSS3TransferManagerDownloadRequest.init()
     request.bucket = bucket
     request.key = key
     request.downloadingFileURL = url
@@ -121,7 +138,7 @@ func download(key: String, url: NSURL, bucket: String, completion: (result: AWSS
     if NSFileManager.defaultManager().fileExistsAtPath(url.path!) {
         return completion(result: AWSS3TransferManagerDownloadOutput())
     }
-    let request: AWSS3TransferManagerDownloadRequest = AWSS3TransferManagerDownloadRequest.new()
+    let request: AWSS3TransferManagerDownloadRequest = AWSS3TransferManagerDownloadRequest.init()
     request.bucket = bucket
     request.key = key
     request.downloadingFileURL = url
@@ -148,7 +165,7 @@ func download(key: String, url: NSURL, bucket: String, completion: (result: AWSS
 
 // Upload to S3 bucket
 func upload(key: String, url: NSURL, bucket: String) {
-    let request: AWSS3TransferManagerUploadRequest = AWSS3TransferManagerUploadRequest.new()
+    let request: AWSS3TransferManagerUploadRequest = AWSS3TransferManagerUploadRequest.init()
     request.bucket = bucket
     request.key = key
     request.body = url
@@ -165,14 +182,14 @@ func upload(key: String, url: NSURL, bucket: String) {
             }
         } else if (task.result != nil) {
             let uploadOutput: AWSS3TransferManagerUploadOutput = task.result as! AWSS3TransferManagerUploadOutput
-            Debug.printl("File uploaded succesfully", sender: "helpers")
+            Debug.printl("File uploaded successfully: \(uploadOutput)", sender: "helpers")
         }
         return nil
     }
 }
 
 func upload(key: String, url: NSURL, bucket: String, completion: (result: AWSS3TransferManagerUploadOutput?) -> Void) {
-    let request: AWSS3TransferManagerUploadRequest = AWSS3TransferManagerUploadRequest.new()
+    let request: AWSS3TransferManagerUploadRequest = AWSS3TransferManagerUploadRequest.init()
     request.bucket = bucket
     request.key = key
     request.body = url
@@ -190,10 +207,29 @@ func upload(key: String, url: NSURL, bucket: String, completion: (result: AWSS3T
             completion(result: nil)
         } else if (task.result != nil) {
             let uploadOutput: AWSS3TransferManagerUploadOutput = task.result as! AWSS3TransferManagerUploadOutput
-            Debug.printl("File uploaded succesfully", sender: "helpers")
+            Debug.printl("File uploaded successfully", sender: "helpers")
             completion(result: uploadOutput)
         }
         return nil
+    }
+}
+
+// Delete item from S3 bucket
+func deleteFromBucket(key: String, bucket: String) {
+    let request: AWSS3DeleteObjectRequest = AWSS3DeleteObjectRequest.init()
+    request.bucket = bucket
+    request.key = key
+    
+    let s3 = AWSS3.defaultS3()
+    s3.deleteObject(request).continueWithBlock() {
+        (task: AWSTask!) -> AnyObject! in
+        if task.error != nil {
+            Debug.printl("Error: \(task.error)", sender: "helpers")
+            return nil
+        } else {
+            Debug.printl("File deleted successfully: \(task.result)", sender: "helpers")
+            return nil
+        }
     }
 }
 
@@ -202,9 +238,30 @@ func getS3Key(track: Track) -> String {
     return "\(track.userText)~~\(track.titleText)\(track.format)"
 }
 
+func getS3Key(user: String, title: String, format: String) -> String {
+    return "\(user)~~\(title)\(format)"
+}
+
 // Returns AWSS3 waveform bucket name
 func getS3WaveformKey(track: Track) -> String {
     return "\(track.userText)~~\(track.titleText)_waveform.jpg"
+}
+
+// Parse DB time stamp
+func parseTimeStamp(timestamp: String) -> String {
+    let dateFormatter = NSDateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    dateFormatter.timeZone = NSTimeZone(name: "UTC")
+    let date: NSDate? = dateFormatter.dateFromString(timestamp)
+    return stringFromTimeInterval(date!.timeIntervalSinceNow)
+}
+
+func stringFromTimeInterval(interval: NSTimeInterval) -> String {
+    let interval = Int(interval)
+    let seconds = interval % 60
+    let minutes = (interval / 60) % 60
+    let hours = (interval / 3600)
+    return String(format: "%02d:%02d:%02d", -hours, -minutes, -seconds)
 }
 
 // Returns directory to application's documents
@@ -215,16 +272,16 @@ func applicationDocuments() -> NSArray {
 // Returns directory to application's documents
 func applicationDocumentsDirectory() -> NSString {
     var paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-    var basePath = paths[0] as? NSString
-    return basePath!
+    let basePath = paths[0]
+    return basePath
 }
 
 // Returns file path URL
 func filePathURL(input: String?) -> NSURL {
     if input == nil {
-        return NSURL(fileURLWithPath: NSString(format: "%@/%@", applicationDocumentsDirectory(), "EZAudioTest.m4a") as String)!
+        return NSURL(fileURLWithPath: NSString(format: "%@/%@", applicationDocumentsDirectory(), "EZAudioTest.m4a") as String)
     } else {
-        return NSURL(fileURLWithPath: NSString(format: "%@/%@", applicationDocumentsDirectory(), input!) as String)!
+        return NSURL(fileURLWithPath: NSString(format: "%@/%@", applicationDocumentsDirectory(), input!) as String)
     }
     
 }
@@ -239,9 +296,18 @@ func filePathString(input: String?) -> String {
 }
 
 // Alert methods
+func raiseAlert(input: String) {
+    dispatch_async(dispatch_get_main_queue()) {
+        let alert = UIAlertView()
+        alert.title = input
+        alert.addButtonWithTitle("OK")
+        alert.show()
+    }
+}
+
 func raiseAlert(input: String, delegate: UIViewController) {
     dispatch_async(dispatch_get_main_queue()) {
-        var alert = UIAlertView()
+        let alert = UIAlertView()
         alert.title = input
         alert.addButtonWithTitle("OK")
         alert.delegate = delegate
@@ -251,7 +317,7 @@ func raiseAlert(input: String, delegate: UIViewController) {
 
 func raiseAlert(input: String, delegate: UIViewController, message: String) {
     dispatch_async(dispatch_get_main_queue()) {
-        var alert = UIAlertView()
+        let alert = UIAlertView()
         alert.title = input
         alert.message = message
         alert.addButtonWithTitle("OK")
@@ -264,7 +330,7 @@ func raiseAlert(input: String, delegate: UIViewController, message: String) {
 func takeShotOfView(view: UIView) -> UIImage {
     UIGraphicsBeginImageContext(CGSizeMake(view.frame.size.width, view.frame.size.height))
     view.drawViewHierarchyInRect(CGRectMake(0, 0, view.frame.size.width, view.frame.size.height), afterScreenUpdates: true)
-    var image = UIGraphicsGetImageFromCurrentImageContext()
+    let image = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
     return image
 }

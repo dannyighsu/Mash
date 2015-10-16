@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import EZAudio
 
 protocol ChannelDelegate {
     func channelVolumeDidChange(channel: Channel, number: Int, value: Float)
@@ -44,7 +43,7 @@ class Channel: UITableViewCell, EZAudioFileDelegate {
         self.audioPlot.shouldFill = true
         self.audioPlot.shouldMirror = true
         self.audioPlot.gain = 2.0
-        var data = self.audioFile!.getWaveformData()
+        let data = self.audioFile!.getWaveformData()
         self.audioPlot.updateBuffer(data.buffers[0], withBufferSize: data.bufferSize)
     }
     
