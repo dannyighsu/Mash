@@ -1824,8 +1824,8 @@ typedef struct FeedResponse__storage_ {
 
 typedef struct FeedRequest__storage_ {
   uint32_t _has_storage_[1];
-  uint32_t scroll;
   UserRequest *user;
+  ScrollRequest *scroll;
 } FeedRequest__storage_;
 
 // This method is threadsafe because it is initially called
@@ -1850,10 +1850,10 @@ typedef struct FeedRequest__storage_ {
         .number = FeedRequest_FieldNumber_Scroll,
         .hasIndex = 1,
         .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeUInt32,
+        .dataType = GPBDataTypeMessage,
         .offset = offsetof(FeedRequest__storage_, scroll),
-        .defaultValue.valueUInt32 = 0U,
-        .dataTypeSpecific.className = NULL,
+        .defaultValue.valueMessage = nil,
+        .dataTypeSpecific.className = GPBStringifySymbol(ScrollRequest),
         .fieldOptions = NULL,
       },
     };
@@ -1870,6 +1870,70 @@ typedef struct FeedRequest__storage_ {
                                         ranges:NULL
                                     rangeCount:0
                                    storageSize:sizeof(FeedRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - ScrollRequest
+
+@implementation ScrollRequest
+
+@dynamic hasOffset, offset;
+@dynamic hasUpdated, updated;
+
+typedef struct ScrollRequest__storage_ {
+  uint32_t _has_storage_[1];
+  uint32_t offset;
+  NSString *updated;
+} ScrollRequest__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "offset",
+        .number = ScrollRequest_FieldNumber_Offset,
+        .hasIndex = 0,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(ScrollRequest__storage_, offset),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "updated",
+        .number = ScrollRequest_FieldNumber_Updated,
+        .hasIndex = 1,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(ScrollRequest__storage_, updated),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[ScrollRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(ScrollRequest__storage_)
                                     wireFormat:NO];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;

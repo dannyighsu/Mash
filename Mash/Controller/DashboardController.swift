@@ -366,7 +366,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             Debug.printl("album title \(collection.localizedTitle)", sender: self)
         }*/
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("ImageViewController") as! ImageViewController
-        controller.data = photoResults
+        var data: [PHAsset] = []
+        for (var i = photoResults.count - 1; i >= 0; i--) {
+            data.append(photoResults[i] as! PHAsset)
+        }
+        controller.data = data
         controller.type = type
         self.navigationController?.pushViewController(controller, animated: true)
     }
@@ -376,11 +380,22 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func updateProfilePic(photo: PHAsset) {
-        photo.requestContentEditingInputWithOptions(nil) {
+        let path = filePathString("\(currentUser.handle!)~~profile_pic.jpg")
+        let phManager = PHImageManager.defaultManager()
+        let options = PHImageRequestOptions()
+        phManager.requestImageDataForAsset(photo, options: options) {
+            (imageData, datUTI, orientation, info) in
+            if let newData: NSData = imageData {
+                newData.writeToFile(path, atomically: true)
+                upload("\(currentUser.handle!)~~profile_pic.jpg", url: NSURL(fileURLWithPath: path), bucket: profile_bucket)
+            }
+        }
+        
+        /*photo.requestContentEditingInputWithOptions(nil) {
             (contentInput, info) in
             let imageURL = contentInput!.fullSizeImageURL
             upload("\(currentUser.handle!)~~profile_pic.jpg", url: imageURL!, bucket: profile_bucket)
-        }
+        }*/
     }
     
     func changeBanner() {
@@ -388,11 +403,22 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func updateBanner(photo: PHAsset) {
-        photo.requestContentEditingInputWithOptions(nil) {
+        let path = filePathString("\(currentUser.handle!)~~banner.jpg")
+        let phManager = PHImageManager.defaultManager()
+        let options = PHImageRequestOptions()
+        phManager.requestImageDataForAsset(photo, options: options) {
+            (imageData, datUTI, orientation, info) in
+            if let newData: NSData = imageData {
+                newData.writeToFile(path, atomically: true)
+                upload("\(currentUser.handle!)~~banner.jpg", url: NSURL(fileURLWithPath: path), bucket: banner_bucket)
+            }
+        }
+        
+        /*photo.requestContentEditingInputWithOptions(nil) {
             (contentInput, info) in
             let imageURL = contentInput!.fullSizeImageURL
             upload("\(currentUser.handle!)~~banner.jpg", url: imageURL!, bucket: banner_bucket)
-        }
+        }*/
     }
     
     func changeName() {

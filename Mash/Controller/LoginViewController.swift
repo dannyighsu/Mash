@@ -26,6 +26,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.handleField.returnKeyType = UIReturnKeyType.Next
         self.passwordField.returnKeyType = UIReturnKeyType.Go
         
+        if let background = UIImage(named: "concert_faded") {
+            self.view.backgroundColor = UIColor(patternImage: background)
+        }
+        
         let tap = UITapGestureRecognizer(target: self, action: "resignTextField:")
         self.view.addGestureRecognizer(tap)
         
@@ -55,11 +59,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         super.viewWillAppear(animated)
         self.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Log In", style: UIBarButtonItemStyle.Plain, target: self, action: "signinAction:"), animated: false)
         self.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
+        self.navigationItem.title = "Sign In"
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationItem.setRightBarButtonItem(nil, animated: false)
+        self.navigationItem.title = ""
     }
 
     func signinAction(sender: AnyObject?) {

@@ -41,26 +41,21 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         
         // Load AVAudioSession
         let session = AVAudioSession.sharedInstance()
-        var error: NSError? = nil
         do {
             try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
         } catch let error1 as NSError {
-            error = error1
+            Debug.printl("Error setting up session: \(error1.localizedDescription)", sender: self)
+
         }
-        if error != nil {
-            Debug.printl("Error setting up session: \(error?.localizedDescription)", sender: self)
+        do {
+            try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
+        } catch let error1 as NSError{
+            Debug.printl("Error setting audio port: \(error1.localizedDescription)", sender: self)
         }
         do {
             try session.setActive(true)
         } catch let error1 as NSError {
-            error = error1
-        }
-        do {
-            try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
-        } catch _ {
-        }
-        if error != nil {
-            Debug.printl("Error setting session active: \(error?.localizedDescription)", sender: self)
+            Debug.printl("Error setting session active: \(error1.localizedDescription)", sender: self)
         }
         
         // Set up metronome

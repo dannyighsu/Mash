@@ -22,7 +22,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         // Set up table
         self.activityFeed.delegate = self
         self.activityFeed.dataSource = self
-        self.activityFeed.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+        self.activityFeed.separatorStyle = .None
         
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
@@ -149,7 +149,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)
             } else {
-                print("done")
                 self.updateActivity(response)
             }
         }
@@ -159,19 +158,21 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.data = []
         self.displayData = []
         
-        for i in 0...response.storyArray.count - 1 {
-            let recording = response.storyArray[i] as! RecordingResponse
-            let user = recording.handle
-            let title = recording.title
-            let time = recording.uploaded
-            let userid = recording.userid
-            let follower = User()
-            follower.handle = user
-            follower.userid = Int(userid)
-            let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower)
-            self.data.append(cell)
-            if i < DEFAULT_DISPLAY_AMOUNT {
-                self.displayData.append(cell)
+        if response.storyArray.count != 0 {
+            for i in 0...response.storyArray.count - 1 {
+                let recording = response.storyArray[i] as! RecordingResponse
+                let user = recording.handle
+                let title = recording.title
+                let time = recording.uploaded
+                let userid = recording.userid
+                let follower = User()
+                follower.handle = user
+                follower.userid = Int(userid)
+                let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower)
+                self.data.append(cell)
+                if i < DEFAULT_DISPLAY_AMOUNT {
+                    self.displayData.append(cell)
+                }
             }
         }
         

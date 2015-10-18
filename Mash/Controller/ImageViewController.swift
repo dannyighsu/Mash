@@ -13,7 +13,7 @@ import Photos
 class ImageViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet var images: UICollectionView!
-    var data: PHFetchResult = PHFetchResult()
+    var data: [PHAsset] = []
     var photoManager: PHImageManager = PHImageManager.defaultManager()
     var cellWidth: CGFloat = 75.0
     var type: String? = nil
@@ -30,7 +30,7 @@ class ImageViewController: UICollectionViewController, UICollectionViewDelegateF
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = self.images.dequeueReusableCellWithReuseIdentifier("ImageCell", forIndexPath: indexPath) as! ImageCell
-        let photo = self.data[indexPath.row] as! PHAsset
+        let photo = self.data[indexPath.row]
         self.photoManager.requestImageForAsset(photo, targetSize: CGSize(width: self.cellWidth, height: self.cellWidth), contentMode: PHImageContentMode.AspectFit, options: nil) {
             (image, info) in
             cell.photoView.image = image

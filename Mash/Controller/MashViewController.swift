@@ -138,32 +138,35 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MashResultsController") as! MashResultsController
         controller.projectRecordings = self.recordings
         let tracks = inputData["recordings"] as! NSArray
-        for i in 0...tracks.count - 1 {
-            let dict = tracks[i] as! NSDictionary
-            let instruments = dict["instrument"] as! NSArray
-            var instrument = ""
-            if instruments.count != 0 {
-                instrument = instruments[0] as! String
-            }
-            let families = dict["family"] as! NSArray
-            var family = ""
-            if families.count != 0 {
-                family = families[0] as! String
-            }
-            
-            let trackName = dict["song_name"] as! String
-            let format = dict["format"] as! String
-            let user = dict["handle"] as! String
-            var url = "\(user)~~\(trackName)\(format)"
-            url = filePathString(url)
-            
-            let track = Track(frame: CGRectZero, recid: 0, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: user, format: format)
-            
-            controller.allResults.append(track)
-            if i < DEFAULT_DISPLAY_AMOUNT {
-                controller.results.append(track)
+        if tracks.count != 0 {
+            for i in 0...tracks.count - 1 {
+                let dict = tracks[i] as! NSDictionary
+                let instruments = dict["instrument"] as! NSArray
+                var instrument = ""
+                if instruments.count != 0 {
+                    instrument = instruments[0] as! String
+                }
+                let families = dict["family"] as! NSArray
+                var family = ""
+                if families.count != 0 {
+                    family = families[0] as! String
+                }
+                
+                let trackName = dict["song_name"] as! String
+                let format = dict["format"] as! String
+                let user = dict["handle"] as! String
+                var url = "\(user)~~\(trackName)\(format)"
+                url = filePathString(url)
+                
+                let track = Track(frame: CGRectZero, recid: 0, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: user, format: format)
+                
+                controller.allResults.append(track)
+                if i < DEFAULT_DISPLAY_AMOUNT {
+                    controller.results.append(track)
+                }
             }
         }
+        
         self.activityView.stopAnimating()
         var index = 0
         for i in 0...self.navigationController!.viewControllers.count {

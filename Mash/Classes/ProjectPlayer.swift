@@ -107,12 +107,11 @@ class ProjectPlayer: UITableViewHeaderFooterView {
     
     // Volume controls
     @IBAction func volumeDidChange(sender: UISlider) {
-        if self.audioPlayers.count == 0 {
-            return
-        }
-        for i in 0...self.audioPlayers.count - 1 {
-            if !self.mutes[i] {
-                self.audioPlayers[i].volume = sender.value
+        if self.audioPlayers.count != 0 {
+            for i in 0...self.audioPlayers.count - 1 {
+                if !self.mutes[i] {
+                    self.audioPlayers[i].volume = sender.value
+                }
             }
         }
     }

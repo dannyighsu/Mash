@@ -22,6 +22,10 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         
         self.navigationController?.navigationBarHidden = false
         
+        if let background = UIImage(named: "concert_faded") {
+            self.view.backgroundColor = UIColor(patternImage: background)
+        }
+        
         // Set textfield delegates
         self.passwordField.delegate = self
         self.emailField.delegate = self
@@ -42,11 +46,13 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         super.viewWillAppear(animated)
         self.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Sign Up", style: UIBarButtonItemStyle.Plain, target: self, action: "signUpAction:"), animated: false)
         self.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
+        self.navigationItem.title = "Register An Account"
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationItem.setRightBarButtonItem(nil, animated: false)
+        self.navigationItem.title = ""
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -125,6 +131,10 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
             self.activityView.stopAnimating()
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
+                if error.code == 6 {
+                    raiseAlert("Username already exists.")
+                    return
+                }
             } else {
                 Debug.printl("\(response.data())", sender: self)
                 self.saveLoginItems()

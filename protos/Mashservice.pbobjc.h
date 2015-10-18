@@ -12,6 +12,7 @@
 CF_EXTERN_C_BEGIN
 
 @class RecordingResponse;
+@class ScrollRequest;
 @class UserPreview;
 @class UserRequest;
 
@@ -562,7 +563,24 @@ typedef GPB_ENUM(FeedRequest_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) UserRequest *user;
 
 @property(nonatomic, readwrite) BOOL hasScroll;
-@property(nonatomic, readwrite) uint32_t scroll;
+@property(nonatomic, readwrite, strong, null_resettable) ScrollRequest *scroll;
+
+@end
+
+#pragma mark - ScrollRequest
+
+typedef GPB_ENUM(ScrollRequest_FieldNumber) {
+  ScrollRequest_FieldNumber_Offset = 1,
+  ScrollRequest_FieldNumber_Updated = 2,
+};
+
+@interface ScrollRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasOffset;
+@property(nonatomic, readwrite) uint32_t offset;
+
+@property(nonatomic, readwrite) BOOL hasUpdated;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *updated;
 
 @end
 

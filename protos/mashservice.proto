@@ -17,8 +17,8 @@ message RegisterResponse {
 }
 
 message SignInRequest {
-	required string handle = 1;
-	required string password_hash = 2;
+    required string handle = 1;
+    required string password_hash = 2;
 }
 
 message SignInResponse {
@@ -41,7 +41,7 @@ message UserResponse {
     optional uint32 followers_count = 5;
     optional uint32 following_count = 6;
     optional uint32 track_count = 7;
-    optional bool 	follow = 8;
+    optional bool   follow = 8;
 }
 
 message RecordingRequest {
@@ -145,8 +145,13 @@ message FeedResponse {
 }
 
 message FeedRequest {
-    required UserRequest user = 1;
-    optional uint32      scroll  = 2;
+    required UserRequest   user    = 1;
+    optional ScrollRequest scroll  = 2;
+}
+
+message ScrollRequest {
+    required uint32 offset  = 1;
+    required string updated = 2;
 }
 
 message FeedStory {
