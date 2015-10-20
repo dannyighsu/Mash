@@ -51,10 +51,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        /*self.parentViewController?.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Tools", style: UIBarButtonItemStyle.Plain, target: self, action: "showTools:"), animated: false)
-        self.parentViewController?.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)*/
-        let value = UIInterfaceOrientation.LandscapeRight.rawValue
-        UIDevice.currentDevice().setValue(value, forKey: "orientation")
+        // Force landscape
+        //let value = UIInterfaceOrientation.LandscapeRight.rawValue
+        //UIDevice.currentDevice().setValue(value, forKey: "orientation")
         self.activityView.center = self.view.center
     }
     
@@ -83,10 +82,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func shouldAutorotate() -> Bool {
         return true
-    }
-    
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask.LandscapeRight
     }
     
     override func prefersStatusBarHidden() -> Bool {

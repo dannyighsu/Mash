@@ -23,6 +23,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     var audioPlayer: AVAudioPlayer? = nil
     var timeSignature: String? = nil
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+    var cellWidth: CGFloat = 75.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +32,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.instrumentsCollection.dataSource = self
         let cell = UINib(nibName: "InstrumentCell", bundle: nil)
         self.instrumentsCollection.registerNib(cell, forCellWithReuseIdentifier: "InstrumentCell")
-        self.instrumentsCollection.allowsMultipleSelection = true // uncheck for multi instr
+        self.instrumentsCollection.allowsMultipleSelection = true // check for multi instr
         
         self.doneButton.addTarget(self, action: "checkInput:", forControlEvents: UIControlEvents.TouchDown)
         self.cancelButton.addTarget(self, action: "cancel:", forControlEvents: UIControlEvents.TouchDown)
@@ -49,6 +50,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.audioPlot.gain = 2.0
         let data = self.recording!.getWaveformData()
         self.audioPlot.updateBuffer(data.buffers[0], withBufferSize: data.bufferSize)
+        self.cellWidth = UIScreen.mainScreen().bounds.size.width / 2 - 4.0
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -67,24 +69,43 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
-        if self.instruments.contains(cell.instrument) {
-            return
-        }
         self.instruments.append(cell.instrument)
         cell.layer.borderColor = darkGray().CGColor
         cell.backgroundColor = lightGray()
         cell.layer.borderWidth = 1.0
     }
     
+    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
+        if self.instruments.count != 0 {
+            for i in 0...self.instruments.count - 1 {
+                if self.instruments[i] == cell.instrument {
+                    self.instruments.removeAtIndex(i)
+                    break
+                }
+            }
+        }
+    }
+    
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         let instr = cell as! InstrumentCell
         instr.instrument = Array(instrumentArray.keys)[indexPath.row]
         instr.instrumentImage.image = findImage([instr.instrument])
+        instr.instrumentImage.frame = instr.frame
+        instr.instrumentImage.center = instr.center
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = self.instrumentsCollection.dequeueReusableCellWithReuseIdentifier("InstrumentCell", forIndexPath: indexPath) as! InstrumentCell
         return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        return CGSize(width: self.cellWidth, height: self.cellWidth)
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return 6.0
     }
     
     // Pre-Upload Checks

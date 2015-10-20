@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -13,6 +14,7 @@
             <subviews>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="4/4" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="M3k-WG-ET6">
                     <rect key="frame" x="530" y="37" width="62" height="30"/>
+                    <animations/>
                     <constraints>
                         <constraint firstAttribute="width" constant="62" id="bNN-rD-eDo"/>
                     </constraints>
@@ -21,6 +23,7 @@
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="120" borderStyle="roundedRect" placeholder="Tempo" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eET-yE-RjD">
                     <rect key="frame" x="8" y="37" width="43" height="30"/>
+                    <animations/>
                     <constraints>
                         <constraint firstAttribute="width" constant="43" id="thn-s8-FMb"/>
                     </constraints>
@@ -29,6 +32,7 @@
                 </textField>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Metronome" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B1j-ZR-IuS">
                     <rect key="frame" x="219" y="11" width="163" height="21"/>
+                    <animations/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="lR3-j8-nMO"/>
                         <constraint firstAttribute="width" constant="163" id="mTg-gS-kws"/>
@@ -39,6 +43,7 @@
                 </label>
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="iky-yf-YBX">
                     <rect key="frame" x="157" y="37" width="360" height="31"/>
+                    <animations/>
                     <color key="tintColor" red="0.38823529410000002" green="0.87843137250000003" blue="1" alpha="1" colorSpace="deviceRGB"/>
                     <connections>
                         <action selector="volumeDidChange:" destination="iN0-l3-epB" eventType="valueChanged" id="u1g-jV-zb8"/>
@@ -46,6 +51,7 @@
                 </slider>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wvU-kG-1R3">
                     <rect key="frame" x="59" y="38" width="59" height="27"/>
+                    <animations/>
                     <constraints>
                         <constraint firstAttribute="width" constant="59" id="n9j-uq-AaY"/>
                     </constraints>
@@ -57,6 +63,7 @@
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HBT-uF-3Dy">
                     <rect key="frame" x="126" y="39" width="25" height="25"/>
+                    <animations/>
                     <constraints>
                         <constraint firstAttribute="width" constant="25" id="0k4-Gy-tw2"/>
                         <constraint firstAttribute="height" constant="25" id="mmc-w5-Rz1"/>
@@ -67,13 +74,15 @@
                 </button>
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="kv1-p6-5Yy">
                     <rect key="frame" x="6" y="62" width="588" height="31"/>
+                    <animations/>
                     <color key="tintColor" red="0.38823529410000002" green="0.87843137250000003" blue="1" alpha="1" colorSpace="deviceRGB"/>
                     <connections>
                         <action selector="tempoDidChange:" destination="iN0-l3-epB" eventType="valueChanged" id="lXb-VX-JRJ"/>
                     </connections>
                 </slider>
             </subviews>
-            <color key="backgroundColor" red="0.24882192459999999" green="0.24882192459999999" blue="0.24882192459999999" alpha="1" colorSpace="calibratedRGB"/>
+            <animations/>
+            <color key="backgroundColor" red="0.1176470588" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="eET-yE-RjD" firstAttribute="top" secondItem="HBT-uF-3Dy" secondAttribute="top" constant="-2" id="3Fl-h9-5wd"/>
                 <constraint firstItem="B1j-ZR-IuS" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="11" id="3yV-fx-pX2"/>

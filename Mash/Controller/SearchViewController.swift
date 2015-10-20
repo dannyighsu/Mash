@@ -216,6 +216,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     func searchBar(searchBar: UISearchBar, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        self.tableView.contentOffset.y = 0
         if self.scope == 0 {
             // Handle odd case where search text is just ","
             if searchBar.text == "," {

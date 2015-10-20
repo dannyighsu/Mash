@@ -25,7 +25,7 @@ class ImageViewController: UICollectionViewController, UICollectionViewDelegateF
         self.images.registerNib(image, forCellWithReuseIdentifier: "ImageCell")
         self.images.delegate = self
         self.images.dataSource = self
-        self.cellWidth = self.images.frame.size.width / 3 - 4.0
+        self.cellWidth = UIScreen.mainScreen().bounds.size.width / 3 - 4.0
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {

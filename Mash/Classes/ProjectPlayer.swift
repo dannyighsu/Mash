@@ -21,14 +21,12 @@ import UIKit
 
 class ProjectPlayer: UITableViewHeaderFooterView {
     
-    @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var stopButton: UIButton!
     @IBOutlet weak var titleLabel: UITextField!
     @IBOutlet weak var toolsButton: UIButton!
-    @IBOutlet weak var mixerButton: UIButton!
     @IBOutlet weak var metronomeButton: UIButton!
     
     var delegate: PlayerDelegate? = nil

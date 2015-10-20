@@ -221,7 +221,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     // Track management
     func retrieveTracks() {
         let request = UserRequest()
-        request.userid = UInt32(self.user.userid!)
+        request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(self.user.userid!)
         

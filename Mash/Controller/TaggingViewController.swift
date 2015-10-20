@@ -48,11 +48,10 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         self.tempoField.keyboardType = UIKeyboardType.NumberPad
         self.tempoField.delegate = self
         self.tempoField.becomeFirstResponder()
-        
         self.doneButton.addTarget(self, action: "finish:", forControlEvents: UIControlEvents.TouchDown)
-        
         self.tempoField.text = self.bpm
         self.timeField.text = self.time
+        
     }
     
     override func viewWillAppear(animated: Bool) {
