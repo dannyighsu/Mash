@@ -153,6 +153,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         if self.player != nil && self.player!.isPlaying {
             self.player!.pause()
         }
+        if self.recording {
+            self.record(nil)
+        }
         self.player = nil
         self.audioFile = nil
         self.recorder = nil

@@ -42,18 +42,18 @@
 - (ProtoRPC *)RPCToRecordingGetWithRequest:(RecordingRequest *)request handler:(void(^)(RecordingResponse *response, NSError *error))handler;
 
 
-#pragma mark FollowersGet(UserRequest) returns (FollowGetResponse)
+#pragma mark FollowersGet(UserRequest) returns (UserPreviews)
 
-- (void)followersGetWithRequest:(UserRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler;
+- (void)followersGetWithRequest:(UserRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToFollowersGetWithRequest:(UserRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler;
+- (ProtoRPC *)RPCToFollowersGetWithRequest:(UserRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler;
 
 
-#pragma mark FollowingsGet(UserRequest) returns (FollowGetResponse)
+#pragma mark FollowingsGet(UserRequest) returns (UserPreviews)
 
-- (void)followingsGetWithRequest:(UserRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler;
+- (void)followingsGetWithRequest:(UserRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToFollowingsGetWithRequest:(UserRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler;
+- (ProtoRPC *)RPCToFollowingsGetWithRequest:(UserRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler;
 
 
 #pragma mark UserDelete(UserRequest) returns (SuccessResponse)
@@ -147,9 +147,17 @@
 - (ProtoRPC *)RPCToSearchTagWithRequest:(SearchTagRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler;
 
 
+#pragma mark UserSearch(UserSearchRequest) returns (UserPreviews)
+
+- (void)userSearchWithRequest:(UserSearchRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToUserSearchWithRequest:(UserSearchRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler;
+
+
 @end
 
 // Basic service implementation, over gRPC, that only does marshalling and parsing.
 @interface MashService : ProtoService<MashService>
 - (instancetype)initWithHost:(NSString *)host NS_DESIGNATED_INITIALIZER;
++ (instancetype)serviceWithHost:(NSString *)host;
 @end

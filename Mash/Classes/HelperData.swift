@@ -11,7 +11,8 @@ import UIKit
 
 // Helper objects
 let db: String = "http://54.152.179.223:5010"
-let hostAddress: String = "http://54.69.218.204:5010"
+//let hostAddress: String = "http://54.69.218.204:5010"
+let hostAddress: String = "http://localhost:5010"
 let server: MashService = MashService(host: hostAddress)
 var keychainWrapper: KeychainWrapper = KeychainWrapper()
 var currentUser = User()
@@ -67,10 +68,10 @@ var instrumentArray: [String: [String]] = [
     "Brass": ["", "French Horn", "Trombone", "Trumpet", "Tuba"],
     "Woodwinds": ["", "Saxophone", "Flute", "Piccolo", "Oboe", "English Horn", "Bassoon", "Clarinet", "Harmonia", "Accordians"],
     "Percussion": ["", "Electronic", "Cajon", "Drum Kit", "Triangle", "Xylophone", "Snare", "Bass Drum", "Vibraphone", "Marimba", "Bongo", "Tamborine", "Darbuka"],
-    "Electronic": ["", "Turntables", "Sample", "Synth Lead", "Synth Bass", "Synth Pad", "Synthesizer"],
+    "Electronic": ["", "Synth Lead", "Synth Bass", "Synth Pad", "Synth Brass", "Gated Synth", "Other"],
     "Strings": ["", "Violin", "Voila", "Cello", "Ukulele", "Harp", "Sitar", "Banjo", "Lyre", "Upright Bass", "Mandolin"],
     "Guitar": ["", "Acoustic Guitar", "Electric Guitar", "Bass Guitar"],
-    "Keyboard": ["", "Synthesizer", "Piano", "Organ", "Electric Piano"],
+    "Keyboard": ["", "Piano", "Organ", "Electric Piano"],
     "Other": ["", "Other"]
 ]
 

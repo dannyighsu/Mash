@@ -79,18 +79,30 @@ typedef GPB_ENUM(RegisterResponse_FieldNumber) {
 
 typedef GPB_ENUM(SignInRequest_FieldNumber) {
   SignInRequest_FieldNumber_Handle = 1,
-  SignInRequest_FieldNumber_PasswordHash = 2,
+  SignInRequest_FieldNumber_Email = 2,
+  SignInRequest_FieldNumber_PasswordHash = 3,
+};
+
+typedef GPB_ENUM(SignInRequest_Input_OneOfCase) {
+  SignInRequest_Input_OneOfCase_GPBUnsetOneOfCase = 0,
+  SignInRequest_Input_OneOfCase_Handle = 1,
+  SignInRequest_Input_OneOfCase_Email = 2,
 };
 
 @interface SignInRequest : GPBMessage
 
-@property(nonatomic, readwrite) BOOL hasHandle;
+@property(nonatomic, readonly) SignInRequest_Input_OneOfCase inputOneOfCase;
+
 @property(nonatomic, readwrite, copy, null_resettable) NSString *handle;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *email;
 
 @property(nonatomic, readwrite) BOOL hasPasswordHash;
 @property(nonatomic, readwrite, copy, null_resettable) NSString *passwordHash;
 
 @end
+
+void SignInRequest_ClearInputOneOfCase(SignInRequest *message);
 
 #pragma mark - SignInResponse
 
@@ -104,6 +116,7 @@ typedef GPB_ENUM(SignInResponse_FieldNumber) {
   SignInResponse_FieldNumber_FollowersCount = 9,
   SignInResponse_FieldNumber_FollowingCount = 10,
   SignInResponse_FieldNumber_TrackCount = 11,
+  SignInResponse_FieldNumber_Handle = 12,
 };
 
 @interface SignInResponse : GPBMessage
@@ -134,6 +147,9 @@ typedef GPB_ENUM(SignInResponse_FieldNumber) {
 
 @property(nonatomic, readwrite) BOOL hasTrackCount;
 @property(nonatomic, readwrite) uint32_t trackCount;
+
+@property(nonatomic, readwrite) BOOL hasHandle;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *handle;
 
 @end
 
@@ -294,13 +310,13 @@ typedef GPB_ENUM(UserRecordingsResponse_FieldNumber) {
 
 @end
 
-#pragma mark - FollowGetResponse
+#pragma mark - UserPreviews
 
-typedef GPB_ENUM(FollowGetResponse_FieldNumber) {
-  FollowGetResponse_FieldNumber_UserArray = 1,
+typedef GPB_ENUM(UserPreviews_FieldNumber) {
+  UserPreviews_FieldNumber_UserArray = 1,
 };
 
-@interface FollowGetResponse : GPBMessage
+@interface UserPreviews : GPBMessage
 
 // |userArray| contains |UserPreview|
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray *userArray;
@@ -499,6 +515,27 @@ typedef GPB_ENUM(RecordingSearchRequest_FieldNumber) {
 
 @property(nonatomic, readwrite) BOOL hasQuery;
 @property(nonatomic, readwrite, copy, null_resettable) NSString *query;
+
+@end
+
+#pragma mark - UserSearchRequest
+
+typedef GPB_ENUM(UserSearchRequest_FieldNumber) {
+  UserSearchRequest_FieldNumber_LoginToken = 1,
+  UserSearchRequest_FieldNumber_Userid = 2,
+  UserSearchRequest_FieldNumber_Search = 3,
+};
+
+@interface UserSearchRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasLoginToken;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *loginToken;
+
+@property(nonatomic, readwrite) BOOL hasUserid;
+@property(nonatomic, readwrite) uint32_t userid;
+
+@property(nonatomic, readwrite) BOOL hasSearch;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *search;
 
 @end
 

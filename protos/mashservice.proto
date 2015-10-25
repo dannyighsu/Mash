@@ -17,12 +17,15 @@ message RegisterResponse {
 }
 
 message SignInRequest {
-    required string handle = 1;
-    required string password_hash = 2;
+    oneof input {
+        string handle = 1;
+        string email = 2;
+    }
+    required string password_hash = 3;
 }
 
 message SignInResponse {
-    optional uint32 userid = 1;
+    required uint32 userid = 1;
     optional string email = 2;
     optional string name = 3;
     optional uint32 register_agent = 4;
@@ -31,6 +34,7 @@ message SignInResponse {
     optional uint32 followers_count = 9;
     optional uint32 following_count = 10;
     optional uint32 track_count = 11;
+    required string handle = 12;
 }
 
 message UserResponse {
@@ -74,7 +78,7 @@ message UserRecordingsResponse {
     repeated RecordingResponse rec = 1;
 }
 
-message FollowGetResponse {
+message UserPreviews {
     repeated UserPreview user = 1;
 }
 
@@ -130,6 +134,12 @@ message RecordingSearchRequest {
     required string query = 3;
 }
 
+message UserSearchRequest {
+    required string login_token = 1;
+    required uint32 userid = 2;
+    required string search = 3;
+}
+
 message UserUpdateRequest {
     required uint32 userid = 1;
     required string login_token = 2;
@@ -183,8 +193,8 @@ service MashService {
     rpc SignOut (UserRequest) returns (SuccessResponse);
     rpc UserGet (UserRequest) returns (UserResponse);
     rpc RecordingGet (RecordingRequest) returns (RecordingResponse);
-    rpc FollowersGet (UserRequest) returns (FollowGetResponse);
-    rpc FollowingsGet (UserRequest) returns (FollowGetResponse);
+    rpc FollowersGet (UserRequest) returns (UserPreviews);
+    rpc FollowingsGet (UserRequest) returns (UserPreviews);
     rpc UserDelete (UserRequest) returns (SuccessResponse);
     rpc RecordingDelete (RecordingRequest) returns (SuccessResponse);
     rpc UserFollow (UserRequest) returns (SuccessResponse);
@@ -198,4 +208,5 @@ service MashService {
     rpc UserRecordings (UserRequest) returns (UserRecordingsResponse);
     rpc Feed (FeedRequest) returns (FeedResponse);
     rpc SearchTag (SearchTagRequest) returns (Recordings);
+    rpc UserSearch (UserSearchRequest) returns (UserPreviews);
 }

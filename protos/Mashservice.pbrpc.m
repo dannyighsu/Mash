@@ -20,6 +20,10 @@ static NSString *const kServiceName = @"MashService";
   return [self initWithHost:host];
 }
 
++ (instancetype)serviceWithHost:(NSString *)host {
+  return [[self alloc] initWithHost:host];
+}
+
 
 #pragma mark Register(RegisterRequest) returns (RegisterResponse)
 
@@ -81,28 +85,28 @@ static NSString *const kServiceName = @"MashService";
              responseClass:[RecordingResponse class]
         responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
 }
-#pragma mark FollowersGet(UserRequest) returns (FollowGetResponse)
+#pragma mark FollowersGet(UserRequest) returns (UserPreviews)
 
-- (void)followersGetWithRequest:(UserRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler{
+- (void)followersGetWithRequest:(UserRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler{
   [[self RPCToFollowersGetWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToFollowersGetWithRequest:(UserRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler{
+- (ProtoRPC *)RPCToFollowersGetWithRequest:(UserRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler{
   return [self RPCToMethod:@"FollowersGet"
             requestsWriter:[GRXWriter writerWithValue:request]
-             responseClass:[FollowGetResponse class]
+             responseClass:[UserPreviews class]
         responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
 }
-#pragma mark FollowingsGet(UserRequest) returns (FollowGetResponse)
+#pragma mark FollowingsGet(UserRequest) returns (UserPreviews)
 
-- (void)followingsGetWithRequest:(UserRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler{
+- (void)followingsGetWithRequest:(UserRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler{
   [[self RPCToFollowingsGetWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToFollowingsGetWithRequest:(UserRequest *)request handler:(void(^)(FollowGetResponse *response, NSError *error))handler{
+- (ProtoRPC *)RPCToFollowingsGetWithRequest:(UserRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler{
   return [self RPCToMethod:@"FollowingsGet"
             requestsWriter:[GRXWriter writerWithValue:request]
-             responseClass:[FollowGetResponse class]
+             responseClass:[UserPreviews class]
         responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
 }
 #pragma mark UserDelete(UserRequest) returns (SuccessResponse)
@@ -259,6 +263,18 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"SearchTag"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[Recordings class]
+        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+}
+#pragma mark UserSearch(UserSearchRequest) returns (UserPreviews)
+
+- (void)userSearchWithRequest:(UserSearchRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler{
+  [[self RPCToUserSearchWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToUserSearchWithRequest:(UserSearchRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler{
+  return [self RPCToMethod:@"UserSearch"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[UserPreviews class]
         responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
 }
 @end

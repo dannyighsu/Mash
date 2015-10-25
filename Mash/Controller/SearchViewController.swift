@@ -47,7 +47,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.completionTableView!.scrollEnabled = true
         self.completionTableView!.backgroundColor = UIColor.whiteColor()
         self.completionTableView!.hidden = true
-        self.tableView.addSubview(self.completionTableView!)
+        self.view.addSubview(self.completionTableView!)
         
         // Register nibs
         let track = UINib(nibName: "Track", bundle: nil)
@@ -62,12 +62,12 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.definesPresentationContext = true
         self.searchController?.searchBar.sizeToFit()
         self.searchController?.searchBar.setShowsCancelButton(true, animated: false)
+        self.searchController?.searchBar.becomeFirstResponder()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.setHidesBackButton(true, animated: false)
-        self.navigationController?.navigationBarHidden = true
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -125,6 +125,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 let userData = self.searchResults[indexPath.row] as! User
                 user.handle = userData.handle
                 user.username = userData.username
+                user.userid = userData.userid
                 user.updateDisplays()
                 return user
             }
@@ -216,7 +217,6 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     func searchBar(searchBar: UISearchBar, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        self.tableView.contentOffset.y = 0
         if self.scope == 0 {
             // Handle odd case where search text is just ","
             if searchBar.text == "," {
@@ -354,30 +354,13 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     func userSearchTextFilter() {
-        /*
         self.activityView.startAnimating()
-        let request = SearchTagRequest()
+        let request = UserSearchRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
-        for tag in self.tags {
-            let string = tag[0]
-            let type = tag[1]
-            switch (type) {
-            case "instrument":
-                request.instrumentArray.addObject(string)
-            case "family":
-                request.familyArray.addObject(string)
-            case "genre":
-                request.genreArray.addObject(string)
-            case "subgenre":
-                request.subgenreArray.addObject(string)
-            default:
-                // FIXME: consider adding a misc search section to request?
-                Debug.printl("Unrecognized search string: \(type): \(string)", sender: self)
-            }
-        }
-        
-        server.searchTagWithRequest(request) {
+        request.search = self.searchController!.searchBar.text!.lowercaseString
+        print(request.search)
+        server.userSearchWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
@@ -388,10 +371,10 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()
-                    self.updateResults(response)
+                    self.updateUserResults(response)
                 }
             }
-        }*/
+        }
     }
     
     func updateResults(response: Recordings) {
@@ -444,21 +427,23 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         }*/
     }
     
-    func updateUserResults(data: NSDictionary) {
-        self.searchResults = []
+    func updateUserResults(response: UserPreviews) {
         self.allResults = []
-        let users = data["users"] as! NSArray
-        if users.count != 0 {
-            for i in 0...users.count - 1 {
-                let dict = users[i] as! NSDictionary
+        self.searchResults = []
+        if response.userArray.count != 0 {
+            for i in 0...response.userArray.count - 1 {
+                let data = response.userArray[i]
                 let user = User()
-                user.handle = dict["handle"] as? String
-                user.username = dict["name"] as? String
+                user.handle = data.handle
+                user.username = data.name
+                user.userid = Int(data.userid)
                 self.allResults.append(user)
                 if i < DEFAULT_DISPLAY_AMOUNT {
                     self.searchResults.append(user)
                 }
             }
+        } else {
+            raiseAlert("No Results Found")
         }
         self.tableView.reloadData()
     }

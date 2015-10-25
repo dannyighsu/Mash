@@ -17,6 +17,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var bpm: Int? = nil
     var instruments: [String] = []
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+    var cellWidth: CGFloat = 75.0
     
     // Testing
     // var audioPlayer: AVAudioPlayer? = nil
@@ -28,14 +29,17 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         self.instrumentsCollection.dataSource = self
         let cell = UINib(nibName: "InstrumentCell", bundle: nil)
         self.instrumentsCollection.registerNib(cell, forCellWithReuseIdentifier: "InstrumentCell")
+        self.instrumentsCollection.backgroundColor = darkGray()
         
         self.activityView.center = self.view.center
         self.view.addSubview(self.activityView)
+        self.cellWidth = UIScreen.mainScreen().bounds.size.width / 2 - 4.0
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.title = "Mash an Instrument"
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "done")
         self.navigationItem.setHidesBackButton(false, animated: false)
     }
     
@@ -53,6 +57,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationItem.setHidesBackButton(true, animated: false)
+        self.navigationItem.rightBarButtonItem = nil
     }
     
     override func prefersStatusBarHidden() -> Bool {
@@ -63,19 +68,11 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         return instrumentArray.count
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
-        self.instruments.append(cell.instrument)
-        cell.layer.borderColor = darkGray().CGColor
-        cell.layer.backgroundColor = lightGray().CGColor
-        cell.layer.borderWidth = 1.0
-        self.downloadAction([cell.instrument])
-    }
-    
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         let instr = cell as! InstrumentCell
         instr.instrument = Array(instrumentArray.keys)[indexPath.row]
         instr.instrumentImage.image = findImage([instr.instrument])
+        instr.backgroundColor = UIColor.whiteColor()
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -86,11 +83,40 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         let index = CGFloat(indexPath.row % 3)
         
         cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, screenWidth / 3, screenWidth / 3)*/
+        let selection = UIImageView(frame: cell.frame)
+        selection.layer.borderColor = lightGray().CGColor
+        cell.selectedBackgroundView = selection
         return cell
     }
     
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
+        if !self.instruments.contains(cell.instrument) {
+            self.instruments.append(cell.instrument)
+        }
+    }
+    
+    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! InstrumentCell
+        for i in 0...self.instruments.count - 1 {
+            if self.instruments[i] == cell.instrument {
+                self.instruments.removeAtIndex(i)
+                break
+            }
+        }
+    }
+
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        return CGSize(width: self.cellWidth, height: self.cellWidth)
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return 6.0
+    }
+    
     // Download mash files
-    func downloadAction(instrument: [String]) {
+    func done() {
+        
         /*
         // Post data to server
         let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String

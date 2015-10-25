@@ -180,9 +180,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func addTracks() {
-        Debug.printl("Pushing new searchcontroller.", sender: self)
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("SearchViewController") as! SearchViewController
-        self.navigationController?.pushViewController(controller, animated: false)
+        self.mash()
     }
     
     func toggleMetronome() {

@@ -196,12 +196,15 @@ typedef struct RegisterResponse__storage_ {
 
 @implementation SignInRequest
 
-@dynamic hasHandle, handle;
+@dynamic inputOneOfCase;
+@dynamic handle;
+@dynamic email;
 @dynamic hasPasswordHash, passwordHash;
 
 typedef struct SignInRequest__storage_ {
-  uint32_t _has_storage_[1];
+  uint32_t _has_storage_[2];
   NSString *handle;
+  NSString *email;
   NSString *passwordHash;
 } SignInRequest__storage_;
 
@@ -210,12 +213,18 @@ typedef struct SignInRequest__storage_ {
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
+    static GPBMessageOneofDescription oneofs[] = {
+      {
+        .name = "input",
+        .index = -1,
+      },
+    };
     static GPBMessageFieldDescription fields[] = {
       {
         .name = "handle",
         .number = SignInRequest_FieldNumber_Handle,
-        .hasIndex = 0,
-        .flags = GPBFieldRequired,
+        .hasIndex = -1,
+        .flags = GPBFieldOptional,
         .dataType = GPBDataTypeString,
         .offset = offsetof(SignInRequest__storage_, handle),
         .defaultValue.valueString = nil,
@@ -223,9 +232,20 @@ typedef struct SignInRequest__storage_ {
         .fieldOptions = NULL,
       },
       {
+        .name = "email",
+        .number = SignInRequest_FieldNumber_Email,
+        .hasIndex = -1,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(SignInRequest__storage_, email),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
         .name = "passwordHash",
         .number = SignInRequest_FieldNumber_PasswordHash,
-        .hasIndex = 1,
+        .hasIndex = 2,
         .flags = GPBFieldRequired,
         .dataType = GPBDataTypeString,
         .offset = offsetof(SignInRequest__storage_, passwordHash),
@@ -240,8 +260,8 @@ typedef struct SignInRequest__storage_ {
                                           file:MashserviceRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                        oneofs:NULL
-                                    oneofCount:0
+                                        oneofs:oneofs
+                                    oneofCount:sizeof(oneofs) / sizeof(GPBMessageOneofDescription)
                                          enums:NULL
                                      enumCount:0
                                         ranges:NULL
@@ -256,6 +276,11 @@ typedef struct SignInRequest__storage_ {
 
 @end
 
+void SignInRequest_ClearInputOneOfCase(SignInRequest *message) {
+  GPBDescriptor *descriptor = [message descriptor];
+  GPBOneofDescriptor *oneof = descriptor->oneofs_[0];
+  GPBMaybeClearOneof(message, oneof, 0);
+}
 #pragma mark - SignInResponse
 
 @implementation SignInResponse
@@ -269,6 +294,7 @@ typedef struct SignInRequest__storage_ {
 @dynamic hasFollowersCount, followersCount;
 @dynamic hasFollowingCount, followingCount;
 @dynamic hasTrackCount, trackCount;
+@dynamic hasHandle, handle;
 
 typedef struct SignInResponse__storage_ {
   uint32_t _has_storage_[1];
@@ -281,6 +307,7 @@ typedef struct SignInResponse__storage_ {
   NSString *name;
   NSString *userDescription;
   NSString *loginToken;
+  NSString *handle;
 } SignInResponse__storage_;
 
 // This method is threadsafe because it is initially called
@@ -293,7 +320,7 @@ typedef struct SignInResponse__storage_ {
         .name = "userid",
         .number = SignInResponse_FieldNumber_Userid,
         .hasIndex = 0,
-        .flags = GPBFieldOptional,
+        .flags = GPBFieldRequired,
         .dataType = GPBDataTypeUInt32,
         .offset = offsetof(SignInResponse__storage_, userid),
         .defaultValue.valueUInt32 = 0U,
@@ -385,6 +412,17 @@ typedef struct SignInResponse__storage_ {
         .dataType = GPBDataTypeUInt32,
         .offset = offsetof(SignInResponse__storage_, trackCount),
         .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "handle",
+        .number = SignInResponse_FieldNumber_Handle,
+        .hasIndex = 9,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(SignInResponse__storage_, handle),
+        .defaultValue.valueString = nil,
         .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
@@ -940,16 +978,16 @@ typedef struct UserRecordingsResponse__storage_ {
 
 @end
 
-#pragma mark - FollowGetResponse
+#pragma mark - UserPreviews
 
-@implementation FollowGetResponse
+@implementation UserPreviews
 
 @dynamic userArray, userArray_Count;
 
-typedef struct FollowGetResponse__storage_ {
+typedef struct UserPreviews__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *userArray;
-} FollowGetResponse__storage_;
+} UserPreviews__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -959,18 +997,18 @@ typedef struct FollowGetResponse__storage_ {
     static GPBMessageFieldDescription fields[] = {
       {
         .name = "userArray",
-        .number = FollowGetResponse_FieldNumber_UserArray,
+        .number = UserPreviews_FieldNumber_UserArray,
         .hasIndex = GPBNoHasBit,
         .flags = GPBFieldRepeated,
         .dataType = GPBDataTypeMessage,
-        .offset = offsetof(FollowGetResponse__storage_, userArray),
+        .offset = offsetof(UserPreviews__storage_, userArray),
         .defaultValue.valueMessage = nil,
         .dataTypeSpecific.className = GPBStringifySymbol(UserPreview),
         .fieldOptions = NULL,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[FollowGetResponse class]
+        [GPBDescriptor allocDescriptorForClass:[UserPreviews class]
                                      rootClass:[MashserviceRoot class]
                                           file:MashserviceRoot_FileDescriptor()
                                         fields:fields
@@ -981,7 +1019,7 @@ typedef struct FollowGetResponse__storage_ {
                                      enumCount:0
                                         ranges:NULL
                                     rangeCount:0
-                                   storageSize:sizeof(FollowGetResponse__storage_)
+                                   storageSize:sizeof(UserPreviews__storage_)
                                     wireFormat:NO];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
@@ -1639,6 +1677,83 @@ typedef struct RecordingSearchRequest__storage_ {
                                         ranges:NULL
                                     rangeCount:0
                                    storageSize:sizeof(RecordingSearchRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - UserSearchRequest
+
+@implementation UserSearchRequest
+
+@dynamic hasLoginToken, loginToken;
+@dynamic hasUserid, userid;
+@dynamic hasSearch, search;
+
+typedef struct UserSearchRequest__storage_ {
+  uint32_t _has_storage_[1];
+  uint32_t userid;
+  NSString *loginToken;
+  NSString *search;
+} UserSearchRequest__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "loginToken",
+        .number = UserSearchRequest_FieldNumber_LoginToken,
+        .hasIndex = 0,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserSearchRequest__storage_, loginToken),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "userid",
+        .number = UserSearchRequest_FieldNumber_Userid,
+        .hasIndex = 1,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(UserSearchRequest__storage_, userid),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "search",
+        .number = UserSearchRequest_FieldNumber_Search,
+        .hasIndex = 2,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserSearchRequest__storage_, search),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[UserSearchRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(UserSearchRequest__storage_)
                                     wireFormat:NO];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;

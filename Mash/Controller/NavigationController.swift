@@ -15,9 +15,10 @@ class NavigationController: UINavigationController {
         super.viewDidLoad()
         
         UINavigationBar.appearance().barTintColor = darkGray()
-        UINavigationBar.appearance().translucent = false
+        UINavigationBar.appearance().translucent = true
         UINavigationBar.appearance().tintColor = lightBlue()
         self.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 20)!, NSForegroundColorAttributeName: lightBlue()]
+        self.edgesForExtendedLayout = UIRectEdge.None
     }
     
     override func viewDidAppear(animated: Bool) {
