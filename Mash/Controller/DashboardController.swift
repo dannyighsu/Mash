@@ -128,6 +128,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 dispatch_async(dispatch_get_main_queue()) {
                     track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
                 }
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    track.staticAudioPlot.image = UIImage(named: "waveform_static")
+                }
             }
         }
         return track

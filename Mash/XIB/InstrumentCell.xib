@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,8 +15,15 @@
                 <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="InstrumentName" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="56S-Wr-fnz">
+                        <rect key="frame" x="15" y="121" width="120" height="21"/>
+                        <animations/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pzR-oe-sLK">
-                        <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                        <rect key="frame" x="15" y="0.0" width="120" height="120"/>
                         <animations/>
                     </imageView>
                 </subviews>
@@ -24,14 +32,19 @@
             </view>
             <animations/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="pzR-oe-sLK" secondAttribute="bottom" id="3wA-Mi-GAL"/>
+                <constraint firstAttribute="bottom" secondItem="pzR-oe-sLK" secondAttribute="bottom" constant="30" id="3wA-Mi-GAL"/>
                 <constraint firstItem="pzR-oe-sLK" firstAttribute="top" secondItem="gNF-by-Mys" secondAttribute="top" id="Iq8-Ve-Fsi"/>
-                <constraint firstItem="pzR-oe-sLK" firstAttribute="leading" secondItem="gNF-by-Mys" secondAttribute="leading" id="Lah-eX-uDm"/>
-                <constraint firstAttribute="trailing" secondItem="pzR-oe-sLK" secondAttribute="trailing" id="n2h-Op-zjr"/>
+                <constraint firstItem="pzR-oe-sLK" firstAttribute="leading" secondItem="gNF-by-Mys" secondAttribute="leading" constant="15" id="Lah-eX-uDm"/>
+                <constraint firstItem="56S-Wr-fnz" firstAttribute="trailing" secondItem="pzR-oe-sLK" secondAttribute="trailing" id="Qsa-ZV-FPZ"/>
+                <constraint firstItem="56S-Wr-fnz" firstAttribute="leading" secondItem="pzR-oe-sLK" secondAttribute="leading" id="Rff-qE-nOp"/>
+                <constraint firstAttribute="trailing" secondItem="pzR-oe-sLK" secondAttribute="trailing" constant="15" id="n2h-Op-zjr"/>
+                <constraint firstItem="56S-Wr-fnz" firstAttribute="top" secondItem="pzR-oe-sLK" secondAttribute="bottom" constant="1" id="oyG-KA-2H2"/>
+                <constraint firstItem="56S-Wr-fnz" firstAttribute="bottom" secondItem="gNF-by-Mys" secondAttribute="bottomMargin" id="tug-V7-Grb"/>
             </constraints>
             <size key="customSize" width="150" height="150"/>
             <connections>
                 <outlet property="instrumentImage" destination="pzR-oe-sLK" id="kE2-4V-rhb"/>
+                <outlet property="instrumentLabel" destination="56S-Wr-fnz" id="MgV-1X-Mb7"/>
             </connections>
             <point key="canvasLocation" x="411" y="308"/>
         </collectionViewCell>

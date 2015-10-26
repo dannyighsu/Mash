@@ -20,10 +20,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SOH-QP-QNH" customClass="EZAudioPlot">
+                                <rect key="frame" x="0.0" y="20" width="600" height="45"/>
+                                <animations/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="uUE-f2-5iJ"/>
+                                </constraints>
+                            </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="LkQ-TK-aJF">
-                                <rect key="frame" x="0.0" y="98" width="600" height="503"/>
+                                <rect key="frame" x="0.0" y="117" width="600" height="483"/>
                                 <animations/>
                                 <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="503" id="0z3-me-uWz"/>
+                                </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="tF3-X5-E7f">
                                     <size key="itemSize" width="150" height="150"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -31,29 +42,29 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="0z3-me-uWz"/>
+                                    </mask>
+                                </variation>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SOH-QP-QNH" customClass="EZAudioPlot">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="45"/>
-                                <animations/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iSE-YE-rIk">
-                                <rect key="frame" x="0.0" y="45" width="600" height="53"/>
+                                <rect key="frame" x="0.0" y="65" width="600" height="56"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Track Title" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UyV-aB-4Ob">
                                         <rect key="frame" x="212" y="10" width="176" height="30"/>
                                         <animations/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="176" id="kAR-ip-GBz"/>
+                                            <constraint firstAttribute="width" constant="176" id="S9K-z0-YNq"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nov-J4-kwh">
-                                        <rect key="frame" x="536" y="10" width="46" height="30"/>
+                                        <rect key="frame" x="536" y="10" width="46" height="33"/>
                                         <animations/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="46" id="WyT-IE-n3v"/>
+                                            <constraint firstAttribute="width" constant="46" id="DTT-l7-qJO"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="15"/>
                                         <state key="normal" title="Done">
@@ -62,10 +73,10 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HGg-GB-eaB">
-                                        <rect key="frame" x="8" y="10" width="58" height="30"/>
+                                        <rect key="frame" x="8" y="10" width="58" height="33"/>
                                         <animations/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="58" id="pTU-tL-DZx"/>
+                                            <constraint firstAttribute="width" constant="58" id="rhI-2D-iZv"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="15"/>
                                         <state key="normal" title="Cancel">
@@ -77,35 +88,40 @@
                                 <animations/>
                                 <color key="backgroundColor" red="0.1176470588" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstItem="Nov-J4-kwh" firstAttribute="baseline" secondItem="HGg-GB-eaB" secondAttribute="firstBaseline" id="5dw-vc-yN5"/>
-                                    <constraint firstItem="UyV-aB-4Ob" firstAttribute="top" secondItem="Nov-J4-kwh" secondAttribute="top" id="Cf8-fB-eBe"/>
-                                    <constraint firstItem="HGg-GB-eaB" firstAttribute="baseline" secondItem="Nov-J4-kwh" secondAttribute="firstBaseline" id="QG0-7z-5Sq"/>
-                                    <constraint firstItem="UyV-aB-4Ob" firstAttribute="top" secondItem="HGg-GB-eaB" secondAttribute="top" id="Xe7-QU-b78"/>
-                                    <constraint firstItem="HGg-GB-eaB" firstAttribute="leading" secondItem="iSE-YE-rIk" secondAttribute="leadingMargin" id="Y8w-Wo-dE7"/>
-                                    <constraint firstItem="UyV-aB-4Ob" firstAttribute="centerX" secondItem="iSE-YE-rIk" secondAttribute="centerX" id="lET-mD-Jut"/>
-                                    <constraint firstItem="UyV-aB-4Ob" firstAttribute="bottom" secondItem="Nov-J4-kwh" secondAttribute="bottom" id="pyW-Pv-k8x"/>
-                                    <constraint firstAttribute="trailing" secondItem="Nov-J4-kwh" secondAttribute="trailing" constant="18" id="rGk-hL-m1I"/>
-                                    <constraint firstItem="HGg-GB-eaB" firstAttribute="top" secondItem="iSE-YE-rIk" secondAttribute="top" constant="10" id="sMf-ei-hYp"/>
-                                    <constraint firstAttribute="height" constant="53" id="sj0-Qd-Faz"/>
-                                    <constraint firstAttribute="bottom" secondItem="HGg-GB-eaB" secondAttribute="bottom" constant="13" id="uMQ-Yq-Ntu"/>
+                                    <constraint firstAttribute="bottom" secondItem="HGg-GB-eaB" secondAttribute="bottom" constant="13" id="9qb-2z-g12"/>
+                                    <constraint firstItem="Nov-J4-kwh" firstAttribute="baseline" secondItem="HGg-GB-eaB" secondAttribute="firstBaseline" id="BZb-pF-RXX"/>
+                                    <constraint firstAttribute="trailing" secondItem="Nov-J4-kwh" secondAttribute="trailing" constant="18" id="HeF-3u-6tH"/>
+                                    <constraint firstItem="HGg-GB-eaB" firstAttribute="top" secondItem="iSE-YE-rIk" secondAttribute="top" constant="10" id="IYd-Cv-j5d"/>
+                                    <constraint firstItem="Nov-J4-kwh" firstAttribute="top" secondItem="UyV-aB-4Ob" secondAttribute="top" id="JMa-uz-YGA"/>
+                                    <constraint firstItem="HGg-GB-eaB" firstAttribute="leading" secondItem="iSE-YE-rIk" secondAttribute="leadingMargin" id="iUT-RP-azV"/>
+                                    <constraint firstItem="UyV-aB-4Ob" firstAttribute="centerX" secondItem="iSE-YE-rIk" secondAttribute="centerX" id="k6k-c3-Jla"/>
+                                    <constraint firstItem="HGg-GB-eaB" firstAttribute="top" secondItem="UyV-aB-4Ob" secondAttribute="top" id="t16-kj-bb0"/>
+                                    <constraint firstItem="HGg-GB-eaB" firstAttribute="baseline" secondItem="Nov-J4-kwh" secondAttribute="firstBaseline" id="ztc-xr-10Y"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="SOH-QP-QNH" firstAttribute="trailing" secondItem="iSE-YE-rIk" secondAttribute="trailing" id="5u1-Nc-Y5O"/>
-                            <constraint firstItem="LkQ-TK-aJF" firstAttribute="bottom" secondItem="Zi0-oJ-SQm" secondAttribute="top" constant="1" id="90z-Wd-1OT"/>
-                            <constraint firstAttribute="trailing" secondItem="LkQ-TK-aJF" secondAttribute="trailing" id="QwE-cM-q5a"/>
-                            <constraint firstItem="LkQ-TK-aJF" firstAttribute="top" secondItem="iSE-YE-rIk" secondAttribute="bottom" id="W4O-eQ-tCg"/>
-                            <constraint firstItem="iSE-YE-rIk" firstAttribute="leading" secondItem="LkQ-TK-aJF" secondAttribute="leading" id="Zpe-fV-Z7q"/>
-                            <constraint firstItem="iSE-YE-rIk" firstAttribute="trailing" secondItem="LkQ-TK-aJF" secondAttribute="trailing" id="bGS-29-Lrp"/>
-                            <constraint firstItem="iSE-YE-rIk" firstAttribute="leading" secondItem="s2i-XX-w3i" secondAttribute="leading" id="cir-pd-jQa"/>
-                            <constraint firstItem="LkQ-TK-aJF" firstAttribute="top" secondItem="SOH-QP-QNH" secondAttribute="bottom" constant="53" id="f4n-49-h2m"/>
-                            <constraint firstItem="iSE-YE-rIk" firstAttribute="top" secondItem="s2i-XX-w3i" secondAttribute="top" constant="45" id="sJy-nj-0GP"/>
-                            <constraint firstItem="SOH-QP-QNH" firstAttribute="leading" secondItem="iSE-YE-rIk" secondAttribute="leading" id="t56-IN-2FC"/>
-                            <constraint firstItem="SOH-QP-QNH" firstAttribute="top" secondItem="iSE-YE-rIk" secondAttribute="bottom" constant="-98" id="uo2-G3-ps7"/>
+                            <constraint firstItem="iSE-YE-rIk" firstAttribute="leading" secondItem="LkQ-TK-aJF" secondAttribute="leading" id="4HE-Ny-R6x"/>
+                            <constraint firstItem="LkQ-TK-aJF" firstAttribute="trailing" secondItem="iSE-YE-rIk" secondAttribute="trailing" id="5Ea-dF-M6O"/>
+                            <constraint firstItem="SOH-QP-QNH" firstAttribute="trailing" secondItem="iSE-YE-rIk" secondAttribute="trailing" id="5zo-IT-f2x"/>
+                            <constraint firstItem="iSE-YE-rIk" firstAttribute="leading" secondItem="s2i-XX-w3i" secondAttribute="leading" id="8kA-wj-G0h"/>
+                            <constraint firstItem="LkQ-TK-aJF" firstAttribute="bottom" secondItem="Zi0-oJ-SQm" secondAttribute="top" id="PR9-g1-WfX"/>
+                            <constraint firstItem="Zi0-oJ-SQm" firstAttribute="top" secondItem="iSE-YE-rIk" secondAttribute="bottom" constant="502" id="VZK-BK-ckq"/>
+                            <constraint firstItem="SOH-QP-QNH" firstAttribute="top" secondItem="iSh-VC-R3h" secondAttribute="bottom" id="bTi-t4-jAV"/>
+                            <constraint firstItem="iSE-YE-rIk" firstAttribute="top" secondItem="SOH-QP-QNH" secondAttribute="bottom" id="etR-I5-BsR"/>
+                            <constraint firstItem="SOH-QP-QNH" firstAttribute="top" secondItem="s2i-XX-w3i" secondAttribute="top" id="hCH-GV-6TV"/>
+                            <constraint firstItem="SOH-QP-QNH" firstAttribute="leading" secondItem="iSE-YE-rIk" secondAttribute="leading" id="sSm-ha-jYs"/>
+                            <constraint firstItem="LkQ-TK-aJF" firstAttribute="top" secondItem="SOH-QP-QNH" secondAttribute="bottom" constant="52" id="tn8-zu-knT"/>
+                            <constraint firstAttribute="trailing" secondItem="LkQ-TK-aJF" secondAttribute="trailing" id="w0W-gm-Zdl"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="hCH-GV-6TV"/>
+                                <exclude reference="VZK-BK-ckq"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="audioPlot" destination="SOH-QP-QNH" id="X8p-A9-wIr"/>

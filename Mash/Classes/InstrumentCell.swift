@@ -12,6 +12,7 @@ import UIKit
 class InstrumentCell: UICollectionViewCell {
 
     @IBOutlet weak var instrumentImage: UIImageView!
+    @IBOutlet weak var instrumentLabel: UILabel!
     var instrument: String = ""
 
 }

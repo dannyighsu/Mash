@@ -24,6 +24,7 @@
 		373F0F011B3DEFC500DE92AB /* tick.caf in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFA1B3DEFC500DE92AB /* tick.caf */; };
 		373F0F021B3DEFC500DE92AB /* tock.caf in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFB1B3DEFC500DE92AB /* tock.caf */; };
 		373F0F031B3DEFC500DE92AB /* Violins 1.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */; };
+		374405AA1BDED22E00BAB39C /* CollecitionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374405A91BDED22E00BAB39C /* CollecitionViewLayout.swift */; settings = {ASSET_TAGS = (); }; };
 		374CEFD71B508552007A7557 /* RecordToolsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374CEFD61B508552007A7557 /* RecordToolsController.swift */; };
 		376CA7771B8BDCA000ADD1E2 /* Mashservice.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 376CA7731B8BDCA000ADD1E2 /* Mashservice.pbobjc.h */; };
 		376CA7781B8BDCA000ADD1E2 /* Mashservice.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 376CA7741B8BDCA000ADD1E2 /* Mashservice.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -140,6 +141,7 @@
 		373F0EFA1B3DEFC500DE92AB /* tick.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = tick.caf; sourceTree = "<group>"; };
 		373F0EFB1B3DEFC500DE92AB /* tock.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = tock.caf; sourceTree = "<group>"; };
 		373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Violins 1.aif"; sourceTree = "<group>"; };
+		374405A91BDED22E00BAB39C /* CollecitionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollecitionViewLayout.swift; sourceTree = "<group>"; };
 		374CEFD61B508552007A7557 /* RecordToolsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordToolsController.swift; sourceTree = "<group>"; };
 		376CA7731B8BDCA000ADD1E2 /* Mashservice.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mashservice.pbobjc.h; path = protos/Mashservice.pbobjc.h; sourceTree = SOURCE_ROOT; };
 		376CA7741B8BDCA000ADD1E2 /* Mashservice.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Mashservice.pbobjc.m; path = protos/Mashservice.pbobjc.m; sourceTree = SOURCE_ROOT; };
@@ -431,6 +433,7 @@
 				37E799CB1B3CC1D000D2E54D /* Track.swift */,
 				37E799CC1B3CC1D000D2E54D /* User.swift */,
 				37C12E271B6988CB00A4E3A3 /* ShareView.swift */,
+				374405A91BDED22E00BAB39C /* CollecitionViewLayout.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -691,6 +694,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				374405AA1BDED22E00BAB39C /* CollecitionViewLayout.swift in Sources */,
 				379265FB1B5DDA6400E78F2E /* SwipeBar.swift in Sources */,
 				37E799E21B3CC1D000D2E54D /* Metronome.swift in Sources */,
 				37E799AB1B3CC1C600D2E54D /* LoginViewController.swift in Sources */,

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class UploadViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAlertViewDelegate {
+class UploadViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAlertViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var instrumentsCollection: UICollectionView!
@@ -19,20 +19,25 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     @IBOutlet weak var doneButton: UIButton!
     var recording: EZAudioFile? = nil
     var bpm: Int? = nil
-    var instruments: [String] = []
     var audioPlayer: AVAudioPlayer? = nil
     var timeSignature: String? = nil
+    var instruments: [String] = []
+    var families: [String] = []
+    var pickerView: UIPickerView? = nil
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     var cellWidth: CGFloat = 75.0
+    var currFamilySelection: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.instrumentsCollection.delegate = self
         self.instrumentsCollection.dataSource = self
+        self.instrumentsCollection.backgroundColor = offWhite()
+        self.instrumentsCollection.allowsMultipleSelection = true // check for multi instr
+        self.instrumentsCollection.collectionViewLayout = CollectionViewLayout()
         let cell = UINib(nibName: "InstrumentCell", bundle: nil)
         self.instrumentsCollection.registerNib(cell, forCellWithReuseIdentifier: "InstrumentCell")
-        self.instrumentsCollection.allowsMultipleSelection = true // check for multi instr
         
         self.doneButton.addTarget(self, action: "checkInput:", forControlEvents: UIControlEvents.TouchDown)
         self.cancelButton.addTarget(self, action: "cancel:", forControlEvents: UIControlEvents.TouchDown)
@@ -64,40 +69,52 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     // Collection View Delegate
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return instrumentArray.count
+        if collectionView == self.instrumentsCollection {
+            return instrumentArray.count
+        } else {
+            return 0
+        }
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = self.instrumentsCollection.dequeueReusableCellWithReuseIdentifier("InstrumentCell", forIndexPath: indexPath) as! InstrumentCell
+        if collectionView == self.instrumentsCollection {
+            cell.instrument = Array(instrumentArray.keys)[indexPath.row]
+            cell.instrumentImage.image = findImage([cell.instrument])
+            cell.instrumentLabel.text = cell.instrument
+        }
+        return cell
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
-        self.instruments.append(cell.instrument)
-        cell.layer.borderColor = darkGray().CGColor
-        cell.backgroundColor = lightGray()
-        cell.layer.borderWidth = 1.0
+        if collectionView == self.instrumentsCollection {
+            self.currFamilySelection = Array(instrumentArray.keys)[indexPath.row]
+            self.pickerView = UIPickerView(frame: self.view.frame)
+        } else {
+            let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
+            self.instruments.append(cell.instrument)
+            cell.layer.borderColor = darkGray().CGColor
+            cell.backgroundColor = lightGray()
+            cell.layer.borderWidth = 1.0
+        }
     }
     
     func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
-        if self.instruments.count != 0 {
-            for i in 0...self.instruments.count - 1 {
-                if self.instruments[i] == cell.instrument {
-                    self.instruments.removeAtIndex(i)
-                    break
+        if collectionView == self.instrumentsCollection {
+            let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
+            if self.families.count != 0 {
+                for i in 0...self.families.count - 1 {
+                    if self.families[i] == cell.instrument {
+                        self.families.removeAtIndex(i)
+                        break
+                    }
                 }
             }
         }
     }
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        let instr = cell as! InstrumentCell
-        instr.instrument = Array(instrumentArray.keys)[indexPath.row]
-        instr.instrumentImage.image = findImage([instr.instrument])
-        instr.instrumentImage.frame = instr.frame
-        instr.instrumentImage.center = instr.center
-    }
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = self.instrumentsCollection.dequeueReusableCellWithReuseIdentifier("InstrumentCell", forIndexPath: indexPath) as! InstrumentCell
-        return cell
+        
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
@@ -108,6 +125,19 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         return 6.0
     }
     
+    // Picker View Delegate
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return instrumentArray[self.currFamilySelection]!.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return instrumentArray[self.currFamilySelection]![row]
+    }
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
     // Pre-Upload Checks
     func checkInput(sender: AnyObject?) {
         // Check if title exists, if not, send alert.
@@ -116,7 +146,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             alert.show()
             return
         }
-        if self.instruments.count == 0 {
+        if self.families.count == 0 {
             let alert = UIAlertView(title: "Invalid Tag", message: "Please select an instrument", delegate: self, cancelButtonTitle: "Ok")
             alert.show()
             return
@@ -124,37 +154,6 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         self.uploadAction()
     }
-    
-    /*
-    func checkForDuplicate(handle: String, passwordHash: String) {
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
-        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "query_name": handle, "song_name": self.titleTextField.text]
-        self.activityView.startAnimating()
-        httpPost(params,request) {
-            (data, statusCode, error) -> Void in
-            var duplicate = false
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
-            } else {
-                if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    if count(data) > 22 {
-                        duplicate = true
-                    }
-                } else if statusCode == HTTP_SERVER_ERROR {
-                    duplicate = true
-                }
-            }
-            if !duplicate {
-                self.uploadAction()
-            } else {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.activityView.stopAnimating()
-                    let alert = UIAlertView(title: "Track exists.", message: "Please choose a different title.", delegate: self, cancelButtonTitle: "Ok")
-                    alert.show()
-                }
-            }
-        }
-    }*/
     
     // Upload Methods
     func uploadAction() {
@@ -165,7 +164,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         request.bpm = 0
         request.bar = 0
         request.key = "X"
-        request.familyArray = NSMutableArray(array: self.instruments)
+        request.familyArray = NSMutableArray(array: self.families)
         request.instrumentArray = []
         request.genreArray = []
         request.subgenreArray = []
@@ -177,6 +176,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)
+                raiseAlert("Track name exists already.")
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()
@@ -231,7 +231,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func finish() {
-        let track = Track(frame: CGRectZero, recid: 0, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, trackURL: "\(currentUser.handle!)~~\(self.titleTextField.text!).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
+        let track = Track(frame: CGRectZero, recid: 0, instruments: self.instruments, instrumentFamilies: self.families, titleText: self.titleTextField.text!, bpm: self.bpm!, trackURL: "\(currentUser.handle!)~~\(self.titleTextField.text!).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
         self.saveWaveform(track)
         
         self.navigationController?.popViewControllerAnimated(true)
