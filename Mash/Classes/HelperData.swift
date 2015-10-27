@@ -11,8 +11,8 @@ import UIKit
 
 // Helper objects
 let db: String = "http://54.152.179.223:5010"
-//let hostAddress: String = "http://54.69.218.204:5010"
-let hostAddress: String = "http://localhost:5010"
+let hostAddress: String = "http://54.69.218.204:5010"
+//let hostAddress: String = "http://localhost:5010"
 let server: MashService = MashService(host: hostAddress)
 var keychainWrapper: KeychainWrapper = KeychainWrapper()
 var currentUser = User()

@@ -101,8 +101,21 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.activityView.startAnimating()
         let passwordHash = hashPassword(password)
         let request = SignInRequest()
-        request.handle = handle
         request.passwordHash = passwordHash
+        // Check for username/email
+        var regex: NSRegularExpression?
+        do {
+            regex = try NSRegularExpression(pattern: ".*@.*", options: [])
+        } catch _ as NSError {
+            regex = nil
+        }
+        let matches = regex?.numberOfMatchesInString(handle, options: [], range: NSMakeRange(0, handle.characters.count))
+        
+        if matches > 0 {
+            request.email = handle
+        } else {
+            request.handle = handle
+        }
         
         server.signInWithRequest(request) {
             (response, error) in
@@ -113,7 +126,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             } else {
                 Debug.printl("\(response.data())", sender: self)
                 currentUser = User()
-                currentUser.handle = handle
+                currentUser.handle = response.handle
                 currentUser.loginToken = response.loginToken
                 currentUser.userid = Int(response.userid)
                 currentUser.followers = "\(response.followersCount)"
