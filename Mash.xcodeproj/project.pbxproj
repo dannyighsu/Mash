@@ -21,10 +21,10 @@
 		373F0EFE1B3DEFC500DE92AB /* Female Chorus.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EF71B3DEFC500DE92AB /* Female Chorus.aif */; };
 		373F0EFF1B3DEFC500DE92AB /* Harp.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EF81B3DEFC500DE92AB /* Harp.aif */; };
 		373F0F001B3DEFC500DE92AB /* Spacious Set.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EF91B3DEFC500DE92AB /* Spacious Set.aif */; };
-		373F0F011B3DEFC500DE92AB /* tick.caf in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFA1B3DEFC500DE92AB /* tick.caf */; };
-		373F0F021B3DEFC500DE92AB /* tock.caf in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFB1B3DEFC500DE92AB /* tock.caf */; };
 		373F0F031B3DEFC500DE92AB /* Violins 1.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */; };
 		374405AA1BDED22E00BAB39C /* CollecitionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374405A91BDED22E00BAB39C /* CollecitionViewLayout.swift */; settings = {ASSET_TAGS = (); }; };
+		374405AD1BDEFB5B00BAB39C /* tick.aif in Resources */ = {isa = PBXBuildFile; fileRef = 374405AB1BDEFB5B00BAB39C /* tick.aif */; settings = {ASSET_TAGS = (); }; };
+		374405AE1BDEFB5B00BAB39C /* tock.aif in Resources */ = {isa = PBXBuildFile; fileRef = 374405AC1BDEFB5B00BAB39C /* tock.aif */; settings = {ASSET_TAGS = (); }; };
 		374CEFD71B508552007A7557 /* RecordToolsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374CEFD61B508552007A7557 /* RecordToolsController.swift */; };
 		376CA7771B8BDCA000ADD1E2 /* Mashservice.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 376CA7731B8BDCA000ADD1E2 /* Mashservice.pbobjc.h */; };
 		376CA7781B8BDCA000ADD1E2 /* Mashservice.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 376CA7741B8BDCA000ADD1E2 /* Mashservice.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -138,10 +138,10 @@
 		373F0EF71B3DEFC500DE92AB /* Female Chorus.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Female Chorus.aif"; sourceTree = "<group>"; };
 		373F0EF81B3DEFC500DE92AB /* Harp.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = Harp.aif; sourceTree = "<group>"; };
 		373F0EF91B3DEFC500DE92AB /* Spacious Set.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Spacious Set.aif"; sourceTree = "<group>"; };
-		373F0EFA1B3DEFC500DE92AB /* tick.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = tick.caf; sourceTree = "<group>"; };
-		373F0EFB1B3DEFC500DE92AB /* tock.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = tock.caf; sourceTree = "<group>"; };
 		373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Violins 1.aif"; sourceTree = "<group>"; };
 		374405A91BDED22E00BAB39C /* CollecitionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollecitionViewLayout.swift; sourceTree = "<group>"; };
+		374405AB1BDEFB5B00BAB39C /* tick.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = tick.aif; sourceTree = "<group>"; };
+		374405AC1BDEFB5B00BAB39C /* tock.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = tock.aif; sourceTree = "<group>"; };
 		374CEFD61B508552007A7557 /* RecordToolsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordToolsController.swift; sourceTree = "<group>"; };
 		376CA7731B8BDCA000ADD1E2 /* Mashservice.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mashservice.pbobjc.h; path = protos/Mashservice.pbobjc.h; sourceTree = SOURCE_ROOT; };
 		376CA7741B8BDCA000ADD1E2 /* Mashservice.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Mashservice.pbobjc.m; path = protos/Mashservice.pbobjc.m; sourceTree = SOURCE_ROOT; };
@@ -263,12 +263,12 @@
 		373F0EF51B3DEFC500DE92AB /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				374405AB1BDEFB5B00BAB39C /* tick.aif */,
+				374405AC1BDEFB5B00BAB39C /* tock.aif */,
 				373F0EF61B3DEFC500DE92AB /* Basses Legato.aif */,
 				373F0EF71B3DEFC500DE92AB /* Female Chorus.aif */,
 				373F0EF81B3DEFC500DE92AB /* Harp.aif */,
 				373F0EF91B3DEFC500DE92AB /* Spacious Set.aif */,
-				373F0EFA1B3DEFC500DE92AB /* tick.caf */,
-				373F0EFB1B3DEFC500DE92AB /* tock.caf */,
 				373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */,
 			);
 			path = Audio;
@@ -630,11 +630,9 @@
 				371F14C71B8D23550044BE5B /* mashservice.proto in Resources */,
 				37E799F21B3CC1D000D2E54D /* Track.xib in Resources */,
 				37DE77251B436F4A00952987 /* User.xib in Resources */,
-				373F0F011B3DEFC500DE92AB /* tick.caf in Resources */,
 				37A3C2D11B3CC00600F77F2A /* Images.xcassets in Resources */,
 				373F0EFF1B3DEFC500DE92AB /* Harp.aif in Resources */,
 				37E799E91B3CC1D000D2E54D /* HomeCell.xib in Resources */,
-				373F0F021B3DEFC500DE92AB /* tock.caf in Resources */,
 				37E799EB1B3CC1D000D2E54D /* ImportHeaderView.xib in Resources */,
 				37E799EF1B3CC1D000D2E54D /* Profile.xib in Resources */,
 				379265F91B5DDA3600E78F2E /* SwipeBar.xib in Resources */,
@@ -644,6 +642,8 @@
 				373F0EFE1B3DEFC500DE92AB /* Female Chorus.aif in Resources */,
 				37E799ED1B3CC1D000D2E54D /* MashResultsHeaderView.xib in Resources */,
 				373F0EFD1B3DEFC500DE92AB /* Basses Legato.aif in Resources */,
+				374405AD1BDEFB5B00BAB39C /* tick.aif in Resources */,
+				374405AE1BDEFB5B00BAB39C /* tock.aif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

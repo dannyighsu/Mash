@@ -22,8 +22,6 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     var audioPlayer: AVAudioPlayer? = nil
     var timeSignature: String? = nil
     var instruments: [String] = []
-    var families: [String] = []
-    var pickerView: UIPickerView? = nil
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     var cellWidth: CGFloat = 75.0
     var currFamilySelection: String = ""
@@ -33,7 +31,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
 
         self.instrumentsCollection.delegate = self
         self.instrumentsCollection.dataSource = self
-        self.instrumentsCollection.backgroundColor = offWhite()
+        self.instrumentsCollection.backgroundColor = darkGray()
         self.instrumentsCollection.allowsMultipleSelection = true // check for multi instr
         self.instrumentsCollection.collectionViewLayout = CollectionViewLayout()
         let cell = UINib(nibName: "InstrumentCell", bundle: nil)
@@ -82,35 +80,31 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             cell.instrument = Array(instrumentArray.keys)[indexPath.row]
             cell.instrumentImage.image = findImage([cell.instrument])
             cell.instrumentLabel.text = cell.instrument
+            cell.backgroundColor = offWhite()
         }
         return cell
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if collectionView == self.instrumentsCollection {
-            self.currFamilySelection = Array(instrumentArray.keys)[indexPath.row]
-            self.pickerView = UIPickerView(frame: self.view.frame)
-        } else {
-            let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
-            self.instruments.append(cell.instrument)
-            cell.layer.borderColor = darkGray().CGColor
-            cell.backgroundColor = lightGray()
-            cell.layer.borderWidth = 1.0
-        }
+        let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
+        self.instruments.append(cell.instrument)
+        cell.layer.borderColor = lightGray().CGColor
+        cell.layer.borderWidth = 5.0
     }
     
     func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
         if collectionView == self.instrumentsCollection {
-            let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
-            if self.families.count != 0 {
-                for i in 0...self.families.count - 1 {
-                    if self.families[i] == cell.instrument {
-                        self.families.removeAtIndex(i)
+            if self.instruments.count != 0 {
+                for i in 0...self.instruments.count - 1 {
+                    if self.instruments[i] == cell.instrument {
+                        self.instruments.removeAtIndex(i)
                         break
                     }
                 }
             }
         }
+        cell.layer.borderWidth = 0.0
     }
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
@@ -146,7 +140,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             alert.show()
             return
         }
-        if self.families.count == 0 {
+        if self.instruments.count == 0 {
             let alert = UIAlertView(title: "Invalid Tag", message: "Please select an instrument", delegate: self, cancelButtonTitle: "Ok")
             alert.show()
             return
@@ -164,7 +158,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         request.bpm = 0
         request.bar = 0
         request.key = "X"
-        request.familyArray = NSMutableArray(array: self.families)
+        request.familyArray = NSMutableArray(array: self.instruments)
         request.instrumentArray = []
         request.genreArray = []
         request.subgenreArray = []
@@ -231,7 +225,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func finish() {
-        let track = Track(frame: CGRectZero, recid: 0, instruments: self.instruments, instrumentFamilies: self.families, titleText: self.titleTextField.text!, bpm: self.bpm!, trackURL: "\(currentUser.handle!)~~\(self.titleTextField.text!).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
+        let track = Track(frame: CGRectZero, recid: 0, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, trackURL: "\(currentUser.handle!)~~\(self.titleTextField.text!).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
         self.saveWaveform(track)
         
         self.navigationController?.popViewControllerAnimated(true)

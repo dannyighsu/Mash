@@ -69,10 +69,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        let instr = cell as! InstrumentCell
-        instr.instrument = Array(instrumentArray.keys)[indexPath.row]
-        instr.instrumentImage.image = findImage([instr.instrument])
-        instr.backgroundColor = UIColor.whiteColor()
+
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -86,6 +83,10 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         let selection = UIImageView(frame: cell.frame)
         selection.layer.borderColor = lightGray().CGColor
         cell.selectedBackgroundView = selection
+        cell.instrument = Array(instrumentArray.keys)[indexPath.row]
+        cell.instrumentImage.image = findImage([cell.instrument])
+        cell.backgroundColor = offWhite()
+        cell.instrumentLabel.text = cell.instrument
         return cell
     }
     
@@ -94,6 +95,8 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         if !self.instruments.contains(cell.instrument) {
             self.instruments.append(cell.instrument)
         }
+        cell.layer.borderColor = lightGray().CGColor
+        cell.layer.borderWidth = 5.0
     }
     
     func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
@@ -104,6 +107,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 break
             }
         }
+        cell.layer.borderWidth = 0.0
     }
 
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {

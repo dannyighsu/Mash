@@ -23,6 +23,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.activityFeed.delegate = self
         self.activityFeed.dataSource = self
         self.activityFeed.separatorStyle = .None
+        self.activityFeed.backgroundColor = offWhite()
         
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
@@ -72,7 +73,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.user = self.displayData[indexPath.row].user
         cell.timeLabel.text = parseTimeStamp(cell.timeLabel.text!)
         self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
-        cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFit
+        cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFill
         cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
         cell.profileImage.layer.borderWidth = 0.5
         cell.profileImage.layer.masksToBounds = true

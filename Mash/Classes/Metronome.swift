@@ -47,8 +47,8 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         self.isPlaying = false
         self.muted = false
         
-        let tickURL = NSBundle.mainBundle().URLForResource("tick", withExtension: ".caf")
-        let tockURL = NSBundle.mainBundle().URLForResource("tock", withExtension: ".caf")
+        let tickURL = NSBundle.mainBundle().URLForResource("tick", withExtension: ".aif")
+        let tockURL = NSBundle.mainBundle().URLForResource("tock", withExtension: ".aif")
         var error:NSError? = nil
         
         do {

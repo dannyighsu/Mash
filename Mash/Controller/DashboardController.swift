@@ -144,9 +144,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header = view as! Profile
         
-        header.profilePic.contentMode = UIViewContentMode.ScaleAspectFit
+        header.profilePic.contentMode = UIViewContentMode.ScaleAspectFill
         header.profilePic.layer.cornerRadius = header.profilePic.frame.size.width / 2
         header.profilePic.layer.borderWidth = 1.0
+        header.profilePic.layer.borderColor = UIColor.whiteColor().CGColor
         header.profilePic.layer.masksToBounds = true
         
         header.followerCount.layer.borderWidth = 0.2

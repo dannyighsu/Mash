@@ -29,7 +29,7 @@
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="LkQ-TK-aJF">
-                                <rect key="frame" x="0.0" y="117" width="600" height="483"/>
+                                <rect key="frame" x="0.0" y="121" width="600" height="479"/>
                                 <animations/>
                                 <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -91,6 +91,7 @@
                                     <constraint firstAttribute="bottom" secondItem="HGg-GB-eaB" secondAttribute="bottom" constant="13" id="9qb-2z-g12"/>
                                     <constraint firstItem="Nov-J4-kwh" firstAttribute="baseline" secondItem="HGg-GB-eaB" secondAttribute="firstBaseline" id="BZb-pF-RXX"/>
                                     <constraint firstAttribute="trailing" secondItem="Nov-J4-kwh" secondAttribute="trailing" constant="18" id="HeF-3u-6tH"/>
+                                    <constraint firstAttribute="height" constant="56" id="IUh-xh-kEY"/>
                                     <constraint firstItem="HGg-GB-eaB" firstAttribute="top" secondItem="iSE-YE-rIk" secondAttribute="top" constant="10" id="IYd-Cv-j5d"/>
                                     <constraint firstItem="Nov-J4-kwh" firstAttribute="top" secondItem="UyV-aB-4Ob" secondAttribute="top" id="JMa-uz-YGA"/>
                                     <constraint firstItem="HGg-GB-eaB" firstAttribute="leading" secondItem="iSE-YE-rIk" secondAttribute="leadingMargin" id="iUT-RP-azV"/>
@@ -113,7 +114,7 @@
                             <constraint firstItem="iSE-YE-rIk" firstAttribute="top" secondItem="SOH-QP-QNH" secondAttribute="bottom" id="etR-I5-BsR"/>
                             <constraint firstItem="SOH-QP-QNH" firstAttribute="top" secondItem="s2i-XX-w3i" secondAttribute="top" id="hCH-GV-6TV"/>
                             <constraint firstItem="SOH-QP-QNH" firstAttribute="leading" secondItem="iSE-YE-rIk" secondAttribute="leading" id="sSm-ha-jYs"/>
-                            <constraint firstItem="LkQ-TK-aJF" firstAttribute="top" secondItem="SOH-QP-QNH" secondAttribute="bottom" constant="52" id="tn8-zu-knT"/>
+                            <constraint firstItem="LkQ-TK-aJF" firstAttribute="top" secondItem="SOH-QP-QNH" secondAttribute="bottom" constant="56" id="tn8-zu-knT"/>
                             <constraint firstAttribute="trailing" secondItem="LkQ-TK-aJF" secondAttribute="trailing" id="w0W-gm-Zdl"/>
                         </constraints>
                         <variation key="default">
@@ -192,11 +193,11 @@
                                         </state>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3OM-hw-cAH">
-                                        <rect key="frame" x="42" y="185" width="516" height="2"/>
+                                        <rect key="frame" x="42" y="185" width="516" height="1"/>
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="2" id="QTa-JM-xJV"/>
+                                            <constraint firstAttribute="height" constant="1" id="QTa-JM-xJV"/>
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HeS-ZO-Pao">
@@ -278,7 +279,7 @@
                                     <constraint firstItem="zox-7z-BKk" firstAttribute="firstBaseline" secondItem="HeS-ZO-Pao" secondAttribute="firstBaseline" id="CwJ-lC-6gl"/>
                                     <constraint firstItem="SMT-fc-RM7" firstAttribute="top" secondItem="8ZE-wZ-bRY" secondAttribute="top" id="GIR-Zb-eRw"/>
                                     <constraint firstItem="hIG-RX-Zhy" firstAttribute="top" secondItem="Ncv-kv-Amq" secondAttribute="bottom" constant="9" id="GW9-5D-FBY"/>
-                                    <constraint firstItem="SMT-fc-RM7" firstAttribute="top" secondItem="3OM-hw-cAH" secondAttribute="bottom" constant="37" id="LSK-Qa-gmY"/>
+                                    <constraint firstItem="SMT-fc-RM7" firstAttribute="top" secondItem="3OM-hw-cAH" secondAttribute="bottom" constant="38" id="LSK-Qa-gmY"/>
                                     <constraint firstAttribute="trailing" secondItem="b3k-4q-fOM" secondAttribute="trailing" constant="36" id="Mev-Ob-cfb"/>
                                     <constraint firstItem="3OM-hw-cAH" firstAttribute="centerY" secondItem="lLw-Sy-TuP" secondAttribute="centerY" constant="11" id="Mzu-2V-QbZ"/>
                                     <constraint firstItem="8ZE-wZ-bRY" firstAttribute="baseline" secondItem="SMT-fc-RM7" secondAttribute="firstBaseline" id="OP8-iu-Bbg"/>
