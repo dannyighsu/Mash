@@ -2,8 +2,8 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "Piano-144-xxhdpi.png"
+      "filename" : "Keyboard.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",

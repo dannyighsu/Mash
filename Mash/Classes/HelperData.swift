@@ -65,13 +65,14 @@ let HTTP_SERVER_ERROR = 500
 // Designates instrument families that have corresponding UIImages
 var instrumentArray: [String: [String]] = [
     "Vocals": ["", "Beatboxing", "Male", "Female"],
+    "Keyboard": ["", "Piano", "Organ", "Electric Piano"],
+    "Guitar": ["", "Acoustic Guitar", "Electric Guitar", "Bass Guitar"],
     "Brass": ["", "French Horn", "Trombone", "Trumpet", "Tuba"],
     "Woodwinds": ["", "Saxophone", "Flute", "Piccolo", "Oboe", "English Horn", "Bassoon", "Clarinet", "Harmonia", "Accordians"],
-    "Percussion": ["", "Electronic", "Cajon", "Drum Kit", "Triangle", "Xylophone", "Snare", "Bass Drum", "Vibraphone", "Marimba", "Bongo", "Tamborine", "Darbuka"],
+    "Percussion": ["", "Electronic", "Cajon", "Drum Kit", "Triangle", "Snare", "Bass Drum", "Bongo", "Tamborine", "Darbuka"],
+    "Tuned Percussion": ["", "Xylophone", "Vibraphone", "Marimba"],
     "Electronic": ["", "Synth Lead", "Synth Bass", "Synth Pad", "Synth Brass", "Gated Synth", "Other"],
     "Strings": ["", "Violin", "Voila", "Cello", "Ukulele", "Harp", "Sitar", "Banjo", "Lyre", "Upright Bass", "Mandolin"],
-    "Guitar": ["", "Acoustic Guitar", "Electric Guitar", "Bass Guitar"],
-    "Keyboard": ["", "Piano", "Organ", "Electric Piano"],
     "Other": ["", "Other"]
 ]
 

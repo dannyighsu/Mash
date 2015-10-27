@@ -80,7 +80,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             cell.instrument = Array(instrumentArray.keys)[indexPath.row]
             cell.instrumentImage.image = findImage([cell.instrument])
             cell.instrumentLabel.text = cell.instrument
-            cell.backgroundColor = offWhite()
+            cell.backgroundColor = UIColor.whiteColor()
         }
         return cell
     }

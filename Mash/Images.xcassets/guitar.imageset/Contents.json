@@ -2,8 +2,8 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "acoustic_guitar.png"
+      "filename" : "Guitar.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",

@@ -71,6 +71,10 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         // Set up nav buttons
         self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItemStyle.Plain, target: self, action: "save:")
         self.parentViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Clear", style: UIBarButtonItemStyle.Plain, target: self, action: "clear:")
+        
+        for device in EZAudioDevice.outputDevices() {
+            print(device)
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -194,11 +198,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.openAudio()
         self.recording = false
         UIView.transitionWithView(self.recordButton.imageView!, duration: 0.5, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { self.recordButton.setImage(UIImage(named: "Record_button"), forState: .Normal) }, completion: nil)
-        
-        /*UIView.animateWithDuration(0.3, animations: { self.recordingCoverView.alpha = 0.0 }) {
-            (completion: Bool) in
-            self.recordingCoverView.hidden = true
-        }*/
     }
     
     func drawRollingPlot() {

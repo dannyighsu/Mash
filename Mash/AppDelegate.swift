@@ -53,11 +53,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Debug.printl("Error setting up session: \(error1.localizedDescription)", sender: self)
         }
         do {
-            try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
-        } catch let error1 as NSError{
-            Debug.printl("Error setting audio port: \(error1.localizedDescription)", sender: self)
-        }
-        do {
             try session.setActive(true)
         } catch let error1 as NSError {
             Debug.printl("Error setting session active: \(error1.localizedDescription)", sender: self)

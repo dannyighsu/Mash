@@ -13,6 +13,7 @@
 #import "CustomIOSAlertView/CustomIOSAlertView.h"
 #import "Mashservice.pbobjc.h"
 #import "Mashservice.pbrpc.h"
+#import <Optimizely/Optimizely.h>
 
 @interface AudioModule : NSObject
 
