@@ -31,6 +31,21 @@
 		376CA7791B8BDCA000ADD1E2 /* Mashservice.pbrpc.h in Headers */ = {isa = PBXBuildFile; fileRef = 376CA7751B8BDCA000ADD1E2 /* Mashservice.pbrpc.h */; };
 		376CA77A1B8BDCA000ADD1E2 /* Mashservice.pbrpc.m in Sources */ = {isa = PBXBuildFile; fileRef = 376CA7761B8BDCA000ADD1E2 /* Mashservice.pbrpc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		3770CED51B6AB46600A79F3A /* libSuperpoweredAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3770CED41B6AB46600A79F3A /* libSuperpoweredAudio.a */; };
+		37737B7D1BDF741100FA9EB7 /* Optimizely.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37737B7C1BDF741100FA9EB7 /* Optimizely.framework */; settings = {ASSET_TAGS = (); }; };
+		37737B7F1BDF743800FA9EB7 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37737B7E1BDF743800FA9EB7 /* AudioToolbox.framework */; };
+		37737B811BDF744000FA9EB7 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37737B801BDF744000FA9EB7 /* CFNetwork.framework */; };
+		37737B831BDF744600FA9EB7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37737B821BDF744600FA9EB7 /* Foundation.framework */; };
+		37737B851BDF744D00FA9EB7 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37737B841BDF744D00FA9EB7 /* MobileCoreServices.framework */; };
+		37737B871BDF745100FA9EB7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37737B861BDF745100FA9EB7 /* Security.framework */; };
+		37737B891BDF745A00FA9EB7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37737B881BDF745A00FA9EB7 /* SystemConfiguration.framework */; };
+		37737B8B1BDF746000FA9EB7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37737B8A1BDF746000FA9EB7 /* UIKit.framework */; };
+		37737B8D1BDF746D00FA9EB7 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 37737B8C1BDF746D00FA9EB7 /* libicucore.tbd */; };
+		37737B8F1BDF747600FA9EB7 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 37737B8E1BDF747600FA9EB7 /* libsqlite3.tbd */; };
+		37737B951BDF865C00FA9EB7 /* load_balancer.proto in Resources */ = {isa = PBXBuildFile; fileRef = 37737B901BDF865C00FA9EB7 /* load_balancer.proto */; settings = {ASSET_TAGS = (); }; };
+		37737B961BDF865C00FA9EB7 /* LoadBalancer.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 37737B911BDF865C00FA9EB7 /* LoadBalancer.pbobjc.h */; settings = {ASSET_TAGS = (); }; };
+		37737B971BDF865C00FA9EB7 /* LoadBalancer.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 37737B921BDF865C00FA9EB7 /* LoadBalancer.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		37737B981BDF865C00FA9EB7 /* LoadBalancer.pbrpc.h in Headers */ = {isa = PBXBuildFile; fileRef = 37737B931BDF865C00FA9EB7 /* LoadBalancer.pbrpc.h */; settings = {ASSET_TAGS = (); }; };
+		37737B991BDF865C00FA9EB7 /* LoadBalancer.pbrpc.m in Sources */ = {isa = PBXBuildFile; fileRef = 37737B941BDF865C00FA9EB7 /* LoadBalancer.pbrpc.m */; settings = {ASSET_TAGS = (); }; };
 		3782615C1B4B139400FC89A0 /* ProjectPlayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3782615B1B4B139400FC89A0 /* ProjectPlayer.xib */; };
 		3782615E1B4B140C00FC89A0 /* ProjectPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3782615D1B4B140C00FC89A0 /* ProjectPlayer.swift */; };
 		379265F91B5DDA3600E78F2E /* SwipeBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 379265F81B5DDA3600E78F2E /* SwipeBar.xib */; };
@@ -148,6 +163,21 @@
 		376CA7751B8BDCA000ADD1E2 /* Mashservice.pbrpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mashservice.pbrpc.h; path = protos/Mashservice.pbrpc.h; sourceTree = SOURCE_ROOT; };
 		376CA7761B8BDCA000ADD1E2 /* Mashservice.pbrpc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Mashservice.pbrpc.m; path = protos/Mashservice.pbrpc.m; sourceTree = SOURCE_ROOT; };
 		3770CED41B6AB46600A79F3A /* libSuperpoweredAudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSuperpoweredAudio.a; sourceTree = "<group>"; };
+		37737B7C1BDF741100FA9EB7 /* Optimizely.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Optimizely.framework; sourceTree = "<group>"; };
+		37737B7E1BDF743800FA9EB7 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		37737B801BDF744000FA9EB7 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		37737B821BDF744600FA9EB7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		37737B841BDF744D00FA9EB7 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		37737B861BDF745100FA9EB7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		37737B881BDF745A00FA9EB7 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		37737B8A1BDF746000FA9EB7 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		37737B8C1BDF746D00FA9EB7 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		37737B8E1BDF747600FA9EB7 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		37737B901BDF865C00FA9EB7 /* load_balancer.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = load_balancer.proto; path = protos/load_balancer.proto; sourceTree = SOURCE_ROOT; };
+		37737B911BDF865C00FA9EB7 /* LoadBalancer.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadBalancer.pbobjc.h; path = protos/LoadBalancer.pbobjc.h; sourceTree = SOURCE_ROOT; };
+		37737B921BDF865C00FA9EB7 /* LoadBalancer.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadBalancer.pbobjc.m; path = protos/LoadBalancer.pbobjc.m; sourceTree = SOURCE_ROOT; };
+		37737B931BDF865C00FA9EB7 /* LoadBalancer.pbrpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadBalancer.pbrpc.h; path = protos/LoadBalancer.pbrpc.h; sourceTree = SOURCE_ROOT; };
+		37737B941BDF865C00FA9EB7 /* LoadBalancer.pbrpc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadBalancer.pbrpc.m; path = protos/LoadBalancer.pbrpc.m; sourceTree = SOURCE_ROOT; };
 		3782615B1B4B139400FC89A0 /* ProjectPlayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectPlayer.xib; sourceTree = "<group>"; };
 		3782615D1B4B140C00FC89A0 /* ProjectPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectPlayer.swift; sourceTree = "<group>"; };
 		379265F81B5DDA3600E78F2E /* SwipeBar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwipeBar.xib; sourceTree = "<group>"; };
@@ -245,7 +275,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37737B8F1BDF747600FA9EB7 /* libsqlite3.tbd in Frameworks */,
+				37737B8D1BDF746D00FA9EB7 /* libicucore.tbd in Frameworks */,
+				37737B8B1BDF746000FA9EB7 /* UIKit.framework in Frameworks */,
+				37737B891BDF745A00FA9EB7 /* SystemConfiguration.framework in Frameworks */,
+				37737B871BDF745100FA9EB7 /* Security.framework in Frameworks */,
+				37737B851BDF744D00FA9EB7 /* MobileCoreServices.framework in Frameworks */,
+				37737B831BDF744600FA9EB7 /* Foundation.framework in Frameworks */,
+				37737B811BDF744000FA9EB7 /* CFNetwork.framework in Frameworks */,
+				37737B7F1BDF743800FA9EB7 /* AudioToolbox.framework in Frameworks */,
 				3770CED51B6AB46600A79F3A /* libSuperpoweredAudio.a in Frameworks */,
+				37737B7D1BDF741100FA9EB7 /* Optimizely.framework in Frameworks */,
 				EDBAE700D5BBFB5785DF766E /* libPods-Mash.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,6 +317,11 @@
 		376CA7721B8BDC7B00ADD1E2 /* Server */ = {
 			isa = PBXGroup;
 			children = (
+				37737B901BDF865C00FA9EB7 /* load_balancer.proto */,
+				37737B911BDF865C00FA9EB7 /* LoadBalancer.pbobjc.h */,
+				37737B921BDF865C00FA9EB7 /* LoadBalancer.pbobjc.m */,
+				37737B931BDF865C00FA9EB7 /* LoadBalancer.pbrpc.h */,
+				37737B941BDF865C00FA9EB7 /* LoadBalancer.pbrpc.m */,
 				371F14C61B8D23550044BE5B /* mashservice.proto */,
 				376CA7731B8BDCA000ADD1E2 /* Mashservice.pbobjc.h */,
 				376CA7741B8BDCA000ADD1E2 /* Mashservice.pbobjc.m */,
@@ -487,6 +532,16 @@
 		9E4DCA1CF72F167AB114291D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				37737B8E1BDF747600FA9EB7 /* libsqlite3.tbd */,
+				37737B8C1BDF746D00FA9EB7 /* libicucore.tbd */,
+				37737B8A1BDF746000FA9EB7 /* UIKit.framework */,
+				37737B881BDF745A00FA9EB7 /* SystemConfiguration.framework */,
+				37737B861BDF745100FA9EB7 /* Security.framework */,
+				37737B841BDF744D00FA9EB7 /* MobileCoreServices.framework */,
+				37737B821BDF744600FA9EB7 /* Foundation.framework */,
+				37737B801BDF744000FA9EB7 /* CFNetwork.framework */,
+				37737B7E1BDF743800FA9EB7 /* AudioToolbox.framework */,
+				37737B7C1BDF741100FA9EB7 /* Optimizely.framework */,
 				B37CA755709BC5D0E106BC64 /* libPods-Mash.a */,
 			);
 			name = Frameworks;
@@ -506,6 +561,7 @@
 				37C12E1D1B69797300A4E3A3 /* SuperpoweredMixer.h in Headers */,
 				37C12E181B69797300A4E3A3 /* SuperpoweredFrequencyDomain.h in Headers */,
 				37C12E241B69797300A4E3A3 /* SuperpoweredWhoosh.h in Headers */,
+				37737B961BDF865C00FA9EB7 /* LoadBalancer.pbobjc.h in Headers */,
 				37C12E1E1B69797300A4E3A3 /* SuperpoweredRecorder.h in Headers */,
 				37C12E191B69797300A4E3A3 /* SuperpoweredFX.h in Headers */,
 				376CA7791B8BDCA000ADD1E2 /* Mashservice.pbrpc.h in Headers */,
@@ -514,6 +570,7 @@
 				37C12E201B69797300A4E3A3 /* SuperpoweredReverb.h in Headers */,
 				37C12E211B69797300A4E3A3 /* SuperpoweredRoll.h in Headers */,
 				37C12E111B69797300A4E3A3 /* SuperpoweredAudioBuffers.h in Headers */,
+				37737B981BDF865C00FA9EB7 /* LoadBalancer.pbrpc.h in Headers */,
 				37C12E1A1B69797300A4E3A3 /* SuperpoweredGate.h in Headers */,
 				37C12E141B69797300A4E3A3 /* SuperpoweredEcho.h in Headers */,
 				37C12E161B69797300A4E3A3 /* SuperpoweredFilter.h in Headers */,
@@ -637,6 +694,7 @@
 				37E799EF1B3CC1D000D2E54D /* Profile.xib in Resources */,
 				379265F91B5DDA3600E78F2E /* SwipeBar.xib in Resources */,
 				3722ACEA1B4DF1F2008473C3 /* ImageCell.xib in Resources */,
+				37737B951BDF865C00FA9EB7 /* load_balancer.proto in Resources */,
 				371F863D1B67062F00BCBEDD /* MixerChannel.xib in Resources */,
 				37E799F11B3CC1D000D2E54D /* Channel.xib in Resources */,
 				373F0EFE1B3DEFC500DE92AB /* Female Chorus.aif in Resources */,
@@ -711,8 +769,10 @@
 				37E799E61B3CC1D000D2E54D /* Track.swift in Sources */,
 				37E799AC1B3CC1C600D2E54D /* MashResultsController.swift in Sources */,
 				37E799A61B3CC1C600D2E54D /* DirectUploadViewController.swift in Sources */,
+				37737B971BDF865C00FA9EB7 /* LoadBalancer.pbobjc.m in Sources */,
 				37E799BA1B3CC1C600D2E54D /* TabBarController.swift in Sources */,
 				371F863F1B6708D900BCBEDD /* MixerChannel.swift in Sources */,
+				37737B991BDF865C00FA9EB7 /* LoadBalancer.pbrpc.m in Sources */,
 				37E799A71B3CC1C600D2E54D /* EntryViewController.swift in Sources */,
 				3722ACE81B4DEDDE008473C3 /* ImageViewController.swift in Sources */,
 				3727B62D1B54881B00FD2F5C /* RecordViewController.swift in Sources */,
@@ -899,6 +959,7 @@
 					"$(inherited)",
 					"\"$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.7.1\"",
 					"\"$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.7.1\"",
+					"$(PROJECT_DIR)",
 				);
 				GCC_INPUT_FILETYPE = automatic;
 				INFOPLIST_FILE = Mash/Info.plist;
@@ -936,6 +997,7 @@
 					"$(inherited)",
 					"\"$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.7.1\"",
 					"\"$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.7.1\"",
+					"$(PROJECT_DIR)",
 				);
 				GCC_INPUT_FILETYPE = automatic;
 				INFOPLIST_FILE = Mash/Info.plist;

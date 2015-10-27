@@ -1,0 +1,16 @@
+syntax = "proto2";
+option cc_generic_services = false;
+
+package Mash;
+
+message ServerAddressResponse {
+    required string ip_address = 1;
+}
+
+message ServerAddressRequest {
+    required uint32 userid = 1;
+}
+
+service LoadBalancer {
+    rpc GetServerAddress (ServerAddressRequest) returns (ServerAddressResponse);
+}

@@ -26,7 +26,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         // Set up table options
         self.tracks.delegate = self
         self.tracks.dataSource = self
-        self.tracks.backgroundColor = offWhite()
+        self.tracks.backgroundColor = lightGray()
         self.tracks.separatorStyle = .SingleLine
         self.tracks.tableFooterView = UIView(frame: CGRectZero)
 
@@ -103,10 +103,14 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.trackTitle.text = trackData.titleText
         cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
         cell.track = trackData
-        cell.backgroundColor = lightGray()
+        cell.backgroundColor = darkGray()
         cell.trackNumber = indexPath.row
         cell.delegate = self
         cell.generateWaveform()
+        cell.audioPlot.color = lightBlue()
+        let trans = CGAffineTransformMakeRotation(CGFloat(M_PI * -0.5))
+        cell.volumeSlider.transform = trans
+        cell.volumeSlider.minimumTrackTintColor = UIColor.blackColor()
         return cell
     }
 
@@ -119,13 +123,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             let trackNumber = indexPath.row
             if trackNumber >= self.audioPlayer!.audioPlayers.count {
                 return
-            }
-            let muted = self.audioPlayer!.muteTrack(trackNumber)
-            let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Channel
-            if muted {
-                track.speakerButton.setImage(UIImage(named: "speaker_white_2"), forState: UIControlState.Normal)
-            } else {
-                track.speakerButton.setImage(UIImage(named: "speaker_white"), forState: UIControlState.Normal)
             }
         }
         tableView.cellForRowAtIndexPath(indexPath)?.selected = false

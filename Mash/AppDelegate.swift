@@ -58,6 +58,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Debug.printl("Error setting session active: \(error1.localizedDescription)", sender: self)
         }
         
+        // Set up Optimizely
+        Optimizely.startOptimizelyWithAPIToken("AAM7hIkBvc0Hcq4ni8hGis3hDg6-xDW4~3701484372", launchOptions: launchOptions)
+        
+        // Retrieve server IP
+        let request = ServerAddressRequest()
+        let rand = arc4random()
+        request.userid = rand
+        loadBalancer.getServerAddressWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error retrieving IP address: \(error)", sender: nil)
+            } else {
+                hostAddress = "http://\(response.ipAddress):5010"
+                server = MashService(host: hostAddress)
+                print(hostAddress)
+            }
+        }
+        
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
@@ -76,6 +94,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        
+        // Retrieve server IP
+        let request = ServerAddressRequest()
+        let rand = arc4random()
+        request.userid = rand
+        loadBalancer.getServerAddressWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                hostAddress = "http://\(response.ipAddress)"
+                print(hostAddress)
+                server = MashService(host: hostAddress)
+            }
+        }
     }
     
     func applicationDidBecomeActive(application: UIApplication) {
@@ -123,6 +154,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             orientations = viewController!.supportedInterfaceOrientations()
         }
         return orientations
+    }
+    
+    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        if Optimizely.handleOpenURL(url) {
+            return true
+        }
+        return false
     }
     
     // Notification registry

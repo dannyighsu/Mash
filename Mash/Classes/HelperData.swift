@@ -10,10 +10,10 @@ import Foundation
 import UIKit
 
 // Helper objects
-let db: String = "http://54.152.179.223:5010"
-let hostAddress: String = "http://54.69.218.204:5010"
-//let hostAddress: String = "http://localhost:5010"
-let server: MashService = MashService(host: hostAddress)
+let loadBalancerAddress: String = "http://52.27.78.119:5010"
+let loadBalancer: LoadBalancer = LoadBalancer(host: loadBalancerAddress)
+var hostAddress: String = "http://localhost:5010"
+var server: MashService = MashService(host: hostAddress)
 var keychainWrapper: KeychainWrapper = KeychainWrapper()
 var currentUser = User()
 var userFollowing: [User] = []
