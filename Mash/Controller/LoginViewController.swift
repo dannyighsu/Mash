@@ -40,14 +40,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         if handle != nil {
             self.handleField.text = handle!
         }
-
-        let hasLoginKey = NSUserDefaults.standardUserDefaults().boolForKey("hasLoginKey")
-        if hasLoginKey == true {
-            let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-            let password = keychainWrapper.myObjectForKey("v_Data") as! String
-            self.handleField.text = handle
-            self.passwordField.text = password
-        }
     }
     
     override func viewDidAppear(animated: Bool) {

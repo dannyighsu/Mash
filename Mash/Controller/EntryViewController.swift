@@ -28,21 +28,36 @@ class EntryViewController: UIViewController {
         self.facebookButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
         self.facebookButton.addTarget(self, action: "facebookLogin:", forControlEvents: UIControlEvents.TouchDown)
         self.logo.contentMode = UIViewContentMode.ScaleAspectFit
-        
+
         // Check for login key
-        let hasLoginKey = NSUserDefaults.standardUserDefaults().boolForKey("hasLoginKey")
-        if hasLoginKey == true {
-            let login = self.storyboard?.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
-            self.navigationController?.pushViewController(login, animated: false)
-            let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-            let password = keychainWrapper.myObjectForKey("v_Data") as! String
-            Debug.printl("Attempting to log in with username \(handle) and password \(password)", sender: self)
-            login.authenticate(handle, password: password)
-        }
+        let login = self.storyboard?.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+        self.navigationController?.pushViewController(login, animated: false)
+        let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController
+        self.navigationController?.pushViewController(tabbarcontroller, animated: false)
     }
     
     override func viewWillAppear(animated: Bool) {
         self.navigationController?.navigationBarHidden = true
+    }
+    
+    // Retrieve server IP
+    func requestNewServerAddress() {
+        let request = ServerAddressRequest()
+        let rand = arc4random()
+        request.userid = rand
+        let serverRequestGroup = dispatch_group_create()
+        dispatch_group_enter(serverRequestGroup)
+        loadBalancer.getServerAddressWithRequest(request) {
+            (response, error) in
+            dispatch_group_leave(serverRequestGroup)
+            if error != nil {
+                Debug.printl("Error retrieving IP address: \(error)", sender: nil)
+            } else {
+                hostAddress = "http://\(response.ipAddress):5010"
+                server = MashService(host: hostAddress)
+            }
+        }
+        dispatch_group_wait(serverRequestGroup, DISPATCH_TIME_FOREVER)
     }
     
     func facebookLogin(sender: AnyObject?) {

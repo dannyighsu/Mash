@@ -35,9 +35,12 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var tempoAlert: UIAlertView? = nil
     var timeAlert: UIAlertView? = nil
     var muted: Bool = false
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.view.addSubview(self.activityView)
         
         // Set up metronome
         let metronome = Metronome.createView()
@@ -49,7 +52,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.audioPlot.backgroundColor = darkGray()
         self.audioPlot.color = lightBlue()
         self.drawBufferPlot()
-        //self.recordingCoverView.hidden = true
         
         self.microphone = EZMicrophone(delegate: self)
         self.microphone?.startFetchingAudio()
@@ -61,6 +63,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.timeButton.addTarget(self, action: "showTime:", forControlEvents: UIControlEvents.TouchUpInside)
         self.tempoButton.addTarget(self, action: "showTempo:", forControlEvents: UIControlEvents.TouchUpInside)
         self.metronomeButton.addTarget(self, action: "muteMetronome:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        // Request server address synchronously
+        self.requestNewServerAddress()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -71,10 +76,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         // Set up nav buttons
         self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItemStyle.Plain, target: self, action: "save:")
         self.parentViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Clear", style: UIBarButtonItemStyle.Plain, target: self, action: "clear:")
-        
-        for device in EZAudioDevice.outputDevices() {
-            print(device)
-        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -408,6 +409,110 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             sender.setImage(UIImage(named: "metronome_black"), forState: .Normal)
             self.muted = true
         }
+    }
+    
+    // Login methods
+    // Retrieve server IP
+    func requestNewServerAddress() {
+        let request = ServerAddressRequest()
+        let rand = arc4random()
+        request.userid = rand
+        let serverRequestGroup = dispatch_group_create()
+        dispatch_group_enter(serverRequestGroup)
+        loadBalancer.getServerAddressWithRequest(request) {
+            (response, error) in
+            dispatch_group_leave(serverRequestGroup)
+            if error != nil {
+                Debug.printl("Error retrieving IP address: \(error)", sender: nil)
+            } else {
+                hostAddress = "http://\(response.ipAddress):5010"
+                server = MashService(host: hostAddress)
+                Debug.printl("Received IP address \(hostAddress) from load balancer.", sender: nil)
+            }
+        }
+        dispatch_group_notify(serverRequestGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+            dispatch_async(dispatch_get_main_queue()) {
+                self.checkLogin()
+            }
+        }
+    }
+    
+    // Check for login key
+    func checkLogin() {
+        let hasLoginKey = NSUserDefaults.standardUserDefaults().boolForKey("hasLoginKey")
+        if hasLoginKey == true {
+            let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
+            let password = keychainWrapper.myObjectForKey("v_Data") as! String
+            Debug.printl("Attempting to log in with username \(handle) and password \(password)", sender: self)
+            self.authenticate(handle, password: password)
+        } else {
+            self.navigationController?.popToRootViewControllerAnimated(false)
+        }
+    }
+    
+    func authenticate(handle: String, password: String) {
+        self.activityView.startAnimating()
+        let passwordHash = hashPassword(password)
+        let request = SignInRequest()
+        request.passwordHash = passwordHash
+        // Check for username/email
+        var regex: NSRegularExpression?
+        do {
+            regex = try NSRegularExpression(pattern: ".*@.*", options: [])
+        } catch _ as NSError {
+            regex = nil
+        }
+        let matches = regex?.numberOfMatchesInString(handle, options: [], range: NSMakeRange(0, handle.characters.count))
+        
+        if matches > 0 {
+            request.email = handle
+        } else {
+            request.handle = handle
+        }
+        
+        server.signInWithRequest(request) {
+            (response, error) in
+            self.activityView.stopAnimating()
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
+                raiseAlert("Incorrect Username and/or Password")
+            } else {
+                Debug.printl("Logged in successfully.", sender: self)
+                currentUser = User()
+                currentUser.handle = response.handle
+                currentUser.loginToken = response.loginToken
+                currentUser.userid = Int(response.userid)
+                currentUser.followers = "\(response.followersCount)"
+                currentUser.following = "\(response.followingCount)"
+                currentUser.tracks = "\(response.trackCount)"
+                currentUser.userDescription = response.userDescription
+                self.completeLogin(handle, password: password)
+            }
+        }
+    }
+    
+    func completeLogin(handle: String, password: String) {
+        let hasLoginKey = NSUserDefaults.standardUserDefaults().boolForKey("hasLoginKey")
+        if !hasLoginKey {
+            self.saveLoginItems(handle, password: password)
+        } else {
+            if (NSUserDefaults.standardUserDefaults().valueForKey("username") as? String != handle || keychainWrapper.myObjectForKey("v_Data") as? String != password) {
+                Debug.printl("Updating saved username and password", sender: self)
+                self.saveLoginItems(handle, password: password)
+            }
+        }
+        User.getUsersFollowing()
+        
+        Debug.printl("Successful login", sender: self)
+    }
+    
+    func saveLoginItems(handle: String, password: String) {
+        Debug.printl("Saving user " + handle + " to NSUserDefaults.", sender: self)
+        NSUserDefaults.standardUserDefaults().setValue(handle, forKey: "username")
+        keychainWrapper.mySetObject(password, forKey: kSecValueData)
+        keychainWrapper.writeToKeychain()
+        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasLoginKey")
+        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
     /*

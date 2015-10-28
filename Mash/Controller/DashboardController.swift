@@ -34,6 +34,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         self.tracks.registerNib(track, forCellReuseIdentifier: "Track")
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
+        self.user = currentUser
     }
     
     override func viewWillAppear(animated: Bool) {

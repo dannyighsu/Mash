@@ -60,22 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Set up Optimizely
         Optimizely.startOptimizelyWithAPIToken("AAM7hIkBvc0Hcq4ni8hGis3hDg6-xDW4~3701484372", launchOptions: launchOptions)
-        
-        // Retrieve server IP
-        let request = ServerAddressRequest()
-        let rand = arc4random()
-        request.userid = rand
-        loadBalancer.getServerAddressWithRequest(request) {
-            (response, error) in
-            if error != nil {
-                Debug.printl("Error retrieving IP address: \(error)", sender: nil)
-            } else {
-                hostAddress = "http://\(response.ipAddress):5010"
-                server = MashService(host: hostAddress)
-                print(hostAddress)
-            }
-        }
-        
+
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
