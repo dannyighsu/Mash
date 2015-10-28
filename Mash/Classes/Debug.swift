@@ -8,9 +8,6 @@
 
 import Foundation
 
-// CHANGE TO FALSE FOR RELEASE
-let debug: Bool = true
-
 class Debug {
     
     class func printnl(input: String) {

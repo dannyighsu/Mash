@@ -174,6 +174,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()
+                    print(response.recid)
                     let key = "\(currentUser.userid!)~~\(response.recid).m4a"
                     upload(key, url: self.recording!.url, bucket: track_bucket)
                     self.finish(Int(response.recid))

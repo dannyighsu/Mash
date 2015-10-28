@@ -102,7 +102,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 track.titleText = track.title.text!
                 track.instruments = trackData.instruments
                 track.instrumentFamilies = trackData.instrumentFamilies
-                track.trackURL = trackData.trackURL
+                track.trackURL = filePathString(trackData.trackURL)
                 track.instrumentImage.image = findImage(track.instrumentFamilies)
                 track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
                 track.titleText = trackData.titleText

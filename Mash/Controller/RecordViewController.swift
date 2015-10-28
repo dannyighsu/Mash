@@ -36,11 +36,15 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var timeAlert: UIAlertView? = nil
     var muted: Bool = false
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+    var coverView: UIView = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.addSubview(self.activityView)
+        self.coverView = UIView(frame: self.navigationController!.view.frame)
+        self.coverView.addSubview(self.activityView)
+        self.view.addSubview(coverView)
+        self.activityView.startAnimating()
         
         // Set up metronome
         let metronome = Metronome.createView()
@@ -414,27 +418,36 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     // Login methods
     // Retrieve server IP
     func requestServerAddress() {
-        let request = ServerAddressRequest()
-        let rand = arc4random()
-        request.userid = rand
-        let serverRequestGroup = dispatch_group_create()
-        dispatch_group_enter(serverRequestGroup)
-        loadBalancer.getServerAddressWithRequest(request) {
-            (response, error) in
-            dispatch_group_leave(serverRequestGroup)
-            if error != nil {
-                Debug.printl("Error retrieving IP address: \(error)", sender: nil)
-            } else {
-                hostAddress = "http://\(response.ipAddress):5010"
-                server = MashService(host: hostAddress)
-                Debug.printl("Received IP address \(hostAddress) from load balancer.", sender: nil)
+        if localServer {
+            hostAddress = "http://localhost:5010"
+            server = MashService(host: hostAddress)
+            Debug.printl("Using local IP", sender: nil)
+            self.checkLogin()
+        } else {
+            let request = ServerAddressRequest()
+            let rand = arc4random()
+            request.userid = rand
+            let serverRequestGroup = dispatch_group_create()
+            dispatch_group_enter(serverRequestGroup)
+            loadBalancer.getServerAddressWithRequest(request) {
+                (response, error) in
+                dispatch_group_leave(serverRequestGroup)
+                if error != nil {
+                    Debug.printl("Error retrieving IP address: \(error)", sender: nil)
+                } else {
+                    hostAddress = "http://\(response.ipAddress):5010"
+                    server = MashService(host: hostAddress)
+                    Debug.printl("Received IP address \(hostAddress) from load balancer.", sender: nil)
+                }
+            }
+            dispatch_group_notify(serverRequestGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.checkLogin()
+                }
             }
         }
-        dispatch_group_notify(serverRequestGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
-            dispatch_async(dispatch_get_main_queue()) {
-                self.checkLogin()
-            }
-        }
+        self.activityView.stopAnimating()
+        self.coverView.removeFromSuperview()
     }
     
     // Check for login key

@@ -62,7 +62,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Optimizely.startOptimizelyWithAPIToken("AAM7hIkBvc0Hcq4ni8hGis3hDg6-xDW4~3701484372", launchOptions: launchOptions)
         
         // Set up server timer
-        serverTimer = NSTimer.scheduledTimerWithTimeInterval(300, target: self, selector: "requestNewServerAddress:", userInfo: nil, repeats: true)
+        if !localServer {
+            serverTimer = NSTimer.scheduledTimerWithTimeInterval(300, target: self, selector: "requestNewServerAddress:", userInfo: nil, repeats: true)
+        }
 
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }

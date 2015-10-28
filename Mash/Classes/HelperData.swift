@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 
+// UNCHECK FOR RELEASE
+let debug: Bool = true
+let localServer: Bool = true
+
 // Helper objects
 let loadBalancerAddress: String = "http://52.27.78.119:5010"
 let loadBalancer: LoadBalancer = LoadBalancer(host: loadBalancerAddress)
