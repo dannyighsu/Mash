@@ -120,10 +120,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     // Download mash files
     func done() {
-        let request = RecordingRequest()
-        request.userid = UInt32(currentUser.userid!)
-        request.loginToken = currentUser.loginToken
-        request.recid = 
+        let request = 
     }
     
     func finish(inputData: NSDictionary) {
