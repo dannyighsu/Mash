@@ -277,4 +277,16 @@ static NSString *const kServiceName = @"MashService";
              responseClass:[UserPreviews class]
         responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
 }
+#pragma mark Mash(MashRequest) returns (Recordings)
+
+- (void)mashWithRequest:(MashRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler{
+  [[self RPCToMashWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToMashWithRequest:(MashRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler{
+  return [self RPCToMethod:@"Mash"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[Recordings class]
+        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+}
 @end

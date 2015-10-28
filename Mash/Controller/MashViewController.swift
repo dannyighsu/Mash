@@ -120,48 +120,10 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     // Download mash files
     func done() {
-        
-        /*
-        // Post data to server
-        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        var instrumentString = String(stringInterpolationSegment: instrument)
-        instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: instrumentString.startIndex.advancedBy(1), end: instrumentString.endIndex.advancedBy(-1)))
-        
-        let request = NSMutableURLRequest(URL: NSURL(string: "\(db)/mash")!)
-        let params: [String: String] = ["handle": handle, "password_hash": passwordHash, "family": "{\(instrumentString)}"]
-        self.activityView.startAnimating()
-        httpPost(params, request: request) {
-            (data, statusCode, error) -> Void in
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
-                return
-            } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("Error: \(error)", sender: self)
-                    return
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    return
-                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    var response: AnyObject?
-                    do {
-                        response = try NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments)
-                    } catch _ as NSError {
-                        response = nil
-                    } catch {
-                        fatalError()
-                    }
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.finish(response as! NSDictionary)
-                    }
-                    return
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                    return
-                }
-            }
-        }*/
+        let request = RecordingRequest()
+        request.userid = UInt32(currentUser.userid!)
+        request.loginToken = currentUser.loginToken
+        request.recid = 
     }
     
     func finish(inputData: NSDictionary) {

@@ -24,6 +24,20 @@ func findImage(instrument: [String]) -> UIImage {
     }
 }
 
+// Returns UIImage corresponding to input string (white)
+func findImageWhite(instrument: [String]) -> UIImage {
+    if instrument.count == 1 {
+        let image = UIImage(named: "\(instrument[0])1")
+        if image == nil {
+            Debug.printl("No such instrument found: \(instrument)", sender: "helpers")
+            return UIImage(named: "Other")!
+        }
+        return image!
+    } else {
+        return UIImage(named: "Other")!
+    }
+}
+
 // Returns the instrument index of input instrument
 func findInstrument(instrument: String) -> Int {
     var keys = Array(instrumentArray.keys)

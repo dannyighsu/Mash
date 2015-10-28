@@ -2360,5 +2360,101 @@ typedef struct Recordings__storage_ {
 
 @end
 
+#pragma mark - MashRequest
+
+@implementation MashRequest
+
+@dynamic hasLoginToken, loginToken;
+@dynamic hasUserid, userid;
+@dynamic hasRecid, recid;
+@dynamic hasInstrumentFamily, instrumentFamily;
+
+typedef struct MashRequest__storage_ {
+  uint32_t _has_storage_[1];
+  uint32_t userid;
+  uint32_t recid;
+  NSString *loginToken;
+  NSString *instrumentFamily;
+} MashRequest__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "loginToken",
+        .number = MashRequest_FieldNumber_LoginToken,
+        .hasIndex = 0,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(MashRequest__storage_, loginToken),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "userid",
+        .number = MashRequest_FieldNumber_Userid,
+        .hasIndex = 1,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(MashRequest__storage_, userid),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "recid",
+        .number = MashRequest_FieldNumber_Recid,
+        .hasIndex = 2,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(MashRequest__storage_, recid),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "instrumentFamily",
+        .number = MashRequest_FieldNumber_InstrumentFamily,
+        .hasIndex = 3,
+        .flags = GPBFieldRequired | GPBFieldTextFormatNameCustom,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(MashRequest__storage_, instrumentFamily),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+#if GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    const char *extraTextFormatInfo = NULL;
+#else
+    static const char *extraTextFormatInfo = "\001\004\020\000";
+#endif  // GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MashRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(MashRequest__storage_)
+                                    wireFormat:NO
+                           extraTextFormatInfo:extraTextFormatInfo];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 
 // @@protoc_insertion_point(global_scope)

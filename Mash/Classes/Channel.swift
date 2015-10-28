@@ -21,6 +21,7 @@ class Channel: UITableViewCell, EZAudioFileDelegate {
     @IBOutlet weak var staticAudioPlot: UIImageView!
     @IBOutlet weak var optionsExtension: UIView!
     @IBOutlet weak var volumeSlider: UISlider!
+    @IBOutlet weak var content: UIView!
     var audioFile: EZAudioFile? = nil
     var track: Track?
     var trackNumber: Int? = nil
@@ -36,7 +37,6 @@ class Channel: UITableViewCell, EZAudioFileDelegate {
     
     func generateWaveform() {
         self.staticAudioPlot.hidden = true
-        self.audioPlot.color = UIColor.blackColor()
         self.audioFile = EZAudioFile(URL: NSURL(fileURLWithPath: self.track!.trackURL), delegate: self)
         self.audioPlot.plotType = .Buffer
         self.audioPlot.shouldFill = true

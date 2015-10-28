@@ -24,7 +24,6 @@ class NavigationController: UINavigationController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        self.hidesBarsOnSwipe = true
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {

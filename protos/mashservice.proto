@@ -187,6 +187,13 @@ message Recordings {
     repeated RecordingResponse recording = 1;
 }
 
+message MashRequest {
+    required string login_token = 1;
+    required uint32 userid = 2;
+    required uint32 recid = 3;
+    required string instrumentFamily = 4;
+}
+
 service MashService {
     rpc Register (RegisterRequest) returns (RegisterResponse);
     rpc SignIn (SignInRequest) returns (SignInResponse);
@@ -209,4 +216,5 @@ service MashService {
     rpc Feed (FeedRequest) returns (FeedResponse);
     rpc SearchTag (SearchTagRequest) returns (Recordings);
     rpc UserSearch (UserSearchRequest) returns (UserPreviews);
+    rpc Mash (MashRequest) returns (Recordings);
 }

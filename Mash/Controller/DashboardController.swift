@@ -104,7 +104,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let track = tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
         let index = indexPath.row
         track.backgroundColor = UIColor.clearColor()
-        track.instrumentImage.backgroundColor = UIColor(red: 200, green: 200, blue: 200, alpha: 0.6)
+        track.instrumentImage.backgroundColor = UIColor.clearColor()
         track.userLabel.textColor = UIColor.whiteColor()
         track.title.textColor = UIColor.whiteColor()
         track.title.text = self.data[index].titleText
@@ -116,7 +116,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         track.instrumentFamilies = self.data[index].instrumentFamilies
         track.trackURL = self.data[index].trackURL
         track.bpm = self.data[index].bpm
-        track.instrumentImage.image = findImage(track.instrumentFamilies)
+        track.instrumentImage.image = findImageWhite(track.instrumentFamilies)
         track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
         track.activityView.startAnimating()
         

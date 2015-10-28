@@ -154,6 +154,13 @@
 - (ProtoRPC *)RPCToUserSearchWithRequest:(UserSearchRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler;
 
 
+#pragma mark Mash(MashRequest) returns (Recordings)
+
+- (void)mashWithRequest:(MashRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToMashWithRequest:(MashRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler;
+
+
 @end
 
 // Basic service implementation, over gRPC, that only does marshalling and parsing.

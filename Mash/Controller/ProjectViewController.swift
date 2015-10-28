@@ -26,9 +26,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         // Set up table options
         self.tracks.delegate = self
         self.tracks.dataSource = self
-        self.tracks.backgroundColor = lightGray()
-        self.tracks.separatorStyle = .SingleLine
+        self.tracks.backgroundColor = darkGrayRegular()
         self.tracks.tableFooterView = UIView(frame: CGRectZero)
+        self.tracks.separatorStyle = .None
 
         // Register nibs
         let nib = UINib(nibName: "Channel", bundle: nil)
@@ -37,6 +37,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tracks.registerNib(header, forHeaderFooterViewReuseIdentifier: "ProjectTools")
         let player = UINib(nibName: "ProjectPlayer", bundle: nil)
         self.tracks.registerNib(player, forHeaderFooterViewReuseIdentifier: "ProjectPlayer")
+        let addbar = UINib(nibName: "ProjectAddBar", bundle: nil)
+        self.tracks.registerNib(addbar, forCellReuseIdentifier: "ProjectAddBar")
         
         self.view.addSubview(self.activityView)
         
@@ -90,35 +92,63 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // TableView delegate
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.data.count
+        if section == 0 {
+            return self.data.count
+        } else {
+            return 1
+        }
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Channel") as! Channel
-        let trackData = self.data[indexPath.row]
-        cell.trackTitle.text = trackData.titleText
-        cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
-        cell.track = trackData
-        cell.backgroundColor = darkGray()
-        cell.trackNumber = indexPath.row
-        cell.delegate = self
-        cell.generateWaveform()
-        cell.audioPlot.color = lightBlue()
-        let trans = CGAffineTransformMakeRotation(CGFloat(M_PI * -0.5))
-        cell.volumeSlider.transform = trans
-        cell.volumeSlider.minimumTrackTintColor = UIColor.blackColor()
-        return cell
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCellWithIdentifier("Channel") as! Channel
+            let trackData = self.data[indexPath.row]
+            cell.trackTitle.text = trackData.titleText
+            cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
+            cell.track = trackData
+            cell.trackNumber = indexPath.row
+            cell.delegate = self
+            
+            cell.generateWaveform()
+            cell.audioPlot.color = lightBlue()
+            cell.audioPlot.layer.cornerRadius = 4.0
+            cell.audioPlot.clipsToBounds = true
+            cell.audioPlot.backgroundColor = darkGray()
+            
+            //cell.content.layer.borderWidth = 0.5
+            //cell.content.layer.borderColor = UIColor.whiteColor().CGColor
+            cell.content.backgroundColor = offWhite()
+            cell.content.layer.cornerRadius = 4.0
+            cell.backgroundColor = UIColor.clearColor()
+            
+            let trans = CGAffineTransformMakeRotation(CGFloat(M_PI * -0.5))
+            cell.volumeSlider.transform = trans
+            cell.volumeSlider.minimumTrackTintColor = UIColor.blackColor()
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCellWithIdentifier("ProjectAddBar") as! ProjectAddBar
+            //cell.content.layer.borderWidth = 0.5
+            //cell.content.layer.borderColor = UIColor.blackColor().CGColor
+            cell.addButton.layer.cornerRadius = 4.0
+            cell.addButton.addTarget(self, action: "mash", forControlEvents: UIControlEvents.TouchUpInside)
+            cell.backgroundColor = UIColor.clearColor()
+            return cell
+        }
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 85.0
+        if indexPath.section == 0 {
+            return 85.0
+        } else {
+            return 44.0
+        }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    /*func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {
             let trackNumber = indexPath.row
             if trackNumber >= self.audioPlayer!.audioPlayers.count {
@@ -126,10 +156,14 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         }
         tableView.cellForRowAtIndexPath(indexPath)?.selected = false
-    }
+    }*/
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
+        if indexPath.section == 0 {
+            return true
+        } else {
+            return false
+        }
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {

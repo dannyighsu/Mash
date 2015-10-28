@@ -22,9 +22,7 @@ import UIKit
 class ProjectPlayer: UITableViewHeaderFooterView {
     
     @IBOutlet weak var playButton: UIButton!
-    @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var volumeSlider: UISlider!
-    @IBOutlet weak var stopButton: UIButton!
     @IBOutlet weak var titleLabel: UITextField!
     @IBOutlet weak var toolsButton: UIButton!
     @IBOutlet weak var metronomeButton: UIButton!
@@ -44,7 +42,7 @@ class ProjectPlayer: UITableViewHeaderFooterView {
         if !self.audioPlayers[0].playing {
             self.play()
         } else {
-            self.pause()
+            self.stop()
         }
         self.delegate?.didPressPlay?(self)
     }
@@ -53,14 +51,14 @@ class ProjectPlayer: UITableViewHeaderFooterView {
         self.delegate?.didToggleRecording?(self)
     }
     
-    @IBAction func addButtonPressed(sender: AnyObject) {
+    /*@IBAction func addButtonPressed(sender: AnyObject) {
         self.delegate?.addTracks()
-    }
+    }*/
     
-    @IBAction func stopButtonPressed(sender: AnyObject) {
+    /*@IBAction func stopButtonPressed(sender: AnyObject) {
         self.stop()
         self.delegate?.didStopPlaying?(self)
-    }
+    }*/
     
     @IBAction func toolsButtonPressed(sender: AnyObject) {
         self.delegate?.showTools!()

@@ -34,9 +34,14 @@ func lightGray() -> UIColor {
     return UIColor(red: (154/255), green: (154/255), blue: (154/255), alpha: 1.0)
 }
 
-// Returns dark gray
+// Returns dark gray (bluish)
 func darkGray() -> UIColor {
     return UIColor(red: (20/255), green: (20/255), blue: (40/255), alpha: 1.0)
+}
+
+// Returns dark gray
+func darkGrayRegular() -> UIColor {
+    return UIColor(red: (30/255), green: (30/255), blue: (30/255), alpha: 1.0)
 }
 
 // Returns off white

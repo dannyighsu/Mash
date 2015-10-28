@@ -709,6 +709,31 @@ typedef GPB_ENUM(Recordings_FieldNumber) {
 
 @end
 
+#pragma mark - MashRequest
+
+typedef GPB_ENUM(MashRequest_FieldNumber) {
+  MashRequest_FieldNumber_LoginToken = 1,
+  MashRequest_FieldNumber_Userid = 2,
+  MashRequest_FieldNumber_Recid = 3,
+  MashRequest_FieldNumber_InstrumentFamily = 4,
+};
+
+@interface MashRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasLoginToken;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *loginToken;
+
+@property(nonatomic, readwrite) BOOL hasUserid;
+@property(nonatomic, readwrite) uint32_t userid;
+
+@property(nonatomic, readwrite) BOOL hasRecid;
+@property(nonatomic, readwrite) uint32_t recid;
+
+@property(nonatomic, readwrite) BOOL hasInstrumentFamily;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *instrumentFamily;
+
+@end
+
 NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END
