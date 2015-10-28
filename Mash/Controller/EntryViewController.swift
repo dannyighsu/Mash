@@ -40,26 +40,6 @@ class EntryViewController: UIViewController {
         self.navigationController?.navigationBarHidden = true
     }
     
-    // Retrieve server IP
-    func requestNewServerAddress() {
-        let request = ServerAddressRequest()
-        let rand = arc4random()
-        request.userid = rand
-        let serverRequestGroup = dispatch_group_create()
-        dispatch_group_enter(serverRequestGroup)
-        loadBalancer.getServerAddressWithRequest(request) {
-            (response, error) in
-            dispatch_group_leave(serverRequestGroup)
-            if error != nil {
-                Debug.printl("Error retrieving IP address: \(error)", sender: nil)
-            } else {
-                hostAddress = "http://\(response.ipAddress):5010"
-                server = MashService(host: hostAddress)
-            }
-        }
-        dispatch_group_wait(serverRequestGroup, DISPATCH_TIME_FOREVER)
-    }
-    
     func facebookLogin(sender: AnyObject?) {
         let login = FBSDKLoginManager()
         login.logInWithReadPermissions(["email", "public_profile"]) {

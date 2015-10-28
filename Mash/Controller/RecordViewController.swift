@@ -65,7 +65,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.metronomeButton.addTarget(self, action: "muteMetronome:", forControlEvents: UIControlEvents.TouchUpInside)
         
         // Request server address synchronously
-        self.requestNewServerAddress()
+        self.requestServerAddress()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -413,7 +413,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     // Login methods
     // Retrieve server IP
-    func requestNewServerAddress() {
+    func requestServerAddress() {
         let request = ServerAddressRequest()
         let rand = arc4random()
         request.userid = rand

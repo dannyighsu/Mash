@@ -60,6 +60,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Set up Optimizely
         Optimizely.startOptimizelyWithAPIToken("AAM7hIkBvc0Hcq4ni8hGis3hDg6-xDW4~3701484372", launchOptions: launchOptions)
+        
+        // Set up server timer
+        serverTimer = NSTimer.scheduledTimerWithTimeInterval(300, target: self, selector: "requestNewServerAddress:", userInfo: nil, repeats: true)
 
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
@@ -156,6 +159,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         // TODO: handle error
         Debug.printl("Failed to register for notifications with error: \(error)", sender: nil)
+    }
+    
+    // Server address refresh
+    func requestNewServerAddress(sender: AnyObject?) {
+        let request = ServerAddressRequest()
+        let rand = arc4random()
+        request.userid = rand
+        loadBalancer.getServerAddressWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error retrieving IP address: \(error)", sender: nil)
+            } else {
+                hostAddress = "http://\(response.ipAddress):5010"
+                server = MashService(host: hostAddress)
+                Debug.printl("Received IP address \(hostAddress) from load balancer.", sender: nil)
+            }
+        }
     }
     
     // Clear user data and downloaded files, excepting profile files

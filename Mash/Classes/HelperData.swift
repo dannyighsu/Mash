@@ -14,6 +14,7 @@ let loadBalancerAddress: String = "http://52.27.78.119:5010"
 let loadBalancer: LoadBalancer = LoadBalancer(host: loadBalancerAddress)
 var hostAddress: String = "nil"
 var server: MashService = MashService(host: hostAddress)
+var serverTimer: NSTimer = NSTimer()
 var keychainWrapper: KeychainWrapper = KeychainWrapper()
 var currentUser = User()
 var userFollowing: [User] = []
