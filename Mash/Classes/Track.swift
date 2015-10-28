@@ -27,6 +27,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
     var format: String = ""
     var id: Int = 0
     var audioFile: EZAudioFile? = nil
+    var userid: Int = 0
     
     convenience init(frame: CGRect, instruments: [String], titleText: String) {
         self.init(frame: frame)
@@ -34,10 +35,11 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         self.titleText = titleText
     }
 
-    convenience init(frame: CGRect, recid: Int, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, trackURL: String, user: String, format: String) {
+    convenience init(frame: CGRect, recid: Int, userid: Int, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, trackURL: String, user: String, format: String) {
         self.init(frame: frame)
         self.instruments = instruments
         self.id = recid
+        self.userid = userid
         self.instrumentFamilies = instrumentFamilies
         self.titleText = titleText
         self.trackURL = trackURL
@@ -89,7 +91,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         }
         
         // Export composition
-        let newTrack = filePathString("\(currentUser.handle!)~~\(name).m4a")
+        let newTrack = filePathString("\(currentUser.userid!)~~\(name).m4a")
         if NSFileManager.defaultManager().fileExistsAtPath(newTrack) {
             do {
                 try NSFileManager.defaultManager().removeItemAtPath(newTrack)

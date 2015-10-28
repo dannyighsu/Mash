@@ -249,16 +249,16 @@ func deleteFromBucket(key: String, bucket: String) {
 
 // Returns AWSS3 bucket name
 func getS3Key(track: Track) -> String {
-    return "\(track.userText)~~\(track.titleText)\(track.format)"
+    return "\(track.userid)~~\(track.id)\(track.format)"
 }
 
-func getS3Key(user: String, title: String, format: String) -> String {
-    return "\(user)~~\(title)\(format)"
+func getS3Key(userid: Int, recid: Int, format: String) -> String {
+    return "\(userid)~~\(recid)\(format)"
 }
 
 // Returns AWSS3 waveform bucket name
 func getS3WaveformKey(track: Track) -> String {
-    return "\(track.userText)~~\(track.titleText)_waveform.jpg"
+    return "\(track.userid)~~\(track.id)_waveform.jpg"
 }
 
 // Parse DB time stamp

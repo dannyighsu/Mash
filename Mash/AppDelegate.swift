@@ -189,8 +189,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let fileManager = NSFileManager.defaultManager()
         for file in try! fileManager.contentsOfDirectoryAtPath(dir as String) {
             // Check if file is a user profile file
-            let profpic = try! NSRegularExpression(pattern: ".*\(currentUser.handle!)~~profile_pic.jpg", options: [])
-            let bannerpic = try! NSRegularExpression(pattern: ".*\(currentUser.handle!)~~banner.jpg", options: [])
+            let profpic = try! NSRegularExpression(pattern: ".*\(currentUser.userid!)~~profile_pic.jpg", options: [])
+            let bannerpic = try! NSRegularExpression(pattern: ".*\(currentUser.userid!)~~banner.jpg", options: [])
             let profcount = profpic.matchesInString(file, options: [], range: NSRange(location: 0, length: file.characters.count))
             let bannercount = bannerpic.matchesInString(file, options: [], range: NSRange(location: 0, length: file.characters.count))
             if profcount.count > 0 || bannercount.count > 0 {

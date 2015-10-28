@@ -52,11 +52,11 @@ class User: UITableViewCell {
     }
     
     func setProfilePic(imageView: UIImageView) {
-        download("\(self.handle!)~~profile_pic.jpg", url: filePathURL("\(self.handle!)~~profile_pic.jpg"), bucket: profile_bucket) {
+        download("\(self.userid!)~~profile_pic.jpg", url: filePathURL("\(self.userid!)~~profile_pic.jpg"), bucket: profile_bucket) {
             (result) -> Void in
             if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
-                    imageView.image = UIImage(contentsOfFile: filePathString("\(self.handle!)~~profile_pic.jpg"))!
+                    imageView.image = UIImage(contentsOfFile: filePathString("\(self.userid!)~~profile_pic.jpg"))!
                 }
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
@@ -67,11 +67,11 @@ class User: UITableViewCell {
     }
     
     func setBannerPic(imageView: UIImageView) {
-        download("\(self.handle!)~~banner.jpg", url: filePathURL("\(self.handle!)~~banner.jpg"), bucket: banner_bucket) {
+        download("\(self.userid!)~~banner.jpg", url: filePathURL("\(self.userid!)~~banner.jpg"), bucket: banner_bucket) {
             (result) -> Void in
             if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
-                    imageView.image = UIImage(contentsOfFile: filePathString("\(self.handle!)~~banner.jpg"))!
+                    imageView.image = UIImage(contentsOfFile: filePathString("\(self.userid!)~~banner.jpg"))!
                 }
             } else {
                 dispatch_async(dispatch_get_main_queue()) {

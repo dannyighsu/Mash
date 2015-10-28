@@ -174,9 +174,9 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()
-                    let key = "\(currentUser.handle!)~~\(self.titleTextField.text!).m4a"
+                    let key = "\(currentUser.userid!)~~\(response.recid).m4a"
                     upload(key, url: self.recording!.url, bucket: track_bucket)
-                    self.finish()
+                    self.finish(Int(response.recid))
                 }
             }
         }
@@ -224,8 +224,8 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         upload(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket)
     }
     
-    func finish() {
-        let track = Track(frame: CGRectZero, recid: 0, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, trackURL: "\(currentUser.handle!)~~\(self.titleTextField.text!).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
+    func finish(recid: Int) {
+        let track = Track(frame: CGRectZero, recid: recid, userid: currentUser.userid!, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, trackURL: "\(currentUser.userid!)~~\(recid).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a")
         self.saveWaveform(track)
         
         self.navigationController?.popViewControllerAnimated(true)

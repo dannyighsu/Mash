@@ -29,6 +29,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tracks.backgroundColor = darkGrayRegular()
         self.tracks.tableFooterView = UIView(frame: CGRectZero)
         self.tracks.separatorStyle = .None
+        self.tracks.allowsSelection = false
 
         // Register nibs
         let nib = UINib(nibName: "Channel", bundle: nil)
@@ -306,7 +307,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 raiseAlert("Error exporting file.", delegate: self)
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
-                    let sharingObjects = [filePathURL("\(currentUser.handle!)~~\(name).m4a")]
+                    let sharingObjects = [filePathURL("\(currentUser.userid!)~~\(name).m4a")]
                     let activityController = UIActivityViewController(activityItems: sharingObjects, applicationActivities: nil)
                     self.presentViewController(activityController, animated: true, completion: nil)
                 }
@@ -348,7 +349,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // Upload functions
     func checkForDuplicate(name: String) {
-        self.uploadAction(filePathString("\(currentUser.handle!)~~\(name).m4a"), name: name)
+        self.uploadAction(filePathString("\(currentUser.userid!)~~\(name).m4a"), name: name)
 
         /*
         var request = RecordingUploadRequest()
@@ -408,15 +409,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func uploadAction(url: String, name: String) {
-        upload("\(currentUser.handle!)~~\(name).m4a", url: NSURL(fileURLWithPath: url), bucket: track_bucket)
-        
-        // FIXME: Using waveform of first track for now
-        let waveformKey = "\(currentUser.handle!)~~\(name)_waveform.jpg"
-        let track = self.tracks.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! Channel
-        let waveform = takeShotOfView(track.audioPlot)
-        UIImageJPEGRepresentation(waveform, 1.0)!.writeToFile(filePathString(waveformKey), atomically: true)
-        upload(waveformKey, url: filePathURL(waveformKey), bucket: waveform_bucket)
-        
         // Post data to server
         var instruments: [String] = []
         var families: [String] = []
@@ -460,6 +452,15 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
+                    let id = Int(response.recid)
+                    upload("\(currentUser.userid!)~~\(id).m4a", url: NSURL(fileURLWithPath: url), bucket: track_bucket)
+                    
+                    // FIXME: Using waveform of first track for now
+                    let waveformKey = "\(currentUser.userid!)~~\(id)_waveform.jpg"
+                    let track = self.tracks.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! Channel
+                    let waveform = takeShotOfView(track.audioPlot)
+                    UIImageJPEGRepresentation(waveform, 1.0)!.writeToFile(filePathString(waveformKey), atomically: true)
+                    upload(waveformKey, url: filePathURL(waveformKey), bucket: waveform_bucket)
                     let alert = UIAlertView(title: "Success!", message: "Your Mash has been Saved.", delegate: self, cancelButtonTitle: "OK")
                     alert.show()
                 }

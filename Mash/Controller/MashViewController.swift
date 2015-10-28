@@ -39,7 +39,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.title = "Mash an Instrument"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "done")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Go", style: .Plain, target: self, action: "done")
         self.navigationItem.setHidesBackButton(false, animated: false)
     }
     
@@ -120,43 +120,35 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     // Download mash files
     func done() {
-        let request = 
-    }
-    
-    func finish(inputData: NSDictionary) {
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MashResultsController") as! MashResultsController
-        controller.projectRecordings = self.recordings
-        let tracks = inputData["recordings"] as! NSArray
-        if tracks.count != 0 {
-            for i in 0...tracks.count - 1 {
-                let dict = tracks[i] as! NSDictionary
-                let instruments = dict["instrument"] as! NSArray
-                var instrument = ""
-                if instruments.count != 0 {
-                    instrument = instruments[0] as! String
+        let request = SearchTagRequest()
+        request.userid = UInt32(currentUser.userid!)
+        request.loginToken = currentUser.loginToken
+        request.familyArray = NSMutableArray(array: self.instruments)
+        self.activityView.startAnimating()
+        server.searchTagWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: self)
+                raiseAlert("No results found.")
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
                 }
-                let families = dict["family"] as! NSArray
-                var family = ""
-                if families.count != 0 {
-                    family = families[0] as! String
-                }
-                
-                let trackName = dict["song_name"] as! String
-                let format = dict["format"] as! String
-                let user = dict["handle"] as! String
-                var url = "\(user)~~\(trackName)\(format)"
-                url = filePathString(url)
-                
-                let track = Track(frame: CGRectZero, recid: 0, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: user, format: format)
-                
-                controller.allResults.append(track)
-                if i < DEFAULT_DISPLAY_AMOUNT {
-                    controller.results.append(track)
-                }
+            } else {
+                self.finish(response)
             }
         }
-        
-        self.activityView.stopAnimating()
+    }
+    
+    func finish(response: Recordings) {
+        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MashResultsController") as! MashResultsController
+        controller.projectRecordings = self.recordings
+        if response.recordingArray.count != 0 {
+            for i in 0...response.recordingArray.count - 1 {
+                let rec = response.recordingArray[i] as! RecordingResponse
+                let track = Track(frame: CGRectZero, recid: Int(rec.recid), userid: Int(rec.userid), instruments: rec.instrumentArray.copy() as! [String], instrumentFamilies: rec.familyArray.copy() as! [String], titleText: rec.title, bpm: Int(rec.bpm), trackURL: getS3Key(Int(rec.userid), recid: Int(rec.recid), format: rec.format), user: rec.handle, format: rec.format)
+                controller.results.append(track)
+            }
+        }
         var index = 0
         for i in 0...self.navigationController!.viewControllers.count {
             if self.navigationController!.viewControllers[i] as? MashViewController != nil {

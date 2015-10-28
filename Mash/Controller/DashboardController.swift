@@ -34,7 +34,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         self.tracks.registerNib(track, forCellReuseIdentifier: "Track")
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
-        self.user = currentUser
+
+        // Check if this is tab bar profile
+        if self.tabBarController != nil {
+            self.user = currentUser
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -108,6 +112,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         track.userLabel.textColor = UIColor.whiteColor()
         track.title.textColor = UIColor.whiteColor()
         track.title.text = self.data[index].titleText
+        track.userid = self.data[index].userid
+        track.id = self.data[index].id
         track.titleText = track.title.text!
         track.format = self.data[index].format
         track.userText = self.data[index].userText
@@ -158,7 +164,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         
         header.editButton.setTitle(self.user.display_name(), forState: .Normal)
         // TODO: implement
-        header.locationButon.setTitle("Berkeley, CA", forState: .Normal)
+        header.locationButon.setTitle(self.user.handle!, forState: .Normal)
         
         let tap1 = UITapGestureRecognizer(target: self, action: "goToFollowers:")
         header.followerCount.addGestureRecognizer(tap1)
@@ -272,13 +278,12 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             let track = t as! RecordingResponse
             let instruments = NSArray(array: track.instrumentArray)
             let families = NSArray(array: track.familyArray)
-            let trackName = track.title
             let format = track.format
-            var url = "\(self.user.handle!)~~\(trackName)\(format!)"
+            var url = "\(self.user.userid!)~~\(track.recid)\(format!)"
             let recid = Int(track.recid)
             url = filePathString(url)
             
-            let trackData = Track(frame: CGRectZero, recid: recid, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: track.title, bpm: Int(track.bpm), trackURL: url, user: self.user.handle!, format: track.format!)
+            let trackData = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: track.title, bpm: Int(track.bpm), trackURL: url, user: self.user.handle!, format: track.format!)
             
             self.data.append(trackData)
         }
@@ -290,8 +295,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func addTrack(sender: UIButton) {
         let track = sender.superview!.superview!.superview as! Track
         ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
-        let tabBarController = self.navigationController?.viewControllers[2] as! UITabBarController
-        tabBarController.selectedIndex = getTabBarController("project")
+        if self.tabBarController != nil {
+            let tabBarController = self.navigationController?.viewControllers[2] as! UITabBarController
+            tabBarController.selectedIndex = getTabBarController("project")
+        }
     }
     
     func deleteTrack(track: Track, indexPath: NSIndexPath) {
@@ -305,7 +312,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             if error != nil {
                 Debug.printl("\(error)", sender: nil)
             } else {
-                deleteFromBucket("\(currentUser.handle)~~\(track.titleText)\(track.format)", bucket: track_bucket)
+                deleteFromBucket("\(currentUser.userid!)~~\(track.id)\(track.format)", bucket: track_bucket)
                 
                 dispatch_async(dispatch_get_main_queue()) {
                     self.data.removeAtIndex(indexPath.row)
@@ -386,14 +393,14 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func updateProfilePic(photo: PHAsset) {
-        let path = filePathString("\(currentUser.handle!)~~profile_pic.jpg")
+        let path = filePathString("\(currentUser.userid!)~~profile_pic.jpg")
         let phManager = PHImageManager.defaultManager()
         let options = PHImageRequestOptions()
         phManager.requestImageDataForAsset(photo, options: options) {
             (imageData, datUTI, orientation, info) in
             if let newData: NSData = imageData {
                 newData.writeToFile(path, atomically: true)
-                upload("\(currentUser.handle!)~~profile_pic.jpg", url: NSURL(fileURLWithPath: path), bucket: profile_bucket)
+                upload("\(currentUser.userid!)~~profile_pic.jpg", url: NSURL(fileURLWithPath: path), bucket: profile_bucket)
             }
         }
         
@@ -409,14 +416,14 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func updateBanner(photo: PHAsset) {
-        let path = filePathString("\(currentUser.handle!)~~banner.jpg")
+        let path = filePathString("\(currentUser.userid!)~~banner.jpg")
         let phManager = PHImageManager.defaultManager()
         let options = PHImageRequestOptions()
         phManager.requestImageDataForAsset(photo, options: options) {
             (imageData, datUTI, orientation, info) in
             if let newData: NSData = imageData {
                 newData.writeToFile(path, atomically: true)
-                upload("\(currentUser.handle!)~~banner.jpg", url: NSURL(fileURLWithPath: path), bucket: banner_bucket)
+                upload("\(currentUser.userid!)~~banner.jpg", url: NSURL(fileURLWithPath: path), bucket: banner_bucket)
             }
         }
         

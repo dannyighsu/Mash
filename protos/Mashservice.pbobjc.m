@@ -1563,10 +1563,12 @@ typedef struct RecordingUpdateRequest__storage_ {
 @implementation SuccessResponse
 
 @dynamic hasSuccess, success;
+@dynamic hasRecid, recid;
 
 typedef struct SuccessResponse__storage_ {
   uint32_t _has_storage_[1];
   BOOL success;
+  uint32_t recid;
 } SuccessResponse__storage_;
 
 // This method is threadsafe because it is initially called
@@ -1583,6 +1585,17 @@ typedef struct SuccessResponse__storage_ {
         .dataType = GPBDataTypeBool,
         .offset = offsetof(SuccessResponse__storage_, success),
         .defaultValue.valueBool = NO,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "recid",
+        .number = SuccessResponse_FieldNumber_Recid,
+        .hasIndex = 1,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(SuccessResponse__storage_, recid),
+        .defaultValue.valueUInt32 = 0U,
         .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },

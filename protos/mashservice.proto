@@ -126,6 +126,7 @@ message RecordingUpdateRequest {
 
 message SuccessResponse {
     required bool success = 1;
+    optional uint32 recid = 2;
 }
 
 message RecordingSearchRequest {

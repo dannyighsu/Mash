@@ -488,12 +488,16 @@ typedef GPB_ENUM(RecordingUpdateRequest_FieldNumber) {
 
 typedef GPB_ENUM(SuccessResponse_FieldNumber) {
   SuccessResponse_FieldNumber_Success = 1,
+  SuccessResponse_FieldNumber_Recid = 2,
 };
 
 @interface SuccessResponse : GPBMessage
 
 @property(nonatomic, readwrite) BOOL hasSuccess;
 @property(nonatomic, readwrite) BOOL success;
+
+@property(nonatomic, readwrite) BOOL hasRecid;
+@property(nonatomic, readwrite) uint32_t recid;
 
 @end
 

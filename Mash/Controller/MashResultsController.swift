@@ -28,8 +28,6 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         
         let track = UINib(nibName: "Track", bundle: nil)
         self.trackTable.registerNib(track, forCellReuseIdentifier: "Track")
-        let profile = UINib(nibName: "MashResultsHeaderView", bundle: nil)
-        self.trackTable.registerNib(profile, forHeaderFooterViewReuseIdentifier: "MashResultsHeaderView")
         
         for track in projectRecordings {
             self.projectPlayers.append(try! AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL)))
@@ -38,12 +36,15 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBarHidden = true
+        self.navigationItem.setHidesBackButton(true, animated: false)
+        self.navigationItem.title = "Results"
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel:")
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.navigationBarHidden = false
+        self.navigationItem.setHidesBackButton(false, animated: false)
+        self.navigationItem.rightBarButtonItem = nil
     }
     
     // Table View Delegate
@@ -70,6 +71,8 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         track.userLabel.text = track.userText
         track.bpm = trackData.bpm
         track.format = trackData.format
+        track.userid = trackData.userid
+        track.id = trackData.id
         track.trackURL = filePathString(getS3Key(track))
         if !self.downloadedTracks.contains(indexPath.row) {
             track.activityView.startAnimating()
@@ -79,6 +82,8 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
                     track.activityView.stopAnimating()
                     if result != nil {
                         track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
+                    } else {
+                        track.staticAudioPlot.image = UIImage(named: "waveform_static")
                     }
                 }
             }
@@ -91,10 +96,6 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 75.0
-    }
-    
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50.0
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -122,15 +123,19 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    /*func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    return 50.0
+    }*/
+    
+    /*func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header = view as! MashResultsHeaderView
         header.cancelButton.addTarget(self, action: "cancel:", forControlEvents: UIControlEvents.TouchDown)
-    }
+    }*/
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    /*func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.trackTable.dequeueReusableHeaderFooterViewWithIdentifier("MashResultsHeaderView") as! MashResultsHeaderView
         return header
-    }
+    }*/
     
     func loadNextData() {
         let currentNumResults = self.results.count - 1
@@ -174,7 +179,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func cancel(sender: AnyObject?) {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewControllerAnimated(false)
     }
     
     func done(sender: UIButton) {
