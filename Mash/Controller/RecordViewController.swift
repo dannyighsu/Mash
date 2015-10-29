@@ -35,15 +35,17 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var tempoAlert: UIAlertView? = nil
     var timeAlert: UIAlertView? = nil
     var muted: Bool = false
-    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     var coverView: UIView = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.coverView = UIView(frame: self.navigationController!.view.frame)
+        self.coverView = UIView(frame: CGRect(x: self.view.frame.minX, y: self.view.frame.minY, width: self.view.frame.size.width, height: self.view.frame.size.height + self.tabBarController!.tabBar.frame.size.height))
+        self.coverView.backgroundColor = UIColor(red: (150/255), green: (150/255), blue: (150/255), alpha: 0.4)
+        self.activityView.center = self.coverView.center
         self.coverView.addSubview(self.activityView)
-        self.view.addSubview(coverView)
+        self.tabBarController!.view.addSubview(self.coverView)
         self.activityView.startAnimating()
         
         // Set up metronome
@@ -423,6 +425,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             server = MashService(host: hostAddress)
             Debug.printl("Using local IP", sender: nil)
             self.checkLogin()
+            self.activityView.stopAnimating()
+            self.coverView.removeFromSuperview()
         } else {
             let request = ServerAddressRequest()
             let rand = arc4random()
@@ -434,7 +438,14 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 dispatch_group_leave(serverRequestGroup)
                 if error != nil {
                     Debug.printl("Error retrieving IP address: \(error)", sender: nil)
+                    dispatch_async(dispatch_get_main_queue()) {
+                        raiseAlert("An unknown error occured.")
+                    }
                 } else {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.activityView.stopAnimating()
+                        self.coverView.removeFromSuperview()
+                    }
                     hostAddress = "http://\(response.ipAddress):5010"
                     server = MashService(host: hostAddress)
                     Debug.printl("Received IP address \(hostAddress) from load balancer.", sender: nil)
@@ -446,8 +457,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 }
             }
         }
-        self.activityView.stopAnimating()
-        self.coverView.removeFromSuperview()
+        
     }
     
     // Check for login key
@@ -464,7 +474,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     }
     
     func authenticate(handle: String, password: String) {
-        self.activityView.startAnimating()
         let passwordHash = hashPassword(password)
         let request = SignInRequest()
         request.passwordHash = passwordHash
@@ -485,7 +494,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         
         server.signInWithRequest(request) {
             (response, error) in
-            self.activityView.stopAnimating()
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)
                 raiseAlert("Incorrect Username and/or Password")

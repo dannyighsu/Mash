@@ -86,17 +86,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
         
         // Retrieve server IP
-        let request = ServerAddressRequest()
+        /*let request = ServerAddressRequest()
         let rand = arc4random()
         request.userid = rand
         loadBalancer.getServerAddressWithRequest(request) {
             (response, error) in
             if error != nil {
                 hostAddress = "http://\(response.ipAddress)"
-                print(hostAddress)
                 server = MashService(host: hostAddress)
             }
-        }
+        }*/
     }
     
     func applicationDidBecomeActive(application: UIApplication) {
@@ -133,7 +132,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
-        return /*GPPURLHandler.handleURL(url, sourceApplication: sourceApplication, annotation: annotation) && */FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+        var optimizely = false
+        if Optimizely.handleOpenURL(url) {
+            optimizely = true
+        }
+        return optimizely && /*GPPURLHandler.handleURL(url, sourceApplication: sourceApplication, annotation: annotation) && */FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
     }
     
     func application(application: UIApplication, supportedInterfaceOrientationsForWindow window: UIWindow?) -> UIInterfaceOrientationMask {
@@ -144,13 +147,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             orientations = viewController!.supportedInterfaceOrientations()
         }
         return orientations
-    }
-    
-    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
-        if Optimizely.handleOpenURL(url) {
-            return true
-        }
-        return false
     }
     
     // Notification registry

@@ -267,7 +267,40 @@ func parseTimeStamp(timestamp: String) -> String {
     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
     dateFormatter.timeZone = NSTimeZone(name: "UTC")
     let date: NSDate? = dateFormatter.dateFromString(timestamp)
-    return stringFromTimeInterval(date!.timeIntervalSinceNow)
+    let timeString = stringFromTimeInterval(date!.timeIntervalSinceNow)
+    
+    // Time format should now be in hh:mm:ss
+    let times: [String] = timeString.characters.split {$0 == ":"}.map(String.init)
+    let hour = Int(times[0])!
+    let minute = Int(times[1])!
+    
+    var result = ""
+    // Less than a day ago
+    if hour < 24 {
+        // Less than an hour ago
+        if hour < 1 {
+            if minute == 1 {
+                result = "\(minute) minute ago"
+            } else {
+                result = "\(minute) minutes ago"
+            }
+        } else {
+            if hour == 1 {
+                result = "\(hour) hour ago"
+            } else {
+                result = "\(hour) hours ago"
+            }
+        }
+    } else {
+        let day = hour % 24
+        if day == 1 {
+            result = "yesterday"
+        } else {
+            result = "\(day) days ago"
+        }
+    }
+    
+    return result
 }
 
 func stringFromTimeInterval(interval: NSTimeInterval) -> String {
