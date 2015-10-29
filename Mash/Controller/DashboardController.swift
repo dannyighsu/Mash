@@ -38,6 +38,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         // Check if this is tab bar profile
         if self.tabBarController != nil {
             self.user = currentUser
+        } else {
+            self.view.frame = self.navigationController!.view.frame
+            self.tracks.frame = self.navigationController!.view.frame
         }
     }
     
@@ -298,6 +301,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         if self.tabBarController != nil {
             let tabBarController = self.navigationController?.viewControllers[2] as! UITabBarController
             tabBarController.selectedIndex = getTabBarController("project")
+        } else {
+            raiseAlert("Track added.")
         }
     }
     
@@ -313,7 +318,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 Debug.printl("\(error)", sender: nil)
             } else {
                 deleteFromBucket("\(currentUser.userid!)~~\(track.id)\(track.format)", bucket: track_bucket)
-                
                 dispatch_async(dispatch_get_main_queue()) {
                     self.data.removeAtIndex(indexPath.row)
                     self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)

@@ -73,6 +73,8 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         track.format = trackData.format
         track.userid = trackData.userid
         track.id = trackData.id
+        track.instrumentFamilies = trackData.instrumentFamilies
+        track.instruments = trackData.instruments
         track.trackURL = filePathString(getS3Key(track))
         if !self.downloadedTracks.contains(indexPath.row) {
             track.activityView.startAnimating()

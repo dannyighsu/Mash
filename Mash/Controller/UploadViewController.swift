@@ -151,12 +151,21 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     // Upload Methods
     func uploadAction() {
+        let times = self.timeSignature!.characters.split {$0 == "/"}.map(String.init)
+        let numer = times[0]
+        var denom = times[1]
+        if denom.characters.count == 1 {
+            denom = "0\(denom)"
+        }
+        
+        let timeSigString = "\(numer)\(denom)"
+        
         let request = RecordingUploadRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         request.title = "\(self.titleTextField.text!)"
-        request.bpm = 0
-        request.bar = 0
+        request.bpm = UInt32(self.bpm!)
+        request.bar = UInt32(timeSigString)!
         request.key = "X"
         request.familyArray = NSMutableArray(array: self.instruments)
         request.instrumentArray = []
@@ -174,7 +183,6 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()
-                    print(response.recid)
                     let key = "\(currentUser.userid!)~~\(response.recid).m4a"
                     upload(key, url: self.recording!.url, bucket: track_bucket)
                     self.finish(Int(response.recid))
