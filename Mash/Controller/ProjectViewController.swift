@@ -16,7 +16,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     var audioPlayer: ProjectPlayer? = nil
     var toolsTap: UITapGestureRecognizer? = nil
     var mixerShowing: Bool = false
-    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     var metronome: Metronome = Metronome.createView()
     var bpm: Int = 120
 
@@ -28,7 +28,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tracks.dataSource = self
         self.tracks.backgroundColor = darkGrayRegular()
         self.tracks.tableFooterView = UIView(frame: CGRectZero)
-        self.tracks.separatorStyle = .None
+        self.tracks.separatorColor = darkGray()
         self.tracks.allowsSelection = false
 
         // Register nibs
@@ -170,7 +170,15 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
             self.data.removeAtIndex(indexPath.row)
+            
+            // Update indices of channels
+            for i in indexPath.row...self.data.count - 1 {
+                let channel = tableView.cellForRowAtIndexPath(indexPath) as! Channel
+                
+            }
+            
             self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+            
             self.audioPlayer!.audioPlayers.removeAtIndex(indexPath.row)
         }
     }
@@ -276,13 +284,24 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func uploadSavedTrack(name: String) -> Bool {
+        for track in self.data {
+            print(track.trackURL)
+        }
         Track.mixTracks(name, tracks: self.data) {
             (exportSession) in
             if exportSession == nil || exportSession!.status == AVAssetExportSessionStatus.Failed {
                 raiseAlert("Error exporting file.", delegate: self)
             } else {
                 Debug.printl("File export of track \(name) completed", sender: self)
-                self.checkForDuplicate(name)
+                //self.checkForDuplicate(name)
+                
+                let controller = self.storyboard?.instantiateViewControllerWithIdentifier("UploadViewController") as! UploadViewController
+                controller.recording = EZAudioFile(URL: filePathURL("\(currentUser.userid!)~~\(name).m4a"))
+                controller.bpm = self.bpm
+                controller.timeSignature = "\(self.metronome.timeSignature[0])/\(self.metronome.timeSignature[1])"
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
             }
         }
         
@@ -432,7 +451,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         request.title = name
         request.bpm = 0
         request.bar = 0
-        request.key = "None"
+        request.key = "C"
         request.instrumentArray = [instrumentString]
         request.familyArray = [familyString]
         request.genreArray = []
@@ -447,8 +466,11 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 Debug.printl("Error: \(error)", sender: nil)
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()
-                    let alert = UIAlertView(title: "Track exists.", message: "Please choose a different title.", delegate: self, cancelButtonTitle: "Ok")
-                    alert.show()
+                    if error.code == 13 {
+                        raiseAlert("Error", delegate: self, message: "Track exists.")
+                    } else {
+                        raiseAlert("Error occurred. \(error.code)")
+                    }
                 }
             } else {
                 dispatch_async(dispatch_get_main_queue()) {

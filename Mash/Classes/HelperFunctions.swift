@@ -30,11 +30,11 @@ func findImageWhite(instrument: [String]) -> UIImage {
         let image = UIImage(named: "\(instrument[0])1")
         if image == nil {
             Debug.printl("No such instrument found: \(instrument)", sender: "helpers")
-            return UIImage(named: "Other")!
+            return UIImage(named: "Other1")!
         }
         return image!
     } else {
-        return UIImage(named: "Other")!
+        return UIImage(named: "Other1")!
     }
 }
 
@@ -292,7 +292,7 @@ func parseTimeStamp(timestamp: String) -> String {
             }
         }
     } else {
-        let day = hour % 24
+        let day = hour / 24
         if day == 1 {
             result = "yesterday"
         } else {

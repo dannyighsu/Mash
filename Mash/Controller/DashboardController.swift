@@ -112,7 +112,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let index = indexPath.row
         track.backgroundColor = UIColor.clearColor()
         track.instrumentImage.backgroundColor = UIColor.clearColor()
-        track.userLabel.textColor = UIColor.whiteColor()
+        track.userLabel.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         track.title.textColor = UIColor.whiteColor()
         track.title.text = self.data[index].titleText
         track.userid = self.data[index].userid
@@ -120,12 +120,13 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         track.titleText = track.title.text!
         track.format = self.data[index].format
         track.userText = self.data[index].userText
-        track.userLabel.text = track.userText
+        track.userLabel.setTitle(track.userText, forState: .Normal)
         track.instruments = self.data[index].instruments
         track.instrumentFamilies = self.data[index].instrumentFamilies
         track.trackURL = self.data[index].trackURL
         track.bpm = self.data[index].bpm
         track.instrumentImage.image = findImageWhite(track.instrumentFamilies)
+        track.instrumentImage.backgroundColor = UIColor.clearColor()
         track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
         track.activityView.startAnimating()
         

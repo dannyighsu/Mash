@@ -129,6 +129,7 @@
 		37E799F11B3CC1D000D2E54D /* Channel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D71B3CC1D000D2E54D /* Channel.xib */; };
 		37E799F21B3CC1D000D2E54D /* Track.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D81B3CC1D000D2E54D /* Track.xib */; };
 		37E799FC1B3CC1F600D2E54D /* KeychainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E799F51B3CC1F600D2E54D /* KeychainWrapper.m */; };
+		37F076D81BE2E8AF006D1B95 /* AudioFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F076D71BE2E8AF006D1B95 /* AudioFunctions.swift */; settings = {ASSET_TAGS = (); }; };
 		EDBAE700D5BBFB5785DF766E /* libPods-Mash.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B37CA755709BC5D0E106BC64 /* libPods-Mash.a */; };
 /* End PBXBuildFile section */
 
@@ -271,6 +272,7 @@
 		37E799D81B3CC1D000D2E54D /* Track.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Track.xib; sourceTree = "<group>"; };
 		37E799F41B3CC1F600D2E54D /* KeychainWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainWrapper.h; sourceTree = "<group>"; };
 		37E799F51B3CC1F600D2E54D /* KeychainWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainWrapper.m; sourceTree = "<group>"; };
+		37F076D71BE2E8AF006D1B95 /* AudioFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFunctions.swift; sourceTree = "<group>"; };
 		65A069C569B0565C12B1DE57 /* Pods-Mash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mash.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mash/Pods-Mash.debug.xcconfig"; sourceTree = "<group>"; };
 		8E5C7599631EC276A2A7DA6C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		B37CA755709BC5D0E106BC64 /* libPods-Mash.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mash.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -489,6 +491,7 @@
 				37C12E271B6988CB00A4E3A3 /* ShareView.swift */,
 				374405A91BDED22E00BAB39C /* CollecitionViewLayout.swift */,
 				37DC47A01BE0B13A006B2D96 /* ProjectAddBar.swift */,
+				37F076D71BE2E8AF006D1B95 /* AudioFunctions.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -779,6 +782,7 @@
 				376CA7781B8BDCA000ADD1E2 /* Mashservice.pbobjc.m in Sources */,
 				37E799DC1B3CC1D000D2E54D /* HelperFunctions.swift in Sources */,
 				37E799E01B3CC1D000D2E54D /* InstrumentCell.swift in Sources */,
+				37F076D81BE2E8AF006D1B95 /* AudioFunctions.swift in Sources */,
 				37E799D91B3CC1D000D2E54D /* Debug.swift in Sources */,
 				37E799E61B3CC1D000D2E54D /* Track.swift in Sources */,
 				37E799AC1B3CC1C600D2E54D /* MashResultsController.swift in Sources */,

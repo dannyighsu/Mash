@@ -257,7 +257,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         if alertView.title == "Set Time Signature" {
             self.metronome!.textFieldDidEndEditing(alertView.textFieldAtIndex(0)!)
             self.timeButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
-            
         } else if alertView.title == "Set Tempo" {
             self.metronome!.textFieldDidEndEditing(alertView.textFieldAtIndex(0)!)
             self.tempoButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
@@ -388,7 +387,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             self.beat -= 1
             self.beatLabel!.text = "\(self.beat)"
         } else if self.beat == 1 {
-            
             // Start recording
             self.drawRollingPlot()
             self.recorder = EZRecorder(URL: filePathURL(nil), clientFormat: self.microphone!.audioStreamBasicDescription(), fileType: EZRecorderFileType.M4A)
@@ -396,8 +394,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             self.recordingStartTime = NSDate()
             self.recording = true
             self.beat = 0
-            //self.recordingCoverView.hidden = false
-            //self.recordingCoverView.alpha = 0.7
             UIView.transitionWithView(self.recordButton.imageView!, duration: 0.5, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { self.recordButton.setImage(UIImage(named: "Record_stop"), forState: .Normal) }, completion: nil)
             UIView.animateWithDuration(0.3, animations: { self.countoffView!.alpha = 0.0 }) {
                 (completed: Bool) in
