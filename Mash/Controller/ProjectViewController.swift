@@ -171,13 +171,15 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         if editingStyle == UITableViewCellEditingStyle.Delete {
             self.data.removeAtIndex(indexPath.row)
             
-            // Update indices of channels
-            for i in indexPath.row...self.data.count - 1 {
-                let channel = tableView.cellForRowAtIndexPath(indexPath) as! Channel
-                
-            }
-            
             self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+            
+            // Update indices of channels
+            if self.data.count > 0 {
+                for _ in indexPath.row + 1...self.data.count {
+                    let channel = tableView.cellForRowAtIndexPath(indexPath) as! Channel
+                    channel.trackNumber! -= 1
+                }
+            }
             
             self.audioPlayer!.audioPlayers.removeAtIndex(indexPath.row)
         }
@@ -268,6 +270,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // Channel Delegate
     func channelVolumeDidChange(channel: Channel, number: Int, value: Float) {
+        print(channel.trackNumber)
         self.audioPlayer!.audioPlayers[number].volume = value
     }
     
