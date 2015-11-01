@@ -270,7 +270,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // Channel Delegate
     func channelVolumeDidChange(channel: Channel, number: Int, value: Float) {
-        print(channel.trackNumber)
         self.audioPlayer!.audioPlayers[number].volume = value
     }
     
@@ -287,9 +286,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func uploadSavedTrack(name: String) -> Bool {
-        for track in self.data {
-            print(track.trackURL)
-        }
         Track.mixTracks(name, tracks: self.data) {
             (exportSession) in
             if exportSession == nil || exportSession!.status == AVAssetExportSessionStatus.Failed {
