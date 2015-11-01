@@ -179,7 +179,11 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)
-                raiseAlert("Track name exists already.")
+                if error.code == 13 {
+                    raiseAlert("Track name exists already.")
+                } else {
+                    raiseAlert("An error occured. \(error.code)")
+                }
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()

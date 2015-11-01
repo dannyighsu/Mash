@@ -76,6 +76,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             self.audioPlayer!.stop()
         }
         self.navigationController?.navigationBarHidden = false
+        self.navigationItem.title = nil
     }
     
     // Table View Delegate
@@ -108,7 +109,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 track.titleText = trackData.titleText
                 track.title.text = trackData.titleText
                 track.userText = trackData.userText
-                track.userLabel.text = track.userText
+                track.userLabel.setTitle(track.userText, forState: .Normal)
                 track.format = trackData.format
                 track.bpm = trackData.bpm
                 track.userid = trackData.userid
@@ -118,6 +119,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                     dispatch_async(dispatch_get_main_queue()) {
                         if result != nil {
                             track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
+                        } else {
+                            track.staticAudioPlot.image = UIImage(named: "waveform_static")
                         }
                     }
                 }
@@ -342,7 +345,11 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
-                raiseAlert("No results found.")
+                if error.code == 14 {
+                    raiseAlert("No results found.")
+                } else {
+                    raiseAlert("Error occured. \(error.code)")
+                }
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()
                 }
@@ -365,7 +372,11 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
-                raiseAlert("No results found.")
+                if error.code == 14 {
+                    raiseAlert("No results found.")
+                } else {
+                    raiseAlert("Error occured. \(error.code)")
+                }
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()
                 }

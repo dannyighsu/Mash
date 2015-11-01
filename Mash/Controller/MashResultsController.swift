@@ -68,7 +68,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         track.titleText = trackData.titleText
         track.userText = trackData.userText
         track.title.text = track.titleText
-        track.userLabel.text = track.userText
+        track.userLabel.setTitle(track.userText, forState: .Normal)
         track.bpm = trackData.bpm
         track.format = trackData.format
         track.userid = trackData.userid

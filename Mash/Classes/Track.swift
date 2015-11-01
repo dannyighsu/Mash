@@ -14,7 +14,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var instrumentImage: UIImageView!
     @IBOutlet weak var title: UILabel!
-    @IBOutlet weak var userLabel: UILabel!
+    @IBOutlet weak var userLabel: UIButton!
     @IBOutlet weak var audioPlot: EZAudioPlot!
     @IBOutlet weak var staticAudioPlot: UIImageView!
     @IBOutlet weak var activityView: UIActivityIndicatorView!

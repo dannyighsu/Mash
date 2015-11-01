@@ -22,7 +22,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         // Set up table
         self.activityFeed.delegate = self
         self.activityFeed.dataSource = self
-        self.activityFeed.separatorStyle = .None
+        self.activityFeed.separatorColor = offWhite()
         self.activityFeed.backgroundColor = offWhite()
         
         self.view.addSubview(self.activityView)
@@ -49,6 +49,10 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "goToSearch:")
+        /*if UIDevice.currentDevice().systemVersion.compare("9.0") == NSComparisonResult.OrderedAscending {
+            self.activityView.frame = CGRect(x: self.activityView.frame.minX + self.navigationController!.navigationBar.frame.size.height, y: self.activityView.frame.minY, width: self.activityView.frame.width, height: self.activityView.frame.height)
+        }*/
+        self.activityFeed.frame = self.view.frame
     }
     
     override func viewWillDisappear(animated: Bool) {

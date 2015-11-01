@@ -66,7 +66,7 @@ class ExploreViewController: UIViewController, UITableViewDelegate, UITableViewD
             track.title.text = result.titleText
             track.titleText = result.titleText
             track.userText = result.userText
-            track.userLabel.text = result.userText
+            track.userLabel.titleLabel!.text = result.userText
             track.instruments = result.instruments
             track.trackURL = result.trackURL
             track.instrumentImage.image = findImage(result.instruments)
