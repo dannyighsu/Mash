@@ -127,7 +127,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         if textField == self.tempoField {
             let input = self.tempoField.text
             if input!.characters.count == 0 {
-                let originalValue = Int(60.0 / Double(self.duration))
+                let originalValue = Int(self.getTempo())
                 self.tempoField.text = String(stringInterpolationSegment: originalValue)
                 return
             }
@@ -280,7 +280,17 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         }
         self.tempoField.text = "\(value)"
         self.tempoSlider.value = Float(value)
-        self.duration = CGFloat(60.0 / Double(value))
+        self.duration = CGFloat(self.getTempo())
     }
     
+    func getTempo() -> Double {
+        return 60.0 / Double(self.duration)
+    }
+    
+}
+
+class MetronomeManualTrigger {
+    init() {
+        
+    }
 }

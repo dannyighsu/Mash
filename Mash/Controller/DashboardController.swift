@@ -39,7 +39,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         if self.tabBarController != nil {
             self.user = currentUser
         } else {
+            // FIXME: hacky
             self.view.frame = self.navigationController!.view.frame
+            self.view.backgroundColor = darkGray()
             self.tracks.frame = self.navigationController!.view.frame
         }
     }
@@ -61,7 +63,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let value = UIInterfaceOrientation.Portrait.rawValue
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
         var editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "goToSettings:")
-        if self.user.handle != currentUser.handle {
+        
+        if self.user.userid != currentUser.userid {
             var following: Bool = false
             for u in userFollowing {
                 if u.handle! == self.user.handle! {
@@ -446,7 +449,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func stopPlaying() {
-        if self.audioPlayer!.playing {
+        if self.audioPlayer != nil && self.audioPlayer!.playing {
             self.audioPlayer!.stop()
         }
     }

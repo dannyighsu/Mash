@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 
-func trimAudio(inputFile: NSURL, outputFile: NSURL, startTime: Float, endTime: Float, callback: (result: Bool) -> Void) {
+func trimAudio(inputFile: NSURL, outputFile: NSURL, startTime: Double, endTime: Double, callback: (result: Bool) -> Void) {
     let asset = AVAsset(URL: inputFile)
     let session = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetAppleM4A)
     
