@@ -68,6 +68,11 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.setHidesBackButton(true, animated: false)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -75,8 +80,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         if self.audioPlayer != nil {
             self.audioPlayer!.stop()
         }
-        self.navigationController?.navigationBarHidden = false
         self.navigationItem.title = nil
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     // Table View Delegate
