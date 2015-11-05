@@ -39,15 +39,14 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         if self.tabBarController != nil {
             self.user = currentUser
         } else {
-            // FIXME: hacky
             self.view.frame = self.navigationController!.view.frame
             self.view.backgroundColor = darkGray()
-            self.tracks.frame = self.navigationController!.view.frame
         }
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
         if self.user != currentUser {
             self.parentViewController?.navigationItem.setHidesBackButton(false, animated: false)
             self.navigationItem.title = "Profile"
@@ -103,52 +102,58 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     // Table View Delegate
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return 0
+        }
         return self.data.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let track = tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
-        let index = indexPath.row
-        track.backgroundColor = UIColor.clearColor()
-        track.instrumentImage.backgroundColor = UIColor.clearColor()
-        track.userLabel.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        track.title.textColor = UIColor.whiteColor()
-        track.title.text = self.data[index].titleText
-        track.userid = self.data[index].userid
-        track.id = self.data[index].id
-        track.titleText = track.title.text!
-        track.format = self.data[index].format
-        track.userText = self.data[index].userText
-        track.userLabel.setTitle(track.userText, forState: .Normal)
-        track.instruments = self.data[index].instruments
-        track.instrumentFamilies = self.data[index].instrumentFamilies
-        track.trackURL = self.data[index].trackURL
-        track.bpm = self.data[index].bpm
-        track.instrumentImage.image = findImageWhite(track.instrumentFamilies)
-        track.instrumentImage.backgroundColor = UIColor.clearColor()
-        track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
-        track.activityView.startAnimating()
-        
-        download(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket) {
-            (result) in
-            dispatch_async(dispatch_get_main_queue()) {
-                track.activityView.stopAnimating()
-            }
-            if result != nil {
+        if indexPath.section == 1 {
+            let track = tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
+            let index = indexPath.row
+            track.backgroundColor = UIColor.clearColor()
+            track.instrumentImage.backgroundColor = UIColor.clearColor()
+            track.userLabel.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            track.title.textColor = UIColor.whiteColor()
+            track.title.text = self.data[index].titleText
+            track.userid = self.data[index].userid
+            track.id = self.data[index].id
+            track.titleText = track.title.text!
+            track.format = self.data[index].format
+            track.userText = self.data[index].userText
+            track.userLabel.setTitle(track.userText, forState: .Normal)
+            track.instruments = self.data[index].instruments
+            track.instrumentFamilies = self.data[index].instrumentFamilies
+            track.trackURL = self.data[index].trackURL
+            track.bpm = self.data[index].bpm
+            track.instrumentImage.image = findImageWhite(track.instrumentFamilies)
+            track.instrumentImage.backgroundColor = UIColor.clearColor()
+            track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
+            track.activityView.startAnimating()
+            
+            download(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket) {
+                (result) in
                 dispatch_async(dispatch_get_main_queue()) {
-                    track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
+                    track.activityView.stopAnimating()
                 }
-            } else {
-                dispatch_async(dispatch_get_main_queue()) {
-                    track.staticAudioPlot.image = UIImage(named: "waveform_static")
+                if result != nil {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
+                    }
+                } else {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        track.staticAudioPlot.image = UIImage(named: "waveform_static")
+                    }
                 }
             }
+            return track
         }
-        return track
+        return UITableViewCell(style: .Default, reuseIdentifier: nil)
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -156,69 +161,82 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        let header = view as! Profile
-        
-        header.profilePic.contentMode = UIViewContentMode.ScaleAspectFill
-        header.profilePic.layer.cornerRadius = header.profilePic.frame.size.width / 2
-        header.profilePic.layer.borderWidth = 1.0
-        header.profilePic.layer.borderColor = UIColor.whiteColor().CGColor
-        header.profilePic.layer.masksToBounds = true
-        
-        header.followerCount.layer.borderWidth = 0.2
-        header.followingCount.layer.borderWidth = 0.2
-        header.trackCount.layer.borderWidth = 0.2
-        //header.descriptionLabel.layer.borderWidth = 0.2
-        
-        header.editButton.setTitle(self.user.display_name(), forState: .Normal)
-        // TODO: implement
-        header.locationButon.setTitle(self.user.handle!, forState: .Normal)
-        
-        let tap1 = UITapGestureRecognizer(target: self, action: "goToFollowers:")
-        header.followerCount.addGestureRecognizer(tap1)
-        let tap2 = UITapGestureRecognizer(target: self, action: "goToFollowing:")
-        header.followingCount.addGestureRecognizer(tap2)
-        
-        self.user.setBannerPic(header.bannerImage)
-        self.user.setProfilePic(header.profilePic)
-        header.followerCount.text = "  \(self.user.followers!)\n  FOLLOWERS"
-        header.followingCount.text = "  \(self.user.following!)\n  FOLLOWING"
-        header.trackCount.text = "  \(self.user.tracks!)\n  TRACKS"
-        //header.descriptionLabel.text = "  \(self.user.userDescription!)"
-        
-        // Add gradient to banner
-        let gradient: CAGradientLayer = CAGradientLayer()
-        gradient.frame = header.bounds
-        gradient.colors = [UIColor.clearColor().CGColor, UIColor.clearColor().CGColor, darkGray().CGColor]
-        header.bannerImage.layer.insertSublayer(gradient, atIndex: 0)
+        if section == 0 {
+            let header = view as! Profile
+            
+            header.profilePic.contentMode = UIViewContentMode.ScaleAspectFill
+            header.profilePic.layer.cornerRadius = header.profilePic.frame.size.width / 2
+            header.profilePic.layer.borderWidth = 1.0
+            header.profilePic.layer.borderColor = UIColor.whiteColor().CGColor
+            header.profilePic.layer.masksToBounds = true
+            
+            header.followerCount.layer.borderWidth = 0.2
+            header.followingCount.layer.borderWidth = 0.2
+            header.trackCount.layer.borderWidth = 0.2
+            //header.descriptionLabel.layer.borderWidth = 0.2
+            
+            header.editButton.setTitle(self.user.display_name(), forState: .Normal)
+            // TODO: implement
+            header.locationButon.setTitle(self.user.handle!, forState: .Normal)
+            
+            let tap1 = UITapGestureRecognizer(target: self, action: "goToFollowers:")
+            header.followerCount.addGestureRecognizer(tap1)
+            let tap2 = UITapGestureRecognizer(target: self, action: "goToFollowing:")
+            header.followingCount.addGestureRecognizer(tap2)
+            
+            self.user.setBannerPic(header.bannerImage)
+            self.user.setProfilePic(header.profilePic)
+            header.followerCount.text = "  \(self.user.followers!)\n  FOLLOWERS"
+            header.followingCount.text = "  \(self.user.following!)\n  FOLLOWING"
+            header.trackCount.text = "  \(self.user.tracks!)\n  TRACKS"
+            //header.descriptionLabel.text = "  \(self.user.userDescription!)"
+            
+            // Add gradient to banner
+            let gradient: CAGradientLayer = CAGradientLayer()
+            gradient.frame = header.bounds
+            gradient.colors = [UIColor.clearColor().CGColor, UIColor.clearColor().CGColor, darkGray().CGColor]
+            header.bannerImage.layer.insertSublayer(gradient, atIndex: 0)
+        }
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = self.tracks.dequeueReusableHeaderFooterViewWithIdentifier("Profile") as! Profile
-        return header
+        if section == 0 {
+            let header = self.tracks.dequeueReusableHeaderFooterViewWithIdentifier("Profile") as! Profile
+            return header
+        }
+        return nil
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 240.0
+        if section == 0 {
+            return 240.0
+        }
+        return 0.0
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 75.0
+        if indexPath.section == 1 {
+            return 75.0
+        }
+        return 0.0
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
-        
-        track.activityView.startAnimating()
-        download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
-            (result) in
-            dispatch_async(dispatch_get_main_queue()) {
-                track.activityView.stopAnimating()
-                tableView.deselectRowAtIndexPath(indexPath, animated: true)
-                if result != nil {
-                    track.generateWaveform()
-                    self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
-                    self.audioPlayer!.play()
-                    Debug.printl("Playing track \(track.titleText)", sender: self)
+        if indexPath.section == 1 {
+            let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
+            
+            track.activityView.startAnimating()
+            download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
+                (result) in
+                dispatch_async(dispatch_get_main_queue()) {
+                    track.activityView.stopAnimating()
+                    tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                    if result != nil {
+                        track.generateWaveform()
+                        self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
+                        self.audioPlayer!.play()
+                        Debug.printl("Playing track \(track.titleText)", sender: self)
+                    }
                 }
             }
         }
@@ -295,7 +313,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             self.data.append(trackData)
         }
         dispatch_async(dispatch_get_main_queue()) {
-            self.tracks.reloadData()
+            self.tracks.reloadSections(NSIndexSet(index: 1), withRowAnimation: .None)
         }
     }
     

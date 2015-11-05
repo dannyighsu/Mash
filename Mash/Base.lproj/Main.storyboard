@@ -623,11 +623,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Kwc-Cd-HIg"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="6sY-8T-WA7">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2Ag-Hh-tkf">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="531"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
@@ -637,18 +637,23 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="2Ag-Hh-tkf" secondAttribute="trailing" id="30x-70-Wxs"/>
                             <constraint firstItem="2Ag-Hh-tkf" firstAttribute="bottom" secondItem="Kwc-Cd-HIg" secondAttribute="top" constant="49" id="VLN-hd-l5y"/>
+                            <constraint firstItem="2Ag-Hh-tkf" firstAttribute="top" secondItem="T17-d8-ife" secondAttribute="bottom" id="bAq-fj-BiH"/>
                             <constraint firstItem="2Ag-Hh-tkf" firstAttribute="top" secondItem="6sY-8T-WA7" secondAttribute="top" id="ftp-QU-yv1"/>
                             <constraint firstItem="2Ag-Hh-tkf" firstAttribute="top" secondItem="6sY-8T-WA7" secondAttribute="topMargin" id="jJz-Gu-8y8"/>
                             <constraint firstItem="2Ag-Hh-tkf" firstAttribute="leading" secondItem="6sY-8T-WA7" secondAttribute="leading" id="kVd-FM-R8v"/>
-                            <constraint firstAttribute="bottom" secondItem="2Ag-Hh-tkf" secondAttribute="bottom" constant="49" id="rZd-bz-5cJ"/>
+                            <constraint firstItem="2Ag-Hh-tkf" firstAttribute="top" secondItem="T17-d8-ife" secondAttribute="bottom" id="r4x-gb-hzu"/>
+                            <constraint firstAttribute="bottom" secondItem="2Ag-Hh-tkf" secondAttribute="bottom" id="rZd-bz-5cJ"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="VLN-hd-l5y"/>
+                                <exclude reference="ftp-QU-yv1"/>
                                 <exclude reference="jJz-Gu-8y8"/>
+                                <exclude reference="r4x-gb-hzu"/>
                             </mask>
                         </variation>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <tabBarItem key="tabBarItem" title="Home" image="home" id="xGn-tj-oPB"/>
                     <connections>
                         <outlet property="activityFeed" destination="2Ag-Hh-tkf" id="gUy-3Q-Ylc"/>
@@ -773,7 +778,7 @@
                         <viewControllerLayoutGuide type="bottom" id="ZMN-Ob-ksM"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="mpP-7y-UjJ">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="1SZ-3W-gYG">
@@ -785,12 +790,19 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="1SZ-3W-gYG" firstAttribute="bottom" secondItem="ZMN-Ob-ksM" secondAttribute="top" id="2Wg-Y1-MIa"/>
                             <constraint firstItem="1SZ-3W-gYG" firstAttribute="top" secondItem="mpP-7y-UjJ" secondAttribute="top" id="I6M-gV-Z2y"/>
-                            <constraint firstAttribute="trailing" secondItem="1SZ-3W-gYG" secondAttribute="trailing" id="s1n-OU-hGn"/>
-                            <constraint firstAttribute="bottom" secondItem="1SZ-3W-gYG" secondAttribute="bottom" constant="49" id="sSV-D8-RAf"/>
-                            <constraint firstItem="1SZ-3W-gYG" firstAttribute="leading" secondItem="mpP-7y-UjJ" secondAttribute="leading" id="x3F-VN-Jkd"/>
+                            <constraint firstItem="1SZ-3W-gYG" firstAttribute="top" secondItem="mpP-7y-UjJ" secondAttribute="top" id="PQH-tp-P37"/>
+                            <constraint firstAttribute="trailing" secondItem="1SZ-3W-gYG" secondAttribute="trailing" id="eE5-D8-tz6"/>
+                            <constraint firstItem="1SZ-3W-gYG" firstAttribute="leading" secondItem="mpP-7y-UjJ" secondAttribute="leading" id="hbQ-9y-jzF"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="I6M-gV-Z2y"/>
+                            </mask>
+                        </variation>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="Project" image="project" id="Lag-LO-KXu"/>
                     <connections>
                         <outlet property="tracks" destination="1SZ-3W-gYG" id="RBy-2l-seu"/>
@@ -813,7 +825,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="lk9-lb-pKZ">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="531"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
@@ -821,6 +833,7 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="lk9-lb-pKZ" firstAttribute="top" secondItem="HVb-Dg-awI" secondAttribute="bottom" id="5ZR-W0-smu"/>
                             <constraint firstItem="lk9-lb-pKZ" firstAttribute="top" secondItem="HVb-Dg-awI" secondAttribute="bottom" constant="-20" id="7WI-12-OrF"/>
                             <constraint firstItem="lk9-lb-pKZ" firstAttribute="leading" secondItem="89t-Wz-ilU" secondAttribute="leading" id="A5O-os-Cgz"/>
                             <constraint firstItem="lk9-lb-pKZ" firstAttribute="top" secondItem="89t-Wz-ilU" secondAttribute="top" id="hdV-wt-lWm"/>
@@ -830,6 +843,7 @@
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="7WI-12-OrF"/>
+                                <exclude reference="hdV-wt-lWm"/>
                             </mask>
                         </variation>
                     </view>
@@ -1198,11 +1212,14 @@
                         <viewControllerLayoutGuide type="bottom" id="jnl-DO-1eI"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="bhe-ur-6LE">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <userGuides>
+                            <userLayoutGuide location="300" affinity="minX"/>
+                        </userGuides>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Gb5-vy-SRn">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="531"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
@@ -1210,18 +1227,31 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Gb5-vy-SRn" firstAttribute="bottom" secondItem="jnl-DO-1eI" secondAttribute="top" id="9Bi-RJ-iut"/>
                             <constraint firstAttribute="trailing" secondItem="Gb5-vy-SRn" secondAttribute="trailing" id="9kv-gX-E1w"/>
                             <constraint firstAttribute="bottom" secondItem="Gb5-vy-SRn" secondAttribute="bottom" constant="49" id="C9L-ne-3En"/>
+                            <constraint firstItem="Gb5-vy-SRn" firstAttribute="top" secondItem="UVF-u0-szG" secondAttribute="bottom" id="FzP-go-7Wf"/>
                             <constraint firstItem="Gb5-vy-SRn" firstAttribute="leading" secondItem="bhe-ur-6LE" secondAttribute="leading" id="JHz-hJ-8F2"/>
+                            <constraint firstAttribute="trailing" secondItem="Gb5-vy-SRn" secondAttribute="trailing" id="cuf-58-LgE"/>
                             <constraint firstItem="Gb5-vy-SRn" firstAttribute="top" secondItem="bhe-ur-6LE" secondAttribute="top" constant="-20" id="cxg-oQ-qXK"/>
+                            <constraint firstItem="Gb5-vy-SRn" firstAttribute="leading" secondItem="bhe-ur-6LE" secondAttribute="leading" id="iNY-BO-heb"/>
+                            <constraint firstItem="Gb5-vy-SRn" firstAttribute="top" secondItem="UVF-u0-szG" secondAttribute="bottom" id="inn-Aj-Oxr"/>
                             <constraint firstItem="Gb5-vy-SRn" firstAttribute="top" secondItem="bhe-ur-6LE" secondAttribute="topMargin" id="z6W-bZ-wrJ"/>
+                            <constraint firstItem="Gb5-vy-SRn" firstAttribute="top" secondItem="bhe-ur-6LE" secondAttribute="top" id="zfu-TH-gMR"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="9kv-gX-E1w"/>
+                                <exclude reference="C9L-ne-3En"/>
+                                <exclude reference="JHz-hJ-8F2"/>
                                 <exclude reference="cxg-oQ-qXK"/>
+                                <exclude reference="inn-Aj-Oxr"/>
+                                <exclude reference="z6W-bZ-wrJ"/>
+                                <exclude reference="zfu-TH-gMR"/>
                             </mask>
                         </variation>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="Profile" image="dashboard" id="rfI-hh-aaF"/>
                     <connections>
                         <outlet property="tracks" destination="Gb5-vy-SRn" id="Qbx-Hl-gap"/>

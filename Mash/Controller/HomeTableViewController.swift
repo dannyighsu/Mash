@@ -38,7 +38,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to Refresh")
         self.refreshControl.addTarget(self, action: "refreshActivity:", forControlEvents: UIControlEvents.ValueChanged)
         self.activityFeed.addSubview(self.refreshControl) */
-        
     }
     
     override func viewWillAppear(animated: Bool) {
