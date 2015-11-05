@@ -285,6 +285,7 @@ class User: UITableViewCell {
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
                     userFollowing.append(user)
+                    Debug.printl("Followed user \(user.handle!)", sender: nil)
                     user.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
                     user.followButton.backgroundColor = lightGray()
                     user.followButton.removeTarget(target, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -337,11 +338,18 @@ class User: UITableViewCell {
                 Debug.printl("Error: \(error)", sender: "user")
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
-                    userFollowing.append(user)
-                    user.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
-                    user.followButton.backgroundColor = lightGray()
-                    user.followButton.removeTarget(target, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
-                    user.followButton.addTarget(target, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
+                    if userFollowing.count != 0 {
+                        for i in 0...userFollowing.count - 1 {
+                            if user.userid == userFollowing[i].userid {
+                                userFollowing.removeAtIndex(i)
+                                Debug.printl("Unfollowed user \(user.handle!)", sender: nil)
+                            }
+                        }
+                    }
+                    user.followButton.setTitle("Follow", forState: UIControlState.Normal)
+                    user.followButton.backgroundColor = lightBlue()
+                    user.followButton.removeTarget(target, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
+                    user.followButton.addTarget(target, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
                 }
             }
         }

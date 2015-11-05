@@ -43,15 +43,18 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.profilePicture?.layer.cornerRadius = cell.profilePicture!.frame.size.width / 2
         cell.profilePicture?.layer.borderWidth = 1.0
         cell.profilePicture?.layer.masksToBounds = true
+        cell.bringSubviewToFront(cell.followButton)
         var following: Bool = false
         for u in userFollowing {
             if u.handle! == follower.handle! {
                 following = true
             }
         }
-        if following {
-            cell.followButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
+        if cell.userid == currentUser.userid {
+            cell.followButton.hidden = true
+        } else if following {
             cell.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
+            cell.followButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
             cell.followButton.backgroundColor = lightGray()
         } else {
             cell.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -62,6 +65,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let user = tableView.cellForRowAtIndexPath(indexPath) as! User
         if user.handle == currentUser.handle {
+            tableView.deselectRowAtIndexPath(indexPath, animated: false)
             return
         }
         User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
