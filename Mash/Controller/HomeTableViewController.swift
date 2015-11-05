@@ -15,6 +15,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     var data: [HomeCell] = []
     var displayData: [HomeCell] = []
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+    var audioPlayer: AVAudioPlayer? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +38,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to Refresh")
         self.refreshControl.addTarget(self, action: "refreshActivity:", forControlEvents: UIControlEvents.ValueChanged)
         self.activityFeed.addSubview(self.refreshControl) */
-        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -57,6 +57,9 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+        if self.audioPlayer != nil && self.audioPlayer!.playing {
+            self.audioPlayer!.stop()
+        }
         self.parentViewController?.navigationItem.rightBarButtonItem = nil
     }
     
@@ -72,24 +75,38 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell") as! HomeCell
         cell.eventLabel.text = self.displayData[indexPath.row].eventText
-        cell.userLabel.text = self.displayData[indexPath.row].userText
+        cell.userLabel.setTitle(self.displayData[indexPath.row].userText, forState: .Normal)
         cell.timeLabel.text = self.displayData[indexPath.row].timeText
         cell.user = self.displayData[indexPath.row].user
+        cell.track = self.displayData[indexPath.row].track
         cell.timeLabel.text = parseTimeStamp(cell.timeLabel.text!)
         self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
         cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFill
         cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
         cell.profileImage.layer.borderWidth = 0.5
         cell.profileImage.layer.masksToBounds = true
+        cell.userLabel.addTarget(self, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! HomeCell
-        let user = User()
-        user.handle = cell.userLabel.text
-        user.userid = cell.user!.userid
-        User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
+        cell.activityView.startAnimating()
+        download(getS3Key(cell.track!), url: filePathURL(cell.track!.trackURL), bucket: track_bucket) {
+            (result) in
+            if result != nil {
+                dispatch_async(dispatch_get_main_queue()) {
+                    cell.activityView.stopAnimating()
+                    do {
+                        try self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(cell.track!.trackURL))
+                        self.audioPlayer!.play()
+                    } catch _ as NSError {
+                        Debug.printl("Error downloading track", sender: self)
+                    }
+                }
+            }
+        }
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -97,21 +114,16 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             self.loadNextData()
         }
     }
-    
-    func loadNextData() {
-        let currentNumResults = self.displayData.count - 1
-        if currentNumResults == self.data.count - 1 {
-            return
-        }
-        for i in currentNumResults...currentNumResults + 15 {
-            if i >= self.data.count {
-                break
-            }
-            self.displayData.append(self.data[i])
-        }
-        self.activityFeed.reloadData()
-    }
 
+    // Auxiliary methods
+    func getUser(sender: UIButton) {
+        let cell = sender.superview?.superview?.superview as! HomeCell
+        let user = User()
+        user.handle = cell.userLabel.titleLabel!.text
+        user.userid = cell.user!.userid
+        User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
+    }
+    
     // Check if project view exists in memory, if not, create one.
     func showProjectView() {
         let count = (self.navigationController?.viewControllers.count)! as Int
@@ -127,6 +139,20 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         Debug.printl("Creating new Project View", sender: self)
         let projectview = self.storyboard?.instantiateViewControllerWithIdentifier("ProjectViewController") as! ProjectViewController
         self.navigationController?.pushViewController(projectview, animated: true)
+    }
+    
+    func loadNextData() {
+        let currentNumResults = self.displayData.count - 1
+        if currentNumResults == self.data.count - 1 {
+            return
+        }
+        for i in currentNumResults...currentNumResults + 15 {
+            if i >= self.data.count {
+                break
+            }
+            self.displayData.append(self.data[i])
+        }
+        self.activityFeed.reloadData()
     }
     
     /*// Request recent activity from db, display on table
@@ -170,10 +196,14 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 let title = recording.title
                 let time = recording.uploaded
                 let userid = recording.userid
+                
                 let follower = User()
                 follower.handle = user
                 follower.userid = Int(userid)
-                let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower)
+                
+                let track = Track(frame: CGRectZero, recid: Int(recording.recid), userid: Int(recording.userid),instruments: recording.instrumentArray.copy() as! [String], instrumentFamilies: recording.familyArray.copy() as! [String], titleText: recording.title, bpm: Int(recording.bpm), trackURL: getS3Key(Int(recording.userid), recid: Int(recording.recid), format: recording.format), user: recording.handle, format: recording.format)
+                
+                let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower, track: track)
                 self.data.append(cell)
                 if i < DEFAULT_DISPLAY_AMOUNT {
                     self.displayData.append(cell)

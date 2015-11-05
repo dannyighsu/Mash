@@ -94,8 +94,8 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
 
     // Check for length & validity of text fields
     func signUpAction(sender: AnyObject?) {
-        if (((self.handleField.text!).characters.count < 1) || ((self.passwordField.text!).characters.count < 1)) {
-            raiseAlert("Username and Password must have at least 1 character.", delegate: self)
+        if (((self.handleField.text!).characters.count < 4) || ((self.passwordField.text!).characters.count < 4)) {
+            raiseAlert("Username and Password must have at least 4 character.", delegate: self)
             return
         } else if (((self.handleField.text!).characters.count > 40 || ((self.passwordField.text!).characters.count > 40))) {
             raiseAlert("Username and Password must be less than 40 characters long.", delegate: self)
@@ -104,9 +104,10 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
             raiseAlert("Username cannot contain spaces.", delegate: self)
         }
 
+        // Check email
         var regex: NSRegularExpression?
         do {
-            regex = try NSRegularExpression(pattern: ".*@.*", options: [])
+            regex = try NSRegularExpression(pattern: ".*@.+\\..+", options: [])
         } catch _ as NSError {
             regex = nil
         }
@@ -115,13 +116,22 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
             raiseAlert("Invalid email format.", delegate: self)
             return
         }
+        
+        // Check for alphanumeric
+        let trimmedHandle = self.handleField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.alphanumericCharacterSet().invertedSet)
+        
+        if trimmedHandle != self.handleField.text {
+            raiseAlert("Handles can only contain letters and numbers.")
+            return
+        }
+        
         self.register()
     }
 
     func register() {
         self.activityView.startAnimating()
         let request = RegisterRequest()
-        request.handle = self.handleField.text!
+        request.handle = self.handleField.text!.lowercaseString
         request.passwordHash = hashPassword(self.passwordField.text!)
         request.email = self.emailField.text!
         request.name = ""

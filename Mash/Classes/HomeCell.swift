@@ -13,19 +13,22 @@ class HomeCell: UITableViewCell {
     
     @IBOutlet weak var eventLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var userLabel: UILabel!
+    @IBOutlet weak var userLabel: UIButton!
     @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet weak var activityView: UIActivityIndicatorView!
     var eventText: String? = nil
     var userText: String? = nil
     var timeText: String? = nil
     var user: User? = nil
+    var track: Track? = nil
     
-    convenience init(frame: CGRect, eventText: String, userText: String, timeText: String, user: User) {
+    convenience init(frame: CGRect, eventText: String, userText: String, timeText: String, user: User, track: Track) {
         self.init(frame: frame)
         self.userText = userText
         self.timeText = timeText
         self.eventText = eventText
         self.user = user
+        self.track = track
     }
 
 }

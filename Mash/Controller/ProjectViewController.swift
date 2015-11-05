@@ -52,42 +52,37 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tracks.tableHeaderView = head
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        // Force landscape
-        //let value = UIInterfaceOrientation.LandscapeRight.rawValue
-        //UIDevice.currentDevice().setValue(value, forKey: "orientation")
-        self.activityView.center = self.view.center
-    }
-    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBarHidden = true
         self.view.frame = self.tabBarController!.view.frame
-        /*self.parentViewController?.navigationItem.title = "Your Project"*/
-        /*self.navigationController?.navigationBar.addGestureRecognizer(self.toolsTap!)*/
+        self.parentViewController?.navigationItem.title = "My Project"
+        //self.navigationController?.navigationBarHidden = true
         if self.tracks != nil {
             self.tracks.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
             self.metronome.setTempo(self.bpm)
         }
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        // Force landscape
+        //let value = UIInterfaceOrientation.LandscapeRight.rawValue
+        //UIDevice.currentDevice().setValue(value, forKey: "orientation")
+        self.activityView.center = self.view.center
+        self.view.frame = self.navigationController!.view.frame
+    }
+    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.navigationBarHidden = false
-        /*self.navigationController?.navigationBar.removeGestureRecognizer(self.toolsTap!)
-        self.parentViewController?.navigationItem.setRightBarButtonItem(nil, animated: false)*/
         self.audioPlayer!.stop()
+        self.parentViewController?.tabBarItem.title = nil
+        //self.navigationController?.navigationBarHidden = false
         if self.metronome.isPlaying {
             self.metronome.toggle(nil)
         }
     }
     
     override func shouldAutorotate() -> Bool {
-        return true
-    }
-    
-    override func prefersStatusBarHidden() -> Bool {
         return true
     }
     
@@ -551,7 +546,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                     track.bpm = project!.bpm
                 }
                 
-                Debug.printl("Adding track with \(track.instruments), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
+                Debug.printl("Adding track with \(track.instrumentFamilies), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
                 project?.data.append(track)
                 let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {

@@ -30,6 +30,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var recordingStartTime: NSDate = NSDate()
     var metronome: Metronome? = nil
     var beat: Int = 5
+    var totalBeats: Int = 0
     var beatLabel: UILabel? = nil
     var countoffView: UIView? = nil
     var tempoAlert: UIAlertView? = nil
@@ -154,6 +155,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.microphone!.startFetchingAudio()
         self.drawBufferPlot()
         self.timeLabel.text = "00:00"
+        self.totalBeats = 0
     }
     
     func save(sender: AnyObject?) {
@@ -161,15 +163,35 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             return
         }
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("UploadViewController") as! UploadViewController
-        controller.recording = self.audioFile
-        controller.bpm = Int(60.0 / Double(self.metronome!.duration))
-        controller.timeSignature = self.metronome!.timeSigField.text
-        self.navigationController?.pushViewController(controller, animated: true)
+        
+        // Trim the file
+        let outputString = filePathString("track_to_upload.m4a")
+        let outputURL = NSURL(fileURLWithPath: outputString)
+        if NSFileManager.defaultManager().fileExistsAtPath(outputString) {
+            try! NSFileManager.defaultManager().removeItemAtPath(outputString)
+        }
+        let startTime = 0.0
+        let endBeats = self.totalBeats - (self.totalBeats % self.metronome!.timeSignature[0])
+        let endTime = (Double(endBeats) / self.metronome!.getTempo()) * 60.0
+        
+        trimAudio(self.audioFile!.url, outputFile: outputURL, startTime: startTime, endTime: endTime) {
+            (result) in
+            if !result {
+                Debug.printl("Error trimming track.", sender: nil)
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    controller.recording = EZAudioFile(URL: outputURL)
+                    controller.bpm = Int(60.0 / Double(self.metronome!.duration))
+                    controller.timeSignature = self.metronome!.timeSigField.text
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        }
     }
     
     // Slider methods
     func volumeDidChange(sender: UISlider) {
-        if self.player != nil {
+        if self.metronome != nil {
             self.metronome!.tickPlayer!.volume = sender.value
             self.metronome!.tockPlayer!.volume = sender.value
         }
@@ -231,13 +253,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.player!.delegate = self
         let data = self.audioFile!.getWaveformData()
         self.audioPlot.updateBuffer(data.buffers[0], withBufferSize: data.bufferSize)
-        
-        /*self.audioFile?.getWaveformDataWithCompletionBlock() {
-            (waveformData: UnsafeMutablePointer<UnsafeMutablePointer<Float>>, length: Int32) in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.audioPlot.updateBuffer(waveformData[0], withBufferSize: UInt32(length))
-            }
-        }*/
     }
     
     func invalidateButtons() {
@@ -250,6 +265,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     // Custom alert view delegate
     func customIOS7dialogButtonTouchUpInside(alertView: AnyObject!, clickedButtonAtIndex buttonIndex: Int) {
+        self.metronome!.toggle(MetronomeManualTrigger())
         alertView.close()
     }
     
@@ -283,8 +299,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         title.frame = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 30.0)
         title.center = CGPoint(x: metronomeView.center.x, y: metronomeView.center.y - 40.0)
         slider.center = metronomeView.center
-        metronomeView.bringSubviewToFront(slider)
         metronomeView.bringSubviewToFront(title)
+        metronomeView.bringSubviewToFront(slider)
+        self.metronome!.toggle(MetronomeManualTrigger())
     }
     
     func showTime(sender: UIButton) {
@@ -383,9 +400,12 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     // Metronome Delegate
     func tick(metronome: Metronome) {
+        self.totalBeats += 1
         if self.beat > 1 {
             self.beat -= 1
-            self.beatLabel!.text = "\(self.beat)"
+            if self.beatLabel != nil {
+                self.beatLabel!.text = "\(self.beat)"
+            }
         } else if self.beat == 1 {
             // Start recording
             self.drawRollingPlot()
@@ -393,6 +413,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             self.microphone?.startFetchingAudio()
             self.recordingStartTime = NSDate()
             self.recording = true
+            self.totalBeats = 0
             self.beat = 0
             UIView.transitionWithView(self.recordButton.imageView!, duration: 0.5, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { self.recordButton.setImage(UIImage(named: "Record_stop"), forState: .Normal) }, completion: nil)
             UIView.animateWithDuration(0.3, animations: { self.countoffView!.alpha = 0.0 }) {
@@ -453,7 +474,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 }
             }
         }
-        
     }
     
     // Check for login key
