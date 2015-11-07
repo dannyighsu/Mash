@@ -137,12 +137,12 @@ func deleteFromBucket(key: String, bucket: String) {
 }
 
 // Returns AWSS3 bucket name
-func getS3Key(track: Track) -> String {
-    return "\(track.userid)~~\(track.id)\(track.format)"
-}
-
 func getS3Key(userid: Int, recid: Int, format: String) -> String {
     return "\(userid)~~\(recid)\(format)"
+}
+
+func getS3Key(track: Track) -> String {
+    return "\(track.userid)~~\(track.id)\(track.format)"
 }
 
 func getS3Key(track: ProfileTrack) -> String {
@@ -151,5 +151,9 @@ func getS3Key(track: ProfileTrack) -> String {
 
 // Returns AWSS3 waveform bucket name
 func getS3WaveformKey(track: Track) -> String {
+    return "\(track.userid)~~\(track.id)_waveform.jpg"
+}
+
+func getS3WaveformKey(track: ProfileTrack) -> String {
     return "\(track.userid)~~\(track.id)_waveform.jpg"
 }

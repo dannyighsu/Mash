@@ -121,6 +121,9 @@ extension NSData {
 
 // Parse DB time stamp
 func parseTimeStamp(timestamp: String) -> String {
+    if timestamp == "Just now" {
+        return "Just now"
+    }
     let dateFormatter = NSDateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
     dateFormatter.timeZone = NSTimeZone(name: "UTC")
