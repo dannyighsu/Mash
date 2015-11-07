@@ -142,12 +142,12 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func loadNextData() {
-        let currentNumResults = self.displayData.count - 1
-        if currentNumResults == self.data.count - 1 {
+        let currentNumResults = self.displayData.count
+        if currentNumResults == self.data.count {
             return
         }
         for i in currentNumResults...currentNumResults + 15 {
-            if i >= self.data.count {
+            if i > self.data.count - 1 {
                 break
             }
             self.displayData.append(self.data[i])

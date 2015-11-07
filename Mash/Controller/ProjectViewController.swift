@@ -61,6 +61,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             self.tracks.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
             self.metronome.setTempo(self.bpm)
         }
+        self.view.frame = self.navigationController!.view.frame
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -69,7 +70,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         //let value = UIInterfaceOrientation.LandscapeRight.rawValue
         //UIDevice.currentDevice().setValue(value, forKey: "orientation")
         self.activityView.center = self.view.center
-        self.view.frame = self.navigationController!.view.frame
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -285,7 +285,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         for track in self.data {
             print(track.trackURL)
         }
-        Track.mixTracks(name, tracks: self.data) {
+        Audio.mixTracks(name, tracks: self.data) {
             (exportSession) in
             if exportSession == nil || exportSession!.status == AVAssetExportSessionStatus.Failed {
                 raiseAlert("Error exporting file.", delegate: self)
@@ -318,7 +318,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func shareTrack(name: String) {
-        Track.mixTracks(name, tracks: self.data) {
+        Audio.mixTracks(name, tracks: self.data) {
             (exportSession) in
             if exportSession == nil || exportSession!.status == AVAssetExportSessionStatus.Failed {
                 raiseAlert("Error exporting file.", delegate: self)

@@ -196,12 +196,12 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     func loadNextData() {
-        let currentNumResults = self.searchResults.count - 1
-        if currentNumResults == self.allResults.count - 1 {
+        let currentNumResults = self.searchResults.count
+        if currentNumResults == self.allResults.count {
             return
         }
         for i in currentNumResults...currentNumResults + 15 {
-            if i >= self.allResults.count {
+            if i > self.allResults.count - 1 {
                 break
             }
             self.searchResults.append(self.allResults[i])

@@ -30,8 +30,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let profile = UINib(nibName: "Profile", bundle: nil)
         self.tracks.registerNib(profile, forHeaderFooterViewReuseIdentifier: "Profile")
 
-        let track = UINib(nibName: "Track", bundle: nil)
-        self.tracks.registerNib(track, forCellReuseIdentifier: "Track")
+        let track = UINib(nibName: "ProfileTrack", bundle: nil)
+        self.tracks.registerNib(track, forCellReuseIdentifier: "ProfileTrack")
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
 
@@ -114,11 +114,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 1 {
-            let track = tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
+            let track = tableView.dequeueReusableCellWithIdentifier("ProfileTrack", forIndexPath: indexPath) as! ProfileTrack
             let index = indexPath.row
             track.backgroundColor = UIColor.clearColor()
             track.instrumentImage.backgroundColor = UIColor.clearColor()
-            track.userLabel.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             track.title.textColor = UIColor.whiteColor()
             track.title.text = self.data[index].titleText
             track.userid = self.data[index].userid
@@ -126,7 +125,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             track.titleText = track.title.text!
             track.format = self.data[index].format
             track.userText = self.data[index].userText
-            track.userLabel.setTitle(track.userText, forState: .Normal)
             track.instruments = self.data[index].instruments
             track.instrumentFamilies = self.data[index].instrumentFamilies
             track.trackURL = self.data[index].trackURL

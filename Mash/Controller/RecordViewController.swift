@@ -174,7 +174,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         let endBeats = self.totalBeats - (self.totalBeats % self.metronome!.timeSignature[0])
         let endTime = (Double(endBeats) / self.metronome!.getTempo()) * 60.0
         
-        trimAudio(self.audioFile!.url, outputFile: outputURL, startTime: startTime, endTime: endTime) {
+        Audio.trimAudio(self.audioFile!.url, outputFile: outputURL, startTime: startTime, endTime: endTime) {
             (result) in
             if !result {
                 Debug.printl("Error trimming track.", sender: nil)
@@ -316,8 +316,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                     self.metronome!.picker!.selectRow(i, inComponent: 0, animated: true)
                 }
             }
-            alert.show()
             self.timeAlert = alert
+            alert.show()
         } else {
             self.timeAlert!.show()
         }
