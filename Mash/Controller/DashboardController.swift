@@ -292,8 +292,14 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func addTrack(sender: UIButton) {
-        let track = sender.superview!.superview!.superview as! Track
-        ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
+        let trackData = sender.superview!.superview!.superview as! ProfileTrack
+        var track: Track? = nil
+        for t in self.data {
+            if t.id == trackData.id {
+                track = t
+            }
+        }
+        ProjectViewController.importTracks([track!], navigationController: self.navigationController, storyboard: self.storyboard)
         if self.tabBarController != nil {
             let tabBarController = self.navigationController?.viewControllers[2] as! UITabBarController
             tabBarController.selectedIndex = getTabBarController("project")
