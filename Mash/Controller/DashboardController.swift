@@ -222,9 +222,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 1 {
-            let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
-            
+            let track = self.tracks.cellForRowAtIndexPath(indexPath) as! ProfileTrack
             track.activityView.startAnimating()
+            print(getS3Key(track))
+            print(track.trackURL)
+            print(self.user)
             download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
                 (result) in
                 dispatch_async(dispatch_get_main_queue()) {
