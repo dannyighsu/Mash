@@ -132,7 +132,7 @@ func parseTimeStamp(timestamp: String) -> String {
     
     // Time format should now be in hh:mm:ss
     let times: [String] = timeString.characters.split {$0 == ":"}.map(String.init)
-    let hour = Int(times[0])!
+    let hour = Int(times[0])! - 8
     let minute = Int(times[1])!
     
     var result = ""
@@ -140,7 +140,9 @@ func parseTimeStamp(timestamp: String) -> String {
     if hour < 24 {
         // Less than an hour ago
         if hour < 1 {
-            if minute == 1 {
+            if minute == 0 {
+                result = "Just now"
+            } else if minute == 1 {
                 result = "\(minute) minute ago"
             } else {
                 result = "\(minute) minutes ago"

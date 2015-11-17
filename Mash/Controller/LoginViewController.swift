@@ -125,7 +125,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 currentUser.following = "\(response.followingCount)"
                 currentUser.tracks = "\(response.trackCount)"
                 currentUser.userDescription = response.userDescription
-                self.completeLogin(handle, password: password)
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                    Flurry.setUserID("\(response.userid)")
+                    self.completeLogin(handle, password: password)
+                }
             }
         }
     }

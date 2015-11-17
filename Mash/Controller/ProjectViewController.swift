@@ -265,17 +265,16 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // Channel Delegate
     func channelVolumeDidChange(channel: Channel, number: Int, value: Float) {
-        print(channel.trackNumber)
         self.audioPlayer!.audioPlayers[number].volume = value
     }
     
     // Preferences methods
     func save() {
-        Flurry.logEvent("Project Saved", withParameters: ["userid": currentUser.userid!, "numTracks": self.data.count])
         if self.data.count < 1 {
             raiseAlert("Error", delegate: self, message: "There must be a track in your project to save.")
             return
         }
+        Flurry.logEvent("Project_Save", withParameters: ["userid": currentUser.userid!, "numTracks": self.data.count])
         let alert = UIAlertView(title: "Saving your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         alert.textFieldAtIndex(0)?.text = self.audioPlayer!.titleLabel.text
@@ -283,9 +282,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func uploadSavedTrack(name: String) -> Bool {
-        for track in self.data {
-            print(track.trackURL)
-        }
         Audio.mixTracks(name, tracks: self.data) {
             (exportSession) in
             if exportSession == nil || exportSession!.status == AVAssetExportSessionStatus.Failed {
@@ -308,11 +304,11 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func share() {
-        Flurry.logEvent("Project Shared", withParameters: ["userid": currentUser.userid!, "numTracks": self.data.count])
         if self.data.count < 1 {
             raiseAlert("Error", delegate: self, message: "There must be a track in your project to share.")
             return
         }
+        Flurry.logEvent("Project_Share", withParameters: ["userid": currentUser.userid!, "numTracks": self.data.count])
         let alert = UIAlertView(title: "Sharing your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         alert.textFieldAtIndex(0)?.text = self.audioPlayer!.titleLabel.text
