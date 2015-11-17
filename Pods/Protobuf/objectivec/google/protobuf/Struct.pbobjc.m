@@ -2,7 +2,7 @@
 // source: google/protobuf/struct.proto
 
 #import "GPBProtocolBuffers_RuntimeSupport.h"
-#import "google/protobuf/Struct.pbobjc.h"
+#import "Struct.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma mark - GPBStructRoot

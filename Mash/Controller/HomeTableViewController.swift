@@ -142,12 +142,12 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func loadNextData() {
-        let currentNumResults = self.displayData.count - 1
-        if currentNumResults == self.data.count - 1 {
+        let currentNumResults = self.displayData.count
+        if currentNumResults == self.data.count {
             return
         }
         for i in currentNumResults...currentNumResults + 15 {
-            if i >= self.data.count {
+            if i > self.data.count - 1 {
                 break
             }
             self.displayData.append(self.data[i])
@@ -201,7 +201,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 follower.handle = user
                 follower.userid = Int(userid)
                 
-                let track = Track(frame: CGRectZero, recid: Int(recording.recid), userid: Int(recording.userid),instruments: recording.instrumentArray.copy() as! [String], instrumentFamilies: recording.familyArray.copy() as! [String], titleText: recording.title, bpm: Int(recording.bpm), trackURL: getS3Key(Int(recording.userid), recid: Int(recording.recid), format: recording.format), user: recording.handle, format: recording.format)
+                let track = Track(frame: CGRectZero, recid: Int(recording.recid), userid: Int(recording.userid),instruments: recording.instrumentArray.copy() as! [String], instrumentFamilies: recording.familyArray.copy() as! [String], titleText: recording.title, bpm: Int(recording.bpm), trackURL: getS3Key(Int(recording.userid), recid: Int(recording.recid), format: recording.format), user: recording.handle, format: recording.format, time: time)
                 
                 let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower, track: track)
                 self.data.append(cell)

@@ -2,7 +2,7 @@
 // source: google/protobuf/wrappers.proto
 
 #import "GPBProtocolBuffers_RuntimeSupport.h"
-#import "google/protobuf/Wrappers.pbobjc.h"
+#import "Wrappers.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma mark - GPBWrappersRoot

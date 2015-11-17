@@ -149,7 +149,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     func saveLoginItems() {
         Debug.printl("Saving user " + self.handleField.text! + " to NSUserDefaults.", sender: self)
-        NSUserDefaults.standardUserDefaults().setValue(self.handleField.text, forKey: "username")
+        NSUserDefaults.standardUserDefaults().setValue(self.handleField.text?.lowercaseString, forKey: "username")
         keychainWrapper.mySetObject(self.passwordField.text, forKey: kSecValueData)
         keychainWrapper.writeToKeychain()
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasLoginKey")

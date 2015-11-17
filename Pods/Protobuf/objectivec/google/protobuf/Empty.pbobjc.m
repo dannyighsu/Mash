@@ -2,7 +2,7 @@
 // source: google/protobuf/empty.proto
 
 #import "GPBProtocolBuffers_RuntimeSupport.h"
-#import "google/protobuf/Empty.pbobjc.h"
+#import "Empty.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma mark - GPBEmptyRoot

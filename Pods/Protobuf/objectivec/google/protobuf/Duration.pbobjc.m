@@ -2,7 +2,7 @@
 // source: google/protobuf/duration.proto
 
 #import "GPBProtocolBuffers_RuntimeSupport.h"
-#import "google/protobuf/Duration.pbobjc.h"
+#import "Duration.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma mark - GPBDurationRoot

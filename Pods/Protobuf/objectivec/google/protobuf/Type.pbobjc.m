@@ -2,9 +2,9 @@
 // source: google/protobuf/type.proto
 
 #import "GPBProtocolBuffers_RuntimeSupport.h"
-#import "google/protobuf/Type.pbobjc.h"
-#import "google/protobuf/Any.pbobjc.h"
-#import "google/protobuf/SourceContext.pbobjc.h"
+#import "Type.pbobjc.h"
+#import "Any.pbobjc.h"
+#import "SourceContext.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma mark - GPBTypeRoot

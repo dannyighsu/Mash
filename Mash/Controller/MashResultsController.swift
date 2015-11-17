@@ -140,12 +140,12 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     }*/
     
     func loadNextData() {
-        let currentNumResults = self.results.count - 1
-        if currentNumResults == self.allResults.count - 1 {
+        let currentNumResults = self.results.count
+        if currentNumResults == self.allResults.count {
             return
         }
         for i in currentNumResults...currentNumResults + 15 {
-            if i >= self.allResults.count {
+            if i > self.allResults.count - 1 {
                 break
             }
             self.results.append(self.allResults[i])

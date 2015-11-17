@@ -92,12 +92,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        if self.player != nil && self.player!.isPlaying {
-            self.stop(nil)
-        }
-        if self.recording {
-            self.record(nil)
-        }
+        self.stopAll()
         self.parentViewController?.navigationItem.rightBarButtonItem = nil
         self.parentViewController?.navigationItem.leftBarButtonItem = nil
     }
@@ -174,7 +169,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         let endBeats = self.totalBeats - (self.totalBeats % self.metronome!.timeSignature[0])
         let endTime = (Double(endBeats) / self.metronome!.getTempo()) * 60.0
         
-        trimAudio(self.audioFile!.url, outputFile: outputURL, startTime: startTime, endTime: endTime) {
+        Audio.trimAudio(self.audioFile!.url, outputFile: outputURL, startTime: startTime, endTime: endTime) {
             (result) in
             if !result {
                 Debug.printl("Error trimming track.", sender: nil)
@@ -218,6 +213,15 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.metronome!.toggle(nil)
         
         UIView.animateWithDuration(0.3, animations: { view.alpha = 1.0 })
+    }
+    
+    func stopAll() {
+        if self.player != nil && self.player!.isPlaying {
+            self.stop(nil)
+        }
+        if self.recording {
+            self.record(nil)
+        }
     }
     
     func stopRecording() {
@@ -280,6 +284,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     }
     
     func showVolume(sender: UIButton) {
+        self.stopAll()
+        
         let slider = UISlider(frame: CGRectZero)
         slider.addTarget(self, action: "volumeDidChange:", forControlEvents: UIControlEvents.ValueChanged)
         slider.value = self.metronome!.tickPlayer!.volume
@@ -305,6 +311,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     }
     
     func showTime(sender: UIButton) {
+        self.stopAll()
+        
         if self.timeAlert == nil {
             let alert = UIAlertView(title: "Set Time Signature", message: "", delegate: self, cancelButtonTitle: "Close")
             alert.alertViewStyle = .PlainTextInput
@@ -316,14 +324,16 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                     self.metronome!.picker!.selectRow(i, inComponent: 0, animated: true)
                 }
             }
-            alert.show()
             self.timeAlert = alert
+            alert.show()
         } else {
             self.timeAlert!.show()
         }
     }
     
     func showTempo(sender: UIButton) {
+        self.stopAll()
+        
         if self.tempoAlert == nil {
             let alert = UIAlertView(title: "Set Tempo", message: "", delegate: self, cancelButtonTitle: "Close")
             alert.alertViewStyle = .PlainTextInput
@@ -442,8 +452,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             server = MashService(host: hostAddress)
             Debug.printl("Using local IP", sender: nil)
             self.checkLogin()
-            self.activityView.stopAnimating()
-            self.coverView.removeFromSuperview()
         } else {
             let request = ServerAddressRequest()
             let rand = arc4random()
@@ -459,10 +467,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                         raiseAlert("An unknown error occured.")
                     }
                 } else {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.activityView.stopAnimating()
-                        self.coverView.removeFromSuperview()
-                    }
                     hostAddress = "http://\(response.ipAddress):5010"
                     server = MashService(host: hostAddress)
                     Debug.printl("Received IP address \(hostAddress) from load balancer.", sender: nil)
@@ -507,13 +511,17 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         } else {
             request.handle = handle
         }
-        
+
         server.signInWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)
                 raiseAlert("Incorrect Username and/or Password")
             } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
+                    self.coverView.removeFromSuperview()
+                }
                 Debug.printl("Logged in successfully.", sender: self)
                 currentUser = User()
                 currentUser.handle = response.handle

@@ -2,7 +2,7 @@
 // source: google/protobuf/timestamp.proto
 
 #import "GPBProtocolBuffers_RuntimeSupport.h"
-#import "google/protobuf/Timestamp.pbobjc.h"
+#import "Timestamp.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma mark - GPBTimestampRoot
