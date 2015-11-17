@@ -271,6 +271,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // Preferences methods
     func save() {
+        Flurry.logEvent("Project Saved", withParameters: ["userid": currentUser.userid!, "numTracks": self.data.count])
         if self.data.count < 1 {
             raiseAlert("Error", delegate: self, message: "There must be a track in your project to save.")
             return
@@ -307,6 +308,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func share() {
+        Flurry.logEvent("Project Shared", withParameters: ["userid": currentUser.userid!, "numTracks": self.data.count])
         if self.data.count < 1 {
             raiseAlert("Error", delegate: self, message: "There must be a track in your project to share.")
             return
