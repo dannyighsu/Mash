@@ -281,7 +281,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func uploadSavedTrack(name: String) -> Bool {
-        Track.mixTracks(name, tracks: self.data) {
+        Audio.mixTracks(name, tracks: self.data) {
             (exportSession) in
             if exportSession == nil || exportSession!.status == AVAssetExportSessionStatus.Failed {
                 raiseAlert("Error exporting file.", delegate: self)
@@ -314,7 +314,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func shareTrack(name: String) {
-        Track.mixTracks(name, tracks: self.data) {
+        Audio.mixTracks(name, tracks: self.data) {
             (exportSession) in
             if exportSession == nil || exportSession!.status == AVAssetExportSessionStatus.Failed {
                 raiseAlert("Error exporting file.", delegate: self)
