@@ -223,8 +223,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 1 {
             let track = self.tracks.cellForRowAtIndexPath(indexPath) as! ProfileTrack
-            
             track.activityView.startAnimating()
+            print(getS3Key(track))
+            print(track.trackURL)
+            print(self.user)
             download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
                 (result) in
                 dispatch_async(dispatch_get_main_queue()) {
@@ -292,17 +294,14 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func addTrack(sender: UIButton) {
-        let track = sender.superview!.superview!.superview as! ProfileTrack
-        var trackIndex = -1
-        if self.data.count != 0 {
-            for i in 0...self.data.count - 1 {
-                if self.data[i].id == track.id {
-                    trackIndex = i
-                }
+        let trackData = sender.superview!.superview!.superview as! ProfileTrack
+        var track: Track? = nil
+        for t in self.data {
+            if t.id == trackData.id {
+                track = t
             }
         }
-        
-        ProjectViewController.importTracks([self.data[trackIndex]], navigationController: self.navigationController, storyboard: self.storyboard)
+        ProjectViewController.importTracks([track!], navigationController: self.navigationController, storyboard: self.storyboard)
         if self.tabBarController != nil {
             let tabBarController = self.navigationController?.viewControllers[2] as! UITabBarController
             tabBarController.selectedIndex = getTabBarController("project")
