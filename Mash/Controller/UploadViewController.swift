@@ -238,7 +238,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func finish(recid: Int) {
-        Flurry.logEvent("Recording Upload", withParameters: ["userid": currentUser.userid!, "instrument": self.instruments])
+        Flurry.logEvent("Recording_Upload", withParameters: ["userid": currentUser.userid!, "instrument": self.instruments])
         
         let track = Track(frame: CGRectZero, recid: recid, userid: currentUser.userid!, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, trackURL: "\(currentUser.userid!)~~\(recid).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a", time: "Just now")
         self.saveWaveform(track)
@@ -246,8 +246,6 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.navigationController?.popViewControllerAnimated(true)
         let tabbarcontroller = self.navigationController?.viewControllers[2] as! TabBarController
         tabbarcontroller.selectedIndex = getTabBarController("dashboard")
-        
-
     }
     
     func cancel(sender: AnyObject?) {

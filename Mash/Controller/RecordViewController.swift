@@ -521,6 +521,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()
                     self.coverView.removeFromSuperview()
+                    Flurry.setUserID("\(response.userid)")
                 }
                 Debug.printl("Logged in successfully.", sender: self)
                 currentUser = User()
@@ -531,6 +532,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 currentUser.following = "\(response.followingCount)"
                 currentUser.tracks = "\(response.trackCount)"
                 currentUser.userDescription = response.userDescription
+                
                 self.completeLogin(handle, password: password)
             }
         }

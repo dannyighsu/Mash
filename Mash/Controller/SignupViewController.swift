@@ -138,7 +138,9 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         request.registerAgent = 0
         server.registerWithRequest(request) {
             (response, error) in
-            self.activityView.stopAnimating()
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityView.stopAnimating()
+            }
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
                 if error.code == 6 {
@@ -153,7 +155,11 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
                 currentUser.loginToken = response.loginToken
                 User.getUsersFollowing()
                 User.updateSelf(nil)
-                raiseAlert("Success!", delegate: self, message: "Welcome to Mash.")
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                    Flurry.setUserID("\(response.userid)")
+                    raiseAlert("Success!", delegate: self, message: "Welcome to Mash.")
+                }
             }
         }
     }

@@ -59,6 +59,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Optimizely.startOptimizelyWithAPIToken("AAM7hIkBvc0Hcq4ni8hGis3hDg6-xDW4~3701484372", launchOptions: launchOptions)
         
         // Set up Flurry
+        Flurry.setCrashReportingEnabled(true)
+        Flurry.setEventLoggingEnabled(true)
         Flurry.startSession("29BN8DC34PSV2QSG9Y22")
         
         // Set up server timer

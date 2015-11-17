@@ -274,6 +274,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             raiseAlert("Error", delegate: self, message: "There must be a track in your project to save.")
             return
         }
+        Flurry.logEvent("Project_Save", withParameters: ["userid": currentUser.userid!, "numTracks": self.data.count])
         let alert = UIAlertView(title: "Saving your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         alert.textFieldAtIndex(0)?.text = self.audioPlayer!.titleLabel.text
@@ -307,6 +308,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             raiseAlert("Error", delegate: self, message: "There must be a track in your project to share.")
             return
         }
+        Flurry.logEvent("Project_Share", withParameters: ["userid": currentUser.userid!, "numTracks": self.data.count])
         let alert = UIAlertView(title: "Sharing your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         alert.textFieldAtIndex(0)?.text = self.audioPlayer!.titleLabel.text
