@@ -2,7 +2,7 @@
 // source: google/protobuf/field_mask.proto
 
 #import "GPBProtocolBuffers_RuntimeSupport.h"
-#import "google/protobuf/FieldMask.pbobjc.h"
+#import "FieldMask.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma mark - GPBFieldMaskRoot

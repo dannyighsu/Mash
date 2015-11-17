@@ -131,6 +131,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             track.bpm = self.data[index].bpm
             track.instrumentImage.image = findImageWhite(track.instrumentFamilies)
             track.instrumentImage.backgroundColor = UIColor.clearColor()
+            track.dateLabel.text = parseTimeStamp(self.data[index].time)
             track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
             track.activityView.startAnimating()
             
@@ -221,7 +222,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 1 {
-            let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
+            let track = self.tracks.cellForRowAtIndexPath(indexPath) as! ProfileTrack
             
             track.activityView.startAnimating()
             download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
@@ -268,31 +269,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.updateTable(response)
             }
         }
-        
-        /*
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/recording")!)
-        var params = ["handle": handle, "password_hash": passwordHash, "query_name": self.user.handle!] as Dictionary
-        httpPost(params, request) {
-            (data, statusCode, error) -> Void in
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
-            } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("HTTP Error: \(error)", sender: self)
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    
-                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    var error: NSError? = nil
-                    var response: AnyObject? = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error)
-                    self.updateTable(response as! NSDictionary)
-                } else if statusCode == HTTP_SERVER_ERROR {
-                    Debug.printl("Internal server error.", sender: self)
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                }
-            }
-        }*/
     }
 
     func updateTable(data: UserRecordingsResponse) {
@@ -306,7 +282,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             let recid = Int(track.recid)
             url = filePathString(url)
             
-            let trackData = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: track.title, bpm: Int(track.bpm), trackURL: url, user: self.user.handle!, format: track.format!)
+            let trackData = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: track.title, bpm: Int(track.bpm), trackURL: url, user: self.user.handle!, format: track.format!, time: track.uploaded)
             
             self.data.append(trackData)
         }
@@ -316,8 +292,17 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func addTrack(sender: UIButton) {
-        let track = sender.superview!.superview!.superview as! Track
-        ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
+        let track = sender.superview!.superview!.superview as! ProfileTrack
+        var trackIndex = -1
+        if self.data.count != 0 {
+            for i in 0...self.data.count - 1 {
+                if self.data[i].id == track.id {
+                    trackIndex = i
+                }
+            }
+        }
+        
+        ProjectViewController.importTracks([self.data[trackIndex]], navigationController: self.navigationController, storyboard: self.storyboard)
         if self.tabBarController != nil {
             let tabBarController = self.navigationController?.viewControllers[2] as! UITabBarController
             tabBarController.selectedIndex = getTabBarController("project")
@@ -344,33 +329,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
         }
-        /*
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = currentUser.handle!
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/delete/recordings")!)
-        var params = ["handle": handle, "password_hash": passwordHash, "song_name": track.titleText] as Dictionary
-        httpDelete(params, request) {
-            (data, statusCode, error) -> Void in
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
-            } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("HTTP Error: \(error)", sender: self)
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    
-                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.data.removeAtIndex(indexPath.row)
-                        self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
-                    }
-                } else if statusCode == HTTP_SERVER_ERROR {
-                    Debug.printl("Internal server error.", sender: self)
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                }
-            }
-        }*/
     }
 
     // Alert view delegate
@@ -391,7 +349,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         alert.show()
     }
     
-    // Profile edititing
+    // Profile editing
     func fetchPhotos(type: String) {
         let photoResults = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: nil)
         /*var userAlbumOptions = PHFetchOptions.new()
@@ -497,28 +455,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
         }
-        /*
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/update/user")!)
-        var params = ["handle": handle!, "password_hash": passwordHash, inputType: input] as Dictionary
-        httpPatch(params, request) {
-            (data, statusCode, error) -> Void in
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
-            } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("HTTP Error: \(error)", sender: self)
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    
-                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    User.updateSelf(self)
-                } else if statusCode == HTTP_SERVER_ERROR {
-                    Debug.printl("Internal server error.", sender: self)
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                }
-            }
-        }*/
     }
     
     func follow(sender: UIButton) {
@@ -563,32 +499,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
         }
-        /*
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = currentUser.handle
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/delete/user")!)
-        var params = ["handle": handle!, "password_hash": passwordHash] as Dictionary
-        httpDelete(params, request) {
-            (data, statusCode, error) -> Void in
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
-            } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("HTTP Error: \(error)", sender: self)
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    
-                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.logout()
-                    }
-                } else if statusCode == HTTP_SERVER_ERROR {
-                    Debug.printl("Internal server error.", sender: self)
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                }
-            }
-        }*/
     }
     
     // Segues

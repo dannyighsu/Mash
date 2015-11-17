@@ -2,9 +2,9 @@
 // source: google/protobuf/api.proto
 
 #import "GPBProtocolBuffers_RuntimeSupport.h"
-#import "google/protobuf/Api.pbobjc.h"
-#import "google/protobuf/SourceContext.pbobjc.h"
-#import "google/protobuf/Type.pbobjc.h"
+#import "Api.pbobjc.h"
+#import "SourceContext.pbobjc.h"
+#import "Type.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma mark - GPBApiRoot

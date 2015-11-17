@@ -36,14 +36,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        // Set exception handler
-        NSSetUncaughtExceptionHandler(exceptionHandlerPtr)
-        
         // Set up notifications
-        let types = UIUserNotificationType.Badge.union(UIUserNotificationType.Sound.union(UIUserNotificationType.Alert))
+        /*let types = UIUserNotificationType.Badge.union(UIUserNotificationType.Sound.union(UIUserNotificationType.Alert))
         let settings = UIUserNotificationSettings(forTypes: types, categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
-        UIApplication.sharedApplication().registerForRemoteNotifications()
+        UIApplication.sharedApplication().registerForRemoteNotifications()*/
         
         // Load AVAudioSession
         let session = AVAudioSession.sharedInstance()
@@ -60,6 +57,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Set up Optimizely
         Optimizely.startOptimizelyWithAPIToken("AAM7hIkBvc0Hcq4ni8hGis3hDg6-xDW4~3701484372", launchOptions: launchOptions)
+        
+        // Set up Flurry
+        Flurry.startSession("29BN8DC34PSV2QSG9Y22")
         
         // Set up server timer
         if !localServer {

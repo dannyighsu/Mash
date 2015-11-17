@@ -280,11 +280,15 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         }
         self.tempoField.text = "\(value)"
         self.tempoSlider.value = Float(value)
-        self.duration = CGFloat(self.getTempo())
+        self.duration = CGFloat(self.getDuration(value))
     }
     
     func getTempo() -> Double {
         return 60.0 / Double(self.duration)
+    }
+    
+    func getDuration(input: Int) -> Double {
+        return 60.0 / Double(input)
     }
     
 }

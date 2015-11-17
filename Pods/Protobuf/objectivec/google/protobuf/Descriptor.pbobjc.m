@@ -2,7 +2,7 @@
 // source: google/protobuf/descriptor.proto
 
 #import "GPBProtocolBuffers_RuntimeSupport.h"
-#import "google/protobuf/Descriptor.pbobjc.h"
+#import "Descriptor.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma mark - GPBDescriptorRoot

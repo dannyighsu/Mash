@@ -2,7 +2,7 @@
 // source: google/protobuf/source_context.proto
 
 #import "GPBProtocolBuffers_RuntimeSupport.h"
-#import "google/protobuf/SourceContext.pbobjc.h"
+#import "SourceContext.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma mark - GPBSourceContextRoot

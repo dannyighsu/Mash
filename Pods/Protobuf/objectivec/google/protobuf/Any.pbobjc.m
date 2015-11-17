@@ -2,7 +2,7 @@
 // source: google/protobuf/any.proto
 
 #import "GPBProtocolBuffers_RuntimeSupport.h"
-#import "google/protobuf/Any.pbobjc.h"
+#import "Any.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma mark - GPBAnyRoot
