@@ -102,6 +102,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
             return
         } else if self.handleField.text!.rangeOfString(" ") != nil {
             raiseAlert("Username cannot contain spaces.", delegate: self)
+            return
         }
 
         // Check email

@@ -62,6 +62,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Flurry.setCrashReportingEnabled(true)
         Flurry.setEventLoggingEnabled(true)
         Flurry.startSession("29BN8DC34PSV2QSG9Y22")
+        Flurry.setShowErrorInLogEnabled(true)
+        Flurry.setDebugLogEnabled(true)
         
         // Set up server timer
         if !localServer {
