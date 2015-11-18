@@ -17,7 +17,7 @@ class Profile: UITableViewHeaderFooterView {
     @IBOutlet weak var followerCount: UILabel!
     @IBOutlet weak var bannerImage: UIImageView!
     @IBOutlet weak var editButton: UIButton!
-    @IBOutlet weak var locationButon: UIButton!
+    @IBOutlet weak var locationButton: UIButton!
 
     /*override init(frame: CGRect) {
         super.init(frame: frame)
