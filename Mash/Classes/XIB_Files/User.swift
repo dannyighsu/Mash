@@ -83,7 +83,9 @@ class User: UITableViewCell {
     
     // Update all displays of the view
     func updateDisplays() {
-        self.nameLabel.setTitle(self.handle!, forState: UIControlState.Normal)
+        if self.nameLabel.titleLabel!.text != self.display_name() {
+            self.nameLabel.setTitle(self.display_name(), forState: UIControlState.Normal)
+        }
         var following = false
         for u in userFollowing {
             if u.handle! == self.handle {

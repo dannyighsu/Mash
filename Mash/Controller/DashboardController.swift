@@ -161,8 +161,13 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if section == 0 {
-            let header = view as! Profile
             
+        }
+    }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 0 {
+            let header = self.tracks.dequeueReusableHeaderFooterViewWithIdentifier("Profile") as! Profile
             header.profilePic.contentMode = UIViewContentMode.ScaleAspectFill
             header.profilePic.layer.cornerRadius = header.profilePic.frame.size.width / 2
             header.profilePic.layer.borderWidth = 1.0
@@ -172,11 +177,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             header.followerCount.layer.borderWidth = 0.2
             header.followingCount.layer.borderWidth = 0.2
             header.trackCount.layer.borderWidth = 0.2
-            //header.descriptionLabel.layer.borderWidth = 0.2
             
             header.editButton.setTitle(self.user.display_name(), forState: .Normal)
             // TODO: implement
-            header.locationButon.setTitle(self.user.handle!, forState: .Normal)
+            header.locationButton.setTitle(self.user.handle!, forState: .Normal)
             
             let tap1 = UITapGestureRecognizer(target: self, action: "goToFollowers:")
             header.followerCount.addGestureRecognizer(tap1)
@@ -188,19 +192,12 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             header.followerCount.text = "  \(self.user.followers!)\n  FOLLOWERS"
             header.followingCount.text = "  \(self.user.following!)\n  FOLLOWING"
             header.trackCount.text = "  \(self.user.tracks!)\n  TRACKS"
-            //header.descriptionLabel.text = "  \(self.user.userDescription!)"
             
             // Add gradient to banner
             let gradient: CAGradientLayer = CAGradientLayer()
             gradient.frame = header.bounds
             gradient.colors = [UIColor.clearColor().CGColor, UIColor.clearColor().CGColor, darkGray().CGColor]
             header.bannerImage.layer.insertSublayer(gradient, atIndex: 0)
-        }
-    }
-    
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            let header = self.tracks.dequeueReusableHeaderFooterViewWithIdentifier("Profile") as! Profile
             return header
         }
         return nil
@@ -489,7 +486,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let request = UserRequest()
         request.loginToken = currentUser.loginToken
         request.userid = UInt32(currentUser.userid!)
-        // FIXME: remove this line later
         request.queryUserid = UInt32(currentUser.userid!)
         
         server.userDeleteWithRequest(request) {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -31,7 +31,7 @@
                                 <constraint firstAttribute="height" constant="169" id="Nen-uw-bdS"/>
                                 <constraint firstAttribute="width" secondItem="XNv-YT-gfh" secondAttribute="height" multiplier="1:1" id="fyS-sy-KMf"/>
                                 <constraint firstAttribute="width" constant="169" id="vfH-1q-5Nw"/>
-                                <constraint firstAttribute="height" constant="152" id="vhD-1k-TSL"/>
+                                <constraint firstAttribute="height" relation="lessThanOrEqual" constant="152" id="vhD-1k-TSL"/>
                             </constraints>
                             <variation key="default">
                                 <mask key="constraints">
@@ -44,24 +44,24 @@
                             </variation>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jgl-b8-Kfq">
-                            <rect key="frame" x="398" y="57" width="166" height="33"/>
+                            <rect key="frame" x="186" y="54" width="78" height="33"/>
                             <animations/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="166" id="Kd9-9l-Gaz"/>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="78" id="Kd9-9l-Gaz"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                            <state key="normal" title="Name">
+                            <state key="normal">
                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qoE-Zk-aoq">
-                            <rect key="frame" x="398" y="88" width="166" height="25"/>
+                            <rect key="frame" x="186" y="87" width="67" height="25"/>
                             <animations/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="166" id="lNn-4k-szD"/>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="67" id="lNn-4k-szD"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                            <state key="normal" title="Location">
+                            <state key="normal">
                                 <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
                         </button>
@@ -70,14 +70,22 @@
                     <color key="backgroundColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="0.5" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="qoE-Zk-aoq" firstAttribute="leading" secondItem="jgl-b8-Kfq" secondAttribute="leading" id="1aw-0k-oBw"/>
-                        <constraint firstAttribute="bottom" secondItem="qoE-Zk-aoq" secondAttribute="bottom" constant="53" id="Qbz-Is-oOy"/>
+                        <constraint firstAttribute="bottom" secondItem="qoE-Zk-aoq" secondAttribute="bottom" constant="54" id="Qbz-Is-oOy"/>
                         <constraint firstItem="XNv-YT-gfh" firstAttribute="centerY" secondItem="022-un-CVN" secondAttribute="centerY" id="Vzy-N9-s9h"/>
-                        <constraint firstItem="jgl-b8-Kfq" firstAttribute="top" secondItem="022-un-CVN" secondAttribute="top" constant="57" id="eRj-HD-oP3"/>
+                        <constraint firstItem="jgl-b8-Kfq" firstAttribute="top" secondItem="022-un-CVN" secondAttribute="top" constant="54" id="eRj-HD-oP3"/>
                         <constraint firstItem="XNv-YT-gfh" firstAttribute="leading" secondItem="022-un-CVN" secondAttribute="leadingMargin" id="hb7-Qh-h46"/>
                         <constraint firstAttribute="trailing" secondItem="jgl-b8-Kfq" secondAttribute="trailing" constant="36" id="jLB-dp-uGe"/>
-                        <constraint firstAttribute="bottom" secondItem="jgl-b8-Kfq" secondAttribute="bottom" constant="76" id="jvV-fS-KhG"/>
-                        <constraint firstItem="qoE-Zk-aoq" firstAttribute="top" secondItem="022-un-CVN" secondAttribute="top" constant="88" id="xsX-gA-HeL"/>
+                        <constraint firstAttribute="bottom" secondItem="jgl-b8-Kfq" secondAttribute="bottom" constant="79" id="jvV-fS-KhG"/>
+                        <constraint firstItem="qoE-Zk-aoq" firstAttribute="top" secondItem="022-un-CVN" secondAttribute="top" constant="87" id="xsX-gA-HeL"/>
+                        <constraint firstItem="jgl-b8-Kfq" firstAttribute="leading" secondItem="XNv-YT-gfh" secondAttribute="trailing" constant="26" id="yzS-g5-n6f"/>
+                        <constraint firstItem="jgl-b8-Kfq" firstAttribute="leading" secondItem="022-un-CVN" secondAttribute="leading" constant="186" id="z5B-vb-EPn"/>
                     </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="jLB-dp-uGe"/>
+                            <exclude reference="z5B-vb-EPn"/>
+                        </mask>
+                    </variation>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n0s-2E-bvI">
                     <rect key="frame" x="0.0" y="200" width="600" height="40"/>
@@ -160,7 +168,7 @@
                 <outlet property="editButton" destination="jgl-b8-Kfq" id="xi0-rS-H4J"/>
                 <outlet property="followerCount" destination="0dQ-Dv-L4J" id="OAe-mU-oCe"/>
                 <outlet property="followingCount" destination="miv-rN-N0T" id="ALd-WL-fTx"/>
-                <outlet property="locationButon" destination="qoE-Zk-aoq" id="Nlk-7U-pdy"/>
+                <outlet property="locationButton" destination="qoE-Zk-aoq" id="oJC-6B-Fwf"/>
                 <outlet property="profilePic" destination="XNv-YT-gfh" id="G9M-lI-MhG"/>
                 <outlet property="trackCount" destination="VC7-aU-ud6" id="Akh-c0-1WH"/>
             </connections>
