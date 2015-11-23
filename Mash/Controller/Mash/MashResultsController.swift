@@ -1,0 +1,193 @@
+//
+//  MashResultsController.swift
+//  Mash-iOS
+//
+//  Created by Danny Hsu on 6/19/15.
+//  Copyright (c) 2015 Mash. All rights reserved.
+//
+
+import Foundation
+import UIKit
+import AVFoundation
+
+class MashResultsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate {
+    
+    @IBOutlet weak var trackTable: UITableView!
+    var results: [Track] = []
+    var allResults: [Track] = []
+    var projectRecordings: [Track] = []
+    var projectPlayers: [AVAudioPlayer] = []
+    var audioPlayer: AVAudioPlayer? = nil
+    var downloadedTracks: Set<Int> = Set<Int>()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.trackTable.delegate = self
+        self.trackTable.dataSource = self
+        
+        let track = UINib(nibName: "Track", bundle: nil)
+        self.trackTable.registerNib(track, forCellReuseIdentifier: "Track")
+        
+        for track in projectRecordings {
+            self.projectPlayers.append(try! AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL)))
+        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationItem.setHidesBackButton(true, animated: false)
+        self.navigationItem.title = "Results"
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel:")
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationItem.setHidesBackButton(false, animated: false)
+        self.navigationItem.rightBarButtonItem = nil
+    }
+    
+    // Table View Delegate
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.results.count
+    }
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.row == self.results.count - 1 {
+            self.loadNextData()
+        }
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let track = tableView.dequeueReusableCellWithIdentifier("Track") as! Track
+        let trackData = self.results[indexPath.row]
+        track.titleText = trackData.titleText
+        track.userText = trackData.userText
+        track.title.text = track.titleText
+        track.userLabel.setTitle(track.userText, forState: .Normal)
+        track.bpm = trackData.bpm
+        track.format = trackData.format
+        track.userid = trackData.userid
+        track.id = trackData.id
+        track.instrumentFamilies = trackData.instrumentFamilies
+        track.instruments = trackData.instruments
+        track.trackURL = filePathString(getS3Key(track))
+        if !self.downloadedTracks.contains(indexPath.row) {
+            track.activityView.startAnimating()
+            download(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket) {
+                (result) in
+                dispatch_async(dispatch_get_main_queue()) {
+                    track.activityView.stopAnimating()
+                    if result != nil {
+                        track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
+                    } else {
+                        track.staticAudioPlot.image = UIImage(named: "waveform_static")
+                    }
+                }
+            }
+        }
+        
+        track.instrumentImage.image = findImage(self.results[indexPath.row].instrumentFamilies)
+        track.addButton.addTarget(self, action: "done:", forControlEvents: UIControlEvents.TouchDown)
+        return track
+    }
+
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 75.0
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let track = self.trackTable.cellForRowAtIndexPath(indexPath) as! Track
+
+        track.activityView.startAnimating()
+        download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
+            (result) in
+            dispatch_async(dispatch_get_main_queue()) {
+                track.activityView.stopAnimating()
+                if result != nil {
+                    track.generateWaveform()
+                    self.playTracks(track)
+                }
+            }
+        }
+        self.downloadedTracks.insert(indexPath.row)
+        
+        Debug.printl("Playing track \(track.titleText)", sender: self)
+    }
+    
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        if self.projectPlayers[0].playing {
+            self.stopPlaying(nil)
+        }
+    }
+    
+    /*func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    return 50.0
+    }*/
+    
+    /*func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as! MashResultsHeaderView
+        header.cancelButton.addTarget(self, action: "cancel:", forControlEvents: UIControlEvents.TouchDown)
+    }*/
+    
+    /*func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = self.trackTable.dequeueReusableHeaderFooterViewWithIdentifier("MashResultsHeaderView") as! MashResultsHeaderView
+        return header
+    }*/
+    
+    func loadNextData() {
+        let currentNumResults = self.results.count
+        if currentNumResults == self.allResults.count {
+            return
+        }
+        for i in currentNumResults...currentNumResults + 15 {
+            if i > self.allResults.count - 1 {
+                break
+            }
+            self.results.append(self.allResults[i])
+        }
+        self.trackTable.reloadData()
+    }
+    
+    func playTracks(track: Track) {
+        if self.projectPlayers[0].playing {
+            self.stopPlaying(nil)
+        }
+        
+        if track.bpm != self.projectRecordings[0].bpm {
+            let shiftAmount: Float = Float(self.projectRecordings[0].bpm) / Float(track.bpm)
+            let newURL = SuperpoweredAudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: "new_\(track.titleText)", amountToShift: shiftAmount)
+            track.trackURL = newURL
+            track.bpm = self.projectRecordings[0].bpm
+        }
+        
+        self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
+        self.audioPlayer!.play()
+        for player in self.projectPlayers {
+            player.play()
+        }
+    }
+    
+    func stopPlaying(sender: AnyObject?) {
+        self.audioPlayer!.stop()
+        for (var i = 0; i < self.projectPlayers.count; i++) {
+            self.projectPlayers[i].stop()
+            self.projectPlayers[i].currentTime = 0
+        }
+    }
+    
+    func cancel(sender: AnyObject?) {
+        self.navigationController?.popViewControllerAnimated(false)
+    }
+    
+    func done(sender: UIButton) {
+        let track = sender.superview?.superview?.superview as! Track
+        ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+}

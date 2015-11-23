@@ -18,7 +18,7 @@
 #import <Optimizely/Optimizely.h>
 #import "Flurry.h"
 
-@interface AudioModule : NSObject
+@interface SuperpoweredAudioModule : NSObject
 
 +(NSString *) timeShift:(NSURL *)url newName: (NSString*)newName amountToShift: (float)shiftAmount;
 +(NSString *) pitchShift:(NSURL *)url newName: (NSString*)newName amountToShift: (int)shiftAmount;

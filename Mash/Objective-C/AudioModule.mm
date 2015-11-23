@@ -8,14 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "Mash-Bridging-Header.h"
-//#include "Mash-Swift.h"
 #include "SuperpoweredDecoder.h"
 #include "SuperpoweredSimple.h"
 #include "SuperpoweredRecorder.h"
 #include "SuperpoweredTimeStretching.h"
 #include "SuperpoweredAudioBuffers.h"
 
-@implementation AudioModule {
+@implementation SuperpoweredAudioModule {
     SuperpoweredDecoder *decoder;
 }
 
