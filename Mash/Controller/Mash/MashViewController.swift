@@ -120,12 +120,12 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     // Download mash files
     func done() {
-        let request = SearchTagRequest()
+        let request = RecordingRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
-        request.familyArray = NSMutableArray(array: self.instruments)
+        request.family = self.instruments[0]
         self.activityView.startAnimating()
-        server.searchTagWithRequest(request) {
+        server.recordingMashWithRequest(request) {
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
@@ -165,22 +165,6 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func cancel(sender: AnyObject?) {
         self.navigationController?.popViewControllerAnimated(true)
-    }
-    
-    // For when the stupid instr search is down
-    func cheat() {
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("MashResultsController") as! MashResultsController
-        
-        controller.projectRecordings = self.recordings
-        var index = 0
-        for i in 0...self.navigationController!.viewControllers.count {
-            if self.navigationController!.viewControllers[i] as? MashViewController != nil {
-                index = i
-                break
-            }
-        }
-        self.navigationController?.pushViewController(controller, animated: true)
-        self.navigationController?.viewControllers.removeAtIndex(index)
     }
     
 }

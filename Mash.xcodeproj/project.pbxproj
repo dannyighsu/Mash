@@ -283,7 +283,7 @@
 		370A39061BF6A8B700FCD060 /* Metronome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A38F41BF6A8B700FCD060 /* Metronome.swift */; };
 		370A390F1BF6A8B700FCD060 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A38FD1BF6A8B700FCD060 /* Track.swift */; };
 		370A39101BF6A8B700FCD060 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A38FE1BF6A8B700FCD060 /* User.swift */; };
-		3711F0A31B6FFD9D00C75F2B /* AudioModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3711F0A21B6FFD9D00C75F2B /* AudioModule.mm */; };
+		3711F0A31B6FFD9D00C75F2B /* SuperpoweredAudioModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3711F0A21B6FFD9D00C75F2B /* SuperpoweredAudioModule.mm */; };
 		3718EF291B57071D00AA5D26 /* Objective-C.h in Headers */ = {isa = PBXBuildFile; fileRef = 3718EF271B57071D00AA5D26 /* Objective-C.h */; };
 		3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718EF281B57071D00AA5D26 /* Objective-C.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		371F14C71B8D23550044BE5B /* mashservice.proto in Resources */ = {isa = PBXBuildFile; fileRef = 371F14C61B8D23550044BE5B /* mashservice.proto */; };
@@ -696,7 +696,7 @@
 		370A38F41BF6A8B700FCD060 /* Metronome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metronome.swift; sourceTree = "<group>"; };
 		370A38FD1BF6A8B700FCD060 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		370A38FE1BF6A8B700FCD060 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		3711F0A21B6FFD9D00C75F2B /* AudioModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioModule.mm; sourceTree = "<group>"; };
+		3711F0A21B6FFD9D00C75F2B /* SuperpoweredAudioModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SuperpoweredAudioModule.mm; sourceTree = "<group>"; };
 		3718EF271B57071D00AA5D26 /* Objective-C.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Objective-C.h"; sourceTree = "<group>"; };
 		3718EF281B57071D00AA5D26 /* Objective-C.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Objective-C.m"; sourceTree = "<group>"; };
 		371F14C61B8D23550044BE5B /* mashservice.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mashservice.proto; path = protos/mashservice.proto; sourceTree = SOURCE_ROOT; };
@@ -1612,7 +1612,7 @@
 		37E799F31B3CC1F600D2E54D /* Objective-C */ = {
 			isa = PBXGroup;
 			children = (
-				3711F0A21B6FFD9D00C75F2B /* AudioModule.mm */,
+				3711F0A21B6FFD9D00C75F2B /* SuperpoweredAudioModule.mm */,
 				37E799F41B3CC1F600D2E54D /* KeychainWrapper.h */,
 				37E799F51B3CC1F600D2E54D /* KeychainWrapper.m */,
 				3718EF271B57071D00AA5D26 /* Objective-C.h */,
@@ -2175,7 +2175,7 @@
 				37C9F5171C029E2000C80F88 /* ProjectTools.swift in Sources */,
 				3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */,
 				37C9F4FB1C029DFA00C80F88 /* CollectionViewLayout.swift in Sources */,
-				3711F0A31B6FFD9D00C75F2B /* AudioModule.mm in Sources */,
+				3711F0A31B6FFD9D00C75F2B /* SuperpoweredAudioModule.mm in Sources */,
 				3798825F1C01313F0029E56C /* SearchViewController.swift in Sources */,
 				37C9F50D1C029E2000C80F88 /* MixerChannel.swift in Sources */,
 				379882471C0131360029E56C /* HelperData.swift in Sources */,

@@ -15,6 +15,7 @@ import UIKit
     optional func didPressPlay(audioPlayer: ProjectPlayer)
     optional func didStopPlaying(audioPlayer: ProjectPlayer)
     optional func didToggleRecording(audioPlayer: ProjectPlayer)
+    optional func tempoLabelDidEndEditing(textField: UITextField)
     func addTracks()
     func toggleMetronome()
 }
@@ -59,6 +60,11 @@ class ProjectPlayer: UITableViewHeaderFooterView {
         self.stop()
         self.delegate?.didStopPlaying?(self)
     }*/
+    
+    @IBAction func tempoLabelEdited(sender: AnyObject) {
+        let textField = sender as! UITextField
+        self.delegate?.tempoLabelDidEndEditing!(textField)
+    }
     
     @IBAction func toolsButtonPressed(sender: AnyObject) {
         self.delegate?.showTools!()
@@ -156,5 +162,12 @@ class ProjectPlayer: UITableViewHeaderFooterView {
         self.volumes.append(0.8)
         self.mutes.append(false)
     }
-
+    
+    func resetPlayers() {
+        if self.audioPlayers.count > 0 {
+            for i in 0...self.audioPlayers.count - 1 {
+                self.audioPlayers[i] = try! AVAudioPlayer(contentsOfURL: self.audioPlayers[i].url!)
+            }
+        }
+    }
 }

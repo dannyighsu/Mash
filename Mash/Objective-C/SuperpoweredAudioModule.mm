@@ -23,14 +23,15 @@
     return self;
 }
 
-+(NSString *) timeShift:(NSURL *)url newName: (NSString*)newName amountToShift: (float)shiftAmount {
++(void) timeShift:(NSURL *)url newName: (NSString*)newName amountToShift: (float)shiftAmount {
     SuperpoweredDecoder *decoder = new SuperpoweredDecoder();
     const char *error = decoder->open([[url path] UTF8String], false, 0, 0);
     if (error) {
         NSLog(@"Error opening file: %s", error);
         delete decoder;
-        return @"";
+        return;
     }
+    
     // Instantiate variable-sized buffer chains, 1MB memory max
     SuperpoweredAudiobufferPool *bufferPool = new SuperpoweredAudiobufferPool(4, 1024 * 1024);
     SuperpoweredTimeStretching *timeStretcher = new SuperpoweredTimeStretching(bufferPool, decoder->samplerate);
@@ -75,13 +76,18 @@
             output->clear();
         }
     }
-    NSLog(@"File converted to destination path %@.", outputFilePath);
+    
+    // Delete original file, rename converted file to original
+    NSFileManager *manager = [NSFileManager defaultManager];
+    [manager removeItemAtPath: [url path] error: NULL];
+    [manager moveItemAtPath: outputFilePath toPath: [url path] error: NULL];
+    
+    NSLog(@"File converted to destination path %@.", [url path]);
     delete decoder;
     delete timeStretcher;
     delete output;
     delete bufferPool;
     free(intBuffer);
-    return outputFilePath;
 }
 
 +(NSString *) pitchShift:(NSURL *)url newName: (NSString*)newName amountToShift: (int)shiftAmount {

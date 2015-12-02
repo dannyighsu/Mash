@@ -25,6 +25,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.passwordField.delegate = self
         self.handleField.returnKeyType = UIReturnKeyType.Next
         self.passwordField.returnKeyType = UIReturnKeyType.Go
+        self.handleField.autocapitalizationType = .None
         
         if let background = UIImage(named: "concert_faded") {
             self.view.backgroundColor = UIColor(patternImage: background)
@@ -66,7 +67,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        authenticate(self.handleField.text!, password: self.passwordField.text!)
+        authenticate(self.handleField.text!.lowercaseString, password: self.passwordField.text!)
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -153,8 +154,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     func saveLoginItems() {
         Debug.printl("Saving user " + self.handleField.text! + " to NSUserDefaults.", sender: self)
-        NSUserDefaults.standardUserDefaults().setValue(self.handleField.text?.lowercaseString, forKey: "username")
-        keychainWrapper.mySetObject(self.passwordField.text, forKey: kSecValueData)
+        NSUserDefaults.standardUserDefaults().setValue(self.handleField.text!.lowercaseString, forKey: "username")
+        keychainWrapper.mySetObject(self.passwordField.text!, forKey: kSecValueData)
         keychainWrapper.writeToKeychain()
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasLoginKey")
         NSUserDefaults.standardUserDefaults().synchronize()

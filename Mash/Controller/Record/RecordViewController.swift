@@ -518,7 +518,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             (response, error) in
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)
-                raiseAlert("Incorrect Username and/or Password")
+                self.navigationController?.popToRootViewControllerAnimated(true)
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()

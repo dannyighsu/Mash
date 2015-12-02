@@ -598,12 +598,14 @@ typedef struct UserResponse__storage_ {
 @dynamic hasLoginToken, loginToken;
 @dynamic hasUserid, userid;
 @dynamic hasRecid, recid;
+@dynamic hasFamily, family;
 
 typedef struct RecordingRequest__storage_ {
   uint32_t _has_storage_[1];
   uint32_t userid;
   uint32_t recid;
   NSString *loginToken;
+  NSString *family;
 } RecordingRequest__storage_;
 
 // This method is threadsafe because it is initially called
@@ -642,6 +644,17 @@ typedef struct RecordingRequest__storage_ {
         .dataType = GPBDataTypeUInt32,
         .offset = offsetof(RecordingRequest__storage_, recid),
         .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "family",
+        .number = RecordingRequest_FieldNumber_Family,
+        .hasIndex = 3,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingRequest__storage_, family),
+        .defaultValue.valueString = nil,
         .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
@@ -1690,6 +1703,109 @@ typedef struct RecordingSearchRequest__storage_ {
                                         ranges:NULL
                                     rangeCount:0
                                    storageSize:sizeof(RecordingSearchRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - RecordingAnalyzeRequest
+
+@implementation RecordingAnalyzeRequest
+
+@dynamic hasLoginToken, loginToken;
+@dynamic hasUserid, userid;
+@dynamic hasRecid, recid;
+@dynamic hasBpm, bpm;
+@dynamic hasBar, bar;
+
+typedef struct RecordingAnalyzeRequest__storage_ {
+  uint32_t _has_storage_[1];
+  uint32_t userid;
+  uint32_t recid;
+  uint32_t bpm;
+  uint32_t bar;
+  NSString *loginToken;
+} RecordingAnalyzeRequest__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "loginToken",
+        .number = RecordingAnalyzeRequest_FieldNumber_LoginToken,
+        .hasIndex = 0,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(RecordingAnalyzeRequest__storage_, loginToken),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "userid",
+        .number = RecordingAnalyzeRequest_FieldNumber_Userid,
+        .hasIndex = 1,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingAnalyzeRequest__storage_, userid),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "recid",
+        .number = RecordingAnalyzeRequest_FieldNumber_Recid,
+        .hasIndex = 2,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingAnalyzeRequest__storage_, recid),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "bpm",
+        .number = RecordingAnalyzeRequest_FieldNumber_Bpm,
+        .hasIndex = 3,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingAnalyzeRequest__storage_, bpm),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "bar",
+        .number = RecordingAnalyzeRequest_FieldNumber_Bar,
+        .hasIndex = 4,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingAnalyzeRequest__storage_, bar),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[RecordingAnalyzeRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(RecordingAnalyzeRequest__storage_)
                                     wireFormat:NO];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;

@@ -30,6 +30,8 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         self.passwordField.delegate = self
         self.emailField.delegate = self
         self.handleField.delegate = self
+        self.emailField.autocapitalizationType = .None
+        self.handleField.autocapitalizationType = .None
 
         // Set textfield actions
         self.passwordField.returnKeyType = UIReturnKeyType.Go
@@ -134,7 +136,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         let request = RegisterRequest()
         request.handle = self.handleField.text!.lowercaseString
         request.passwordHash = hashPassword(self.passwordField.text!)
-        request.email = self.emailField.text!
+        request.email = self.emailField.text!.lowercaseString
         request.name = ""
         request.registerAgent = 0
         server.registerWithRequest(request) {
@@ -172,8 +174,8 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     }
     
     func saveLoginItems() {
-        Debug.printl("Saving user " + self.handleField.text! + " to NSUserDefaults.", sender: self)
-        NSUserDefaults.standardUserDefaults().setValue(self.handleField.text, forKey: "username")
+        Debug.printl("Saving user " + self.handleField.text!.lowercaseString + " to NSUserDefaults.", sender: self)
+        NSUserDefaults.standardUserDefaults().setValue(self.handleField.text!.lowercaseString, forKey: "username")
         keychainWrapper.mySetObject(self.passwordField.text, forKey: kSecValueData)
         keychainWrapper.writeToKeychain()
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasLoginKey")

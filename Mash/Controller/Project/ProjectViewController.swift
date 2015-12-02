@@ -173,7 +173,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
             
             // Update indices of channels
-            if self.data.count > 0 {
+            if self.data.count > 1 {
                 for _ in indexPath.row + 1...self.data.count {
                     let channel = tableView.cellForRowAtIndexPath(indexPath) as! Channel
                     channel.trackNumber! -= 1
@@ -241,6 +241,19 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         if self.metronome.isPlaying {
             self.metronome.toggle(nil)
         }
+    }
+    
+    func tempoLabelDidEndEditing(textField: UITextField) {
+        var newBPM = Int(textField.text!)!
+        if newBPM < 40 {
+            newBPM = 40
+        } else if newBPM > 220 {
+            newBPM = 220
+        }
+        
+        self.activityView.startAnimating()
+        self.bpm = newBPM
+        self.timeShiftAll(self.bpm)
     }
     
     // Track management
@@ -370,6 +383,17 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         tabBarController.setViewControllers(newTabBarController as? [UIViewController], animated: true)*/
     }
     
+    // Helpers
+    func timeShiftAll(bpm: Int) {
+        for track in self.data {
+            let shiftAmount: Float = Float(self.bpm) / Float(track.bpm)
+            SuperpoweredAudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: "new_\(track.titleText)", amountToShift: shiftAmount)
+            track.bpm = self.bpm
+        }
+        self.audioPlayer?.resetPlayers()
+        self.activityView.stopAnimating()
+    }
+    
     func uploadAction(url: NSURL, name: String) {
         // Post data to server
         var instruments: [String] = []
@@ -463,8 +487,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 if track.bpm != project!.bpm {
                     let shiftAmount: Float = Float(project!.bpm) / Float(track.bpm)
-                    let newURL = SuperpoweredAudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: "new_\(track.titleText)", amountToShift: shiftAmount)
-                    track.trackURL = newURL
+                    SuperpoweredAudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: "new_\(track.titleText)", amountToShift: shiftAmount)
                     track.bpm = project!.bpm
                 }
                 
