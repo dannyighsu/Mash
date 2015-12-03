@@ -200,6 +200,7 @@ typedef GPB_ENUM(RecordingRequest_FieldNumber) {
   RecordingRequest_FieldNumber_LoginToken = 1,
   RecordingRequest_FieldNumber_Userid = 2,
   RecordingRequest_FieldNumber_Recid = 3,
+  RecordingRequest_FieldNumber_Family = 4,
 };
 
 @interface RecordingRequest : GPBMessage
@@ -212,6 +213,9 @@ typedef GPB_ENUM(RecordingRequest_FieldNumber) {
 
 @property(nonatomic, readwrite) BOOL hasRecid;
 @property(nonatomic, readwrite) uint32_t recid;
+
+@property(nonatomic, readwrite) BOOL hasFamily;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *family;
 
 @end
 
@@ -519,6 +523,35 @@ typedef GPB_ENUM(RecordingSearchRequest_FieldNumber) {
 
 @property(nonatomic, readwrite) BOOL hasQuery;
 @property(nonatomic, readwrite, copy, null_resettable) NSString *query;
+
+@end
+
+#pragma mark - RecordingAnalyzeRequest
+
+typedef GPB_ENUM(RecordingAnalyzeRequest_FieldNumber) {
+  RecordingAnalyzeRequest_FieldNumber_LoginToken = 1,
+  RecordingAnalyzeRequest_FieldNumber_Userid = 2,
+  RecordingAnalyzeRequest_FieldNumber_Recid = 3,
+  RecordingAnalyzeRequest_FieldNumber_Bpm = 4,
+  RecordingAnalyzeRequest_FieldNumber_Bar = 5,
+};
+
+@interface RecordingAnalyzeRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasLoginToken;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *loginToken;
+
+@property(nonatomic, readwrite) BOOL hasUserid;
+@property(nonatomic, readwrite) uint32_t userid;
+
+@property(nonatomic, readwrite) BOOL hasRecid;
+@property(nonatomic, readwrite) uint32_t recid;
+
+@property(nonatomic, readwrite) BOOL hasBpm;
+@property(nonatomic, readwrite) uint32_t bpm;
+
+@property(nonatomic, readwrite) BOOL hasBar;
+@property(nonatomic, readwrite) uint32_t bar;
 
 @end
 

@@ -91,6 +91,13 @@
 - (ProtoRPC *)RPCToRecordingUploadWithRequest:(RecordingUploadRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
 
 
+#pragma mark RecordingAnalyze(RecordingAnalyzeRequest) returns (SuccessResponse)
+
+- (void)recordingAnalyzeWithRequest:(RecordingAnalyzeRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToRecordingAnalyzeWithRequest:(RecordingAnalyzeRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+
 #pragma mark RecordingPlay(RecordingRequest) returns (SuccessResponse)
 
 - (void)recordingPlayWithRequest:(RecordingRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
@@ -152,6 +159,13 @@
 - (void)userSearchWithRequest:(UserSearchRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler;
 
 - (ProtoRPC *)RPCToUserSearchWithRequest:(UserSearchRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler;
+
+
+#pragma mark RecordingMash(RecordingRequest) returns (Recordings)
+
+- (void)recordingMashWithRequest:(RecordingRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToRecordingMashWithRequest:(RecordingRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler;
 
 
 @end

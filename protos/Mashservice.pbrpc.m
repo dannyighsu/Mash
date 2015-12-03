@@ -169,6 +169,18 @@ static NSString *const kServiceName = @"MashService";
              responseClass:[SuccessResponse class]
         responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
+#pragma mark RecordingAnalyze(RecordingAnalyzeRequest) returns (SuccessResponse)
+
+- (void)recordingAnalyzeWithRequest:(RecordingAnalyzeRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  [[self RPCToRecordingAnalyzeWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToRecordingAnalyzeWithRequest:(RecordingAnalyzeRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  return [self RPCToMethod:@"RecordingAnalyze"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[SuccessResponse class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
 #pragma mark RecordingPlay(RecordingRequest) returns (SuccessResponse)
 
 - (void)recordingPlayWithRequest:(RecordingRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
@@ -275,6 +287,18 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"UserSearch"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[UserPreviews class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
+#pragma mark RecordingMash(RecordingRequest) returns (Recordings)
+
+- (void)recordingMashWithRequest:(RecordingRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler{
+  [[self RPCToRecordingMashWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToRecordingMashWithRequest:(RecordingRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler{
+  return [self RPCToMethod:@"RecordingMash"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[Recordings class]
         responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 @end
