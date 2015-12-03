@@ -34,6 +34,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         self.activityView.center = self.view.center
         self.view.addSubview(self.activityView)
         self.cellWidth = UIScreen.mainScreen().bounds.size.width / 2 - 4.0
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -58,10 +59,6 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         super.viewWillDisappear(animated)
         self.navigationItem.setHidesBackButton(true, animated: false)
         self.navigationItem.rightBarButtonItem = nil
-    }
-    
-    override func prefersStatusBarHidden() -> Bool {
-        return true
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -152,16 +149,19 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 }
                 controller.allResults.append(track)
             }
+        } else {
+            raiseAlert("No results found.")
+            return
         }
-        var index = 0
+        /*var index = 0
         for i in 0...self.navigationController!.viewControllers.count {
             if self.navigationController!.viewControllers[i] as? MashViewController != nil {
                 index = i
                 break
             }
         }
+        self.navigationController!.viewControllers.removeAtIndex(index)*/
         self.navigationController?.pushViewController(controller, animated: true)
-        self.navigationController!.viewControllers.removeAtIndex(index)
     }
     
     func cancel(sender: AnyObject?) {

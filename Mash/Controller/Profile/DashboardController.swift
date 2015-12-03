@@ -308,7 +308,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             let tabBarController = self.navigationController?.viewControllers[2] as! UITabBarController
             tabBarController.selectedIndex = getTabBarController("project")
         } else {
-            raiseAlert("Track added.")
+            raiseAlert("Sound added to project.")
         }
     }
     

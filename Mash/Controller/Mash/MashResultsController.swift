@@ -36,14 +36,14 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationItem.setHidesBackButton(true, animated: false)
+        self.navigationItem.setHidesBackButton(false, animated: false)
         self.navigationItem.title = "Results"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel:")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "done:")
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationItem.setHidesBackButton(false, animated: false)
+        self.navigationItem.setHidesBackButton(true, animated: false)
         self.navigationItem.rightBarButtonItem = nil
     }
     
@@ -92,7 +92,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         }
         
         track.instrumentImage.image = findImage(self.results[indexPath.row].instrumentFamilies)
-        track.addButton.addTarget(self, action: "done:", forControlEvents: UIControlEvents.TouchDown)
+        track.addButton.addTarget(self, action: "add:", forControlEvents: UIControlEvents.TouchDown)
         return track
     }
 
@@ -181,13 +181,21 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func cancel(sender: AnyObject?) {
-        self.navigationController?.popViewControllerAnimated(false)
-    }
-    
-    func done(sender: UIButton) {
+    func add(sender: UIButton) {
         let track = sender.superview?.superview?.superview as! Track
         ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
+        raiseAlert("Sound added to project.")
+    }
+    
+    func done(sender: AnyObject?) {
+        var index = 0
+        for i in 0...self.navigationController!.viewControllers.count {
+            if self.navigationController!.viewControllers[i] as? MashViewController != nil {
+                index = i
+                break
+            }
+        }
+        self.navigationController!.viewControllers.removeAtIndex(index)
         self.navigationController?.popViewControllerAnimated(true)
     }
     
