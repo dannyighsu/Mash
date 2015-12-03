@@ -23,13 +23,13 @@
     return self;
 }
 
-+(void) timeShift:(NSURL *)url newName: (NSString*)newName amountToShift: (float)shiftAmount {
++(NSString *) timeShift:(NSURL *)url newName: (NSString*)newName amountToShift: (float)shiftAmount {
     SuperpoweredDecoder *decoder = new SuperpoweredDecoder();
     const char *error = decoder->open([[url path] UTF8String], false, 0, 0);
     if (error) {
         NSLog(@"Error opening file: %s", error);
         delete decoder;
-        return;
+        return @"";
     }
     
     // Instantiate variable-sized buffer chains, 1MB memory max
@@ -40,7 +40,8 @@
     SuperpoweredAudiopointerList *output = new SuperpoweredAudiopointerList(bufferPool);
     short int *intBuffer = (short int*)malloc(decoder->samplesPerFrame * 2 * sizeof(short int) + 16384);
     
-    NSString *outputFilePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.m4a", newName]];
+    NSString *outputFilePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"temp_%@.m4a", newName]];
+    NSString *resultPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.m4a", newName]];
     FILE *fd = createWAV(outputFilePath.fileSystemRepresentation, decoder->samplerate, 2);
     
     while (true) {
@@ -79,15 +80,19 @@
     
     // Delete original file, rename converted file to original
     NSFileManager *manager = [NSFileManager defaultManager];
-    [manager removeItemAtPath: [url path] error: NULL];
-    [manager moveItemAtPath: outputFilePath toPath: [url path] error: NULL];
+    if ([manager fileExistsAtPath:resultPath]) {
+        [manager removeItemAtPath: resultPath error: NULL];
+    }
+    [manager moveItemAtPath: outputFilePath toPath: resultPath error: NULL];
     
-    NSLog(@"File converted to destination path %@.", [url path]);
+    NSLog(@"File converted to destination path %@.", resultPath);
     delete decoder;
     delete timeStretcher;
     delete output;
     delete bufferPool;
     free(intBuffer);
+    
+    return resultPath;
 }
 
 +(NSString *) pitchShift:(NSURL *)url newName: (NSString*)newName amountToShift: (int)shiftAmount {

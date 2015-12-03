@@ -523,7 +523,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()
                     self.coverView.removeFromSuperview()
-                    Flurry.setUserID("\(response.userid)")
+                    if !testing {
+                        Flurry.setUserID("\(response.userid)")
+                    }
                 }
                 Debug.printl("Logged in successfully.", sender: self)
                 currentUser = User()

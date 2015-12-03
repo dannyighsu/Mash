@@ -124,6 +124,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         request.family = self.instruments[0]
+        request.recid = UInt32(self.recordings[0].id)
         self.activityView.startAnimating()
         server.recordingMashWithRequest(request) {
             (response, error) in

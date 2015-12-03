@@ -160,7 +160,9 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         
         if track.bpm != self.projectRecordings[0].bpm {
             let shiftAmount: Float = Float(self.projectRecordings[0].bpm) / Float(track.bpm)
-            SuperpoweredAudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: "new_\(track.titleText)", amountToShift: shiftAmount)
+            let newName = "new_\(track.id)"
+            let newTrackURL = SuperpoweredAudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: newName, amountToShift: shiftAmount)
+            track.trackURL = newTrackURL
             track.bpm = self.projectRecordings[0].bpm
         }
         

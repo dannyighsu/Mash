@@ -30,10 +30,12 @@ class ProjectPlayer: UITableViewHeaderFooterView {
     
     var delegate: PlayerDelegate? = nil
     var audioPlayers: [AVAudioPlayer] = []
+    var tracks: [Track] = []
     var volumes: [Float] = []
     var mutes: [Bool] = []
     var previousVolume: Float = 0.8
     var metronomeToggled: Bool = false
+    var isPlaying: Bool = false
     
     // Button Methods
     @IBAction func playButtonPressed(sender: AnyObject) {
@@ -90,6 +92,7 @@ class ProjectPlayer: UITableViewHeaderFooterView {
             self.audioPlayers[i].play()
         }
         self.playButton.setImage(UIImage(named: "Pause"), forState: UIControlState.Normal)
+        self.isPlaying = true
     }
     
     func pause() {
@@ -97,14 +100,16 @@ class ProjectPlayer: UITableViewHeaderFooterView {
             self.audioPlayers[i].pause()
         }
         self.playButton.setImage(UIImage(named: "Play"), forState: UIControlState.Normal)
+        self.isPlaying = false
     }
     
     func stop() {
         for (var i = 0; i < self.audioPlayers.count; i++) {
             self.audioPlayers[i].stop()
             self.audioPlayers[i].currentTime = 0
-            self.playButton.setImage(UIImage(named: "Play"), forState: UIControlState.Normal)
         }
+        self.playButton.setImage(UIImage(named: "Play"), forState: UIControlState.Normal)
+        self.isPlaying = false
     }
     
     // Volume controls
@@ -144,11 +149,11 @@ class ProjectPlayer: UITableViewHeaderFooterView {
     }
     
     // Auxiliary
-    func addTrack(trackURL: String) {
+    func addTrack(track: Track) {
         var error: NSError? = nil
         let player: AVAudioPlayer!
         do {
-            player = try AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: trackURL))
+            player = try AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
         } catch let error1 as NSError {
             error = error1
             player = nil
@@ -159,6 +164,7 @@ class ProjectPlayer: UITableViewHeaderFooterView {
         }
         player.numberOfLoops = -1
         self.audioPlayers.append(player)
+        self.tracks.append(track)
         self.volumes.append(0.8)
         self.mutes.append(false)
     }
@@ -166,7 +172,9 @@ class ProjectPlayer: UITableViewHeaderFooterView {
     func resetPlayers() {
         if self.audioPlayers.count > 0 {
             for i in 0...self.audioPlayers.count - 1 {
-                self.audioPlayers[i] = try! AVAudioPlayer(contentsOfURL: self.audioPlayers[i].url!)
+                let audioPlayer = try! AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: self.tracks[i].trackURL))
+                audioPlayer.numberOfLoops = -1
+                self.audioPlayers[i] = audioPlayer
             }
         }
     }

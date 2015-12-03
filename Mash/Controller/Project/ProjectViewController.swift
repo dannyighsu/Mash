@@ -244,6 +244,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tempoLabelDidEndEditing(textField: UITextField) {
+        if self.audioPlayer!.isPlaying {
+            self.audioPlayer!.stop()
+        }
         var newBPM = Int(textField.text!)!
         if newBPM < 40 {
             newBPM = 40
@@ -252,6 +255,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         self.activityView.startAnimating()
+        textField.text = "\(newBPM)"
         self.bpm = newBPM
         self.timeShiftAll(self.bpm)
     }
@@ -303,7 +307,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             raiseAlert("Oops!", delegate: self, message: "There must be a track in your project to save.")
             return
         }
-        Flurry.logEvent("Project_Save", withParameters: ["userid": currentUser.userid!, "numTracks": self.data.count])
+        if !testing {
+            Flurry.logEvent("Project_Save", withParameters: ["userid": currentUser.userid!, "numTracks": self.data.count])
+        }
         let alert = UIAlertView(title: "Saving your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         alert.textFieldAtIndex(0)?.text = self.titleButton.titleLabel?.text
@@ -329,7 +335,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             raiseAlert("Oops!", delegate: self, message: "There must be a track in your project to share.")
             return
         }
-        Flurry.logEvent("Project_Share", withParameters: ["userid": currentUser.userid!, "numTracks": self.data.count])
+        if !testing {
+            Flurry.logEvent("Project_Share", withParameters: ["userid": currentUser.userid!, "numTracks": self.data.count])
+        }
         let alert = UIAlertView(title: "Sharing your Mash", message: "Please enter a name for your track.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         alert.textFieldAtIndex(0)?.text = self.titleButton.titleLabel?.text
@@ -375,6 +383,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         let tabBarController = self.navigationController?.viewControllers[2] as! TabBarController
         tabBarController.viewControllers!.removeAtIndex(getTabBarController(("project")))
         tabBarController.viewControllers!.insert(newProjectView, atIndex: getTabBarController("project"))
+        tabBarController.selectedIndex = getTabBarController("project")
         /*let tabBarController = self.navigationController?.viewControllers[2] as! TabBarController
         var newTabBarController: [UIViewController] = []
         newTabBarController.addObjectsFromArray(tabBarController.viewControllers!)
@@ -387,7 +396,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     func timeShiftAll(bpm: Int) {
         for track in self.data {
             let shiftAmount: Float = Float(self.bpm) / Float(track.bpm)
-            SuperpoweredAudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: "new_\(track.titleText)", amountToShift: shiftAmount)
+            let newName = "new_\(track.id)"
+            let newTrackURL = SuperpoweredAudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: newName, amountToShift: shiftAmount)
+            track.trackURL = newTrackURL
             track.bpm = self.bpm
         }
         self.audioPlayer?.resetPlayers()
@@ -487,7 +498,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 if track.bpm != project!.bpm {
                     let shiftAmount: Float = Float(project!.bpm) / Float(track.bpm)
-                    SuperpoweredAudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: "new_\(track.titleText)", amountToShift: shiftAmount)
+                    let newName = "new_\(track.id)"
+                    let newTrackURL = SuperpoweredAudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: newName, amountToShift: shiftAmount)
+                    track.trackURL = newTrackURL
                     track.bpm = project!.bpm
                 }
                 
@@ -498,7 +511,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                     while project!.audioPlayer == nil {
                         NSThread.sleepForTimeInterval(0.1)
                     }
-                    project!.audioPlayer!.addTrack(track.trackURL)
+                    project!.audioPlayer!.addTrack(track)
                     dispatch_async(dispatch_get_main_queue()) {
                         project!.activityView.stopAnimating()
                         project!.tracks.reloadData()

@@ -160,7 +160,9 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
                 User.updateSelf(nil)
                 
                 dispatch_async(dispatch_get_main_queue()) {
-                    Flurry.setUserID("\(response.userid)")
+                    if !testing {
+                        Flurry.setUserID("\(response.userid)")
+                    }
                     raiseAlert("Success!", delegate: self, message: "Welcome to Mash.")
                 }
             }

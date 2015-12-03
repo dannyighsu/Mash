@@ -191,7 +191,10 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                 if error.code == 13 {
                     raiseAlert("Track name exists already.")
                 } else {
-                    raiseAlert("An error occured. \(error.code)")
+                    if !testing {
+                        Flurry.logError("\(error.code)", message: "Unknown Error", error: error)
+                        raiseAlert("There was an issue with your upload. Please try again.")
+                    }
                 }
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
@@ -205,6 +208,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                             }
                         } else {
                             self.deleteTrack(response.recid)
+                            raiseAlert("There was an issue with your upload. Please try again.")
                         }
                     }
                 }
@@ -257,7 +261,9 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                 raiseAlert("There was a problem uploading your track.")
             } else {
                 raiseAlert("An unknown error occurred.")
-                Flurry.logError("\(error.code)", message: "Unknown error", error: error)
+                if !testing {
+                    Flurry.logError("\(error.code)", message: "Unknown error", error: error)
+                }
             }
         }
     }
@@ -270,7 +276,9 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func finish(recid: Int) {
-        Flurry.logEvent("Recording_Upload", withParameters: ["userid": currentUser.userid!, "instrument": self.instruments])
+        if !testing {
+            Flurry.logEvent("Recording_Upload", withParameters: ["userid": currentUser.userid!, "instrument": self.instruments])
+        }
         
         let track = Track(frame: CGRectZero, recid: recid, userid: currentUser.userid!, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, trackURL: "\(currentUser.userid!)~~\(recid).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a", time: "Just now")
         self.saveWaveform(track)

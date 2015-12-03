@@ -128,7 +128,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 currentUser.userDescription = response.userDescription
                 
                 dispatch_async(dispatch_get_main_queue()) {
-                    Flurry.setUserID("\(response.userid)")
+                    if !testing {
+                        Flurry.setUserID("\(response.userid)")
+                    }
                     self.completeLogin(handle, password: password)
                 }
             }
