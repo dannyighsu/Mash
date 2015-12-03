@@ -9,10 +9,10 @@
 import Foundation
 
 // Print debug messages
-let debug: Bool = true
+let debug: Bool = false
 
 // Use local server
-let localServer: Bool = true
+let localServer: Bool = false
 
 // Testing mode, don't log analytics
-let testing: Bool = true
+let testing: Bool = false
