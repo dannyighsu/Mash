@@ -287,6 +287,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         } else if alertView.title == "Set Tempo" {
             self.metronome!.textFieldDidEndEditing(alertView.textFieldAtIndex(0)!)
             self.tempoButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
+        } else if alertView.title == "Version is oudated. Please update." {
+            exit(0)
         }
     }
     
@@ -458,7 +460,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             hostAddress = "http://localhost:5010"
             server = MashService(host: hostAddress)
             Debug.printl("Using local IP", sender: nil)
-            self.checkLogin()
+            self.checkVersion()
         } else {
             let request = ServerAddressRequest()
             let rand = arc4random()
@@ -481,8 +483,25 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             }
             dispatch_group_notify(serverRequestGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.checkLogin()
+                    self.checkVersion()
                 }
+            }
+        }
+    }
+    
+    // Check version
+    func checkVersion() {
+        // Check if version is supported
+        let version = NSBundle.mainBundle().infoDictionary?["CFBundleShortVersionString"] as! String
+        let request = VersionRequest()
+        request.version = version
+        
+        server.versionWithRequest(request) {
+            (response, error) in
+            if response.outdated {
+                raiseAlert("Version is oudated. Please update.", delegate: self)
+            } else {
+                self.checkLogin()
             }
         }
     }
