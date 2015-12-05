@@ -17,6 +17,7 @@
 #import "LoadBalancer.pbrpc.h"
 #import <Optimizely/Optimizely.h>
 #import "Flurry.h"
+#import "TPAACAudioConverter.h"
 
 @interface SuperpoweredAudioModule : NSObject
 

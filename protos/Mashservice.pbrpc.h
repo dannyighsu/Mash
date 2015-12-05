@@ -168,6 +168,13 @@
 - (ProtoRPC *)RPCToRecordingMashWithRequest:(RecordingRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler;
 
 
+#pragma mark Version(VersionRequest) returns (VersionResponse)
+
+- (void)versionWithRequest:(VersionRequest *)request handler:(void(^)(VersionResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToVersionWithRequest:(VersionRequest *)request handler:(void(^)(VersionResponse *response, NSError *error))handler;
+
+
 @end
 
 // Basic service implementation, over gRPC, that only does marshalling and parsing.

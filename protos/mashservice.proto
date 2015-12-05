@@ -197,6 +197,14 @@ message Recordings {
     repeated RecordingResponse recording = 1;
 }
 
+message VersionResponse {
+    required bool outdated = 1;
+}
+
+message VersionRequest {
+    required string version = 1;
+}
+
 service MashService {
     rpc Register        (RegisterRequest) returns (RegisterResponse);
     rpc SignIn          (SignInRequest) returns (SignInResponse);
@@ -221,4 +229,5 @@ service MashService {
     rpc SearchTag       (SearchTagRequest) returns (Recordings);
     rpc UserSearch      (UserSearchRequest) returns (UserPreviews);
     rpc RecordingMash   (RecordingRequest) returns (Recordings);
+    rpc Version         (VersionRequest) returns (VersionResponse);
 }

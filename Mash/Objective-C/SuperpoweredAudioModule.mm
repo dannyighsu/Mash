@@ -40,8 +40,8 @@
     SuperpoweredAudiopointerList *output = new SuperpoweredAudiopointerList(bufferPool);
     short int *intBuffer = (short int*)malloc(decoder->samplesPerFrame * 2 * sizeof(short int) + 16384);
     
-    NSString *outputFilePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"temp_%@.m4a", newName]];
-    NSString *resultPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.m4a", newName]];
+    NSString *outputFilePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"temp_%@.wav", newName]];
+    NSString *resultPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.wav", newName]];
     FILE *fd = createWAV(outputFilePath.fileSystemRepresentation, decoder->samplerate, 2);
     
     while (true) {

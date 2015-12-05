@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate, MetronomeDelegate, ChannelDelegate {
+class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate, MetronomeDelegate, ChannelDelegate, TPAACAudioConverterDelegate {
 
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
@@ -294,6 +294,15 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.audioPlayer!.audioPlayers[number].volume = value
     }
     
+    // Audio Conversion Delegate
+    func AACAudioConverterDidFinishConversion(converter: TPAACAudioConverter!) {
+        
+    }
+    
+    func AACAudioConverter(converter: TPAACAudioConverter!, didFailWithError error: NSError!) {
+        
+    }
+    
     // Preferences methods
     func changeTitle(sender: AnyObject?) {
         let alert = UIAlertView(title: "Name Your Track", message: "", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Ok")
@@ -317,6 +326,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func uploadSavedTrack(name: String) -> Bool {
+        // Mix audio
         AudioModule.mixTracks(name, tracks: self.data) {
             (exportSession) in
             if exportSession == nil || exportSession!.status == AVAssetExportSessionStatus.Failed {

@@ -20,19 +20,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = configuration
         
+        // Check if version is supported
+        let version = NSBundle.mainBundle().infoDictionary?["CFBundleShortVersionString"] as! String
+        let request = VersionRequest()
+        request.version = version
+        
+        let serverRequestGroup = dispatch_group_create()
+        dispatch_group_enter(serverRequestGroup)
+        server.versionWithRequest(request) {
+            (response, error) in
+            if response.outdated {
+                raiseAlert("Version is outdated")
+            }
+        }
+        /*dispatch_group_notify(serverRequestGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+            dispatch_async(dispatch_get_main_queue()) {
+                self.checkLogin()
+            }
+        }*/
+        dispatch_group_leave(serverRequestGroup)
+
         // Check if update required
         let info: NSDictionary = NSBundle.mainBundle().infoDictionary!
         let appID = info["CFBundleIdentifier"] as! String
         let url = NSURL(string: "http://itunes.apple.com/lookup?bundleId=\(appID)")
-        let data = NSData(contentsOfURL: url!)!
-        let lookup = (try! NSJSONSerialization.JSONObjectWithData(data, options: [])) as! NSDictionary
-        
-        if lookup["resultCount"]!.integerValue == 1 {
-            let appStoreVersion = ((lookup["results"] as! NSArray)[0] as! NSDictionary)["version"] as! String
-            let currentVersion = info["CFBundleShortVersionString"] as! String
-            if appStoreVersion != currentVersion {
-                Debug.printl("version oudated", sender: nil)
-                // Handle outdated version
+        let data = NSData(contentsOfURL: url!)
+        if data != nil {
+            let lookup = (try! NSJSONSerialization.JSONObjectWithData(data!, options: [])) as! NSDictionary
+            if lookup["resultCount"]!.integerValue == 1 {
+                let appStoreVersion = ((lookup["results"] as! NSArray)[0] as! NSDictionary)["version"] as! String
+                let currentVersion = info["CFBundleShortVersionString"] as! String
+                if appStoreVersion != currentVersion {
+                    Debug.printl("version oudated", sender: nil)
+                    // Handle outdated version
+                }
             }
         }
         

@@ -746,6 +746,32 @@ typedef GPB_ENUM(Recordings_FieldNumber) {
 
 @end
 
+#pragma mark - VersionResponse
+
+typedef GPB_ENUM(VersionResponse_FieldNumber) {
+  VersionResponse_FieldNumber_Outdated = 1,
+};
+
+@interface VersionResponse : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasOutdated;
+@property(nonatomic, readwrite) BOOL outdated;
+
+@end
+
+#pragma mark - VersionRequest
+
+typedef GPB_ENUM(VersionRequest_FieldNumber) {
+  VersionRequest_FieldNumber_Version = 1,
+};
+
+@interface VersionRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasVersion;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *version;
+
+@end
+
 NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END

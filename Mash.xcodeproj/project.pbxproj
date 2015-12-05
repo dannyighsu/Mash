@@ -346,6 +346,8 @@
 		37A3C2D11B3CC00600F77F2A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37A3C2D01B3CC00600F77F2A /* Images.xcassets */; };
 		37A3C2D41B3CC00600F77F2A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37A3C2D21B3CC00600F77F2A /* LaunchScreen.xib */; };
 		37A3C2E01B3CC00600F77F2A /* MashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A3C2DF1B3CC00600F77F2A /* MashTests.swift */; };
+		37AF7B011C125D4D009DA251 /* TPAACAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 37AF7AFF1C125D4D009DA251 /* TPAACAudioConverter.h */; };
+		37AF7B021C125D4D009DA251 /* TPAACAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 37AF7B001C125D4D009DA251 /* TPAACAudioConverter.m */; };
 		37C12E0E1B69797300A4E3A3 /* Superpowered3BandEQ.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C12DF31B69797300A4E3A3 /* Superpowered3BandEQ.h */; };
 		37C12E0F1B69797300A4E3A3 /* SuperpoweredAdvancedAudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C12DF41B69797300A4E3A3 /* SuperpoweredAdvancedAudioPlayer.h */; };
 		37C12E101B69797300A4E3A3 /* SuperpoweredAnalyzer.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C12DF51B69797300A4E3A3 /* SuperpoweredAnalyzer.h */; };
@@ -764,6 +766,8 @@
 		37A3C2D91B3CC00600F77F2A /* MashTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MashTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		37A3C2DE1B3CC00600F77F2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37A3C2DF1B3CC00600F77F2A /* MashTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MashTests.swift; sourceTree = "<group>"; };
+		37AF7AFF1C125D4D009DA251 /* TPAACAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPAACAudioConverter.h; sourceTree = "<group>"; };
+		37AF7B001C125D4D009DA251 /* TPAACAudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPAACAudioConverter.m; sourceTree = "<group>"; };
 		37C12DF31B69797300A4E3A3 /* Superpowered3BandEQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Superpowered3BandEQ.h; sourceTree = "<group>"; };
 		37C12DF41B69797300A4E3A3 /* SuperpoweredAdvancedAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperpoweredAdvancedAudioPlayer.h; sourceTree = "<group>"; };
 		37C12DF51B69797300A4E3A3 /* SuperpoweredAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperpoweredAnalyzer.h; sourceTree = "<group>"; };
@@ -1615,6 +1619,8 @@
 		37E799F31B3CC1F600D2E54D /* Objective-C */ = {
 			isa = PBXGroup;
 			children = (
+				37AF7AFF1C125D4D009DA251 /* TPAACAudioConverter.h */,
+				37AF7B001C125D4D009DA251 /* TPAACAudioConverter.m */,
 				3711F0A21B6FFD9D00C75F2B /* SuperpoweredAudioModule.mm */,
 				37E799F41B3CC1F600D2E54D /* KeychainWrapper.h */,
 				37E799F51B3CC1F600D2E54D /* KeychainWrapper.m */,
@@ -1671,6 +1677,7 @@
 				370A38DC1BF6A31D00FCD060 /* FlurryAds.h in Headers */,
 				37C12E1D1B69797300A4E3A3 /* SuperpoweredMixer.h in Headers */,
 				370A38D91BF6A31D00FCD060 /* FlurryAdError.h in Headers */,
+				37AF7B011C125D4D009DA251 /* TPAACAudioConverter.h in Headers */,
 				370A38E11BF6A31D00FCD060 /* FlurryTumblr.h in Headers */,
 				370A38D11BF6A31D00FCD060 /* FlurryAdBannerDelegate.h in Headers */,
 				37C12E181B69797300A4E3A3 /* SuperpoweredFrequencyDomain.h in Headers */,
@@ -2189,6 +2196,7 @@
 				3798827F1C01314F0029E56C /* MixerController.swift in Sources */,
 				37C9F5151C029E2000C80F88 /* ProjectAddBar.swift in Sources */,
 				379442D61BF80DC600A32DE1 /* CustomIOSAlertView.m in Sources */,
+				37AF7B021C125D4D009DA251 /* TPAACAudioConverter.m in Sources */,
 				370A390F1BF6A8B700FCD060 /* Track.swift in Sources */,
 				379882481C0131360029E56C /* HelperFunctions.swift in Sources */,
 				370A39101BF6A8B700FCD060 /* User.swift in Sources */,

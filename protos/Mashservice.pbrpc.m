@@ -301,4 +301,16 @@ static NSString *const kServiceName = @"MashService";
              responseClass:[Recordings class]
         responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
+#pragma mark Version(VersionRequest) returns (VersionResponse)
+
+- (void)versionWithRequest:(VersionRequest *)request handler:(void(^)(VersionResponse *response, NSError *error))handler{
+  [[self RPCToVersionWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToVersionWithRequest:(VersionRequest *)request handler:(void(^)(VersionResponse *response, NSError *error))handler{
+  return [self RPCToMethod:@"Version"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[VersionResponse class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
 @end

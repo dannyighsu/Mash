@@ -108,7 +108,7 @@
                 <outlet property="trackTitle" destination="ZNn-5t-h0K" id="WaS-4t-cjr"/>
                 <outlet property="volumeSlider" destination="Rnv-2x-t9I" id="k2N-id-saU"/>
             </connections>
-            <point key="canvasLocation" x="398" y="256.5"/>
+            <point key="canvasLocation" x="376" y="218.5"/>
         </tableViewCell>
     </objects>
 </document>
