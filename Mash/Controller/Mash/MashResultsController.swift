@@ -129,7 +129,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     // Audio Module Delegate
-    func audioFileDidFinishConverting() {
+    func audioFileDidFinishConverting(trackid: Int) {
         self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: self.currentTrackURL))
         self.audioPlayer!.play()
         for player in self.projectPlayers {
@@ -163,6 +163,12 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
             track.trackURL = newTrackURL
             self.currentTrackURL = newTrackURL
             track.bpm = self.projectRecordings[0].bpm
+        } else {
+            self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
+            self.audioPlayer!.play()
+            for player in self.projectPlayers {
+                player.play()
+            }
         }
     }
     
