@@ -170,14 +170,11 @@ class ProjectPlayer: UITableViewHeaderFooterView {
         self.mutes.append(false)
     }
     
-    func resetPlayersOnCount() {
-        if self.updatedPlayerCount == self.audioPlayers.count {
-            self.updatedPlayerCount = 0
-        }
-        // FIXME: SUPER HACKY
-        NSThread.sleepForTimeInterval(0.5)
-        self.audioPlayers[self.updatedPlayerCount] = try! AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: self.tracks[self.updatedPlayerCount].trackURL))
-        self.updatedPlayerCount += 1
+    func resetPlayer(index: Int) {
+        print(self.tracks)
+        let audioPlayer = try! AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: self.tracks[index].trackURL))
+        audioPlayer.numberOfLoops = -1
+        self.audioPlayers[index] = audioPlayer
     }
     
     func resetPlayers() {

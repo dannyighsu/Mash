@@ -307,7 +307,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func save() {
-        self.timeShiftAll(self.bpm)
         if self.data.count < 1 {
             raiseAlert("Oops!", delegate: self, message: "There must be a track in your project to save.")
             return
@@ -337,7 +336,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func share() {
-        self.timeShiftAll(self.bpm)
         if self.data.count < 1 {
             raiseAlert("Oops!", delegate: self, message: "There must be a track in your project to share.")
             return
@@ -400,17 +398,26 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     // Audio Module Delegate
-    func audioFileDidFinishConverting() {
-        self.audioPlayer?.resetPlayersOnCount()
+    func audioFileDidFinishConverting(trackid: Int) {
+        for i in 0...self.audioPlayer!.tracks.count - 1 {
+            if self.audioPlayer!.tracks[i].id == trackid {
+                self.audioPlayer?.resetPlayer(i)
+                self.activityView.stopAnimating()
+                return
+            }
+        }
+        
+        self.audioPlayer?.addTrack(self.data[self.audioPlayer!.tracks.count])
         self.activityView.stopAnimating()
     }
     
     // Helpers
     func timeShiftAll(bpm: Int) {
+        self.activityView.startAnimating()
         for track in self.data {
             let shiftAmount: Float = Float(self.bpm) / Float(track.bpm)
             let newName = "new_\(track.id)"
-            let newTrackURL = self.audioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: newName, shiftAmount: shiftAmount)
+            let newTrackURL = self.audioModule.timeShift(track.id, url: NSURL(fileURLWithPath: track.trackURL), newName: newName, shiftAmount: shiftAmount)
             track.trackURL = newTrackURL
             track.bpm = self.bpm
         }
@@ -510,24 +517,38 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 if track.bpm != project!.bpm {
                     let shiftAmount: Float = Float(project!.bpm) / Float(track.bpm)
                     let newName = "new_\(track.id)"
-                    let newTrackURL = SuperpoweredAudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: newName, amountToShift: shiftAmount)
+                    
+                    let newTrackURL = project!.audioModule.timeShift(track.id, url: NSURL(fileURLWithPath: track.trackURL), newName: newName, shiftAmount: shiftAmount)
                     track.trackURL = newTrackURL
                     track.bpm = project!.bpm
+                    
+                    Debug.printl("Adding track with \(track.instrumentFamilies), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
+                    project?.data.append(track)
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if project?.tracks != nil {
+                            project!.tracks.reloadData()
+                            project!.activityView.stopAnimating()
+                        }
+                    }
+                } else {
+                    Debug.printl("Adding track with \(track.instrumentFamilies), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
+                    project?.data.append(track)
+                    
+                    // Create audio player
+                    let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                    dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                        while project!.audioPlayer == nil {
+                            NSThread.sleepForTimeInterval(0.1)
+                        }
+                        project!.audioPlayer!.addTrack(track)
+                        dispatch_async(dispatch_get_main_queue()) {
+                            project!.activityView.stopAnimating()
+                            project!.tracks.reloadData()
+                        }
+                    }
                 }
                 
-                Debug.printl("Adding track with \(track.instrumentFamilies), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
-                project?.data.append(track)
-                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-                dispatch_async(dispatch_get_global_queue(priority, 0)) {
-                    while project!.audioPlayer == nil {
-                        NSThread.sleepForTimeInterval(0.1)
-                    }
-                    project!.audioPlayer!.addTrack(track)
-                    dispatch_async(dispatch_get_main_queue()) {
-                        project!.activityView.stopAnimating()
-                        project!.tracks.reloadData()
-                    }
-                }
+                
             }
         }
     }
