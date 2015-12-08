@@ -16,6 +16,7 @@ class TabBarController: UITabBarController {
         
         UITabBar.appearance().backgroundImage = UIImage(named: "tab_bar_background")
         UITabBar.appearance().backgroundColor = darkGray()
+        UITabBar.appearance().tintColor = lightBlue()
         self.navigationController?.hidesBarsWhenKeyboardAppears = false
         self.navigationController?.hidesBarsOnSwipe = false
         self.navigationItem.setHidesBackButton(true, animated: false)

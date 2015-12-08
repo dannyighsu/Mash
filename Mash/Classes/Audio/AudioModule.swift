@@ -9,7 +9,20 @@
 import Foundation
 import AVFoundation
 
-class AudioModule {
+@objc protocol AudioModuleDelegate {
+    
+    optional func audioFileDidFinishConverting()
+    
+}
+
+@objc class AudioModule: NSObject, TPAACAudioConverterDelegate {
+    
+    var delegate: AudioModuleDelegate? = nil
+    
+    convenience init(delegate: AudioModuleDelegate) {
+        self.init()
+        self.delegate = delegate
+    }
     
     class func trimAudio(inputFile: NSURL, outputFile: NSURL, startTime: Double, endTime: Double, callback: (result: Bool) -> Void) {
         let asset = AVAsset(URL: inputFile)
@@ -81,7 +94,24 @@ class AudioModule {
         exportSession?.exportAsynchronouslyWithCompletionHandler() {
             completion(exportSession: exportSession!)
         }
+    }
+    
+    func timeShift(url: NSURL, newName: NSString, shiftAmount: Float) -> String {
+        let tempresult = SuperpoweredAudioModule.timeShift(url, newName: newName as String, amountToShift: shiftAmount)
+        let result = filePathString("\(newName).m4a")
+        let converter = TPAACAudioConverter(delegate: self, source: tempresult, destination: result)
+        converter.start()
         
+        return result
+    }
+    
+    func AACAudioConverter(converter: TPAACAudioConverter!, didFailWithError error: NSError!) {
+        raiseAlert("There was an issue adding the track. Please try again.")
+    }
+    
+    func AACAudioConverterDidFinishConversion(converter: TPAACAudioConverter!) {
+        Debug.printl("Audio file converted.", sender: nil)
+        self.delegate?.audioFileDidFinishConverting?()
     }
 }
 

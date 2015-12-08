@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import AVFoundation
 
-class MashResultsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate {
+class MashResultsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, AudioModuleDelegate {
     
     @IBOutlet weak var trackTable: UITableView!
     var results: [Track] = []
@@ -19,12 +19,15 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     var projectPlayers: [AVAudioPlayer] = []
     var audioPlayer: AVAudioPlayer? = nil
     var downloadedTracks: Set<Int> = Set<Int>()
+    var audioModule: AudioModule = AudioModule()
+    var currentTrackURL: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.trackTable.delegate = self
         self.trackTable.dataSource = self
+        self.audioModule.delegate = self
         
         let track = UINib(nibName: "Track", bundle: nil)
         self.trackTable.registerNib(track, forCellReuseIdentifier: "Track")
@@ -125,19 +128,14 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    /*func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-    return 50.0
-    }*/
-    
-    /*func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        let header = view as! MashResultsHeaderView
-        header.cancelButton.addTarget(self, action: "cancel:", forControlEvents: UIControlEvents.TouchDown)
-    }*/
-    
-    /*func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = self.trackTable.dequeueReusableHeaderFooterViewWithIdentifier("MashResultsHeaderView") as! MashResultsHeaderView
-        return header
-    }*/
+    // Audio Module Delegate
+    func audioFileDidFinishConverting() {
+        self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: self.currentTrackURL))
+        self.audioPlayer!.play()
+        for player in self.projectPlayers {
+            player.play()
+        }
+    }
     
     func loadNextData() {
         let currentNumResults = self.results.count
@@ -161,15 +159,10 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         if track.bpm != self.projectRecordings[0].bpm {
             let shiftAmount: Float = Float(self.projectRecordings[0].bpm) / Float(track.bpm)
             let newName = "new_\(track.id)"
-            let newTrackURL = SuperpoweredAudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: newName, amountToShift: shiftAmount)
+            let newTrackURL = self.audioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: newName, shiftAmount: shiftAmount)
             track.trackURL = newTrackURL
+            self.currentTrackURL = newTrackURL
             track.bpm = self.projectRecordings[0].bpm
-        }
-        
-        self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
-        self.audioPlayer!.play()
-        for player in self.projectPlayers {
-            player.play()
         }
     }
     
