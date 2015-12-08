@@ -46,13 +46,6 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        // Testing
-        /*var superpowered = SuperpoweredModule()
-        superpowered.timeShift(NSURL(fileURLWithPath: self.recordings[0].trackURL), newName: "test")
-        
-        self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL("test.m4a"), error: nil)
-        self.audioPlayer!.play()*/
     }
     
     override func viewWillDisappear(animated: Bool) {

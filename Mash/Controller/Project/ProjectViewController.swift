@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate, MetronomeDelegate, ChannelDelegate, TPAACAudioConverterDelegate {
+class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate, MetronomeDelegate, ChannelDelegate, AudioModuleDelegate {
 
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
@@ -20,6 +20,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     var metronome: Metronome = Metronome.createView()
     var bpm: Int = 120
     var titleButton: UIButton = UIButton(frame: CGRectZero)
+    var audioModule: AudioModule = AudioModule()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,9 +46,12 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.view.addSubview(self.activityView)
         
         self.metronome.delegate = self
+        self.audioModule.delegate = self
         
         var view = NSBundle.mainBundle().loadNibNamed("ProjectPlayer", owner: nil, options: nil)
         let head = view[0] as! ProjectPlayer
+        head.tempoLabel.keyboardType = .NumberPad
+        head.volumeSlider.tintColor = lightBlue()
         self.audioPlayer = head
         self.audioPlayer?.delegate = self
         self.tracks.tableHeaderView = head
@@ -294,15 +298,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.audioPlayer!.audioPlayers[number].volume = value
     }
     
-    // Audio Conversion Delegate
-    func AACAudioConverterDidFinishConversion(converter: TPAACAudioConverter!) {
-        
-    }
-    
-    func AACAudioConverter(converter: TPAACAudioConverter!, didFailWithError error: NSError!) {
-        
-    }
-    
     // Preferences methods
     func changeTitle(sender: AnyObject?) {
         let alert = UIAlertView(title: "Name Your Track", message: "", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Ok")
@@ -312,6 +307,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func save() {
+        self.timeShiftAll(self.bpm)
         if self.data.count < 1 {
             raiseAlert("Oops!", delegate: self, message: "There must be a track in your project to save.")
             return
@@ -341,6 +337,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func share() {
+        self.timeShiftAll(self.bpm)
         if self.data.count < 1 {
             raiseAlert("Oops!", delegate: self, message: "There must be a track in your project to share.")
             return
@@ -402,17 +399,21 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         tabBarController.setViewControllers(newTabBarController as? [UIViewController], animated: true)*/
     }
     
+    // Audio Module Delegate
+    func audioFileDidFinishConverting() {
+        self.audioPlayer?.resetPlayersOnCount()
+        self.activityView.stopAnimating()
+    }
+    
     // Helpers
     func timeShiftAll(bpm: Int) {
         for track in self.data {
             let shiftAmount: Float = Float(self.bpm) / Float(track.bpm)
             let newName = "new_\(track.id)"
-            let newTrackURL = SuperpoweredAudioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: newName, amountToShift: shiftAmount)
+            let newTrackURL = self.audioModule.timeShift(NSURL(fileURLWithPath: track.trackURL), newName: newName, shiftAmount: shiftAmount)
             track.trackURL = newTrackURL
             track.bpm = self.bpm
         }
-        self.audioPlayer?.resetPlayers()
-        self.activityView.stopAnimating()
     }
     
     func uploadAction(url: NSURL, name: String) {

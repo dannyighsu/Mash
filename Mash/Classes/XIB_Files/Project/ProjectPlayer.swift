@@ -36,6 +36,7 @@ class ProjectPlayer: UITableViewHeaderFooterView {
     var previousVolume: Float = 0.8
     var metronomeToggled: Bool = false
     var isPlaying: Bool = false
+    var updatedPlayerCount: Int = 0
     
     // Button Methods
     @IBAction func playButtonPressed(sender: AnyObject) {
@@ -167,6 +168,16 @@ class ProjectPlayer: UITableViewHeaderFooterView {
         self.tracks.append(track)
         self.volumes.append(0.8)
         self.mutes.append(false)
+    }
+    
+    func resetPlayersOnCount() {
+        if self.updatedPlayerCount == self.audioPlayers.count {
+            self.updatedPlayerCount = 0
+        }
+        // FIXME: SUPER HACKY
+        NSThread.sleepForTimeInterval(0.5)
+        self.audioPlayers[self.updatedPlayerCount] = try! AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: self.tracks[self.updatedPlayerCount].trackURL))
+        self.updatedPlayerCount += 1
     }
     
     func resetPlayers() {

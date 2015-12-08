@@ -314,6 +314,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         title.frame = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 30.0)
         title.center = CGPoint(x: metronomeView.center.x, y: metronomeView.center.y - 40.0)
         slider.center = metronomeView.center
+        slider.tintColor = lightBlue()
         metronomeView.bringSubviewToFront(title)
         metronomeView.bringSubviewToFront(slider)
         self.metronome!.toggle(MetronomeManualTrigger())
