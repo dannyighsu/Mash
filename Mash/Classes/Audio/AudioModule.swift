@@ -11,7 +11,13 @@ import AVFoundation
 
 @objc protocol AudioModuleDelegate {
     
-    optional func audioFileDidFinishConverting()
+    optional func audioFileDidFinishConverting(trackid: Int)
+    
+}
+
+class AudioConverter: TPAACAudioConverter {
+    
+    var trackid: Int = 0
     
 }
 
@@ -96,10 +102,11 @@ import AVFoundation
         }
     }
     
-    func timeShift(url: NSURL, newName: NSString, shiftAmount: Float) -> String {
+    func timeShift(trackid: Int, url: NSURL, newName: NSString, shiftAmount: Float) -> String {
         let tempresult = SuperpoweredAudioModule.timeShift(url, newName: newName as String, amountToShift: shiftAmount)
         let result = filePathString("\(newName).m4a")
-        let converter = TPAACAudioConverter(delegate: self, source: tempresult, destination: result)
+        let converter = AudioConverter(delegate: self, source: tempresult, destination: result)
+        converter.trackid = trackid
         converter.start()
         
         return result
@@ -111,7 +118,8 @@ import AVFoundation
     
     func AACAudioConverterDidFinishConversion(converter: TPAACAudioConverter!) {
         Debug.printl("Audio file converted.", sender: nil)
-        self.delegate?.audioFileDidFinishConverting?()
+        let audioConverter = converter as! AudioConverter
+        self.delegate?.audioFileDidFinishConverting?(audioConverter.trackid)
     }
 }
 

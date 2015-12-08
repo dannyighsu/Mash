@@ -304,12 +304,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
         ProjectViewController.importTracks([track!], navigationController: self.navigationController, storyboard: self.storyboard)
-        if self.tabBarController != nil {
-            let tabBarController = self.navigationController?.viewControllers[2] as! UITabBarController
-            tabBarController.selectedIndex = getTabBarController("project")
-        } else {
-            raiseAlert("Sound added to project.")
-        }
+        raiseAlert("Sound added to project.")
     }
     
     func deleteTrack(track: Track, indexPath: NSIndexPath) {
