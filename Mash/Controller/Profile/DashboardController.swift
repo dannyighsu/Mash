@@ -304,7 +304,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
         ProjectViewController.importTracks([track!], navigationController: self.navigationController, storyboard: self.storyboard)
-        raiseAlert("Sound added to project.")
     }
     
     func deleteTrack(track: Track, indexPath: NSIndexPath) {

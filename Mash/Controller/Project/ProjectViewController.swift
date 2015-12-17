@@ -80,6 +80,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         //let value = UIInterfaceOrientation.LandscapeRight.rawValue
         //UIDevice.currentDevice().setValue(value, forKey: "orientation")
         self.activityView.center = self.view.center
+        self.audioPlayer!.resetPlayers()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -177,7 +178,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
             
             // Update indices of channels
-            if self.data.count > 1 {
+            if self.data.count > 1 && indexPath.row < self.data.count {
                 for _ in indexPath.row + 1...self.data.count {
                     let channel = tableView.cellForRowAtIndexPath(indexPath) as! Channel
                     channel.trackNumber! -= 1
@@ -496,6 +497,11 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         }
         
+        if project?.tracks == nil {
+            raiseAlert("You have not created a project yet.")
+            return
+        }
+        
         if project == nil {
             Debug.printl("Something went horrendously wrong because project view does not exist.", sender: "helpers")
             return
@@ -506,7 +512,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             project!.bpm = tracks[0].bpm
         }
         
-        // Download new tracks asnychronously
+        // Download new tracks asynchronously
         project!.activityView.startAnimating()
         
         for track in tracks {
@@ -518,6 +524,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                     let shiftAmount: Float = Float(project!.bpm) / Float(track.bpm)
                     let newName = "new_\(track.id)"
                     
+                    project!.audioModule.delegate = project
                     let newTrackURL = project!.audioModule.timeShift(track.id, url: NSURL(fileURLWithPath: track.trackURL), newName: newName, shiftAmount: shiftAmount)
                     track.trackURL = newTrackURL
                     track.bpm = project!.bpm
@@ -547,10 +554,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                         }
                     }
                 }
-                
-                
             }
         }
+        raiseAlert("Sound added to project.")
     }
 
 }
