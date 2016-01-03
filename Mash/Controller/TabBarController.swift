@@ -26,6 +26,14 @@ class TabBarController: UITabBarController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "update:", name: "UpdateUINotification", object: nil)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let button = NSBundle.mainBundle().loadNibNamed("ProjectTabBar", owner: nil, options: nil)[0] as! ProjectTabBar
+        button.frame = CGRect(x: 0.0, y: self.tabBar.frame.minY - 40.0, width: UIScreen.mainScreen().bounds.width, height: 40.0)
+        self.view.addSubview(button)
+    }
+    
     override func shouldAutorotate() -> Bool {
         var result: Bool
         if self.selectedViewController!.respondsToSelector("shouldAutorotate") {
@@ -45,7 +53,7 @@ class TabBarController: UITabBarController {
         }
         return result
     }
-    
+
     // Update view controllers on return from extended inactivity
     func update(sender: AnyObject?) {
         if self.navigationController!.viewControllers.count > 3 {

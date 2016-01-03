@@ -296,6 +296,8 @@
 		373F0F031B3DEFC500DE92AB /* Violins 1.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */; };
 		374405AD1BDEFB5B00BAB39C /* tick.aif in Resources */ = {isa = PBXBuildFile; fileRef = 374405AB1BDEFB5B00BAB39C /* tick.aif */; };
 		374405AE1BDEFB5B00BAB39C /* tock.aif in Resources */ = {isa = PBXBuildFile; fileRef = 374405AC1BDEFB5B00BAB39C /* tock.aif */; };
+		37625A661C38C47F00322811 /* ProjectTabBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37625A651C38C47F00322811 /* ProjectTabBar.xib */; };
+		37625A681C38C50300322811 /* ProjectTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37625A671C38C50300322811 /* ProjectTabBar.swift */; };
 		376CA7771B8BDCA000ADD1E2 /* Mashservice.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 376CA7731B8BDCA000ADD1E2 /* Mashservice.pbobjc.h */; };
 		376CA7781B8BDCA000ADD1E2 /* Mashservice.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 376CA7741B8BDCA000ADD1E2 /* Mashservice.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		376CA7791B8BDCA000ADD1E2 /* Mashservice.pbrpc.h in Headers */ = {isa = PBXBuildFile; fileRef = 376CA7751B8BDCA000ADD1E2 /* Mashservice.pbrpc.h */; };
@@ -712,6 +714,8 @@
 		373F0EFC1B3DEFC500DE92AB /* Violins 1.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Violins 1.aif"; sourceTree = "<group>"; };
 		374405AB1BDEFB5B00BAB39C /* tick.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = tick.aif; sourceTree = "<group>"; };
 		374405AC1BDEFB5B00BAB39C /* tock.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = tock.aif; sourceTree = "<group>"; };
+		37625A651C38C47F00322811 /* ProjectTabBar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectTabBar.xib; sourceTree = "<group>"; };
+		37625A671C38C50300322811 /* ProjectTabBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTabBar.swift; sourceTree = "<group>"; };
 		376CA7731B8BDCA000ADD1E2 /* Mashservice.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mashservice.pbobjc.h; path = protos/Mashservice.pbobjc.h; sourceTree = SOURCE_ROOT; };
 		376CA7741B8BDCA000ADD1E2 /* Mashservice.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Mashservice.pbobjc.m; path = protos/Mashservice.pbobjc.m; sourceTree = SOURCE_ROOT; };
 		376CA7751B8BDCA000ADD1E2 /* Mashservice.pbrpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mashservice.pbrpc.h; path = protos/Mashservice.pbrpc.h; sourceTree = SOURCE_ROOT; };
@@ -1257,6 +1261,7 @@
 				370A38F41BF6A8B700FCD060 /* Metronome.swift */,
 				370A38FD1BF6A8B700FCD060 /* Track.swift */,
 				370A38FE1BF6A8B700FCD060 /* User.swift */,
+				37625A671C38C50300322811 /* ProjectTabBar.swift */,
 			);
 			path = XIB_Files;
 			sourceTree = "<group>";
@@ -1612,6 +1617,7 @@
 				37E799D41B3CC1D000D2E54D /* Metronome.xib */,
 				37E799D81B3CC1D000D2E54D /* Track.xib */,
 				37DE77241B436F4A00952987 /* User.xib */,
+				37625A651C38C47F00322811 /* ProjectTabBar.xib */,
 			);
 			path = XIB;
 			sourceTree = "<group>";
@@ -2083,6 +2089,7 @@
 				370A388A1BF6A31D00FCD060 /* functions_5f.html in Resources */,
 				370A38791BF6A31D00FCD060 /* all_73.html in Resources */,
 				370A38BC1BF6A31D00FCD060 /* properties_74.html in Resources */,
+				37625A661C38C47F00322811 /* ProjectTabBar.xib in Resources */,
 				370A37EE1BF6A31D00FCD060 /* _flurry_ads_8h_source.html in Resources */,
 				370A38201BF6A31D00FCD060 /* ftv2node.png in Resources */,
 				370A38891BF6A31D00FCD060 /* files_66.js in Resources */,
@@ -2199,6 +2206,7 @@
 				37AF7B021C125D4D009DA251 /* TPAACAudioConverter.m in Sources */,
 				370A390F1BF6A8B700FCD060 /* Track.swift in Sources */,
 				379882481C0131360029E56C /* HelperFunctions.swift in Sources */,
+				37625A681C38C50300322811 /* ProjectTabBar.swift in Sources */,
 				370A39101BF6A8B700FCD060 /* User.swift in Sources */,
 				37E799A91B3CC1C600D2E54D /* HomeTableViewController.swift in Sources */,
 				37A3C2CA1B3CC00600F77F2A /* AppDelegate.swift in Sources */,

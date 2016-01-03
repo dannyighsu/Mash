@@ -12,17 +12,18 @@ import UIKit
 // Helper objects
 let loadBalancerAddress: String = "http://52.27.78.119:5010"
 let loadBalancer: LoadBalancer = LoadBalancer(host: loadBalancerAddress)
+let track_bucket: String = "mash1-tracks"
+let profile_bucket: String = "mash-profiles"
+let banner_bucket: String = "mash-banners"
+let waveform_bucket: String = "mash-trackwaveforms"
+let DEFAULT_DISPLAY_AMOUNT = 15
 var hostAddress: String = "nil"
 var server: MashService = MashService(host: hostAddress)
 var serverTimer: NSTimer = NSTimer()
 var keychainWrapper: KeychainWrapper = KeychainWrapper()
 var currentUser = User()
 var userFollowing: [User] = []
-let track_bucket: String = "mash1-tracks"
-let profile_bucket: String = "mash-profiles"
-let banner_bucket: String = "mash-banners"
-let waveform_bucket: String = "mash-trackwaveforms"
-let DEFAULT_DISPLAY_AMOUNT = 15
+var currentProject: ProjectViewController? = nil
 
 // Returns light blue
 func lightBlue() -> UIColor {
@@ -42,6 +43,11 @@ func lighterGray() -> UIColor {
 // Returns dark gray (bluish)
 func darkGray() -> UIColor {
     return UIColor(red: (20/255), green: (20/255), blue: (40/255), alpha: 1.0)
+}
+
+// Returns translucent dark blue
+func darkBlueTranslucent() -> UIColor {
+    return UIColor(red: (15/255), green: (15/255), blue: (35/255), alpha: 0.8)
 }
 
 // Returns dark gray
