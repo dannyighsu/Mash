@@ -31,7 +31,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tracks.dataSource = self
         self.tracks.backgroundColor = offWhite()
         self.tracks.tableFooterView = UIView(frame: CGRectZero)
-        self.tracks.separatorColor = darkGray()
+        self.tracks.separatorColor = darkBlueTranslucent()
         self.tracks.allowsSelection = false
 
         // Register nibs
@@ -132,7 +132,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.audioPlot.color = lightBlue()
             cell.audioPlot.layer.cornerRadius = 4.0
             cell.audioPlot.clipsToBounds = true
-            cell.audioPlot.backgroundColor = darkGray()
+            cell.audioPlot.backgroundColor = darkBlueTranslucent()
 
             cell.content.layer.cornerRadius = 4.0
             cell.backgroundColor = UIColor.clearColor()
@@ -210,12 +210,14 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             if buttonIndex == 1 {
                 let title = alertView.textFieldAtIndex(0)!.text
                 self.titleButton.setTitle(title, forState: UIControlState.Normal)
+                rootTabBarController!.tabBarButton!.tapButton.setTitle(title, forState: .Normal)
                 self.shareTrack(title!)
             }
         } else if alertView.title == "Name Your Track" {
             if buttonIndex == 1 {
                 let title = alertView.textFieldAtIndex(0)!.text
                 self.titleButton.setTitle(title, forState: UIControlState.Normal)
+                rootTabBarController!.tabBarButton!.tapButton.setTitle(title, forState: .Normal)
             }
         }
     }

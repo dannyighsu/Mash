@@ -32,6 +32,8 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         // Home cell and header registration
         let nib = UINib(nibName: "HomeCell", bundle: nil)
         self.activityFeed.registerNib(nib, forCellReuseIdentifier: "HomeCell")
+        let buffer = UINib(nibName: "BufferCell", bundle: nil)
+        self.activityFeed.registerNib(buffer, forCellReuseIdentifier: "BufferCell")
 
         // Pull to refresh
         /*self.refreshControl = UIRefreshControl()
@@ -52,7 +54,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         /*if UIDevice.currentDevice().systemVersion.compare("9.0") == NSComparisonResult.OrderedAscending {
             self.activityView.frame = CGRect(x: self.activityView.frame.minX + self.navigationController!.navigationBar.frame.size.height, y: self.activityView.frame.minY, width: self.activityView.frame.width, height: self.activityView.frame.height)
         }*/
-        self.activityFeed.frame = self.view.frame
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -65,53 +66,86 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // TableView delegate
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.displayData.count
+        if section == 0 {
+            return self.displayData.count
+        } else {
+            return 1
+        }
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 2
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 100.0
+        if indexPath.section == 0 {
+            return 100.0
+        } else {
+            return 35
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell") as! HomeCell
-        cell.eventLabel.text = self.displayData[indexPath.row].eventText
-        cell.userLabel.setTitle(self.displayData[indexPath.row].userText, forState: .Normal)
-        cell.timeLabel.text = self.displayData[indexPath.row].timeText
-        cell.user = self.displayData[indexPath.row].user
-        cell.track = self.displayData[indexPath.row].track
-        cell.timeLabel.text = parseTimeStamp(cell.timeLabel.text!)
-        self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
-        cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFill
-        cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
-        cell.profileImage.layer.borderWidth = 0.5
-        cell.profileImage.layer.masksToBounds = true
-        cell.userLabel.addTarget(self, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
-        return cell
+        if indexPath.section == 0 {
+            let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell") as! HomeCell
+            cell.eventLabel.text = self.displayData[indexPath.row].eventText
+            cell.userLabel.setTitle(self.displayData[indexPath.row].userText, forState: .Normal)
+            cell.timeLabel.text = self.displayData[indexPath.row].timeText
+            cell.user = self.displayData[indexPath.row].user
+            cell.track = self.displayData[indexPath.row].track
+            cell.timeLabel.text = parseTimeStamp(cell.timeLabel.text!)
+            self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
+            cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFill
+            cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
+            cell.profileImage.layer.borderWidth = 0.5
+            cell.profileImage.layer.masksToBounds = true
+            cell.userLabel.addTarget(self, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
+            return cell
+        } else {
+            let cell = self.activityFeed.dequeueReusableCellWithIdentifier("BufferCell")!
+            cell.backgroundColor = UIColor.clearColor()
+            return cell
+        }
+        
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! HomeCell
-        cell.activityView.startAnimating()
-        download(getS3Key(cell.track!), url: filePathURL(cell.track!.trackURL), bucket: track_bucket) {
-            (result) in
-            if result != nil {
-                dispatch_async(dispatch_get_main_queue()) {
-                    cell.activityView.stopAnimating()
-                    do {
-                        try self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(cell.track!.trackURL))
-                        self.audioPlayer!.play()
-                    } catch _ as NSError {
-                        Debug.printl("Error downloading track", sender: self)
+        if indexPath.section == 0 {
+            let cell = tableView.cellForRowAtIndexPath(indexPath) as! HomeCell
+            cell.activityView.startAnimating()
+            download(getS3Key(cell.track!), url: filePathURL(cell.track!.trackURL), bucket: track_bucket) {
+                (result) in
+                if result != nil {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        cell.activityView.stopAnimating()
+                        do {
+                            try self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(cell.track!.trackURL))
+                            self.audioPlayer!.play()
+                        } catch _ as NSError {
+                            Debug.printl("Error downloading track", sender: self)
+                        }
                     }
                 }
             }
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        } else {
+            return
         }
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == self.displayData.count - 1 {
-            self.loadNextData()
+        if indexPath.section == 0 {
+            if indexPath.row == self.displayData.count - 1 {
+                self.loadNextData()
+            }
+        }
+    }
+    
+    func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        if indexPath.row == 0 {
+            return indexPath
+        } else {
+            return nil
         }
     }
 

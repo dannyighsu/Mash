@@ -14,10 +14,10 @@ class NavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        UINavigationBar.appearance().tintColor = darkGray()
-        self.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 20)!, NSForegroundColorAttributeName: UIColor.whiteColor()]
-        self.navigationBar.tintColor = UIColor.whiteColor()
+        self.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 20)!, NSForegroundColorAttributeName: UIColor.blackColor()]
+        self.navigationBar.tintColor = UIColor.blackColor()
         self.edgesForExtendedLayout = UIRectEdge.None
+        rootNavigationController = self
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -25,7 +25,7 @@ class NavigationController: UINavigationController {
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+        return UIStatusBarStyle.Default
     }
     
     override func shouldAutorotate() -> Bool {

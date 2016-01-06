@@ -14,8 +14,8 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S7g-dI-vWa">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Tools" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uUb-q3-Dxc">
-                            <rect key="frame" x="228" y="30" width="145" height="20"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tools" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uUb-q3-Dxc">
+                            <rect key="frame" x="228" y="30" width="145" height="28"/>
                             <animations/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="145" id="oo6-Rd-Frh"/>

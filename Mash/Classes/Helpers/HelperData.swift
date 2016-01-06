@@ -24,6 +24,8 @@ var keychainWrapper: KeychainWrapper = KeychainWrapper()
 var currentUser = User()
 var userFollowing: [User] = []
 var currentProject: ProjectViewController? = nil
+var rootTabBarController: TabBarController? = nil
+var rootNavigationController: NavigationController? = nil
 
 // Returns light blue
 func lightBlue() -> UIColor {
@@ -47,7 +49,7 @@ func darkGray() -> UIColor {
 
 // Returns translucent dark blue
 func darkBlueTranslucent() -> UIColor {
-    return UIColor(red: (15/255), green: (15/255), blue: (35/255), alpha: 0.8)
+    return UIColor(red: (20/255), green: (20/255), blue: (40/255), alpha: 0.7)
 }
 
 // Returns dark gray

@@ -63,7 +63,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.metronome = metronome
 
         // Configure EZAudio
-        self.audioPlot.backgroundColor = darkGray()
+        self.audioPlot.backgroundColor = darkBlueTranslucent()
         self.audioPlot.color = lightBlue()
         self.drawBufferPlot()
         

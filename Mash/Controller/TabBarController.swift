@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class TabBarController: UITabBarController, UIViewControllerTransitioningDelegate {
+class TabBarController: UITabBarController, UIViewControllerTransitioningDelegate, UIAlertViewDelegate {
     
     let animationController: ProjectTransitionAnimationController = ProjectTransitionAnimationController()
     let dismissAnimationController: ProjectDismissAnimationController = ProjectDismissAnimationController()
@@ -19,7 +19,6 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        UITabBar.appearance().backgroundImage = UIImage(named: "tab_bar_background")
         UITabBar.appearance().tintColor = lightBlue()
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         blurView.frame = self.tabBar.bounds
@@ -33,6 +32,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         self.selectedIndex = getTabBarController("record")
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "update:", name: "UpdateUINotification", object: nil)
+        rootTabBarController = self
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -41,7 +41,8 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         if self.tabBarButton == nil {
             let button = NSBundle.mainBundle().loadNibNamed("ProjectTabBar", owner: nil, options: nil)[0] as! ProjectTabBar
             button.tapButton.addTarget(self, action: "showProject:", forControlEvents: .TouchUpInside)
-            button.frame = CGRect(x: 0.0, y: self.tabBar.frame.minY - 40.0, width: UIScreen.mainScreen().bounds.width, height: 40.0)
+            button.addButton.addTarget(self, action: "showProject:", forControlEvents: .TouchUpInside)
+            button.frame = CGRect(x: 0.0, y: self.tabBar.frame.minY - 30.0, width: UIScreen.mainScreen().bounds.width, height: 35.0)
             self.view.addSubview(button)
             self.tabBarButton = button
         }
@@ -67,6 +68,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         return result
     }
     
+    // Animations
     func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if presented as? ProjectViewController != nil {
             self.animationController.originFrame = self.tabBarButton!.frame
@@ -86,6 +88,20 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
     func interactionControllerForDismissal(animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         return self.swipeInteractionController.interacting ? self.swipeInteractionController : nil
     }
+    
+    // Alert View Delegate
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if buttonIndex == 1 {
+            currentProject = self.storyboard!.instantiateViewControllerWithIdentifier("ProjectViewController") as? ProjectViewController
+            currentProject!.transitioningDelegate = self
+            // Add for interaction
+            //self.swipeInteractionController.addViewController(currentProject!)
+            self.presentViewController(currentProject!, animated: true, completion: nil)
+            currentProject!.titleButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
+            self.tabBarButton?.tapButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
+            self.tabBarButton?.addButton.hidden = true
+        }
+    }
 
     // Update view controllers on return from extended inactivity
     func update(sender: AnyObject?) {
@@ -100,12 +116,12 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
     // Show project view
     func showProject(sender: AnyObject?) {
         if currentProject == nil {
-            currentProject = self.storyboard!.instantiateViewControllerWithIdentifier("ProjectViewController") as? ProjectViewController
-            currentProject!.transitioningDelegate = self
-            // Add for interaction
-            //self.swipeInteractionController.addViewController(currentProject!)
+            let alert = UIAlertView(title: "New Project", message: "Name your project.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
+            alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
+            alert.show()
+        } else {
+            self.presentViewController(currentProject!, animated: true, completion: nil)
         }
-        self.presentViewController(currentProject!, animated: true, completion: nil)
     }
     
 }

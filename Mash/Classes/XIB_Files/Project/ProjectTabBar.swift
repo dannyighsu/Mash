@@ -12,5 +12,6 @@ import UIKit
 class ProjectTabBar: UIVisualEffectView {
     
     @IBOutlet weak var tapButton: UIButton!
-    
+    @IBOutlet weak var addButton: UIButton!
+
 }
