@@ -80,7 +80,10 @@ func returnProjectView(navcontroller: UINavigationController) -> ProjectViewCont
         }
     }
     return nil*/
-    return currentProject
+    if currentProject != nil {
+        return currentProject?.viewControllers[0] as? ProjectViewController
+    }
+    return nil
 }
 
 

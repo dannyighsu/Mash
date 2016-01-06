@@ -23,9 +23,9 @@ var serverTimer: NSTimer = NSTimer()
 var keychainWrapper: KeychainWrapper = KeychainWrapper()
 var currentUser = User()
 var userFollowing: [User] = []
-var currentProject: ProjectViewController? = nil
+var currentProject: UINavigationController? = nil
 var rootTabBarController: TabBarController? = nil
-var rootNavigationController: NavigationController? = nil
+var rootNavigationController: RootNavigationController? = nil
 
 // Returns light blue
 func lightBlue() -> UIColor {

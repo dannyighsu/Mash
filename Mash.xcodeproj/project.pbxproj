@@ -408,7 +408,7 @@
 		37DE77271B4370B200952987 /* FollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DE77261B4370B200952987 /* FollowingViewController.swift */; };
 		37E799A61B3CC1C600D2E54D /* DirectUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799881B3CC1C600D2E54D /* DirectUploadViewController.swift */; };
 		37E799AA1B3CC1C600D2E54D /* ImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E7998C1B3CC1C600D2E54D /* ImportViewController.swift */; };
-		37E799AE1B3CC1C600D2E54D /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799901B3CC1C600D2E54D /* NavigationController.swift */; };
+		37E799AE1B3CC1C600D2E54D /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799901B3CC1C600D2E54D /* RootNavigationController.swift */; };
 		37E799BA1B3CC1C600D2E54D /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799A21B3CC1C600D2E54D /* TabBarController.swift */; };
 		37E799D91B3CC1D000D2E54D /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799BE1B3CC1D000D2E54D /* Debug.swift */; };
 		37E799EC1B3CC1D000D2E54D /* InstrumentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D21B3CC1D000D2E54D /* InstrumentCell.xib */; };
@@ -836,7 +836,7 @@
 		37E799851B3CC12D00D2E54D /* Mash-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mash-Bridging-Header.h"; sourceTree = "<group>"; };
 		37E799881B3CC1C600D2E54D /* DirectUploadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectUploadViewController.swift; sourceTree = "<group>"; };
 		37E7998C1B3CC1C600D2E54D /* ImportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportViewController.swift; sourceTree = "<group>"; };
-		37E799901B3CC1C600D2E54D /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		37E799901B3CC1C600D2E54D /* RootNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootNavigationController.swift; sourceTree = "<group>"; };
 		37E799A21B3CC1C600D2E54D /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		37E799BE1B3CC1D000D2E54D /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		37E799D21B3CC1D000D2E54D /* InstrumentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InstrumentCell.xib; sourceTree = "<group>"; };
@@ -1594,7 +1594,7 @@
 				37E799881B3CC1C600D2E54D /* DirectUploadViewController.swift */,
 				37DE77261B4370B200952987 /* FollowingViewController.swift */,
 				37E7998C1B3CC1C600D2E54D /* ImportViewController.swift */,
-				37E799901B3CC1C600D2E54D /* NavigationController.swift */,
+				37E799901B3CC1C600D2E54D /* RootNavigationController.swift */,
 				37E799A21B3CC1C600D2E54D /* TabBarController.swift */,
 				3798824C1C01313F0029E56C /* Entry */,
 				370AC1A41C3C9D45002ED357 /* Home */,
@@ -2185,7 +2185,7 @@
 				37DE77271B4370B200952987 /* FollowingViewController.swift in Sources */,
 				379882431C0131200029E56C /* HTTP.swift in Sources */,
 				37C9F5141C029E2000C80F88 /* ChannelPlaceholder.swift in Sources */,
-				37E799AE1B3CC1C600D2E54D /* NavigationController.swift in Sources */,
+				37E799AE1B3CC1C600D2E54D /* RootNavigationController.swift in Sources */,
 				379882811C01314F0029E56C /* ProjectViewController.swift in Sources */,
 				379882801C01314F0029E56C /* ProjectPreferencesViewController.swift in Sources */,
 				379882631C01313F0029E56C /* MashResultsController.swift in Sources */,

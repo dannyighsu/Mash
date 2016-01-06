@@ -806,46 +806,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="1SZ-3W-gYG">
-                                <rect key="frame" x="0.0" y="50" width="600" height="550"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <animations/>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gam-pv-NaE">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zME-4i-AF1">
-                                        <rect key="frame" x="277" y="10" width="46" height="30"/>
-                                        <animations/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="46" id="GQh-SB-50V"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
-                                        <state key="normal" title="Title">
-                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
-                                </subviews>
-                                <animations/>
-                                <color key="backgroundColor" red="0.97254901960784312" green="0.97254901960784312" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstItem="zME-4i-AF1" firstAttribute="centerY" secondItem="Gam-pv-NaE" secondAttribute="centerY" id="ILq-l8-otw"/>
-                                    <constraint firstItem="zME-4i-AF1" firstAttribute="centerX" secondItem="Gam-pv-NaE" secondAttribute="centerX" id="YcU-To-I42"/>
-                                    <constraint firstItem="zME-4i-AF1" firstAttribute="top" secondItem="Gam-pv-NaE" secondAttribute="top" constant="10" id="g9E-ZY-huT"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="1SZ-3W-gYG" firstAttribute="bottom" secondItem="ZMN-Ob-ksM" secondAttribute="top" id="2Wg-Y1-MIa"/>
-                            <constraint firstItem="1SZ-3W-gYG" firstAttribute="top" secondItem="Gam-pv-NaE" secondAttribute="bottom" id="CF5-By-rTD"/>
-                            <constraint firstItem="Gam-pv-NaE" firstAttribute="trailing" secondItem="1SZ-3W-gYG" secondAttribute="trailing" id="F2X-gW-i6t"/>
                             <constraint firstItem="1SZ-3W-gYG" firstAttribute="top" secondItem="mpP-7y-UjJ" secondAttribute="top" id="I6M-gV-Z2y"/>
-                            <constraint firstItem="1SZ-3W-gYG" firstAttribute="top" secondItem="mpP-7y-UjJ" secondAttribute="top" constant="50" id="PQH-tp-P37"/>
-                            <constraint firstItem="Gam-pv-NaE" firstAttribute="top" secondItem="mpP-7y-UjJ" secondAttribute="top" id="a37-aL-OUm"/>
+                            <constraint firstItem="1SZ-3W-gYG" firstAttribute="top" secondItem="mpP-7y-UjJ" secondAttribute="top" id="PQH-tp-P37"/>
                             <constraint firstAttribute="trailing" secondItem="1SZ-3W-gYG" secondAttribute="trailing" id="eE5-D8-tz6"/>
                             <constraint firstItem="1SZ-3W-gYG" firstAttribute="leading" secondItem="mpP-7y-UjJ" secondAttribute="leading" id="hbQ-9y-jzF"/>
-                            <constraint firstItem="Gam-pv-NaE" firstAttribute="leading" secondItem="1SZ-3W-gYG" secondAttribute="leading" id="oro-1U-qjG"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -856,8 +829,6 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="Project" image="project" id="Lag-LO-KXu"/>
                     <connections>
-                        <outlet property="header" destination="Gam-pv-NaE" id="fu1-JQ-1fJ"/>
-                        <outlet property="titleButton" destination="zME-4i-AF1" id="o58-9H-Sfy"/>
                         <outlet property="tracks" destination="1SZ-3W-gYG" id="RBy-2l-seu"/>
                     </connections>
                 </viewController>
@@ -938,10 +909,10 @@
             </objects>
             <point key="canvasLocation" x="379" y="1710"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Root Navigation Controller-->
         <scene sceneID="CrR-cN-Iue">
             <objects>
-                <navigationController id="s3H-ZR-sVA" customClass="NavigationController" customModule="Mash" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController id="s3H-ZR-sVA" customClass="RootNavigationController" customModule="Mash" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="wr7-cp-DzO">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

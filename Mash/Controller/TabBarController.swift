@@ -92,14 +92,13 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
     // Alert View Delegate
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if buttonIndex == 1 {
-            currentProject = self.storyboard!.instantiateViewControllerWithIdentifier("ProjectViewController") as? ProjectViewController
-            currentProject!.transitioningDelegate = self
-            // Add for interaction
-            //self.swipeInteractionController.addViewController(currentProject!)
-            self.presentViewController(currentProject!, animated: true, completion: nil)
-            currentProject!.titleButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
+            let titleButton = currentProject!.navigationItem.titleView as! UIButton
+            titleButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
             self.tabBarButton?.tapButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
             self.tabBarButton?.addButton.hidden = true
+        } else if buttonIndex == 0 {
+            currentProject!.dismissViewControllerAnimated(true, completion: nil)
+            currentProject = nil
         }
     }
 
@@ -116,6 +115,13 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
     // Show project view
     func showProject(sender: AnyObject?) {
         if currentProject == nil {
+            let project = self.storyboard!.instantiateViewControllerWithIdentifier("ProjectViewController") as! ProjectViewController
+            let navController = UINavigationController(rootViewController: project)
+            currentProject = navController
+            currentProject!.transitioningDelegate = self
+            // Add for interaction
+            //self.swipeInteractionController.addViewController(currentProject)
+            self.presentViewController(currentProject!, animated: true, completion: nil)
             let alert = UIAlertView(title: "New Project", message: "Name your project.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
             alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
             alert.show()

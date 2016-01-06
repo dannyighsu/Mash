@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class NavigationController: UINavigationController {
+class RootNavigationController: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -12,8 +12,6 @@ import AVFoundation
 class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate, MetronomeDelegate, ChannelDelegate, AudioModuleDelegate {
 
     @IBOutlet var tracks: UITableView!
-    @IBOutlet weak var header: UIView!
-    @IBOutlet weak var titleButton: UIButton!
     var data: [Track] = []
     var audioPlayer: ProjectPlayer? = nil
     var toolsTap: UITapGestureRecognizer? = nil
@@ -22,6 +20,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     var metronome: Metronome = Metronome.createView()
     var bpm: Int = 120
     var audioModule: AudioModule = AudioModule()
+    var titleButton: UIButton = UIButton(frame: CGRectZero)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,11 +56,12 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.audioPlayer?.delegate = self
         self.tracks.tableHeaderView = head
         
+        self.navigationController?.navigationItem.titleView = self.titleButton
         self.titleButton.addTarget(self, action: "changeTitle:", forControlEvents: UIControlEvents.TouchUpInside)
         self.titleButton.setTitle("My Project", forState: UIControlState.Normal)
         let swipe = UISwipeGestureRecognizer(target: self, action: "dismiss:")
         swipe.direction = .Down
-        self.header.addGestureRecognizer(swipe)
+        self.navigationController?.navigationBar.addGestureRecognizer(swipe)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -394,7 +394,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         Debug.printl("Creating new project view", sender: self)
         
         let newProjectView = self.storyboard!.instantiateViewControllerWithIdentifier("ProjectViewController") as! ProjectViewController
-        currentProject = newProjectView
+        currentProject!.viewControllers = [newProjectView]
         self.navigationController?.popViewControllerAnimated(false)
         self.navigationController?.pushViewController(newProjectView, animated: false)
         /*
@@ -508,52 +508,52 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             return
         }
         
-        let project: ProjectViewController? = currentProject
+        let project: ProjectViewController = currentProject!.viewControllers[0] as! ProjectViewController
         
         // If this is the first track, set the project's bpm
-        if project!.data.count == 0 {
-            project!.bpm = tracks[0].bpm
+        if project.data.count == 0 {
+            project.bpm = tracks[0].bpm
         }
         
         // Download new tracks asynchronously
-        project!.activityView.startAnimating()
+        project.activityView.startAnimating()
         
         for track in tracks {
             let URL = NSURL(fileURLWithPath: track.trackURL)
             download(getS3Key(track), url: URL, bucket: track_bucket) {
                 (result) in
                 
-                if track.bpm != project!.bpm {
-                    let shiftAmount: Float = Float(project!.bpm) / Float(track.bpm)
+                if track.bpm != project.bpm {
+                    let shiftAmount: Float = Float(project.bpm) / Float(track.bpm)
                     let newName = "new_\(track.id)"
                     
-                    project!.audioModule.delegate = project
-                    let newTrackURL = project!.audioModule.timeShift(track.id, url: NSURL(fileURLWithPath: track.trackURL), newName: newName, shiftAmount: shiftAmount)
+                    project.audioModule.delegate = project
+                    let newTrackURL = project.audioModule.timeShift(track.id, url: NSURL(fileURLWithPath: track.trackURL), newName: newName, shiftAmount: shiftAmount)
                     track.trackURL = newTrackURL
-                    track.bpm = project!.bpm
+                    track.bpm = project.bpm
                     
                     Debug.printl("Adding track with \(track.instrumentFamilies), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
-                    project?.data.append(track)
+                    project.data.append(track)
                     dispatch_async(dispatch_get_main_queue()) {
-                        if project?.tracks != nil {
-                            project!.tracks.reloadData()
-                            project!.activityView.stopAnimating()
+                        if project.tracks != nil {
+                            project.tracks.reloadData()
+                            project.activityView.stopAnimating()
                         }
                     }
                 } else {
                     Debug.printl("Adding track with \(track.instrumentFamilies), url \(track.trackURL) named \(track.titleText) to project view", sender: "helpers")
-                    project?.data.append(track)
+                    project.data.append(track)
                     
                     // Create audio player
                     let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                     dispatch_async(dispatch_get_global_queue(priority, 0)) {
-                        while project!.audioPlayer == nil {
+                        while project.audioPlayer == nil {
                             NSThread.sleepForTimeInterval(0.1)
                         }
-                        project!.audioPlayer!.addTrack(track)
+                        project.audioPlayer!.addTrack(track)
                         dispatch_async(dispatch_get_main_queue()) {
-                            project!.activityView.stopAnimating()
-                            project!.tracks.reloadData()
+                            project.activityView.stopAnimating()
+                            project.tracks.reloadData()
                         }
                     }
                 }

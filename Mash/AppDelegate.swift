@@ -149,7 +149,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, supportedInterfaceOrientationsForWindow window: UIWindow?) -> UIInterfaceOrientationMask {
         var orientations = UIInterfaceOrientationMask.Portrait
         if self.window?.rootViewController != nil {
-            let navController = self.window?.rootViewController as! NavigationController
+            let navController = self.window?.rootViewController as! RootNavigationController
             let viewController = navController.viewControllers.last
             orientations = viewController!.supportedInterfaceOrientations()
         }
