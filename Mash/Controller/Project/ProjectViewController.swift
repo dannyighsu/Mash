@@ -12,6 +12,8 @@ import AVFoundation
 class ProjectViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, PlayerDelegate, MetronomeDelegate, ChannelDelegate, AudioModuleDelegate {
 
     @IBOutlet var tracks: UITableView!
+    @IBOutlet weak var header: UIView!
+    @IBOutlet weak var titleButton: UIButton!
     var data: [Track] = []
     var audioPlayer: ProjectPlayer? = nil
     var toolsTap: UITapGestureRecognizer? = nil
@@ -19,7 +21,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     var metronome: Metronome = Metronome.createView()
     var bpm: Int = 120
-    var titleButton: UIButton = UIButton(frame: CGRectZero)
     var audioModule: AudioModule = AudioModule()
 
     override func viewDidLoad() {
@@ -58,17 +59,17 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         
         self.titleButton.addTarget(self, action: "changeTitle:", forControlEvents: UIControlEvents.TouchUpInside)
         self.titleButton.setTitle("My Project", forState: UIControlState.Normal)
+        let swipe = UISwipeGestureRecognizer(target: self, action: "dismiss:")
+        swipe.direction = .Down
+        self.header.addGestureRecognizer(swipe)
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.view.frame = self.tabBarController!.view.frame
-        self.parentViewController?.navigationItem.titleView = self.titleButton
         if self.tracks != nil {
             self.tracks.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
             self.metronome.setTempo(self.bpm)
         }
-        self.view.frame = self.navigationController!.view.frame
         
         let player = self.tracks.tableHeaderView as! ProjectPlayer
         player.tempoLabel.text = "\(self.bpm)"
@@ -86,7 +87,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.audioPlayer!.stop()
-        self.parentViewController?.navigationItem.titleView = nil
+        self.navigationItem.titleView = nil
         if self.metronome.isPlaying {
             self.metronome.toggle(nil)
         }
@@ -94,6 +95,14 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func shouldAutorotate() -> Bool {
         return true
+    }
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
+    
+    func dismiss(sender: UISwipeGestureRecognizer) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     // TableView delegate
@@ -124,9 +133,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.audioPlot.layer.cornerRadius = 4.0
             cell.audioPlot.clipsToBounds = true
             cell.audioPlot.backgroundColor = darkGray()
-            
-            //cell.content.layer.borderWidth = 0.5
-            //cell.content.layer.borderColor = UIColor.whiteColor().CGColor
+
             cell.content.layer.cornerRadius = 4.0
             cell.backgroundColor = UIColor.clearColor()
             
@@ -136,8 +143,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier("ProjectAddBar") as! ProjectAddBar
-            //cell.content.layer.borderWidth = 0.5
-            //cell.content.layer.borderColor = UIColor.blackColor().CGColor
             cell.addButton.layer.cornerRadius = 4.0
             cell.addButton.addTarget(self, action: "mash", forControlEvents: UIControlEvents.TouchUpInside)
             cell.backgroundColor = UIColor.clearColor()
@@ -385,17 +390,16 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func newProject() {
         Debug.printl("Creating new project view", sender: self)
+        
         let newProjectView = self.storyboard!.instantiateViewControllerWithIdentifier("ProjectViewController") as! ProjectViewController
+        currentProject = newProjectView
+        self.navigationController?.popViewControllerAnimated(false)
+        self.navigationController?.pushViewController(newProjectView, animated: false)
+        /*
         let tabBarController = self.navigationController?.viewControllers[2] as! TabBarController
         tabBarController.viewControllers!.removeAtIndex(getTabBarController(("project")))
         tabBarController.viewControllers!.insert(newProjectView, atIndex: getTabBarController("project"))
-        tabBarController.selectedIndex = getTabBarController("project")
-        /*let tabBarController = self.navigationController?.viewControllers[2] as! TabBarController
-        var newTabBarController: [UIViewController] = []
-        newTabBarController.addObjectsFromArray(tabBarController.viewControllers!)
-        let newProjectView = self.storyboard?.instantiateViewControllerWithIdentifier("ProjectViewController") as! ProjectViewController
-        newTabBarController.replaceObjectAtIndex(projectViewIndex, withObject: newProjectView)
-        tabBarController.setViewControllers(newTabBarController as? [UIViewController], animated: true)*/
+        tabBarController.selectedIndex = getTabBarController("project")*/
     }
     
     // Audio Module Delegate
@@ -485,7 +489,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     class func importTracks(tracks: [Track], navigationController: UINavigationController?, storyboard: UIStoryboard?) {
-        var project: ProjectViewController? = nil
+        /*var project: ProjectViewController? = nil
         let tabBarController = navigationController?.viewControllers[2] as! UITabBarController
         
         for (var i = 0; i < tabBarController.viewControllers!.count; i++) {
@@ -495,17 +499,14 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 project = controller
                 break
             }
-        }
+        }*/
         
-        if project?.tracks == nil {
+        if currentProject == nil {
             raiseAlert("You have not created a project yet.")
             return
         }
         
-        if project == nil {
-            Debug.printl("Something went horrendously wrong because project view does not exist.", sender: "helpers")
-            return
-        }
+        let project: ProjectViewController? = currentProject
         
         // If this is the first track, set the project's bpm
         if project!.data.count == 0 {

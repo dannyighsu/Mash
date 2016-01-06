@@ -14,9 +14,7 @@ class NavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        UINavigationBar.appearance().barTintColor = darkGray()
-        UINavigationBar.appearance().translucent = false
-        UINavigationBar.appearance().backgroundColor = darkGray()
+        UINavigationBar.appearance().tintColor = darkGray()
         self.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 20)!, NSForegroundColorAttributeName: UIColor.whiteColor()]
         self.navigationBar.tintColor = UIColor.whiteColor()
         self.edgesForExtendedLayout = UIRectEdge.None

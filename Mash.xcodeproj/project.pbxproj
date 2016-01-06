@@ -350,6 +350,7 @@
 		37A3C2E01B3CC00600F77F2A /* MashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A3C2DF1B3CC00600F77F2A /* MashTests.swift */; };
 		37AF7B011C125D4D009DA251 /* TPAACAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 37AF7AFF1C125D4D009DA251 /* TPAACAudioConverter.h */; };
 		37AF7B021C125D4D009DA251 /* TPAACAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 37AF7B001C125D4D009DA251 /* TPAACAudioConverter.m */; };
+		37B934A61C3B4B680001E468 /* ProjectTransitionAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B934A51C3B4B680001E468 /* ProjectTransitionAnimationController.swift */; };
 		37C12E0E1B69797300A4E3A3 /* Superpowered3BandEQ.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C12DF31B69797300A4E3A3 /* Superpowered3BandEQ.h */; };
 		37C12E0F1B69797300A4E3A3 /* SuperpoweredAdvancedAudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C12DF41B69797300A4E3A3 /* SuperpoweredAdvancedAudioPlayer.h */; };
 		37C12E101B69797300A4E3A3 /* SuperpoweredAnalyzer.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C12DF51B69797300A4E3A3 /* SuperpoweredAnalyzer.h */; };
@@ -398,6 +399,8 @@
 		37C9F5151C029E2000C80F88 /* ProjectAddBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C9F5091C029E2000C80F88 /* ProjectAddBar.swift */; };
 		37C9F5161C029E2000C80F88 /* ProjectPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C9F50A1C029E2000C80F88 /* ProjectPlayer.swift */; };
 		37C9F5171C029E2000C80F88 /* ProjectTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C9F50B1C029E2000C80F88 /* ProjectTools.swift */; };
+		37D2351F1C3B90CA0091A1D0 /* ProjectDismissAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D2351E1C3B90CA0091A1D0 /* ProjectDismissAnimationController.swift */; };
+		37D235231C3BABFE0091A1D0 /* SwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D235221C3BABFE0091A1D0 /* SwipeInteractionController.swift */; };
 		37DE77251B436F4A00952987 /* User.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37DE77241B436F4A00952987 /* User.xib */; };
 		37DE77271B4370B200952987 /* FollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DE77261B4370B200952987 /* FollowingViewController.swift */; };
 		37E799A61B3CC1C600D2E54D /* DirectUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799881B3CC1C600D2E54D /* DirectUploadViewController.swift */; };
@@ -772,6 +775,7 @@
 		37A3C2DF1B3CC00600F77F2A /* MashTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MashTests.swift; sourceTree = "<group>"; };
 		37AF7AFF1C125D4D009DA251 /* TPAACAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPAACAudioConverter.h; sourceTree = "<group>"; };
 		37AF7B001C125D4D009DA251 /* TPAACAudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPAACAudioConverter.m; sourceTree = "<group>"; };
+		37B934A51C3B4B680001E468 /* ProjectTransitionAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTransitionAnimationController.swift; sourceTree = "<group>"; };
 		37C12DF31B69797300A4E3A3 /* Superpowered3BandEQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Superpowered3BandEQ.h; sourceTree = "<group>"; };
 		37C12DF41B69797300A4E3A3 /* SuperpoweredAdvancedAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperpoweredAdvancedAudioPlayer.h; sourceTree = "<group>"; };
 		37C12DF51B69797300A4E3A3 /* SuperpoweredAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperpoweredAnalyzer.h; sourceTree = "<group>"; };
@@ -820,6 +824,8 @@
 		37C9F5091C029E2000C80F88 /* ProjectAddBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectAddBar.swift; sourceTree = "<group>"; };
 		37C9F50A1C029E2000C80F88 /* ProjectPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectPlayer.swift; sourceTree = "<group>"; };
 		37C9F50B1C029E2000C80F88 /* ProjectTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTools.swift; sourceTree = "<group>"; };
+		37D2351E1C3B90CA0091A1D0 /* ProjectDismissAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectDismissAnimationController.swift; sourceTree = "<group>"; };
+		37D235221C3BABFE0091A1D0 /* SwipeInteractionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeInteractionController.swift; sourceTree = "<group>"; };
 		37DE77241B436F4A00952987 /* User.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = User.xib; sourceTree = "<group>"; };
 		37DE77261B4370B200952987 /* FollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowingViewController.swift; sourceTree = "<group>"; };
 		37E799851B3CC12D00D2E54D /* Mash-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mash-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -1379,6 +1385,9 @@
 				379882741C01314F0029E56C /* MixerController.swift */,
 				379882751C01314F0029E56C /* ProjectPreferencesViewController.swift */,
 				379882761C01314F0029E56C /* ProjectViewController.swift */,
+				37B934A51C3B4B680001E468 /* ProjectTransitionAnimationController.swift */,
+				37D2351E1C3B90CA0091A1D0 /* ProjectDismissAnimationController.swift */,
+				37D235221C3BABFE0091A1D0 /* SwipeInteractionController.swift */,
 			);
 			name = Project;
 			path = Mash/Controller/Project;
@@ -2162,6 +2171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				370A39061BF6A8B700FCD060 /* Metronome.swift in Sources */,
+				37D235231C3BABFE0091A1D0 /* SwipeInteractionController.swift in Sources */,
 				379882421C0131200029E56C /* AWSS3.swift in Sources */,
 				379882831C01314F0029E56C /* RecordViewController.swift in Sources */,
 				37C9F50F1C029E2000C80F88 /* SwipeBar.swift in Sources */,
@@ -2192,6 +2202,7 @@
 				3709D5AB1C0E7E6A00491CA7 /* Options.swift in Sources */,
 				37C9F5171C029E2000C80F88 /* ProjectTools.swift in Sources */,
 				3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */,
+				37B934A61C3B4B680001E468 /* ProjectTransitionAnimationController.swift in Sources */,
 				37C9F4FB1C029DFA00C80F88 /* CollectionViewLayout.swift in Sources */,
 				3711F0A31B6FFD9D00C75F2B /* SuperpoweredAudioModule.mm in Sources */,
 				3798825F1C01313F0029E56C /* SearchViewController.swift in Sources */,
@@ -2217,6 +2228,7 @@
 				37C9F5111C029E2000C80F88 /* Profile.swift in Sources */,
 				37C9F5101C029E2000C80F88 /* HomeCell.swift in Sources */,
 				379882821C01314F0029E56C /* RecordToolsController.swift in Sources */,
+				37D2351F1C3B90CA0091A1D0 /* ProjectDismissAnimationController.swift in Sources */,
 				379882601C01313F0029E56C /* EntryViewController.swift in Sources */,
 				37C9F5161C029E2000C80F88 /* ProjectPlayer.swift in Sources */,
 				37C9F50C1C029E2000C80F88 /* ImportHeaderView.swift in Sources */,
