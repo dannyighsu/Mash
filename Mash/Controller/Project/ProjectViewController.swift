@@ -56,9 +56,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.audioPlayer?.delegate = self
         self.tracks.tableHeaderView = head
         
-        self.navigationController?.navigationItem.titleView = self.titleButton
         self.titleButton.addTarget(self, action: "changeTitle:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.titleButton.setTitle("My Project", forState: UIControlState.Normal)
+        self.titleButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
         let swipe = UISwipeGestureRecognizer(target: self, action: "dismiss:")
         swipe.direction = .Down
         self.navigationController?.navigationBar.addGestureRecognizer(swipe)
@@ -66,6 +65,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationItem.titleView = self.titleButton
         if self.tracks != nil {
             self.tracks.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
             self.metronome.setTempo(self.bpm)

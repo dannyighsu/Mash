@@ -92,7 +92,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
     // Alert View Delegate
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if buttonIndex == 1 {
-            let titleButton = currentProject!.navigationItem.titleView as! UIButton
+            let titleButton = currentProject!.viewControllers[0].navigationItem.titleView as! UIButton
             titleButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
             self.tabBarButton?.tapButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
             self.tabBarButton?.addButton.hidden = true
