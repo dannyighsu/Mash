@@ -275,7 +275,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         return true
     }
-
+    
     // Track management
     func retrieveTracks() {
         let request = UserRequest()

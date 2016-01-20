@@ -17,7 +17,10 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     var displayData: [HomeCell] = []
     var activityView: ActivityView = ActivityView.make()
     var audioPlayer: AVAudioPlayer? = nil
+    var tabControlBar: TabControlBar? = nil
     var currentScope: Int = 0
+    var previousTableYOffset: CGFloat = 0.0
+    var tabBarHidden: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +44,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         let header = self.activityFeed.dequeueReusableHeaderFooterViewWithIdentifier("TabControlBar") as! TabControlBar
         header.scopeTab.addTarget(self, action: "didChangeScope:", forControlEvents: .ValueChanged)
         header.scopeTab.selectedSegmentIndex = 0
+        self.tabControlBar = header
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         blurView.frame = header.bounds
         blurView.contentView.backgroundColor = UIColor(red: 240, green: 240, blue: 240, alpha: 0.7)
@@ -160,24 +164,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             return nil
         }
     }
-    
-    /*func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("TabControlBar") as! TabControlBar
-            header.scopeTab.addTarget(self, action: "didChangeScope:", forControlEvents: .ValueChanged)
-            header.scopeTab.selectedSegmentIndex = 0
-            let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
-            blurView.frame = header.bounds
-            blurView.contentView.backgroundColor = UIColor(red: 240, green: 240, blue: 240, alpha: 0.7)
-            header.insertSubview(blurView, atIndex: 0)
-            return header
-        }
-        return nil
-    }
-    
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40.0
-    }*/
     
     // Scope tab
     func didChangeScope(sender: UISegmentedControl) {

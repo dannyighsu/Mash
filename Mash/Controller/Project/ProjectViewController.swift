@@ -46,6 +46,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
         self.activityView.titleLabel.text = "Loading sounds..."
+        self.activityView.hidden = true
         
         self.metronome.delegate = self
         self.audioModule.delegate = self
