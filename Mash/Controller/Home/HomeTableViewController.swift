@@ -12,10 +12,15 @@ import AVFoundation
 class HomeTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet var activityFeed: UITableView!
-    var data: [HomeCell] = []
+    var activityData: [HomeCell] = []
+    var globalData: [HomeCell] = []
     var displayData: [HomeCell] = []
-    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+    var activityView: ActivityView = ActivityView.make()
     var audioPlayer: AVAudioPlayer? = nil
+    var tabControlBar: TabControlBar? = nil
+    var currentScope: Int = 0
+    var previousTableYOffset: CGFloat = 0.0
+    var tabBarHidden: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +37,19 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         // Home cell and header registration
         let nib = UINib(nibName: "HomeCell", bundle: nil)
         self.activityFeed.registerNib(nib, forCellReuseIdentifier: "HomeCell")
+        let buffer = UINib(nibName: "BufferCell", bundle: nil)
+        self.activityFeed.registerNib(buffer, forCellReuseIdentifier: "BufferCell")
+        let head = UINib(nibName: "TabControlBar", bundle: nil)
+        self.activityFeed.registerNib(head, forHeaderFooterViewReuseIdentifier: "TabControlBar")
+        let header = self.activityFeed.dequeueReusableHeaderFooterViewWithIdentifier("TabControlBar") as! TabControlBar
+        header.scopeTab.addTarget(self, action: "didChangeScope:", forControlEvents: .ValueChanged)
+        header.scopeTab.selectedSegmentIndex = 0
+        self.tabControlBar = header
+        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+        blurView.frame = header.bounds
+        blurView.contentView.backgroundColor = UIColor(red: 240, green: 240, blue: 240, alpha: 0.7)
+        header.insertSubview(blurView, atIndex: 0)
+        self.activityFeed.tableHeaderView = header
 
         // Pull to refresh
         /*self.refreshControl = UIRefreshControl()
@@ -52,7 +70,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         /*if UIDevice.currentDevice().systemVersion.compare("9.0") == NSComparisonResult.OrderedAscending {
             self.activityView.frame = CGRect(x: self.activityView.frame.minX + self.navigationController!.navigationBar.frame.size.height, y: self.activityView.frame.minY, width: self.activityView.frame.width, height: self.activityView.frame.height)
         }*/
-        self.activityFeed.frame = self.view.frame
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -65,54 +82,118 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // TableView delegate
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.displayData.count
+        if section == 0 {
+            return self.displayData.count
+        } else {
+            return 1
+        }
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 2
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 100.0
+        if indexPath.section == 0 {
+            return 100.0
+        } else {
+            return 35
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell") as! HomeCell
-        cell.eventLabel.text = self.displayData[indexPath.row].eventText
-        cell.userLabel.setTitle(self.displayData[indexPath.row].userText, forState: .Normal)
-        cell.timeLabel.text = self.displayData[indexPath.row].timeText
-        cell.user = self.displayData[indexPath.row].user
-        cell.track = self.displayData[indexPath.row].track
-        cell.timeLabel.text = parseTimeStamp(cell.timeLabel.text!)
-        self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
-        cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFill
-        cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
-        cell.profileImage.layer.borderWidth = 0.5
-        cell.profileImage.layer.masksToBounds = true
-        cell.userLabel.addTarget(self, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
-        return cell
+        if indexPath.section == 0 {
+            let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell") as! HomeCell
+            cell.eventLabel.text = self.displayData[indexPath.row].eventText
+            cell.userLabel.setTitle(self.displayData[indexPath.row].userText, forState: .Normal)
+            cell.timeLabel.text = self.displayData[indexPath.row].timeText
+            cell.user = self.displayData[indexPath.row].user
+            cell.track = self.displayData[indexPath.row].track
+            cell.timeLabel.text = parseTimeStamp(cell.timeLabel.text!)
+            self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
+            cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFill
+            cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
+            cell.profileImage.layer.borderWidth = 0.5
+            cell.profileImage.layer.masksToBounds = true
+            cell.userLabel.addTarget(self, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
+            return cell
+        } else {
+            let cell = self.activityFeed.dequeueReusableCellWithIdentifier("BufferCell")!
+            cell.backgroundColor = UIColor.clearColor()
+            return cell
+        }
+        
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! HomeCell
-        cell.activityView.startAnimating()
-        download(getS3Key(cell.track!), url: filePathURL(cell.track!.trackURL), bucket: track_bucket) {
-            (result) in
-            if result != nil {
-                dispatch_async(dispatch_get_main_queue()) {
-                    cell.activityView.stopAnimating()
-                    do {
-                        try self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(cell.track!.trackURL))
-                        self.audioPlayer!.play()
-                    } catch _ as NSError {
-                        Debug.printl("Error downloading track", sender: self)
+        if indexPath.section == 0 {
+            let cell = tableView.cellForRowAtIndexPath(indexPath) as! HomeCell
+            cell.activityView.startAnimating()
+            download(getS3Key(cell.track!), url: filePathURL(cell.track!.trackURL), bucket: track_bucket) {
+                (result) in
+                if result != nil {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        cell.activityView.stopAnimating()
+                        do {
+                            try self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(cell.track!.trackURL))
+                            self.audioPlayer!.play()
+                        } catch _ as NSError {
+                            Debug.printl("Error downloading track", sender: self)
+                        }
                     }
                 }
             }
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        } else {
+            return
         }
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == self.displayData.count - 1 {
-            self.loadNextData()
+        if indexPath.section == 0 {
+            if indexPath.row == self.displayData.count - 1 {
+                self.loadNextData()
+            }
         }
+    }
+    
+    func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        if indexPath.row == 0 {
+            return indexPath
+        } else {
+            return nil
+        }
+    }
+    
+    // Scope tab
+    func didChangeScope(sender: UISegmentedControl) {
+        self.currentScope = sender.selectedSegmentIndex
+        if self.currentScope == 0 {
+            if self.activityData.count > 0 {
+                for i in 0...DEFAULT_DISPLAY_AMOUNT {
+                    if i == self.activityData.count {
+                        break
+                    }
+                    self.displayData.append(self.activityData[i])
+                }
+            } else {
+                retrieveActivity()
+                return
+            }
+        } else {
+            if self.globalData.count > 0 {
+                for i in 0...DEFAULT_DISPLAY_AMOUNT {
+                    if i == self.globalData.count {
+                        break
+                    }
+                    self.displayData.append(self.globalData[i])
+                }
+            } else {
+                retrieveGlobal()
+                return
+            }
+        }
+        self.activityFeed.reloadData()
     }
 
     // Auxiliary methods
@@ -142,15 +223,21 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func loadNextData() {
+        var data: [HomeCell]
+        if self.currentScope == 0 {
+            data = self.activityData
+        } else {
+            data = self.globalData
+        }
         let currentNumResults = self.displayData.count
-        if currentNumResults == self.data.count {
+        if currentNumResults == data.count {
             return
         }
         for i in currentNumResults...currentNumResults + 15 {
-            if i > self.data.count - 1 {
+            if i > data.count - 1 {
                 break
             }
-            self.displayData.append(self.data[i])
+            self.displayData.append(data[i])
         }
         self.activityFeed.reloadData()
     }
@@ -163,7 +250,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     // Push search page up
     func goToSearch(sender: AnyObject?) {
-        Debug.printl("Going to Search", sender: self)
         let search = self.storyboard?.instantiateViewControllerWithIdentifier("SearchViewController") as! SearchViewController
         self.navigationController?.pushViewController(search, animated: false)
     }
@@ -180,13 +266,36 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)
             } else {
-                self.updateActivity(response)
+                self.updateActivity(response, scope: 0)
             }
         }
     }
     
-    func updateActivity(response: FeedResponse) {
-        self.data = []
+    func retrieveGlobal() {
+        self.activityView.startAnimating()
+        let request = FeedRequest()
+        request.user = UserRequest()
+        request.user.userid = UInt32(currentUser.userid!)
+        request.user.loginToken = currentUser.loginToken
+        
+        server.globalFeedWithRequest(request) {
+            (response, error) in
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
+            } else {
+                self.updateActivity(response, scope: 1)
+            }
+        }
+    }
+    
+    func updateActivity(response: FeedResponse, scope: Int) {
+        var data: [HomeCell]
+        if scope == 0 {
+            data = self.activityData
+        } else {
+            data = self.globalData
+        }
+        data = []
         self.displayData = []
         
         if response.storyArray.count != 0 {
@@ -204,7 +313,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 let track = Track(frame: CGRectZero, recid: Int(recording.recid), userid: Int(recording.userid),instruments: recording.instrumentArray.copy() as! [String], instrumentFamilies: recording.familyArray.copy() as! [String], titleText: recording.title, bpm: Int(recording.bpm), trackURL: getS3Key(Int(recording.userid), recid: Int(recording.recid), format: recording.format), user: recording.handle, format: recording.format, time: time)
                 
                 let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower, track: track)
-                self.data.append(cell)
+                data.append(cell)
                 if i < DEFAULT_DISPLAY_AMOUNT {
                     self.displayData.append(cell)
                 }

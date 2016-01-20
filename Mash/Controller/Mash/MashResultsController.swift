@@ -183,7 +183,6 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     func add(sender: UIButton) {
         let track = sender.superview?.superview?.superview as! Track
         ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
-        raiseAlert("Sound added to project.")
     }
     
     func done(sender: AnyObject?) {

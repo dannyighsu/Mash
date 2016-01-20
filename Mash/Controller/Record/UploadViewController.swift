@@ -31,7 +31,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
 
         self.instrumentsCollection.delegate = self
         self.instrumentsCollection.dataSource = self
-        self.instrumentsCollection.backgroundColor = darkGray()
+        self.instrumentsCollection.backgroundColor = UIColor.whiteColor()
         self.instrumentsCollection.allowsMultipleSelection = true // check for multi instr
         self.instrumentsCollection.collectionViewLayout = CollectionViewLayout()
         let cell = UINib(nibName: "InstrumentCell", bundle: nil)
@@ -46,7 +46,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.activityView.center = self.view.center
         
         self.audioPlot.color = lightBlue()
-        self.audioPlot.backgroundColor = darkGray()
+        self.audioPlot.backgroundColor = offWhite()
         self.audioPlot.plotType = .Buffer
         self.audioPlot.shouldFill = true
         self.audioPlot.shouldMirror = true

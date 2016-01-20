@@ -147,6 +147,13 @@
 - (ProtoRPC *)RPCToFeedWithRequest:(FeedRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler;
 
 
+#pragma mark GlobalFeed(FeedRequest) returns (FeedResponse)
+
+- (void)globalFeedWithRequest:(FeedRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToGlobalFeedWithRequest:(FeedRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler;
+
+
 #pragma mark SearchTag(SearchTagRequest) returns (Recordings)
 
 - (void)searchTagWithRequest:(SearchTagRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler;

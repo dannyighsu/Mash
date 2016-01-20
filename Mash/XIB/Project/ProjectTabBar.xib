@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <visualEffectView opaque="NO" contentMode="scaleToFill" id="Zlk-MJ-6jB" customClass="ProjectTabBar" customModule="Mash" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="35"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="dw7-Jw-nXh">
+                <rect key="frame" x="0.0" y="0.0" width="600" height="35"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Keh-SZ-LBC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="35"/>
+                        <animations/>
+                        <state key="normal" title="New Project">
+                            <color key="titleColor" red="0.27450980392156865" green="0.792156862745098" blue="0.88235294117647056" alpha="1" colorSpace="calibratedRGB"/>
+                        </state>
+                    </button>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tab_bar_background_reversed" translatesAutoresizingMaskIntoConstraints="NO" id="0rw-4e-sgA">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="35"/>
+                        <animations/>
+                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bUC-66-Hog">
+                        <rect key="frame" x="570" y="7" width="22" height="22"/>
+                        <animations/>
+                        <color key="tintColor" red="0.27450980390000002" green="0.79215686269999996" blue="0.88235294119999996" alpha="1" colorSpace="calibratedRGB"/>
+                    </button>
+                </subviews>
+                <animations/>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="Keh-SZ-LBC" secondAttribute="bottom" id="5AS-vr-pwg"/>
+                    <constraint firstItem="bUC-66-Hog" firstAttribute="centerY" secondItem="0rw-4e-sgA" secondAttribute="centerY" id="6bu-Im-XH8"/>
+                    <constraint firstAttribute="trailing" secondItem="Keh-SZ-LBC" secondAttribute="trailing" id="84V-qx-Iy5"/>
+                    <constraint firstItem="bUC-66-Hog" firstAttribute="trailing" secondItem="dw7-Jw-nXh" secondAttribute="trailingMargin" id="Hj0-Xa-JKK"/>
+                    <constraint firstItem="0rw-4e-sgA" firstAttribute="top" secondItem="Keh-SZ-LBC" secondAttribute="top" id="Nb9-M0-eSx"/>
+                    <constraint firstItem="0rw-4e-sgA" firstAttribute="leading" secondItem="Keh-SZ-LBC" secondAttribute="leading" id="OB3-TU-4kD"/>
+                    <constraint firstItem="Keh-SZ-LBC" firstAttribute="top" secondItem="dw7-Jw-nXh" secondAttribute="top" id="Vt5-P9-a4u"/>
+                    <constraint firstItem="0rw-4e-sgA" firstAttribute="bottom" secondItem="Keh-SZ-LBC" secondAttribute="bottom" id="n08-fX-0ag"/>
+                    <constraint firstItem="Keh-SZ-LBC" firstAttribute="leading" secondItem="dw7-Jw-nXh" secondAttribute="leading" id="t2X-Nr-9Qf"/>
+                    <constraint firstItem="0rw-4e-sgA" firstAttribute="trailing" secondItem="Keh-SZ-LBC" secondAttribute="trailing" id="yUC-He-HX6"/>
+                </constraints>
+            </view>
+            <animations/>
+            <color key="backgroundColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.15686274509803921" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
+            <blurEffect style="light"/>
+            <connections>
+                <outlet property="addButton" destination="bUC-66-Hog" id="ha9-aC-XZZ"/>
+                <outlet property="tapButton" destination="Keh-SZ-LBC" id="OAJ-6J-RJ2"/>
+            </connections>
+            <point key="canvasLocation" x="600" y="422.5"/>
+        </visualEffectView>
+        <visualEffectView opaque="NO" contentMode="scaleToFill" id="csV-gJ-s4v">
+            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="P6m-iZ-YwB">
+                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <animations/>
+            </view>
+            <animations/>
+            <blurEffect style="light"/>
+        </visualEffectView>
+    </objects>
+    <resources>
+        <image name="tab_bar_background_reversed" width="320" height="49"/>
+    </resources>
+</document>

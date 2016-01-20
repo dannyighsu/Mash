@@ -171,18 +171,18 @@ class ProjectPlayer: UITableViewHeaderFooterView {
     }
     
     func resetPlayer(index: Int) {
-        print(self.tracks)
         let audioPlayer = try! AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: self.tracks[index].trackURL))
         audioPlayer.numberOfLoops = -1
         self.audioPlayers[index] = audioPlayer
     }
     
     func resetPlayers() {
-        if self.audioPlayers.count > 0 {
-            for i in 0...self.audioPlayers.count - 1 {
+        if self.tracks.count > 0 {
+            self.audioPlayers = []
+            for i in 0...self.tracks.count - 1 {
                 let audioPlayer = try! AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: self.tracks[i].trackURL))
                 audioPlayer.numberOfLoops = -1
-                self.audioPlayers[i] = audioPlayer
+                self.audioPlayers.append(audioPlayer)
             }
         }
     }

@@ -73,7 +73,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     
     // Create a metronome with recordController
     class func createView() -> Metronome {
-        var view = NSBundle.mainBundle().loadNibNamed("Metronome", owner: nil, options: nil)
+        let view = NSBundle.mainBundle().loadNibNamed("Metronome", owner: nil, options: nil)
         let metronome = view[0] as! Metronome
         metronome.startButton.addTarget(metronome, action: "toggle:", forControlEvents: UIControlEvents.TouchDown)
         

@@ -226,6 +226,7 @@ service MashService {
     rpc UserUpdate      (UserUpdateRequest) returns (SuccessResponse);
     rpc UserRecordings  (UserRequest) returns (UserRecordingsResponse);
     rpc Feed            (FeedRequest) returns (FeedResponse);
+    rpc GlobalFeed      (FeedRequest) returns (FeedResponse);
     rpc SearchTag       (SearchTagRequest) returns (Recordings);
     rpc UserSearch      (UserSearchRequest) returns (UserPreviews);
     rpc RecordingMash   (RecordingRequest) returns (Recordings);

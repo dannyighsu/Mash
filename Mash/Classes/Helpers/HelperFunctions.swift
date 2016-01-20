@@ -52,14 +52,10 @@ func findInstrument(instrument: String) -> Int {
 func getTabBarController(input: String) -> Int {
     if input == "home" {
         return 0
-    } else if input == "explore" {
-        return 1
     } else if input == "record" {
-        return 2
-    } else if input == "project" {
-        return 3
+        return 1
     } else {
-        return 4
+        return 2
     }
 }
 
@@ -68,24 +64,24 @@ func getTabBarController(input: String, navcontroller: UINavigationController) -
     let controllers = tabBarController.viewControllers!
     if input == "home" {
         return controllers[0] 
-    } else if input == "explore" {
-        return controllers[1] 
     } else if input == "record" {
-        return controllers[2] 
-    } else if input == "project" {
-        return controllers[3] 
+        return controllers[1]
     } else {
-        return controllers[4] 
+        return controllers[2]
     }
 }
 
 func returnProjectView(navcontroller: UINavigationController) -> ProjectViewController? {
-    let tabBarController = navcontroller.viewControllers[2] as! UITabBarController
+    /*let tabBarController = navcontroller.viewControllers[2] as! UITabBarController
     for (var i = 0; i < tabBarController.viewControllers!.count; i++) {
         let controller = tabBarController.viewControllers![i] as? ProjectViewController
         if controller != nil {
             return tabBarController.viewControllers![i] as? ProjectViewController
         }
+    }
+    return nil*/
+    if currentProject != nil {
+        return currentProject?.viewControllers[0] as? ProjectViewController
     }
     return nil
 }

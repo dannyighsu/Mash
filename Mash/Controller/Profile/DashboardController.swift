@@ -18,12 +18,13 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     var data: [Track] = []
     var audioPlayer: AVAudioPlayer? = nil
     var user: User = currentUser
+    var activityView: ActivityView = ActivityView.make()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tracks.delegate = self
         self.tracks.dataSource = self
-        self.tracks.backgroundColor = darkGray()
+        self.tracks.backgroundColor = offWhite()
         self.tracks.separatorStyle = .None
         
         // Register profile and track nibs
@@ -33,6 +34,13 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let track = UINib(nibName: "ProfileTrack", bundle: nil)
         self.tracks.registerNib(track, forCellReuseIdentifier: "ProfileTrack")
         
+        let buffer = UINib(nibName: "BufferCell", bundle: nil)
+        self.tracks.registerNib(buffer, forCellReuseIdentifier: "BufferCell")
+        
+        self.view.addSubview(self.activityView)
+        self.activityView.center = self.view.center
+        self.activityView.titleLabel.text = "Fetching your sounds"
+        
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
 
         // Check if this is tab bar profile
@@ -40,7 +48,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             self.user = currentUser
         } else {
             self.view.frame = self.navigationController!.view.frame
-            self.view.backgroundColor = darkGray()
         }
     }
     
@@ -103,14 +110,17 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     // Table View Delegate
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 0
+        } else if section == 1 {
+            return self.data.count
+        } else {
+            return 1
         }
-        return self.data.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -119,7 +129,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             let index = indexPath.row
             track.backgroundColor = UIColor.clearColor()
             track.instrumentImage.backgroundColor = UIColor.clearColor()
-            track.title.textColor = UIColor.whiteColor()
+            track.title.textColor = UIColor.blackColor()
             track.title.text = self.data[index].titleText
             track.userid = self.data[index].userid
             track.id = self.data[index].id
@@ -130,7 +140,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             track.instrumentFamilies = self.data[index].instrumentFamilies
             track.trackURL = self.data[index].trackURL
             track.bpm = self.data[index].bpm
-            track.instrumentImage.image = findImageWhite(track.instrumentFamilies)
+            track.instrumentImage.image = findImage(track.instrumentFamilies)
             track.instrumentImage.backgroundColor = UIColor.clearColor()
             track.dateLabel.text = parseTimeStamp(self.data[index].time)
             track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
@@ -152,6 +162,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
             return track
+        } else if indexPath.section == 2 {
+            let cell = self.tracks.dequeueReusableCellWithIdentifier("BufferCell")!
+            cell.backgroundColor = UIColor.clearColor()
+            return cell
         }
         return UITableViewCell(style: .Default, reuseIdentifier: nil)
     }
@@ -161,9 +175,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if section == 0 {
-            
-        }
+        
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -197,7 +209,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             // Add gradient to banner
             let gradient: CAGradientLayer = CAGradientLayer()
             gradient.frame = header.bounds
-            gradient.colors = [UIColor.clearColor().CGColor, UIColor.clearColor().CGColor, darkGray().CGColor]
+            gradient.colors = [UIColor.clearColor().CGColor, UIColor.clearColor().CGColor, offWhite().CGColor]
             header.bannerImage.layer.insertSublayer(gradient, atIndex: 0)
             return header
         }
@@ -214,6 +226,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 1 {
             return 75.0
+        } else if indexPath.section == 2 {
+            return 35.0
         }
         return 0.0
     }
@@ -243,27 +257,32 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if self.user != currentUser {
-            return
-        }
-        if editingStyle == UITableViewCellEditingStyle.Delete {
-            self.deleteTrack(self.data[indexPath.row], indexPath: indexPath)
+        if indexPath.row == 1 {
+            if self.user != currentUser {
+                return
+            }
+            if editingStyle == UITableViewCellEditingStyle.Delete {
+                self.deleteTrack(self.data[indexPath.row], indexPath: indexPath)
+            }
         }
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if self.user != currentUser {
-            return false
+        if indexPath.row == 1 {
+            if self.user != currentUser {
+                return false
+            }
         }
         return true
     }
-
+    
     // Track management
     func retrieveTracks() {
         let request = UserRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(self.user.userid!)
+        self.activityView.startAnimating()
         
         server.userRecordingsWithRequest(request) {
             (response, error) in
@@ -292,6 +311,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         dispatch_async(dispatch_get_main_queue()) {
             self.tracks.reloadSections(NSIndexSet(index: 1), withRowAnimation: .None)
+            self.activityView.stopAnimating()
         }
     }
     
@@ -304,7 +324,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
         ProjectViewController.importTracks([track!], navigationController: self.navigationController, storyboard: self.storyboard)
-        raiseAlert("Sound added to project.")
     }
     
     func deleteTrack(track: Track, indexPath: NSIndexPath) {
@@ -312,6 +331,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         request.loginToken = currentUser.loginToken
         request.userid = UInt32(currentUser.userid!)
         request.recid = UInt32(track.id)
+        self.activityView.startAnimating()
         
         server.recordingDeleteWithRequest(request) {
             (response, error) in
@@ -321,6 +341,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 deleteFromBucket("\(currentUser.userid!)~~\(track.id)\(track.format)", bucket: track_bucket)
                 dispatch_async(dispatch_get_main_queue()) {
                     self.data.removeAtIndex(indexPath.row)
+                    self.activityView.stopAnimating()
                     self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
                 }
             }

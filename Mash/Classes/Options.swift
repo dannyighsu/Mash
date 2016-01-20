@@ -12,7 +12,7 @@ import Foundation
 let debug: Bool = false
 
 // Use local server
-let localServer: Bool = false
+let localServer: Bool = true
 
 // Testing mode, don't log analytics
 let testing: Bool = false
