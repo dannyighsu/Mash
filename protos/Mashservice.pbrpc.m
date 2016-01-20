@@ -265,6 +265,18 @@ static NSString *const kServiceName = @"MashService";
              responseClass:[FeedResponse class]
         responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
+#pragma mark GlobalFeed(FeedRequest) returns (FeedResponse)
+
+- (void)globalFeedWithRequest:(FeedRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler{
+  [[self RPCToGlobalFeedWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToGlobalFeedWithRequest:(FeedRequest *)request handler:(void(^)(FeedResponse *response, NSError *error))handler{
+  return [self RPCToMethod:@"GlobalFeed"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[FeedResponse class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
 #pragma mark SearchTag(SearchTagRequest) returns (Recordings)
 
 - (void)searchTagWithRequest:(SearchTagRequest *)request handler:(void(^)(Recordings *response, NSError *error))handler{

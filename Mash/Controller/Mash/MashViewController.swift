@@ -16,7 +16,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var recordings: [Track] = []
     var bpm: Int? = nil
     var instruments: [String] = []
-    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+    var activityView: ActivityView = ActivityView.make()
     var cellWidth: CGFloat = 75.0
     
     // Testing
@@ -33,6 +33,8 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         self.activityView.center = self.view.center
         self.view.addSubview(self.activityView)
+        self.activityView.titleLabel.text = "Mashing..."
+        
         self.cellWidth = UIScreen.mainScreen().bounds.size.width / 2 - 4.0
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
     }

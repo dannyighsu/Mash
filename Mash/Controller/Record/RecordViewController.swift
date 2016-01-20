@@ -38,19 +38,15 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var tempoAlert: UIAlertView? = nil
     var timeAlert: UIAlertView? = nil
     var muted: Bool = false
-    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    var activityView: ActivityView = ActivityView.make()
     var coverView: UIView = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.coverView = UIView(frame: CGRect(x: self.view.frame.minX, y: self.view.frame.minY, width: self.view.frame.size.width, height: self.view.frame.size.height))
-        self.coverView.backgroundColor = UIColor(red: (150/255), green: (150/255), blue: (150/255), alpha: 0.6)
-        let infoLabel = UILabel(frame: CGRect(x: self.coverView.center.x, y: self.coverView.center.y - 50.0, width: 100.0, height: 20.0))
-        infoLabel.text = "Logging In..."
-        infoLabel.center = CGPoint(x: self.coverView.center.x, y: self.coverView.center.y - 60.0)
-        infoLabel.textColor = UIColor.blackColor()
-        self.coverView.addSubview(infoLabel)
+        self.coverView.backgroundColor = UIColor.clearColor()
+        self.activityView.titleLabel.text = "Logging In..."
         self.activityView.center = CGPoint(x: self.coverView.center.x, y: self.coverView.center.y - 30.0)
         self.coverView.addSubview(self.activityView)
         self.tabBarController!.view.addSubview(self.coverView)

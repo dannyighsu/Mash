@@ -18,6 +18,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     var data: [Track] = []
     var audioPlayer: AVAudioPlayer? = nil
     var user: User = currentUser
+    var activityView: ActivityView = ActivityView.make()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +36,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         
         let buffer = UINib(nibName: "BufferCell", bundle: nil)
         self.tracks.registerNib(buffer, forCellReuseIdentifier: "BufferCell")
+        
+        self.view.addSubview(self.activityView)
+        self.activityView.center = self.view.center
+        self.activityView.titleLabel.text = "Fetching your sounds"
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
 
@@ -277,6 +282,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         request.queryUserid = UInt32(self.user.userid!)
+        self.activityView.startAnimating()
         
         server.userRecordingsWithRequest(request) {
             (response, error) in
@@ -305,6 +311,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         dispatch_async(dispatch_get_main_queue()) {
             self.tracks.reloadSections(NSIndexSet(index: 1), withRowAnimation: .None)
+            self.activityView.stopAnimating()
         }
     }
     
@@ -324,6 +331,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         request.loginToken = currentUser.loginToken
         request.userid = UInt32(currentUser.userid!)
         request.recid = UInt32(track.id)
+        self.activityView.startAnimating()
         
         server.recordingDeleteWithRequest(request) {
             (response, error) in
@@ -333,6 +341,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 deleteFromBucket("\(currentUser.userid!)~~\(track.id)\(track.format)", bucket: track_bucket)
                 dispatch_async(dispatch_get_main_queue()) {
                     self.data.removeAtIndex(indexPath.row)
+                    self.activityView.stopAnimating()
                     self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
                 }
             }

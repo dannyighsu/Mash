@@ -16,7 +16,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     var audioPlayer: ProjectPlayer? = nil
     var toolsTap: UITapGestureRecognizer? = nil
     var mixerShowing: Bool = false
-    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    var activityView: ActivityView = ActivityView.make()
     var metronome: Metronome = Metronome.createView()
     var bpm: Int = 120
     var audioModule: AudioModule = AudioModule()
@@ -24,7 +24,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Set up table options
         self.tracks.delegate = self
         self.tracks.dataSource = self
@@ -44,6 +44,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tracks.registerNib(addbar, forCellReuseIdentifier: "ProjectAddBar")
         
         self.view.addSubview(self.activityView)
+        self.activityView.center = self.view.center
+        self.activityView.titleLabel.text = "Loading sounds..."
         
         self.metronome.delegate = self
         self.audioModule.delegate = self
