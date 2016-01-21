@@ -46,7 +46,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.activityView.center = self.view.center
         
         self.audioPlot.color = lightBlue()
-        self.audioPlot.backgroundColor = offWhite()
+        self.audioPlot.backgroundColor = UIColor.clearColor()
         self.audioPlot.plotType = .Buffer
         self.audioPlot.shouldFill = true
         self.audioPlot.shouldMirror = true
@@ -270,8 +270,14 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func saveWaveform(track: Track) {
         track.titleText = self.titleTextField.text!
-        let waveform = takeShotOfView(self.audioPlot)
-        UIImageJPEGRepresentation(waveform, 1.0)!.writeToFile(filePathString(getS3WaveformKey(track)), atomically: true)
+        /*let waveform = takeShotOfView(self.audioPlot)
+        UIImageJPEGRepresentation(waveform, 1.0)!.writeToFile(filePathString(getS3WaveformKey(track)), atomically: true)*/
+        UIGraphicsBeginImageContext(self.audioPlot.bounds.size)
+        self.audioPlot.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        let imageData = UIImagePNGRepresentation(image)
+        imageData!.writeToFile(filePathString(getS3WaveformKey(track)), atomically: true)
         upload(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket)
     }
     

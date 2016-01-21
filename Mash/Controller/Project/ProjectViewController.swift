@@ -207,6 +207,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             if buttonIndex == 1 {
                 let title = alertView.textFieldAtIndex(0)!.text
                 self.titleButton.setTitle(title, forState: UIControlState.Normal)
+                rootTabBarController!.tabBarButton!.tapButton.setTitle(title, forState: .Normal)
                 self.uploadSavedTrack(title!)
             }
         } else if alertView.title == "Sharing your Mash" {
