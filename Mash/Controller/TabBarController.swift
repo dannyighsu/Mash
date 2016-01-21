@@ -91,14 +91,32 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
     
     // Alert View Delegate
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        if buttonIndex == 1 {
-            let titleButton = currentProject!.viewControllers[0].navigationItem.titleView as! UIButton
-            titleButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
-            self.tabBarButton?.tapButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
-            self.tabBarButton?.addButton.hidden = true
-        } else if buttonIndex == 0 {
-            currentProject!.dismissViewControllerAnimated(true, completion: nil)
-            currentProject = nil
+        if alertView.title == "New Project" {
+            if buttonIndex == 1 {
+                let titleButton = currentProject!.viewControllers[0].navigationItem.titleView as! UIButton
+                titleButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
+                self.tabBarButton?.tapButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
+                self.tabBarButton?.addButton.hidden = true
+            } else if buttonIndex == 0 {
+                currentProject!.dismissViewControllerAnimated(true, completion: nil)
+                currentProject = nil
+            }
+        } else if alertView.title == "You have not created a project yet." {
+            if buttonIndex == 1 {
+                let project = self.storyboard!.instantiateViewControllerWithIdentifier("ProjectViewController") as! ProjectViewController
+                let navController = UINavigationController(rootViewController: project)
+                currentProject = navController
+                currentProject!.transitioningDelegate = self
+                // Add for interaction
+                //self.swipeInteractionController.addViewController(currentProject)
+                self.presentViewController(currentProject!, animated: true) {
+                    ProjectViewController.importTracks(tracksToAdd, navigationController: self.navigationController!, storyboard: self.storyboard!)
+                    let titleButton = project.navigationItem.titleView as! UIButton
+                    titleButton.setTitle(tracksToAdd[0].titleText, forState: .Normal)
+                    self.tabBarButton?.tapButton.setTitle(tracksToAdd[0].titleText, forState: .Normal)
+                    self.tabBarButton?.addButton.hidden = true
+                }
+            }
         }
     }
 

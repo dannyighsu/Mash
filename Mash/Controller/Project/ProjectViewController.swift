@@ -494,20 +494,11 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     class func importTracks(tracks: [Track], navigationController: UINavigationController?, storyboard: UIStoryboard?) {
-        /*var project: ProjectViewController? = nil
-        let tabBarController = navigationController?.viewControllers[2] as! UITabBarController
-        
-        for (var i = 0; i < tabBarController.viewControllers!.count; i++) {
-            let controller = tabBarController.viewControllers![i] as? ProjectViewController
-            if controller != nil {
-                Debug.printl("Using existing project view controller", sender: "helpers")
-                project = controller
-                break
-            }
-        }*/
+        tracksToAdd = tracks
         
         if currentProject == nil {
-            raiseAlert("You have not created a project yet.")
+            let alert = UIAlertView(title: "You have not created a project yet.", message: "Create one now?", delegate: rootTabBarController, cancelButtonTitle: "Cancel", otherButtonTitles: "Ok")
+            alert.show()
             return
         }
         

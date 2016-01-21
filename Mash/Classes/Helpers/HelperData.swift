@@ -26,6 +26,7 @@ var userFollowing: [User] = []
 var currentProject: UINavigationController? = nil
 var rootTabBarController: TabBarController? = nil
 var rootNavigationController: RootNavigationController? = nil
+var tracksToAdd: [Track] = []
 
 // Returns light blue
 func lightBlue() -> UIColor {
