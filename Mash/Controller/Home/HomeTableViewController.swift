@@ -95,7 +95,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 100.0
+            return 225.0
         } else {
             return 35
         }
@@ -104,18 +104,22 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell") as! HomeCell
-            cell.eventLabel.text = self.displayData[indexPath.row].eventText
+            cell.eventText = self.displayData[indexPath.row].eventText
+            cell.trackButton.setTitle(self.displayData[indexPath.row].eventText, forState: .Normal)
+            cell.artistButton.setTitle(self.displayData[indexPath.row].userText, forState: .Normal)
             cell.userLabel.setTitle(self.displayData[indexPath.row].userText, forState: .Normal)
             cell.timeLabel.text = self.displayData[indexPath.row].timeText
             cell.user = self.displayData[indexPath.row].user
             cell.track = self.displayData[indexPath.row].track
             cell.timeLabel.text = parseTimeStamp(cell.timeLabel.text!)
             self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
+            self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
             cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFill
             cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
             cell.profileImage.layer.borderWidth = 0.5
             cell.profileImage.layer.masksToBounds = true
             cell.userLabel.addTarget(self, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
+            cell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)
             return cell
         } else {
             let cell = self.activityFeed.dequeueReusableCellWithIdentifier("BufferCell")!

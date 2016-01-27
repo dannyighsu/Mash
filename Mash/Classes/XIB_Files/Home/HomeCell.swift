@@ -11,11 +11,16 @@ import UIKit
 
 class HomeCell: UITableViewCell {
     
-    @IBOutlet weak var eventLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var userLabel: UIButton!
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var activityView: UIActivityIndicatorView!
+    @IBOutlet weak var artistButton: UIButton!
+    @IBOutlet weak var trackButton: UIButton!
+    @IBOutlet weak var commentButton: UIButton!
+    @IBOutlet weak var likeButton: UIButton!
+    @IBOutlet weak var audioPlot: EZAudioPlot!
+    @IBOutlet weak var backgroundArt: UIImageView!
     var eventText: String? = nil
     var userText: String? = nil
     var timeText: String? = nil
