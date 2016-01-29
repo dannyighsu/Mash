@@ -211,11 +211,11 @@ class User: UITableViewCell {
                         currentUser.setProfilePic(profile.profilePic)
                         currentUser.setBannerPic(profile.bannerImage)
                         //profile.descriptionLabel.text = currentUser.userDescription
-                        let followers = NSMutableAttributedString(string: "  \(currentUser.followers!)\n  FOLLOWERS")
+                        let followers = NSMutableAttributedString(string: "    \(currentUser.followers!)\n    FOLLOWERS")
                         profile.followerCount.attributedText = followers
-                        let following = NSMutableAttributedString(string: "  \(currentUser.following!)\n  FOLLOWING")
+                        let following = NSMutableAttributedString(string: "    \(currentUser.following!)\n    FOLLOWING")
                         profile.followingCount.attributedText = following
-                        let tracks = NSMutableAttributedString(string: "  \(currentUser.tracks!)\n  TRACKS")
+                        let tracks = NSMutableAttributedString(string: "    \(currentUser.tracks!)\n    TRACKS")
                         profile.trackCount.attributedText = tracks
                     }
                 }

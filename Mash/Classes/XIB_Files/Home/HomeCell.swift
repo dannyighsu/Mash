@@ -19,7 +19,7 @@ class HomeCell: UITableViewCell {
     @IBOutlet weak var trackButton: UIButton!
     @IBOutlet weak var commentButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
-    @IBOutlet weak var audioPlot: EZAudioPlot!
+    @IBOutlet weak var audioPlotView: UIImageView!
     @IBOutlet weak var backgroundArt: UIImageView!
     var eventText: String? = nil
     var userText: String? = nil

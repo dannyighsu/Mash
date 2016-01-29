@@ -112,32 +112,54 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.user = self.displayData[indexPath.row].user
             cell.track = self.displayData[indexPath.row].track
             cell.timeLabel.text = parseTimeStamp(cell.timeLabel.text!)
-            self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
-            self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
+            cell.backgroundArt.layer.borderWidth = 0.5
+            cell.backgroundArt.layer.borderColor = lightGray().CGColor
             cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFill
             cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
             cell.profileImage.layer.borderWidth = 0.5
             cell.profileImage.layer.masksToBounds = true
             cell.userLabel.addTarget(self, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
+            
+            self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
+            self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
             cell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)
+            
+            if !NSFileManager.defaultManager().fileExistsAtPath(filePathString(getS3WaveformKey(cell.track!))) {
+                download(getS3WaveformKey(cell.track!), url: filePathURL(getS3WaveformKey(cell.track!)), bucket: waveform_bucket) {
+                    (result) in
+                    if result != nil {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            cell.audioPlotView.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(cell.track!)))
+                        }
+                    } else {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            cell.audioPlotView.image = UIImage(named: "waveform_static")
+                        }
+                    }
+                    dispatch_async(dispatch_get_main_queue()) {
+                        let gradient: CAGradientLayer = CAGradientLayer()
+                        gradient.frame = cell.backgroundArt.bounds
+                        gradient.colors = [lightGray().CGColor, UIColor.clearColor().CGColor, lightGray().CGColor]
+                        cell.backgroundArt.layer.insertSublayer(gradient, atIndex: 0)
+                    }
+                }
+            }
+            
             return cell
         } else {
             let cell = self.activityFeed.dequeueReusableCellWithIdentifier("BufferCell")!
             cell.backgroundColor = UIColor.clearColor()
             return cell
         }
-        
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {
             let cell = tableView.cellForRowAtIndexPath(indexPath) as! HomeCell
-            cell.activityView.startAnimating()
             download(getS3Key(cell.track!), url: filePathURL(cell.track!.trackURL), bucket: track_bucket) {
                 (result) in
                 if result != nil {
                     dispatch_async(dispatch_get_main_queue()) {
-                        cell.activityView.stopAnimating()
                         do {
                             try self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(cell.track!.trackURL))
                             self.audioPlayer!.play()
@@ -162,7 +184,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        if indexPath.row == 0 {
+        if indexPath.section == 0 {
             return indexPath
         } else {
             return nil

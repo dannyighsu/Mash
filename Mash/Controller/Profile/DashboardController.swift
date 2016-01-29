@@ -202,15 +202,15 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             
             self.user.setBannerPic(header.bannerImage)
             self.user.setProfilePic(header.profilePic)
-            header.followerCount.text = "  \(self.user.followers!)\n  FOLLOWERS"
-            header.followingCount.text = "  \(self.user.following!)\n  FOLLOWING"
-            header.trackCount.text = "  \(self.user.tracks!)\n  TRACKS"
+            header.followerCount.text = "    \(self.user.followers!)\n    FOLLOWERS"
+            header.followingCount.text = "    \(self.user.following!)\n    FOLLOWING"
+            header.trackCount.text = "    \(self.user.tracks!)\n    TRACKS"
             
             // Add gradient to banner
-            let gradient: CAGradientLayer = CAGradientLayer()
+            /*let gradient: CAGradientLayer = CAGradientLayer()
             gradient.frame = header.bounds
             gradient.colors = [UIColor.clearColor().CGColor, UIColor.clearColor().CGColor, offWhite().CGColor]
-            header.bannerImage.layer.insertSublayer(gradient, atIndex: 0)
+            header.bannerImage.layer.insertSublayer(gradient, atIndex: 0)*/
             return header
         }
         return nil
