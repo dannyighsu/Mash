@@ -17,6 +17,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
     var audioPlayer: AVAudioPlayer? = nil
+    var playerTimer: NSTimer? = nil
+    var currTrackID: Int = 0
     var user: User = currentUser
     var activityView: ActivityView = ActivityView.make()
     
@@ -191,6 +193,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             header.followingCount.layer.borderWidth = 0.2
             header.trackCount.layer.borderWidth = 0.2
             
+            let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+            blurView.frame = header.informationView.bounds
+            blurView.contentView.backgroundColor = lightGrayTranslucent()
+            header.informationView.insertSubview(blurView, atIndex: 0)
+            
             header.editButton.setTitle(self.user.display_name(), forState: .Normal)
             // TODO: implement
             header.locationButton.setTitle(self.user.handle!, forState: .Normal)
@@ -202,15 +209,15 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             
             self.user.setBannerPic(header.bannerImage)
             self.user.setProfilePic(header.profilePic)
-            header.followerCount.text = "  \(self.user.followers!)\n  FOLLOWERS"
-            header.followingCount.text = "  \(self.user.following!)\n  FOLLOWING"
-            header.trackCount.text = "  \(self.user.tracks!)\n  TRACKS"
+            header.followerCount.text = "    \(self.user.followers!)\n    FOLLOWERS"
+            header.followingCount.text = "    \(self.user.following!)\n    FOLLOWING"
+            header.trackCount.text = "    \(self.user.tracks!)\n    TRACKS"
             
             // Add gradient to banner
-            let gradient: CAGradientLayer = CAGradientLayer()
+            /*let gradient: CAGradientLayer = CAGradientLayer()
             gradient.frame = header.bounds
             gradient.colors = [UIColor.clearColor().CGColor, UIColor.clearColor().CGColor, offWhite().CGColor]
-            header.bannerImage.layer.insertSublayer(gradient, atIndex: 0)
+            header.bannerImage.layer.insertSublayer(gradient, atIndex: 0)*/
             return header
         }
         return nil
@@ -245,6 +252,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                         track.generateWaveform()
                         self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
                         self.audioPlayer!.play()
+                        self.currTrackID = track.id
+                        if self.playerTimer != nil {
+                            self.playerTimer!.invalidate()
+                        }
+                        self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
                         Debug.printl("Playing track \(track.titleText)", sender: self)
                     }
                 }
@@ -257,7 +269,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == 1 {
+        if indexPath.section == 1 {
             if self.user != currentUser {
                 return
             }
@@ -268,14 +280,14 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if indexPath.row == 1 {
+        if indexPath.section == 1 {
             if self.user != currentUser {
                 return false
             }
         }
         return true
     }
-    
+
     // Track management
     func retrieveTracks() {
         let request = UserRequest()
@@ -345,6 +357,13 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
                 }
             }
+        }
+    }
+    
+    func play(sender: NSTimer) {
+        if self.audioPlayer!.currentTime >= (self.audioPlayer!.duration / 2) || self.audioPlayer!.currentTime > 10.0 {
+            sendPlayRequest(self.currTrackID)
+            sender.invalidate()
         }
     }
 

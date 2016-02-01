@@ -17,6 +17,8 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     var displayData: [HomeCell] = []
     var activityView: ActivityView = ActivityView.make()
     var audioPlayer: AVAudioPlayer? = nil
+    var playerTimer: NSTimer? = nil
+    var currTrackID: Int = 0
     var tabControlBar: TabControlBar? = nil
     var currentScope: Int = 0
     var previousTableYOffset: CGFloat = 0.0
@@ -95,7 +97,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 100.0
+            return 225.0
         } else {
             return 35
         }
@@ -104,39 +106,71 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell") as! HomeCell
-            cell.eventLabel.text = self.displayData[indexPath.row].eventText
+            cell.eventText = self.displayData[indexPath.row].eventText
+            cell.trackButton.setTitle(self.displayData[indexPath.row].eventText, forState: .Normal)
+            cell.artistButton.setTitle(self.displayData[indexPath.row].userText, forState: .Normal)
             cell.userLabel.setTitle(self.displayData[indexPath.row].userText, forState: .Normal)
             cell.timeLabel.text = self.displayData[indexPath.row].timeText
             cell.user = self.displayData[indexPath.row].user
             cell.track = self.displayData[indexPath.row].track
             cell.timeLabel.text = parseTimeStamp(cell.timeLabel.text!)
-            self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
+            cell.backgroundArt.layer.borderWidth = 0.5
+            cell.backgroundArt.layer.borderColor = lightGray().CGColor
             cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFill
             cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
             cell.profileImage.layer.borderWidth = 0.5
             cell.profileImage.layer.masksToBounds = true
             cell.userLabel.addTarget(self, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
+            
+            self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
+            self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
+            cell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)
+            cell.likeButton.addTarget(self, action: "like:", forControlEvents: .TouchUpInside)
+            
+            if !NSFileManager.defaultManager().fileExistsAtPath(filePathString(getS3WaveformKey(cell.track!))) {
+                download(getS3WaveformKey(cell.track!), url: filePathURL(getS3WaveformKey(cell.track!)), bucket: waveform_bucket) {
+                    (result) in
+                    if result != nil {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            cell.audioPlotView.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(cell.track!)))
+                        }
+                    } else {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            cell.audioPlotView.image = UIImage(named: "waveform_static")
+                        }
+                    }
+                    dispatch_async(dispatch_get_main_queue()) {
+                        let gradient: CAGradientLayer = CAGradientLayer()
+                        gradient.frame = cell.backgroundArt.bounds
+                        gradient.colors = [lightGray().CGColor, UIColor.clearColor().CGColor, lightGray().CGColor]
+                        cell.backgroundArt.layer.insertSublayer(gradient, atIndex: 0)
+                    }
+                }
+            }
+            
             return cell
         } else {
             let cell = self.activityFeed.dequeueReusableCellWithIdentifier("BufferCell")!
             cell.backgroundColor = UIColor.clearColor()
             return cell
         }
-        
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {
             let cell = tableView.cellForRowAtIndexPath(indexPath) as! HomeCell
-            cell.activityView.startAnimating()
             download(getS3Key(cell.track!), url: filePathURL(cell.track!.trackURL), bucket: track_bucket) {
                 (result) in
                 if result != nil {
                     dispatch_async(dispatch_get_main_queue()) {
-                        cell.activityView.stopAnimating()
                         do {
                             try self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(cell.track!.trackURL))
                             self.audioPlayer!.play()
+                            if self.playerTimer != nil {
+                                self.playerTimer!.invalidate()
+                            }
+                            self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
+                            self.currTrackID = cell.track!.id
                         } catch _ as NSError {
                             Debug.printl("Error downloading track", sender: self)
                         }
@@ -158,7 +192,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        if indexPath.row == 0 {
+        if indexPath.section == 0 {
             return indexPath
         } else {
             return nil
@@ -203,6 +237,23 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         user.handle = cell.userLabel.titleLabel!.text
         user.userid = cell.user!.userid
         User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
+    }
+    
+    func play(sender: NSTimer) {
+        if self.audioPlayer!.currentTime >= (self.audioPlayer!.duration / 2) || self.audioPlayer!.currentTime > 10.0 {
+            sendPlayRequest(self.currTrackID)
+            sender.invalidate()
+        }
+    }
+    
+    func like(sender: UIButton) {
+        var cell = sender.superview
+        while cell != nil && !(cell is HomeCell) {
+            cell = cell!.superview
+        }
+        let homecell = cell as! HomeCell
+        sendLikeRequest(homecell.track!.id)
+        // TODO: After calls are written, implement change in text after like
     }
     
     // Check if project view exists in memory, if not, create one.
@@ -324,39 +375,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             self.activityFeed.reloadData()
             self.activityView.stopAnimating()
         }
-        /*self.data = []
-        var activity = data["feed"] as! NSArray
-        for item in activity {
-            let type = item["type"] as! String
-            if type == "follow" {
-                let follower = item["following_handle"] as! String
-                let followed = item["followed_handle"] as! String
-                let event = "\(follower) followed \(followed)."
-                let time = item["timestamp"] as! String
-                var user = User()
-                user.handle = follower
-                user.profilePicKey = "\(user.handle!)~~profile_pic.jpg"
-                let cell = HomeCell(frame: CGRectZero, eventText: event, userText: follower, timeText: time, user: user)
-                self.data.append(cell)
-            } else if type == "recording" {
-                let user = item["following_handle"] as! String
-                let recording = item["recording_name"] as! String
-                let time = item["timestamp"] as! String
-                let event = "\(recording)"
-                var follower = User()
-                follower.handle = user
-                follower.profilePicKey = "\(follower.handle!)~~profile_pic.jpg"
-                let cell = HomeCell(frame: CGRectZero, eventText: event, userText: user, timeText: time, user: follower)
-                self.data.append(cell)
-            }
-        }
-        self.activityFeed.reloadData()
-        self.activityView.stopAnimating()*/
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
 }

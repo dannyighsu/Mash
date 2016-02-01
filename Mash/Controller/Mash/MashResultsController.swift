@@ -18,6 +18,8 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     var projectRecordings: [Track] = []
     var projectPlayers: [AVAudioPlayer] = []
     var audioPlayer: AVAudioPlayer? = nil
+    var playerTimer: NSTimer? = nil
+    var currTrackID: Int = 0
     var downloadedTracks: Set<Int> = Set<Int>()
     var audioModule: AudioModule = AudioModule()
     var currentTrackURL: String = ""
@@ -132,6 +134,11 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     func audioFileDidFinishConverting(trackid: Int) {
         self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: self.currentTrackURL))
         self.audioPlayer!.play()
+        if self.playerTimer != nil {
+            self.playerTimer!.invalidate()
+        }
+        self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
+        self.currTrackID = trackid
         for player in self.projectPlayers {
             player.play()
         }
@@ -166,6 +173,11 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         } else {
             self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
             self.audioPlayer!.play()
+            if self.playerTimer != nil {
+                self.playerTimer!.invalidate()
+            }
+            self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "sendPlayRequest:", userInfo: nil, repeats: true)
+            self.currTrackID = track.id
             for player in self.projectPlayers {
                 player.play()
             }
@@ -177,6 +189,13 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         for (var i = 0; i < self.projectPlayers.count; i++) {
             self.projectPlayers[i].stop()
             self.projectPlayers[i].currentTime = 0
+        }
+    }
+    
+    func play(sender: NSTimer) {
+        if self.audioPlayer!.currentTime >= (self.audioPlayer!.duration / 2) || self.audioPlayer!.currentTime > 10.0 {
+            sendPlayRequest(self.currTrackID)
+            sender.invalidate()
         }
     }
     

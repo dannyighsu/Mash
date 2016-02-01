@@ -151,9 +151,9 @@ func getS3Key(track: ProfileTrack) -> String {
 
 // Returns AWSS3 waveform bucket name
 func getS3WaveformKey(track: Track) -> String {
-    return "\(track.userid)~~\(track.id)_waveform.jpg"
+    return "\(track.userid)~~\(track.id)_waveform.png"
 }
 
 func getS3WaveformKey(track: ProfileTrack) -> String {
-    return "\(track.userid)~~\(track.id)_waveform.jpg"
+    return "\(track.userid)~~\(track.id)_waveform.png"
 }

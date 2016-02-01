@@ -18,6 +18,7 @@ class Profile: UITableViewHeaderFooterView {
     @IBOutlet weak var bannerImage: UIImageView!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var locationButton: UIButton!
+    @IBOutlet weak var informationView: UIView!
 
     /*override init(frame: CGRect) {
         super.init(frame: frame)

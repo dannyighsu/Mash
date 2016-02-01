@@ -15,6 +15,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     var completionTableView: UITableView? = nil
     var searchController: UISearchController?
     var audioPlayer: AVAudioPlayer? = nil
+    var playerTimer: NSTimer? = nil
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     // Holds current search results
     var searchResults: [AnyObject] = []
@@ -23,8 +24,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     // Holds current suggestion results
     var suggestions: [[String]] = []
     var tags: [[String]] = []
-    // Current search scope
     var scope: Int = 0
+    var currTrackID: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -175,6 +176,11 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                         self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
                         self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
                         self.audioPlayer!.play()
+                        if self.playerTimer != nil {
+                            self.playerTimer!.invalidate()
+                        }
+                        self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
+                        self.currTrackID = track.id
                     }
                 }
             } else {
@@ -211,6 +217,13 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             self.searchResults.append(self.allResults[i])
         }
         self.tableView.reloadData()
+    }
+    
+    func play(sender: NSTimer) {
+        if self.audioPlayer!.currentTime >= (self.audioPlayer!.duration / 2) || self.audioPlayer!.currentTime > 10.0 {
+            sendPlayRequest(self.currTrackID)
+            sender.invalidate()
+        }
     }
     
     // Text Field Delegate

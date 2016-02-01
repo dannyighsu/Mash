@@ -8,12 +8,12 @@ PODS:
   - Bolts/AppLinks (1.2.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.2.0)
-  - EZAudio (1.1.1):
-    - EZAudio/Full (= 1.1.1)
-  - EZAudio/Core (1.1.1)
-  - EZAudio/Full (1.1.1):
+  - EZAudio (1.1.4):
+    - EZAudio/Full (= 1.1.4)
+  - EZAudio/Core (1.1.4)
+  - EZAudio/Full (1.1.4):
     - EZAudio/Core
-    - TPCircularBuffer (~> 0.0)
+    - TPCircularBuffer (= 1.1)
   - FBSDKCoreKit (4.5.1):
     - Bolts (~> 1.1)
     - FBSDKCoreKit/arc (= 4.5.1)
@@ -46,7 +46,7 @@ PODS:
   - IQKeyboardManager (3.2.4)
   - OpenSSL (1.0.204)
   - Protobuf (3.0.0-alpha-4.1)
-  - TPCircularBuffer (0.0.1)
+  - TPCircularBuffer (1.1)
 
 DEPENDENCIES:
   - AWSCore
@@ -64,7 +64,7 @@ SPEC CHECKSUMS:
   AWSCore: 483fa0f25c8508e3364f818e9b941c6204619afa
   AWSS3: da758d5a95e65bb9e6e718245c1a86b6f63de9ae
   Bolts: d176cb1e0012175589e389a9db49b85e27787576
-  EZAudio: 63cd1f0d1b1261f76955dab204a10af067ffb689
+  EZAudio: 8e684b2b81b0437fe45faa7e2725fe99f69c84b6
   FBSDKCoreKit: f335eaf6865e1e1597dee1debfb533045500da47
   FBSDKLoginKit: 225cc9a388a92916ee3f3bb14422017b6e44b65b
   FBSDKShareKit: 642034ac9f30793dfd897851b724bb4281750266
@@ -73,6 +73,6 @@ SPEC CHECKSUMS:
   IQKeyboardManager: 555b1231fefafb21b19278d7cca72986a27b748b
   OpenSSL: 576b352e6e6e60793ca133c6785736e3cbc31a09
   Protobuf: a0f3b369ce888d47735a5ec1c40b1bc31cbad46b
-  TPCircularBuffer: 949e9632b9fb99b7274d7b2296ee22bff5841e35
+  TPCircularBuffer: 4960a919e667280f7f38963d771f45871b64fe62
 
 COCOAPODS: 0.39.0

@@ -296,6 +296,7 @@
 		3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718EF281B57071D00AA5D26 /* Objective-C.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		371F14C71B8D23550044BE5B /* mashservice.proto in Resources */ = {isa = PBXBuildFile; fileRef = 371F14C61B8D23550044BE5B /* mashservice.proto */; };
 		3722ACEA1B4DF1F2008473C3 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3722ACE91B4DF1F2008473C3 /* ImageCell.xib */; };
+		373915D41C5D7FFE0093351B /* RemoteFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373915D31C5D7FFE0093351B /* RemoteFunctions.swift */; };
 		373F0EFD1B3DEFC500DE92AB /* Basses Legato.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EF61B3DEFC500DE92AB /* Basses Legato.aif */; };
 		373F0EFE1B3DEFC500DE92AB /* Female Chorus.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EF71B3DEFC500DE92AB /* Female Chorus.aif */; };
 		373F0EFF1B3DEFC500DE92AB /* Harp.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EF81B3DEFC500DE92AB /* Harp.aif */; };
@@ -723,6 +724,7 @@
 		3718EF281B57071D00AA5D26 /* Objective-C.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Objective-C.m"; sourceTree = "<group>"; };
 		371F14C61B8D23550044BE5B /* mashservice.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mashservice.proto; path = protos/mashservice.proto; sourceTree = SOURCE_ROOT; };
 		3722ACE91B4DF1F2008473C3 /* ImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
+		373915D31C5D7FFE0093351B /* RemoteFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteFunctions.swift; sourceTree = "<group>"; };
 		373F0EF61B3DEFC500DE92AB /* Basses Legato.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Basses Legato.aif"; sourceTree = "<group>"; };
 		373F0EF71B3DEFC500DE92AB /* Female Chorus.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Female Chorus.aif"; sourceTree = "<group>"; };
 		373F0EF81B3DEFC500DE92AB /* Harp.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = Harp.aif; sourceTree = "<group>"; };
@@ -1349,6 +1351,7 @@
 			children = (
 				3798823D1C0131200029E56C /* AWSS3.swift */,
 				3798823E1C0131200029E56C /* HTTP.swift */,
+				373915D31C5D7FFE0093351B /* RemoteFunctions.swift */,
 			);
 			path = Remote;
 			sourceTree = "<group>";
@@ -2216,6 +2219,7 @@
 				37E799BA1B3CC1C600D2E54D /* TabBarController.swift in Sources */,
 				37737B991BDF865C00FA9EB7 /* LoadBalancer.pbrpc.m in Sources */,
 				370A39021BF6A8B700FCD060 /* ImageCell.swift in Sources */,
+				373915D41C5D7FFE0093351B /* RemoteFunctions.swift in Sources */,
 				379882851C01314F0029E56C /* UploadViewController.swift in Sources */,
 				37A43C2D1C3DDD1300B06A14 /* TabControlBar.swift in Sources */,
 				3798827E1C01314F0029E56C /* SettingsViewController.swift in Sources */,
