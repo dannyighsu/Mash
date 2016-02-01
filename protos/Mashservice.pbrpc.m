@@ -20,10 +20,6 @@ static NSString *const kServiceName = @"MashService";
   return [self initWithHost:host];
 }
 
-+ (instancetype)serviceWithHost:(NSString *)host {
-  return [[self alloc] initWithHost:host];
-}
-
 
 #pragma mark Register(RegisterRequest) returns (RegisterResponse)
 
@@ -323,6 +319,18 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"Version"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[VersionResponse class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
+#pragma mark UserDevice(DeviceRequest) returns (SuccessResponse)
+
+- (void)userDeviceWithRequest:(DeviceRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  [[self RPCToUserDeviceWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToUserDeviceWithRequest:(DeviceRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  return [self RPCToMethod:@"UserDevice"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[SuccessResponse class]
         responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 @end

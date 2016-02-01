@@ -158,6 +158,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
                 currentUser.loginToken = response.loginToken
                 User.getUsersFollowing()
                 User.updateSelf(nil)
+                sendTokenRequest()
                 
                 dispatch_async(dispatch_get_main_queue()) {
                     if !testing {

@@ -182,10 +182,16 @@
 - (ProtoRPC *)RPCToVersionWithRequest:(VersionRequest *)request handler:(void(^)(VersionResponse *response, NSError *error))handler;
 
 
+#pragma mark UserDevice(DeviceRequest) returns (SuccessResponse)
+
+- (void)userDeviceWithRequest:(DeviceRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToUserDeviceWithRequest:(DeviceRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+
 @end
 
 // Basic service implementation, over gRPC, that only does marshalling and parsing.
 @interface MashService : ProtoService<MashService>
 - (instancetype)initWithHost:(NSString *)host NS_DESIGNATED_INITIALIZER;
-+ (instancetype)serviceWithHost:(NSString *)host;
 @end

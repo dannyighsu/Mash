@@ -205,6 +205,12 @@ message VersionRequest {
     required string version = 1;
 }
 
+message DeviceRequest {
+    required uint32 userid = 1;
+    required string login_token = 2;
+    required string device_token = 3;
+}
+
 service MashService {
     rpc Register        (RegisterRequest) returns (RegisterResponse);
     rpc SignIn          (SignInRequest) returns (SignInResponse);
@@ -231,4 +237,5 @@ service MashService {
     rpc UserSearch      (UserSearchRequest) returns (UserPreviews);
     rpc RecordingMash   (RecordingRequest) returns (Recordings);
     rpc Version         (VersionRequest) returns (VersionResponse);
+    rpc UserDevice      (DeviceRequest) returns (SuccessResponse);
 }

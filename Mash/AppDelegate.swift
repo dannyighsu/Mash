@@ -38,10 +38,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // Set up notifications
-        /*let types = UIUserNotificationType.Badge.union(UIUserNotificationType.Sound.union(UIUserNotificationType.Alert))
+        let types = UIUserNotificationType.Badge.union(UIUserNotificationType.Sound.union(UIUserNotificationType.Alert))
         let settings = UIUserNotificationSettings(forTypes: types, categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
-        UIApplication.sharedApplication().registerForRemoteNotifications()*/
+        UIApplication.sharedApplication().registerForRemoteNotifications()
         
         // Load AVAudioSession
         let session = AVAudioSession.sharedInstance()
@@ -158,7 +158,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // Notification registry
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        
+        var token = deviceToken.description.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "<>"))
+        token = token.stringByReplacingOccurrencesOfString(" ", withString: "")
+        deviceNotificationToken = token
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {

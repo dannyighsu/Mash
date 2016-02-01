@@ -148,6 +148,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }
         User.getUsersFollowing()
+        sendTokenRequest()
 
         Debug.printl("Successful login - pushing tab bar controller onto navigation controller", sender: self)
         let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController
