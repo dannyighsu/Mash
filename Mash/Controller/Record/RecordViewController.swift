@@ -574,6 +574,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             }
         }
         User.getUsersFollowing()
+        sendTokenRequest()
         
         Debug.printl("Successful login", sender: self)
     }

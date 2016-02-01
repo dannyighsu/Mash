@@ -211,6 +211,16 @@ func raiseAlert(input: String) {
     }
 }
 
+func raiseAlert(input: String, message: String) {
+    dispatch_async(dispatch_get_main_queue()) {
+        let alert = UIAlertView()
+        alert.title = input
+        alert.message = message
+        alert.addButtonWithTitle("OK")
+        alert.show()
+    }
+}
+
 func raiseAlert(input: String, delegate: UIViewController) {
     dispatch_async(dispatch_get_main_queue()) {
         let alert = UIAlertView()

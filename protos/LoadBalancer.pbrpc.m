@@ -20,10 +20,6 @@ static NSString *const kServiceName = @"LoadBalancer";
   return [self initWithHost:host];
 }
 
-+ (instancetype)serviceWithHost:(NSString *)host {
-  return [[self alloc] initWithHost:host];
-}
-
 
 #pragma mark GetServerAddress(ServerAddressRequest) returns (ServerAddressResponse)
 

@@ -19,5 +19,4 @@
 // Basic service implementation, over gRPC, that only does marshalling and parsing.
 @interface LoadBalancer : ProtoService<LoadBalancer>
 - (instancetype)initWithHost:(NSString *)host NS_DESIGNATED_INITIALIZER;
-+ (instancetype)serviceWithHost:(NSString *)host;
 @end

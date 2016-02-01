@@ -772,6 +772,27 @@ typedef GPB_ENUM(VersionRequest_FieldNumber) {
 
 @end
 
+#pragma mark - DeviceRequest
+
+typedef GPB_ENUM(DeviceRequest_FieldNumber) {
+  DeviceRequest_FieldNumber_Userid = 1,
+  DeviceRequest_FieldNumber_LoginToken = 2,
+  DeviceRequest_FieldNumber_DeviceToken = 3,
+};
+
+@interface DeviceRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasUserid;
+@property(nonatomic, readwrite) uint32_t userid;
+
+@property(nonatomic, readwrite) BOOL hasLoginToken;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *loginToken;
+
+@property(nonatomic, readwrite) BOOL hasDeviceToken;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *deviceToken;
+
+@end
+
 NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END

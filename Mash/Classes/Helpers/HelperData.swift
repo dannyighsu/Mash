@@ -9,25 +9,6 @@
 import Foundation
 import UIKit
 
-// Helper objects
-let loadBalancerAddress: String = "http://52.27.78.119:5010"
-let loadBalancer: LoadBalancer = LoadBalancer(host: loadBalancerAddress)
-let track_bucket: String = "mash1-tracks"
-let profile_bucket: String = "mash-profiles"
-let banner_bucket: String = "mash-banners"
-let waveform_bucket: String = "mash-trackwaveforms"
-let DEFAULT_DISPLAY_AMOUNT = 15
-var hostAddress: String = "nil"
-var server: MashService = MashService(host: hostAddress)
-var serverTimer: NSTimer = NSTimer()
-var keychainWrapper: KeychainWrapper = KeychainWrapper()
-var currentUser = User()
-var userFollowing: [User] = []
-var currentProject: UINavigationController? = nil
-var rootTabBarController: TabBarController? = nil
-var rootNavigationController: RootNavigationController? = nil
-var tracksToAdd: [Track] = []
-
 // Returns light blue
 func lightBlue() -> UIColor {
     return UIColor(red: (70/255), green: (202/255), blue: (229/255), alpha: 1.0)

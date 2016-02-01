@@ -126,7 +126,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
             cell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)
             cell.likeButton.addTarget(self, action: "like:", forControlEvents: .TouchUpInside)
-            
+    
             if !NSFileManager.defaultManager().fileExistsAtPath(filePathString(getS3WaveformKey(cell.track!))) {
                 download(getS3WaveformKey(cell.track!), url: filePathURL(getS3WaveformKey(cell.track!)), bucket: waveform_bucket) {
                     (result) in
@@ -146,6 +146,12 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                         cell.backgroundArt.layer.insertSublayer(gradient, atIndex: 0)
                     }
                 }
+            } else {
+                cell.audioPlotView.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(cell.track!)))
+                let gradient: CAGradientLayer = CAGradientLayer()
+                gradient.frame = cell.backgroundArt.bounds
+                gradient.colors = [lightGray().CGColor, UIColor.clearColor().CGColor, lightGray().CGColor]
+                cell.backgroundArt.layer.insertSublayer(gradient, atIndex: 0)
             }
             
             return cell

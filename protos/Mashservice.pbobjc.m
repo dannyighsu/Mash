@@ -2591,5 +2591,82 @@ typedef struct VersionRequest__storage_ {
 
 @end
 
+#pragma mark - DeviceRequest
+
+@implementation DeviceRequest
+
+@dynamic hasUserid, userid;
+@dynamic hasLoginToken, loginToken;
+@dynamic hasDeviceToken, deviceToken;
+
+typedef struct DeviceRequest__storage_ {
+  uint32_t _has_storage_[1];
+  uint32_t userid;
+  NSString *loginToken;
+  NSString *deviceToken;
+} DeviceRequest__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "userid",
+        .number = DeviceRequest_FieldNumber_Userid,
+        .hasIndex = 0,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(DeviceRequest__storage_, userid),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "loginToken",
+        .number = DeviceRequest_FieldNumber_LoginToken,
+        .hasIndex = 1,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(DeviceRequest__storage_, loginToken),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "deviceToken",
+        .number = DeviceRequest_FieldNumber_DeviceToken,
+        .hasIndex = 2,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(DeviceRequest__storage_, deviceToken),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[DeviceRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(DeviceRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 
 // @@protoc_insertion_point(global_scope)

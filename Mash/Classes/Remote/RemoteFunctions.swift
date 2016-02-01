@@ -35,3 +35,19 @@ func sendLikeRequest(trackid: Int) {
         }
     }
 }
+
+func sendTokenRequest() {
+    let request = DeviceRequest()
+    request.userid = UInt32(currentUser.userid!)
+    request.loginToken = currentUser.loginToken
+    request.deviceToken = deviceNotificationToken
+    
+    server.userDeviceWithRequest(request) {
+        (response, error) in
+        if error != nil {
+            Debug.printl(error, sender: "helpers")
+            // TODO: Add a direct link to notification center
+            raiseAlert("There was an issue registering your device for push notifications.", message: "Please enable notifications in the Notification Center.")
+        }
+    }
+}
