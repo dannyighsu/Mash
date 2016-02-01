@@ -87,7 +87,6 @@
                     <subviews>
                         <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0dQ-Dv-L4J">
                             <rect key="frame" x="0.0" y="0.0" width="200" height="40"/>
-                            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="200" id="1pd-Mn-bdG"/>
                                 <constraint firstAttribute="height" constant="40" id="CjE-p1-cAc"/>
@@ -109,7 +108,6 @@
                         </label>
                         <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="miv-rN-N0T">
                             <rect key="frame" x="200" y="0.0" width="200" height="40"/>
-                            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <string key="text">    0000
     Following</string>
                             <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="11"/>
@@ -118,7 +116,6 @@
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VC7-aU-ud6">
                             <rect key="frame" x="400" y="0.0" width="200" height="40"/>
-                            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <string key="text">    0000
     Tracks</string>
                             <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="11"/>
@@ -161,6 +158,7 @@
                 <outlet property="editButton" destination="jgl-b8-Kfq" id="xi0-rS-H4J"/>
                 <outlet property="followerCount" destination="0dQ-Dv-L4J" id="OAe-mU-oCe"/>
                 <outlet property="followingCount" destination="miv-rN-N0T" id="ALd-WL-fTx"/>
+                <outlet property="informationView" destination="n0s-2E-bvI" id="ust-n1-OTL"/>
                 <outlet property="locationButton" destination="qoE-Zk-aoq" id="oJC-6B-Fwf"/>
                 <outlet property="profilePic" destination="XNv-YT-gfh" id="G9M-lI-MhG"/>
                 <outlet property="trackCount" destination="VC7-aU-ud6" id="Akh-c0-1WH"/>

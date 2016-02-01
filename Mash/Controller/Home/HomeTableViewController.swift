@@ -17,6 +17,8 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     var displayData: [HomeCell] = []
     var activityView: ActivityView = ActivityView.make()
     var audioPlayer: AVAudioPlayer? = nil
+    var playerTimer: NSTimer? = nil
+    var currTrackID: Int = 0
     var tabControlBar: TabControlBar? = nil
     var currentScope: Int = 0
     var previousTableYOffset: CGFloat = 0.0
@@ -123,6 +125,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
             self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
             cell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)
+            cell.likeButton.addTarget(self, action: "like:", forControlEvents: .TouchUpInside)
             
             if !NSFileManager.defaultManager().fileExistsAtPath(filePathString(getS3WaveformKey(cell.track!))) {
                 download(getS3WaveformKey(cell.track!), url: filePathURL(getS3WaveformKey(cell.track!)), bucket: waveform_bucket) {
@@ -163,6 +166,11 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                         do {
                             try self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(cell.track!.trackURL))
                             self.audioPlayer!.play()
+                            if self.playerTimer != nil {
+                                self.playerTimer!.invalidate()
+                            }
+                            self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
+                            self.currTrackID = cell.track!.id
                         } catch _ as NSError {
                             Debug.printl("Error downloading track", sender: self)
                         }
@@ -229,6 +237,23 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         user.handle = cell.userLabel.titleLabel!.text
         user.userid = cell.user!.userid
         User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
+    }
+    
+    func play(sender: NSTimer) {
+        if self.audioPlayer!.currentTime >= (self.audioPlayer!.duration / 2) || self.audioPlayer!.currentTime > 10.0 {
+            sendPlayRequest(self.currTrackID)
+            sender.invalidate()
+        }
+    }
+    
+    func like(sender: UIButton) {
+        var cell = sender.superview
+        while cell != nil && !(cell is HomeCell) {
+            cell = cell!.superview
+        }
+        let homecell = cell as! HomeCell
+        sendLikeRequest(homecell.track!.id)
+        // TODO: After calls are written, implement change in text after like
     }
     
     // Check if project view exists in memory, if not, create one.
@@ -350,39 +375,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             self.activityFeed.reloadData()
             self.activityView.stopAnimating()
         }
-        /*self.data = []
-        var activity = data["feed"] as! NSArray
-        for item in activity {
-            let type = item["type"] as! String
-            if type == "follow" {
-                let follower = item["following_handle"] as! String
-                let followed = item["followed_handle"] as! String
-                let event = "\(follower) followed \(followed)."
-                let time = item["timestamp"] as! String
-                var user = User()
-                user.handle = follower
-                user.profilePicKey = "\(user.handle!)~~profile_pic.jpg"
-                let cell = HomeCell(frame: CGRectZero, eventText: event, userText: follower, timeText: time, user: user)
-                self.data.append(cell)
-            } else if type == "recording" {
-                let user = item["following_handle"] as! String
-                let recording = item["recording_name"] as! String
-                let time = item["timestamp"] as! String
-                let event = "\(recording)"
-                var follower = User()
-                follower.handle = user
-                follower.profilePicKey = "\(follower.handle!)~~profile_pic.jpg"
-                let cell = HomeCell(frame: CGRectZero, eventText: event, userText: user, timeText: time, user: follower)
-                self.data.append(cell)
-            }
-        }
-        self.activityFeed.reloadData()
-        self.activityView.stopAnimating()*/
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
 }

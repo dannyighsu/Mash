@@ -33,9 +33,17 @@ func lightBlue() -> UIColor {
     return UIColor(red: (70/255), green: (202/255), blue: (229/255), alpha: 1.0)
 }
 
+func lightBlueTranslucent() -> UIColor {
+    return UIColor(red: (70/255), green: (202/255), blue: (229/255), alpha: 0.7)
+}
+
 // Returns light gray
 func lightGray() -> UIColor {
     return UIColor(red: (154/255), green: (154/255), blue: (154/255), alpha: 1.0)
+}
+
+func lightGrayTranslucent() -> UIColor {
+    return UIColor(red: (154/255), green: (154/255), blue: (154/255), alpha: 0.6)
 }
 
 // Returns lighter gray
@@ -48,7 +56,6 @@ func darkGray() -> UIColor {
     return UIColor(red: (20/255), green: (20/255), blue: (40/255), alpha: 1.0)
 }
 
-// Returns translucent dark blue
 func darkBlueTranslucent() -> UIColor {
     return UIColor(red: (20/255), green: (20/255), blue: (40/255), alpha: 0.7)
 }

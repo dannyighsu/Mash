@@ -17,6 +17,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet var tracks: UITableView!
     var data: [Track] = []
     var audioPlayer: AVAudioPlayer? = nil
+    var playerTimer: NSTimer? = nil
+    var currTrackID: Int = 0
     var user: User = currentUser
     var activityView: ActivityView = ActivityView.make()
     
@@ -191,6 +193,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             header.followingCount.layer.borderWidth = 0.2
             header.trackCount.layer.borderWidth = 0.2
             
+            let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+            blurView.frame = header.informationView.bounds
+            blurView.contentView.backgroundColor = lightGrayTranslucent()
+            header.informationView.insertSubview(blurView, atIndex: 0)
+            
             header.editButton.setTitle(self.user.display_name(), forState: .Normal)
             // TODO: implement
             header.locationButton.setTitle(self.user.handle!, forState: .Normal)
@@ -245,6 +252,11 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                         track.generateWaveform()
                         self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
                         self.audioPlayer!.play()
+                        self.currTrackID = track.id
+                        if self.playerTimer != nil {
+                            self.playerTimer!.invalidate()
+                        }
+                        self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
                         Debug.printl("Playing track \(track.titleText)", sender: self)
                     }
                 }
@@ -275,7 +287,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         return true
     }
-    
+
     // Track management
     func retrieveTracks() {
         let request = UserRequest()
@@ -345,6 +357,13 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
                 }
             }
+        }
+    }
+    
+    func play(sender: NSTimer) {
+        if self.audioPlayer!.currentTime >= (self.audioPlayer!.duration / 2) || self.audioPlayer!.currentTime > 10.0 {
+            sendPlayRequest(self.currTrackID)
+            sender.invalidate()
         }
     }
 
