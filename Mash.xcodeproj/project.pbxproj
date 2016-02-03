@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37038FB81C617D1C0043C262 /* DirectUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37038FB31C617D1C0043C262 /* DirectUploadViewController.swift */; };
+		37038FB91C617D1C0043C262 /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37038FB41C617D1C0043C262 /* ExploreViewController.swift */; };
+		37038FBA1C617D1C0043C262 /* ImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37038FB51C617D1C0043C262 /* ImportViewController.swift */; };
+		37038FBB1C617D1C0043C262 /* RecordToolsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37038FB61C617D1C0043C262 /* RecordToolsController.swift */; };
+		37038FBC1C617D1C0043C262 /* TaggingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37038FB71C617D1C0043C262 /* TaggingViewController.swift */; };
+		37038FC11C617F0F0043C262 /* Deprecated.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37038FBF1C617F0F0043C262 /* Deprecated.storyboard */; };
 		3709D5AB1C0E7E6A00491CA7 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3709D5AA1C0E7E6A00491CA7 /* Options.swift */; };
 		370A37DE1BF6A31D00FCD060 /* Flurry.h in Headers */ = {isa = PBXBuildFile; fileRef = 370A36C61BF6A31D00FCD060 /* Flurry.h */; };
 		370A37DF1BF6A31D00FCD060 /* FlurryWatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 370A36C71BF6A31D00FCD060 /* FlurryWatch.h */; };
@@ -285,7 +291,6 @@
 		370A390F1BF6A8B700FCD060 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A38FD1BF6A8B700FCD060 /* Track.swift */; };
 		370A39101BF6A8B700FCD060 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A38FE1BF6A8B700FCD060 /* User.swift */; };
 		370AC1A31C3C95C1002ED357 /* ProjectTabBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 370AC1A21C3C95C1002ED357 /* ProjectTabBar.xib */; };
-		370AC1A81C3C9D45002ED357 /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370AC1A51C3C9D45002ED357 /* ExploreViewController.swift */; };
 		370AC1A91C3C9D45002ED357 /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370AC1A61C3C9D45002ED357 /* HomeTableViewController.swift */; };
 		370AC1AA1C3C9D45002ED357 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370AC1A71C3C9D45002ED357 /* SearchViewController.swift */; };
 		370AC1AE1C3C9DC1002ED357 /* BufferCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 370AC1AD1C3C9DC1002ED357 /* BufferCell.xib */; };
@@ -345,9 +350,7 @@
 		3798827F1C01314F0029E56C /* MixerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379882741C01314F0029E56C /* MixerController.swift */; };
 		379882801C01314F0029E56C /* ProjectPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379882751C01314F0029E56C /* ProjectPreferencesViewController.swift */; };
 		379882811C01314F0029E56C /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379882761C01314F0029E56C /* ProjectViewController.swift */; };
-		379882821C01314F0029E56C /* RecordToolsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379882781C01314F0029E56C /* RecordToolsController.swift */; };
 		379882831C01314F0029E56C /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379882791C01314F0029E56C /* RecordViewController.swift */; };
-		379882841C01314F0029E56C /* TaggingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3798827A1C01314F0029E56C /* TaggingViewController.swift */; };
 		379882851C01314F0029E56C /* UploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3798827B1C01314F0029E56C /* UploadViewController.swift */; };
 		37A3C2CA1B3CC00600F77F2A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A3C2C91B3CC00600F77F2A /* AppDelegate.swift */; };
 		37A3C2CF1B3CC00600F77F2A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37A3C2CD1B3CC00600F77F2A /* Main.storyboard */; };
@@ -411,8 +414,6 @@
 		37D235231C3BABFE0091A1D0 /* SwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D235221C3BABFE0091A1D0 /* SwipeInteractionController.swift */; };
 		37DE77251B436F4A00952987 /* User.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37DE77241B436F4A00952987 /* User.xib */; };
 		37DE77271B4370B200952987 /* FollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DE77261B4370B200952987 /* FollowingViewController.swift */; };
-		37E799A61B3CC1C600D2E54D /* DirectUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799881B3CC1C600D2E54D /* DirectUploadViewController.swift */; };
-		37E799AA1B3CC1C600D2E54D /* ImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E7998C1B3CC1C600D2E54D /* ImportViewController.swift */; };
 		37E799AE1B3CC1C600D2E54D /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799901B3CC1C600D2E54D /* RootNavigationController.swift */; };
 		37E799BA1B3CC1C600D2E54D /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799A21B3CC1C600D2E54D /* TabBarController.swift */; };
 		37E799D91B3CC1D000D2E54D /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799BE1B3CC1D000D2E54D /* Debug.swift */; };
@@ -436,6 +437,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		37038FB31C617D1C0043C262 /* DirectUploadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectUploadViewController.swift; sourceTree = "<group>"; };
+		37038FB41C617D1C0043C262 /* ExploreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
+		37038FB51C617D1C0043C262 /* ImportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportViewController.swift; sourceTree = "<group>"; };
+		37038FB61C617D1C0043C262 /* RecordToolsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordToolsController.swift; sourceTree = "<group>"; };
+		37038FB71C617D1C0043C262 /* TaggingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaggingViewController.swift; sourceTree = "<group>"; };
+		37038FC01C617F0F0043C262 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Deprecated.storyboard; sourceTree = "<group>"; };
 		3709D5AA1C0E7E6A00491CA7 /* Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		370A36C61BF6A31D00FCD060 /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
 		370A36C71BF6A31D00FCD060 /* FlurryWatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlurryWatch.h; sourceTree = "<group>"; };
@@ -714,7 +721,6 @@
 		370A38FD1BF6A8B700FCD060 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		370A38FE1BF6A8B700FCD060 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		370AC1A21C3C95C1002ED357 /* ProjectTabBar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectTabBar.xib; sourceTree = "<group>"; };
-		370AC1A51C3C9D45002ED357 /* ExploreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
 		370AC1A61C3C9D45002ED357 /* HomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
 		370AC1A71C3C9D45002ED357 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		370AC1AD1C3C9DC1002ED357 /* BufferCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BufferCell.xib; sourceTree = "<group>"; };
@@ -774,9 +780,7 @@
 		379882741C01314F0029E56C /* MixerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MixerController.swift; sourceTree = "<group>"; };
 		379882751C01314F0029E56C /* ProjectPreferencesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectPreferencesViewController.swift; sourceTree = "<group>"; };
 		379882761C01314F0029E56C /* ProjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectViewController.swift; sourceTree = "<group>"; };
-		379882781C01314F0029E56C /* RecordToolsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordToolsController.swift; sourceTree = "<group>"; };
 		379882791C01314F0029E56C /* RecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
-		3798827A1C01314F0029E56C /* TaggingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaggingViewController.swift; sourceTree = "<group>"; };
 		3798827B1C01314F0029E56C /* UploadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadViewController.swift; sourceTree = "<group>"; };
 		37A3C2C41B3CC00600F77F2A /* Mash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37A3C2C81B3CC00600F77F2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -845,8 +849,6 @@
 		37DE77241B436F4A00952987 /* User.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = User.xib; sourceTree = "<group>"; };
 		37DE77261B4370B200952987 /* FollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowingViewController.swift; sourceTree = "<group>"; };
 		37E799851B3CC12D00D2E54D /* Mash-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mash-Bridging-Header.h"; sourceTree = "<group>"; };
-		37E799881B3CC1C600D2E54D /* DirectUploadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectUploadViewController.swift; sourceTree = "<group>"; };
-		37E7998C1B3CC1C600D2E54D /* ImportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportViewController.swift; sourceTree = "<group>"; };
 		37E799901B3CC1C600D2E54D /* RootNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootNavigationController.swift; sourceTree = "<group>"; };
 		37E799A21B3CC1C600D2E54D /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		37E799BE1B3CC1D000D2E54D /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
@@ -896,6 +898,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		37038FB21C617CBA0043C262 /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				37038FB31C617D1C0043C262 /* DirectUploadViewController.swift */,
+				37038FB41C617D1C0043C262 /* ExploreViewController.swift */,
+				37038FB51C617D1C0043C262 /* ImportViewController.swift */,
+				37038FB61C617D1C0043C262 /* RecordToolsController.swift */,
+				37038FB71C617D1C0043C262 /* TaggingViewController.swift */,
+			);
+			path = Deprecated;
+			sourceTree = "<group>";
+		};
 		370A36C31BF6A31D00FCD060 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -1292,7 +1306,6 @@
 		370AC1A41C3C9D45002ED357 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				370AC1A51C3C9D45002ED357 /* ExploreViewController.swift */,
 				370AC1A61C3C9D45002ED357 /* HomeTableViewController.swift */,
 				370AC1A71C3C9D45002ED357 /* SearchViewController.swift */,
 			);
@@ -1415,9 +1428,7 @@
 		379882771C01314F0029E56C /* Record */ = {
 			isa = PBXGroup;
 			children = (
-				379882781C01314F0029E56C /* RecordToolsController.swift */,
 				379882791C01314F0029E56C /* RecordViewController.swift */,
-				3798827A1C01314F0029E56C /* TaggingViewController.swift */,
 				3798827B1C01314F0029E56C /* UploadViewController.swift */,
 			);
 			name = Record;
@@ -1454,6 +1465,7 @@
 				37E799BD1B3CC1D000D2E54D /* Classes */,
 				37E799861B3CC1C600D2E54D /* Controller */,
 				37A3C2D21B3CC00600F77F2A /* LaunchScreen.xib */,
+				37038FBF1C617F0F0043C262 /* Deprecated.storyboard */,
 				37A3C2CD1B3CC00600F77F2A /* Main.storyboard */,
 				370A36C31BF6A31D00FCD060 /* Libraries */,
 				37E799F31B3CC1F600D2E54D /* Objective-C */,
@@ -1607,11 +1619,10 @@
 		37E799861B3CC1C600D2E54D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				37E799881B3CC1C600D2E54D /* DirectUploadViewController.swift */,
 				37DE77261B4370B200952987 /* FollowingViewController.swift */,
-				37E7998C1B3CC1C600D2E54D /* ImportViewController.swift */,
 				37E799901B3CC1C600D2E54D /* RootNavigationController.swift */,
 				37E799A21B3CC1C600D2E54D /* TabBarController.swift */,
+				37038FB21C617CBA0043C262 /* Deprecated */,
 				3798824C1C01313F0029E56C /* Entry */,
 				370AC1A41C3C9D45002ED357 /* Home */,
 				379882501C01313F0029E56C /* Mash */,
@@ -1896,6 +1907,7 @@
 				370A38C21BF6A31D00FCD060 /* properties_77.html in Resources */,
 				370A38441BF6A31D00FCD060 /* navtreeindex0.js in Resources */,
 				370A38E91BF6A31D00FCD060 /* Hogan.js-LICENSE.txt in Resources */,
+				37038FC11C617F0F0043C262 /* Deprecated.storyboard in Resources */,
 				370A38B01BF6A31D00FCD060 /* properties_68.html in Resources */,
 				370A37F81BF6A31D00FCD060 /* class_flurry_ad_interstitial-members.html in Resources */,
 				370A38BE1BF6A31D00FCD060 /* properties_75.html in Resources */,
@@ -2216,10 +2228,11 @@
 				379882411C0131200029E56C /* AudioProcessor.swift in Sources */,
 				37C9F5131C029E2000C80F88 /* Channel.swift in Sources */,
 				37C9F5121C029E2000C80F88 /* ProfileTrack.swift in Sources */,
+				37038FB91C617D1C0043C262 /* ExploreViewController.swift in Sources */,
 				3798827D1C01314F0029E56C /* ImageViewController.swift in Sources */,
 				37E799D91B3CC1D000D2E54D /* Debug.swift in Sources */,
-				37E799A61B3CC1C600D2E54D /* DirectUploadViewController.swift in Sources */,
 				37737B971BDF865C00FA9EB7 /* LoadBalancer.pbobjc.m in Sources */,
+				37038FBB1C617D1C0043C262 /* RecordToolsController.swift in Sources */,
 				37E799BA1B3CC1C600D2E54D /* TabBarController.swift in Sources */,
 				37737B991BDF865C00FA9EB7 /* LoadBalancer.pbrpc.m in Sources */,
 				370A39021BF6A8B700FCD060 /* ImageCell.swift in Sources */,
@@ -2240,11 +2253,13 @@
 				379882471C0131360029E56C /* HelperData.swift in Sources */,
 				379882401C0131200029E56C /* AudioModule.swift in Sources */,
 				370AC1AA1C3C9D45002ED357 /* SearchViewController.swift in Sources */,
+				37038FB81C617D1C0043C262 /* DirectUploadViewController.swift in Sources */,
 				370A39041BF6A8B700FCD060 /* InstrumentCell.swift in Sources */,
 				3798827C1C01314F0029E56C /* DashboardController.swift in Sources */,
 				370AC1B21C3CA3F7002ED357 /* ProjectTabBar.swift in Sources */,
 				370AC1B01C3C9FB8002ED357 /* BufferCell.swift in Sources */,
 				3798827F1C01314F0029E56C /* MixerController.swift in Sources */,
+				37038FBC1C617D1C0043C262 /* TaggingViewController.swift in Sources */,
 				37C9F5151C029E2000C80F88 /* ProjectAddBar.swift in Sources */,
 				379442D61BF80DC600A32DE1 /* CustomIOSAlertView.m in Sources */,
 				37AF7B021C125D4D009DA251 /* TPAACAudioConverter.m in Sources */,
@@ -2253,18 +2268,15 @@
 				370A39101BF6A8B700FCD060 /* User.swift in Sources */,
 				37A3C2CA1B3CC00600F77F2A /* AppDelegate.swift in Sources */,
 				379882611C01313F0029E56C /* LoginViewController.swift in Sources */,
-				379882841C01314F0029E56C /* TaggingViewController.swift in Sources */,
 				379882621C01313F0029E56C /* SignupViewController.swift in Sources */,
 				37C9F50E1C029E2000C80F88 /* ShareView.swift in Sources */,
+				37038FBA1C617D1C0043C262 /* ImportViewController.swift in Sources */,
 				37C9F5111C029E2000C80F88 /* Profile.swift in Sources */,
 				37C9F5101C029E2000C80F88 /* HomeCell.swift in Sources */,
-				379882821C01314F0029E56C /* RecordToolsController.swift in Sources */,
 				37D2351F1C3B90CA0091A1D0 /* ProjectDismissAnimationController.swift in Sources */,
 				379882601C01313F0029E56C /* EntryViewController.swift in Sources */,
 				37C9F5161C029E2000C80F88 /* ProjectPlayer.swift in Sources */,
 				37C9F50C1C029E2000C80F88 /* ImportHeaderView.swift in Sources */,
-				37E799AA1B3CC1C600D2E54D /* ImportViewController.swift in Sources */,
-				370AC1A81C3C9D45002ED357 /* ExploreViewController.swift in Sources */,
 				37C12E1C1B69797300A4E3A3 /* SuperpoweredIOSAudioOutput.mm in Sources */,
 				376CA77A1B8BDCA000ADD1E2 /* Mashservice.pbrpc.m in Sources */,
 			);
@@ -2289,6 +2301,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		37038FBF1C617F0F0043C262 /* Deprecated.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				37038FC01C617F0F0043C262 /* Base */,
+			);
+			name = Deprecated.storyboard;
+			sourceTree = "<group>";
+		};
 		37A3C2CD1B3CC00600F77F2A /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

@@ -57,10 +57,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewWillAppear(animated)
         
         if self.user != currentUser {
-            self.parentViewController?.navigationItem.setHidesBackButton(false, animated: false)
+            self.parentViewController!.navigationItem.setHidesBackButton(false, animated: false)
             self.navigationItem.title = "Profile"
         } else {
-            self.parentViewController?.navigationItem.title = "Profile"
+            self.parentViewController!.navigationItem.title = "Profile"
             User.updateSelf(self)
         }
         self.retrieveTracks()

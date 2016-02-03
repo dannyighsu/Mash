@@ -214,41 +214,6 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                 }
             }
         }
-        
-        /*
-        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
-        var instrumentString = String(stringInterpolationSegment: self.instruments)
-        instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
-        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "title": self.titleTextField.text, "bpm": "0", "bar": "0", "key": "0", "family": "{\(instrumentString)}", "instrument": "{}", "genre": "{}", "subgenre": "{}", "feel": "0", "solo": "0", "format": ".m4a"]
-        httpPost(params, request) {
-            (data, statusCode, error) -> Void in
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
-                return
-            } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("Error: \(error)", sender: self)
-                    return
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    return
-                } else if statusCode == HTTP_SUCCESS {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.activityView.stopAnimating()
-                        let key = "\(currentUser.handle!)~~\(self.titleTextField.text).m4a"
-                        upload(key, self.recording!.url, track_bucket)
-                        self.finish()
-                    }
-                    Debug.printl("Data: \(data)", sender: self)
-                    return
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                    return
-                }
-            }
-        }*/
     }
     
     func deleteTrack(recid: UInt32) {

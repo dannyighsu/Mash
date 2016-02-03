@@ -22,9 +22,14 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         UITabBar.appearance().tintColor = lightBlue()
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         blurView.frame = self.tabBar.bounds
-        blurView.contentView.backgroundColor = UIColor(red: 20/255, green: 20/255, blue: 40/255, alpha: 0.7)
+        blurView.contentView.backgroundColor = darkBlueTranslucent()
         self.tabBar.insertSubview(blurView, atIndex: 0)
         
+        // Hardcode image tints
+        let home = self.tabBar.items![0]
+        let unselectedImage = UIImage(named: "home")
+        home.image = unselectedImage?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+                
         self.navigationController?.hidesBarsWhenKeyboardAppears = false
         self.navigationController?.hidesBarsOnSwipe = false
         self.navigationItem.setHidesBackButton(true, animated: false)

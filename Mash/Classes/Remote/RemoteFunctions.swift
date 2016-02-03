@@ -47,7 +47,7 @@ func sendTokenRequest() {
         if error != nil {
             Debug.printl(error, sender: "helpers")
             // TODO: Add a direct link to notification center
-            raiseAlert("There was an issue registering your device for push notifications.", message: "Please enable notifications in the Notification Center.")
+            Flurry.logError("\(error.code)", message: "Device token registration invalid", error: error)
         }
     }
 }

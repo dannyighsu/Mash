@@ -484,7 +484,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                     let id = Int(response.recid)
                     upload("\(currentUser.userid!)~~\(id).m4a", url: url, bucket: track_bucket)
                     
-                    // FIXME: Using waveform of first track for now
                     let waveformKey = "\(currentUser.userid!)~~\(id)_waveform.jpg"
                     upload(waveformKey, url: filePathURL("\(currentUser.userid!)~~\(self.data[0].id)_waveform.jpg"), bucket: waveform_bucket)
                     let alert = UIAlertView(title: "Success!", message: "Your Mash has been Saved.", delegate: self, cancelButtonTitle: "OK")

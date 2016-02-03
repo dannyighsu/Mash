@@ -127,31 +127,25 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)
             cell.likeButton.addTarget(self, action: "like:", forControlEvents: .TouchUpInside)
     
-            if !NSFileManager.defaultManager().fileExistsAtPath(filePathString(getS3WaveformKey(cell.track!))) {
-                download(getS3WaveformKey(cell.track!), url: filePathURL(getS3WaveformKey(cell.track!)), bucket: waveform_bucket) {
-                    (result) in
-                    if result != nil {
-                        dispatch_async(dispatch_get_main_queue()) {
-                            cell.audioPlotView.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(cell.track!)))
-                        }
-                    } else {
-                        dispatch_async(dispatch_get_main_queue()) {
-                            cell.audioPlotView.image = UIImage(named: "waveform_static")
-                        }
-                    }
+            download(getS3WaveformKey(cell.track!), url: filePathURL(getS3WaveformKey(cell.track!)), bucket: waveform_bucket) {
+                (result) in
+                if result != nil {
                     dispatch_async(dispatch_get_main_queue()) {
+                        cell.audioPlotView.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(cell.track!)))
+                    }
+                } else {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        cell.audioPlotView.image = UIImage(named: "waveform_static")
+                    }
+                }
+                dispatch_async(dispatch_get_main_queue()) {
+                    if cell.backgroundArt.layer.sublayers == nil || !(cell.backgroundArt.layer.sublayers![0] is CAGradientLayer) {
                         let gradient: CAGradientLayer = CAGradientLayer()
                         gradient.frame = cell.backgroundArt.bounds
                         gradient.colors = [lightGray().CGColor, UIColor.clearColor().CGColor, lightGray().CGColor]
                         cell.backgroundArt.layer.insertSublayer(gradient, atIndex: 0)
                     }
                 }
-            } else {
-                cell.audioPlotView.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(cell.track!)))
-                let gradient: CAGradientLayer = CAGradientLayer()
-                gradient.frame = cell.backgroundArt.bounds
-                gradient.colors = [lightGray().CGColor, UIColor.clearColor().CGColor, lightGray().CGColor]
-                cell.backgroundArt.layer.insertSublayer(gradient, atIndex: 0)
             }
             
             return cell
