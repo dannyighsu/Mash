@@ -9,15 +9,6 @@
         <!--Explore-->
         <scene sceneID="jFt-Kz-buK">
             <objects>
-                <searchDisplayController id="lbA-z7-8K1">
-                    <connections>
-                        <outlet property="delegate" destination="Xr7-Aq-7hA" id="ueF-9d-XrW"/>
-                        <outlet property="searchContentsController" destination="Xr7-Aq-7hA" id="fug-Q7-kFS"/>
-                        <outlet property="searchResultsDataSource" destination="Xr7-Aq-7hA" id="P9N-d6-4Cs"/>
-                        <outlet property="searchResultsDelegate" destination="Xr7-Aq-7hA" id="Gn7-fa-Qqr"/>
-                    </connections>
-                </searchDisplayController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="aQ0-sx-qBF" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="ExploreViewController" title="Explore" id="Xr7-Aq-7hA" customClass="ExploreViewController" customModule="Mash" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="HVb-Dg-awI"/>
@@ -48,13 +39,22 @@
                             </mask>
                         </variation>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Browse" image="6653DA6B-A190-4C4A-8C38-271F469679AF" id="DWM-Km-XaQ"/>
+                    <tabBarItem key="tabBarItem" title="Browse" image="1B03882B-8170-4969-9DC1-FECAAA17D88F" id="DWM-Km-XaQ"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="600" height="600"/>
                     <connections>
                         <outlet property="exploreDisplay" destination="lk9-lb-pKZ" id="lYP-Q2-Jih"/>
                     </connections>
                 </viewController>
+                <searchDisplayController id="lbA-z7-8K1">
+                    <connections>
+                        <outlet property="delegate" destination="Xr7-Aq-7hA" id="ueF-9d-XrW"/>
+                        <outlet property="searchContentsController" destination="Xr7-Aq-7hA" id="fug-Q7-kFS"/>
+                        <outlet property="searchResultsDataSource" destination="Xr7-Aq-7hA" id="P9N-d6-4Cs"/>
+                        <outlet property="searchResultsDelegate" destination="Xr7-Aq-7hA" id="Gn7-fa-Qqr"/>
+                    </connections>
+                </searchDisplayController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aQ0-sx-qBF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="585" y="278"/>
         </scene>
@@ -217,7 +217,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="6653DA6B-A190-4C4A-8C38-271F469679AF" width="30" height="30">
+        <image name="1B03882B-8170-4969-9DC1-FECAAA17D88F" width="30" height="30">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOjtYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISgrLjQ3VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA
@@ -286,7 +286,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgEAAAMAAAABAB4AAAEBAAMAAAABAB4AAAEC
 AAMAAAAEAAAOxgEDAAMAAAABAAEAAAEGAAMAAAABAAIAAAERAAQAAAABAAAACAESAAMAAAABAAEAAAEV
 AAMAAAABAAQAAAEWAAMAAAABAB4AAAEXAAQAAAABAAAOEAEcAAMAAAABAAEAAAFSAAMAAAABAAIAAAFT
 AAMAAAAEAAAOzodzAAcAAAxIAAAO1gAAAAAACAAIAAgACAABAAEAAQABAAAMSExpbm8CEAAAbW50clJH
-QiBYWVogB84AAgAJAAYAMQAAYWNzcE1TRlQAAAAASUVDIHNSR0IAAAAAAAAAAAAAAAAAAPbWAAEAAAAA
+QiBYWVogB84AAgAJAAYAMQAAYWNzcE1TRlQAAAAASUVDIHNSR0IAAAAAAAAAAAAAAAEAAPbWAAEAAAAA
 0y1IUCAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARY3BydAAA
 AVAAAAAzZGVzYwAAAYQAAABsd3RwdAAAAfAAAAAUYmtwdAAAAgQAAAAUclhZWgAAAhgAAAAUZ1hZWgAA
 AiwAAAAUYlhZWgAAAkAAAAAUZG1uZAAAAlQAAABwZG1kZAAAAsQAAACIdnVlZAAAA0wAAACGdmlldwAA

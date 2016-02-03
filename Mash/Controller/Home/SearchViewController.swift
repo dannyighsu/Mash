@@ -66,8 +66,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.searchController?.searchBar.sizeToFit()
         self.searchController?.searchBar.setShowsCancelButton(true, animated: false)
         self.searchController?.searchBar.tintColor = lightBlue()
-        self.searchController?.searchBar.barTintColor = darkGray()
-        self.searchController?.searchBar.becomeFirstResponder()
+        self.searchController?.searchBar.barTintColor = offWhite()
+        self.searchController!.searchBar.becomeFirstResponder()
     }
     
     override func viewWillAppear(animated: Bool) {
