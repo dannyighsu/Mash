@@ -126,7 +126,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
             cell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)
             cell.likeButton.addTarget(self, action: "like:", forControlEvents: .TouchUpInside)
-            
+            cell.addButton.addTarget(self, action: "add:", forControlEvents: .TouchUpInside)
     
             download(getS3WaveformKey(cell.track!), url: filePathURL(getS3WaveformKey(cell.track!)), bucket: waveform_bucket) {
                 (result) in
@@ -255,6 +255,15 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         let homecell = cell as! HomeCell
         sendLikeRequest(homecell.track!.id)
         // TODO: After calls are written, implement change in text after like
+    }
+    
+    func add(sender: UIButton) {
+        var cell = sender.superview
+        while cell != nil && !(cell is HomeCell) {
+            cell = cell!.superview
+        }
+        let homecell = cell as! HomeCell
+        ProjectViewController.importTracks([homecell.track!], navigationController: self.navigationController!, storyboard: self.storyboard!)
     }
     
     // Check if project view exists in memory, if not, create one.
