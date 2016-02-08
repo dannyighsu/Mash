@@ -126,6 +126,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
             cell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)
             cell.likeButton.addTarget(self, action: "like:", forControlEvents: .TouchUpInside)
+            
     
             download(getS3WaveformKey(cell.track!), url: filePathURL(getS3WaveformKey(cell.track!)), bucket: waveform_bucket) {
                 (result) in

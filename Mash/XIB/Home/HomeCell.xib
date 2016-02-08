@@ -13,7 +13,7 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="225"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Non-ho-d3k" id="rwM-sO-RLY">
-                <rect key="frame" x="0.0" y="0.0" width="600" height="224"/>
+                <rect key="frame" x="0.0" y="0.0" width="600" height="224.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="duh-PM-rI0">
@@ -121,6 +121,10 @@
                                     <constraint firstAttribute="height" constant="68" id="GOp-6b-CEQ"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c5A-fY-GOV">
+                                <rect key="frame" x="570" y="17" width="22" height="22"/>
+                                <color key="tintColor" red="0.27450980390000002" green="0.79215686269999996" blue="0.88235294119999996" alpha="1" colorSpace="calibratedRGB"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -152,9 +156,11 @@
                             <constraint firstItem="iB9-fy-hJR" firstAttribute="baseline" secondItem="CpZ-qy-Ngo" secondAttribute="baseline" id="ltK-cJ-5bZ"/>
                             <constraint firstItem="sKl-nI-klk" firstAttribute="top" secondItem="fsE-C7-WYi" secondAttribute="top" id="mYu-iH-C5B"/>
                             <constraint firstItem="5e9-QK-tnH" firstAttribute="top" secondItem="sKl-nI-klk" secondAttribute="bottom" constant="7" id="nCF-s3-WOz"/>
+                            <constraint firstItem="c5A-fY-GOV" firstAttribute="trailing" secondItem="tCQ-Pj-pdh" secondAttribute="trailing" id="o0f-oa-ZTd"/>
                             <constraint firstItem="5e9-QK-tnH" firstAttribute="leading" secondItem="tCQ-Pj-pdh" secondAttribute="leading" id="oAz-7V-NR4"/>
                             <constraint firstItem="iB9-fy-hJR" firstAttribute="leading" secondItem="CpZ-qy-Ngo" secondAttribute="trailing" constant="18" id="oUo-A5-32n"/>
                             <constraint firstItem="tCQ-Pj-pdh" firstAttribute="top" secondItem="5e9-QK-tnH" secondAttribute="bottom" constant="8" symbolic="YES" id="sOu-aC-cbo"/>
+                            <constraint firstItem="c5A-fY-GOV" firstAttribute="centerY" secondItem="yek-5G-nnW" secondAttribute="centerY" constant="6" id="vPE-JW-XqI"/>
                             <constraint firstItem="5e9-QK-tnH" firstAttribute="top" secondItem="fsE-C7-WYi" secondAttribute="topMargin" id="wKE-eL-IRi"/>
                             <constraint firstItem="nVG-Ae-MDB" firstAttribute="leading" secondItem="8RP-tj-KBl" secondAttribute="leading" id="wSe-MI-KxD"/>
                         </constraints>
@@ -178,6 +184,7 @@
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
             <connections>
+                <outlet property="addButton" destination="c5A-fY-GOV" id="yg9-tw-Pdx"/>
                 <outlet property="artistButton" destination="nVG-Ae-MDB" id="1pE-GC-Oey"/>
                 <outlet property="audioPlotView" destination="8RP-tj-KBl" id="iTB-W7-qEd"/>
                 <outlet property="backgroundArt" destination="tCQ-Pj-pdh" id="MzN-Sx-Edm"/>
