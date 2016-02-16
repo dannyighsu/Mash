@@ -73,6 +73,8 @@ message RecordingResponse {
     optional uint32 recid = 15;
     optional uint32 userid = 16;
     optional string handle = 17;
+    optional uint32 mash_count = 18;
+    optional bool   liked = 19;
 }
 
 message UserRecordingsResponse {
@@ -225,7 +227,7 @@ service MashService {
     rpc UserUnfollow    (UserRequest) returns (SuccessResponse);
     rpc RecordingUpload (RecordingUploadRequest) returns (SuccessResponse);
     rpc RecordingAnalyze(RecordingAnalyzeRequest) returns (SuccessResponse);
-    rpc RecordingPlay   (RecordingRequest)         returns (SuccessResponse);
+    rpc RecordingPlay   (RecordingRequest) returns (SuccessResponse);
     rpc RecordingLike   (RecordingRequest) returns (SuccessResponse);
     rpc RecordingUnlike (RecordingRequest) returns (SuccessResponse);
     rpc RecordingUpdate (RecordingUpdateRequest) returns (SuccessResponse);
@@ -238,4 +240,6 @@ service MashService {
     rpc RecordingMash   (RecordingRequest) returns (Recordings);
     rpc Version         (VersionRequest) returns (VersionResponse);
     rpc UserDevice      (DeviceRequest) returns (SuccessResponse);
+    rpc RecordingLikers (RecordingRequest) returns (UserPreviews);
+    rpc RecordingAdd    (RecordingRequest) returns (SuccessResponse);
 }

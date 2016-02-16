@@ -31,6 +31,6 @@ static NSString *const kServiceName = @"LoadBalancer";
   return [self RPCToMethod:@"GetServerAddress"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[ServerAddressResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
 }
 @end

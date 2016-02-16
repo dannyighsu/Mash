@@ -189,6 +189,20 @@
 - (ProtoRPC *)RPCToUserDeviceWithRequest:(DeviceRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
 
 
+#pragma mark RecordingLikers(RecordingRequest) returns (UserPreviews)
+
+- (void)recordingLikersWithRequest:(RecordingRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToRecordingLikersWithRequest:(RecordingRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler;
+
+
+#pragma mark RecordingAdd(RecordingRequest) returns (SuccessResponse)
+
+- (void)recordingAddWithRequest:(RecordingRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToRecordingAddWithRequest:(RecordingRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+
 @end
 
 // Basic service implementation, over gRPC, that only does marshalling and parsing.

@@ -239,6 +239,8 @@ typedef GPB_ENUM(RecordingResponse_FieldNumber) {
   RecordingResponse_FieldNumber_Recid = 15,
   RecordingResponse_FieldNumber_Userid = 16,
   RecordingResponse_FieldNumber_Handle = 17,
+  RecordingResponse_FieldNumber_MashCount = 18,
+  RecordingResponse_FieldNumber_Liked = 19,
 };
 
 @interface RecordingResponse : GPBMessage
@@ -297,6 +299,12 @@ typedef GPB_ENUM(RecordingResponse_FieldNumber) {
 
 @property(nonatomic, readwrite) BOOL hasHandle;
 @property(nonatomic, readwrite, copy, null_resettable) NSString *handle;
+
+@property(nonatomic, readwrite) BOOL hasMashCount;
+@property(nonatomic, readwrite) uint32_t mashCount;
+
+@property(nonatomic, readwrite) BOOL hasLiked;
+@property(nonatomic, readwrite) BOOL liked;
 
 @end
 
