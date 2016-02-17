@@ -97,7 +97,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 225.0
+            return 250.0
         } else {
             return 35
         }
@@ -121,6 +121,9 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.profileImage.layer.borderWidth = 0.5
             cell.profileImage.layer.masksToBounds = true
             cell.userLabel.addTarget(self, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
+            cell.playButton.addTarget(self, action: "playButton:", forControlEvents: .TouchUpInside)
+            cell.playCountLabel.text = "\(cell.track!.playCount)"
+            cell.likeCountLabel.text = "\(cell.track!.likeCount) likes"
             
             self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
             self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
@@ -160,24 +163,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {
             let cell = tableView.cellForRowAtIndexPath(indexPath) as! HomeCell
-            download(getS3Key(cell.track!), url: filePathURL(cell.track!.trackURL), bucket: track_bucket) {
-                (result) in
-                if result != nil {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        do {
-                            try self.audioPlayer = AVAudioPlayer(contentsOfURL: filePathURL(cell.track!.trackURL))
-                            self.audioPlayer!.play()
-                            if self.playerTimer != nil {
-                                self.playerTimer!.invalidate()
-                            }
-                            self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
-                            self.currTrackID = cell.track!.id
-                        } catch _ as NSError {
-                            Debug.printl("Error downloading track", sender: self)
-                        }
-                    }
-                }
-            }
+            self.playTrack(cell)
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
         } else {
             return
@@ -247,14 +233,48 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
+    func playButton(sender: UIButton) {
+        var cell = sender.superview
+        while cell != nil && !(cell is HomeCell) {
+            cell = cell!.superview
+        }
+        let homecell = cell as! HomeCell
+        self.playTrack(homecell)
+    }
+    
+    func playTrack(cell: HomeCell) {
+        download(getS3Key(cell.track!), url: NSURL(fileURLWithPath: cell.track!.trackURL), bucket: track_bucket) {
+            (result) in
+            if result != nil {
+                dispatch_async(dispatch_get_main_queue()) {
+                    do {
+                        try self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: cell.track!.trackURL))
+                        self.audioPlayer!.play()
+                        if self.playerTimer != nil {
+                            self.playerTimer!.invalidate()
+                        }
+                        self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
+                        self.currTrackID = cell.track!.id
+                    } catch _ as NSError {
+                        Debug.printl("Error downloading track", sender: self)
+                    }
+                }
+            }
+        }
+    }
+    
     func like(sender: UIButton) {
         var cell = sender.superview
         while cell != nil && !(cell is HomeCell) {
             cell = cell!.superview
         }
         let homecell = cell as! HomeCell
-        sendLikeRequest(homecell.track!.id)
-        // TODO: After calls are written, implement change in text after like
+        sendLikeRequest(homecell.track!.id) {
+            (success) in
+            if success {
+                sender.setImage(UIImage(named: "liked"), forState: .Normal)
+            }
+        }
     }
     
     func add(sender: UIButton) {
@@ -371,7 +391,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 follower.handle = user
                 follower.userid = Int(userid)
                 
-                let track = Track(frame: CGRectZero, recid: Int(recording.recid), userid: Int(recording.userid),instruments: recording.instrumentArray.copy() as! [String], instrumentFamilies: recording.familyArray.copy() as! [String], titleText: recording.title, bpm: Int(recording.bpm), trackURL: getS3Key(Int(recording.userid), recid: Int(recording.recid), format: recording.format), user: recording.handle, format: recording.format, time: time)
+                let track = Track(frame: CGRectZero, recid: Int(recording.recid), userid: Int(recording.userid), instruments: recording.instrumentArray.copy() as! [String], instrumentFamilies: recording.familyArray.copy() as! [String], titleText: recording.title, bpm: Int(recording.bpm), trackURL: filePathString("\(userid)~~\(Int(recording.recid)).\(recording.format)"), user: recording.handle, format: recording.format, time: time, playCount: Int(recording.playCount), likeCount: Int(recording.likeCount), mashCount: Int(recording.likeCount))
                 
                 let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower, track: track)
                 data.append(cell)

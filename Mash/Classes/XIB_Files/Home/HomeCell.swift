@@ -22,6 +22,9 @@ class HomeCell: UITableViewCell {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var audioPlotView: UIImageView!
     @IBOutlet weak var backgroundArt: UIImageView!
+    @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var playCountLabel: UILabel!
+    @IBOutlet weak var likeCountLabel: UILabel!
     var eventText: String? = nil
     var userText: String? = nil
     var timeText: String? = nil

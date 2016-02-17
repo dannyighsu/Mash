@@ -31,7 +31,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"Register"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[RegisterResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark SignIn(SignInRequest) returns (SignInResponse)
 
@@ -43,7 +43,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"SignIn"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SignInResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark SignOut(UserRequest) returns (SuccessResponse)
 
@@ -55,7 +55,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"SignOut"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuccessResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark UserGet(UserRequest) returns (UserResponse)
 
@@ -67,7 +67,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"UserGet"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[UserResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark RecordingGet(RecordingRequest) returns (RecordingResponse)
 
@@ -79,7 +79,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"RecordingGet"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[RecordingResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark FollowersGet(UserRequest) returns (UserPreviews)
 
@@ -91,7 +91,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"FollowersGet"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[UserPreviews class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark FollowingsGet(UserRequest) returns (UserPreviews)
 
@@ -103,7 +103,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"FollowingsGet"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[UserPreviews class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark UserDelete(UserRequest) returns (SuccessResponse)
 
@@ -115,7 +115,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"UserDelete"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuccessResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark RecordingDelete(RecordingRequest) returns (SuccessResponse)
 
@@ -127,7 +127,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"RecordingDelete"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuccessResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark UserFollow(UserRequest) returns (SuccessResponse)
 
@@ -139,7 +139,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"UserFollow"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuccessResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark UserUnfollow(UserRequest) returns (SuccessResponse)
 
@@ -151,7 +151,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"UserUnfollow"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuccessResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark RecordingUpload(RecordingUploadRequest) returns (SuccessResponse)
 
@@ -163,7 +163,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"RecordingUpload"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuccessResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark RecordingAnalyze(RecordingAnalyzeRequest) returns (SuccessResponse)
 
@@ -175,7 +175,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"RecordingAnalyze"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuccessResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark RecordingPlay(RecordingRequest) returns (SuccessResponse)
 
@@ -187,7 +187,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"RecordingPlay"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuccessResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark RecordingLike(RecordingRequest) returns (SuccessResponse)
 
@@ -199,7 +199,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"RecordingLike"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuccessResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark RecordingUnlike(RecordingRequest) returns (SuccessResponse)
 
@@ -211,7 +211,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"RecordingUnlike"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuccessResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark RecordingUpdate(RecordingUpdateRequest) returns (SuccessResponse)
 
@@ -223,7 +223,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"RecordingUpdate"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuccessResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark UserUpdate(UserUpdateRequest) returns (SuccessResponse)
 
@@ -235,7 +235,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"UserUpdate"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuccessResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark UserRecordings(UserRequest) returns (UserRecordingsResponse)
 
@@ -247,7 +247,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"UserRecordings"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[UserRecordingsResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark Feed(FeedRequest) returns (FeedResponse)
 
@@ -259,7 +259,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"Feed"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[FeedResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark GlobalFeed(FeedRequest) returns (FeedResponse)
 
@@ -271,7 +271,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"GlobalFeed"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[FeedResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark SearchTag(SearchTagRequest) returns (Recordings)
 
@@ -283,7 +283,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"SearchTag"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[Recordings class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark UserSearch(UserSearchRequest) returns (UserPreviews)
 
@@ -295,7 +295,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"UserSearch"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[UserPreviews class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark RecordingMash(RecordingRequest) returns (Recordings)
 
@@ -307,7 +307,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"RecordingMash"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[Recordings class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark Version(VersionRequest) returns (VersionResponse)
 
@@ -319,7 +319,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"Version"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[VersionResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark UserDevice(DeviceRequest) returns (SuccessResponse)
 
@@ -331,7 +331,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"UserDevice"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuccessResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark RecordingLikers(RecordingRequest) returns (UserPreviews)
 
@@ -343,7 +343,7 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"RecordingLikers"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[UserPreviews class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 #pragma mark RecordingAdd(RecordingRequest) returns (SuccessResponse)
 
@@ -355,6 +355,6 @@ static NSString *const kServiceName = @"MashService";
   return [self RPCToMethod:@"RecordingAdd"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuccessResponse class]
-        responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
 @end

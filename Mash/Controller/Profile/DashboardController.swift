@@ -100,7 +100,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         self.parentViewController?.navigationItem.setHidesBackButton(true, animated: false)
         if self.user == currentUser {
             self.parentViewController?.navigationItem.rightBarButtonItem = nil
-            self.parentViewController?.navigationItem.title = nil
         } else {
             self.navigationItem.rightBarButtonItem = nil
         }
@@ -317,7 +316,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             let recid = Int(track.recid)
             url = filePathString(url)
             
-            let trackData = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: track.title, bpm: Int(track.bpm), trackURL: url, user: self.user.handle!, format: track.format!, time: track.uploaded)
+            let trackData = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: track.title, bpm: Int(track.bpm), trackURL: url, user: self.user.handle!, format: track.format!, time: track.uploaded, playCount: Int(track.playCount), likeCount: Int(track.likeCount), mashCount: Int(track.likeCount))
             
             self.data.append(trackData)
         }
