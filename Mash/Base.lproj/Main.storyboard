@@ -1027,14 +1027,34 @@
                                     <constraint firstAttribute="height" constant="186" id="JZA-PQ-12T"/>
                                 </constraints>
                             </imageView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Your Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="INi-mJ-v3t">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UYK-u5-zyU">
+                                <rect key="frame" x="38" y="302" width="562" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="562" id="yqF-ys-J52"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="yqF-ys-J52"/>
+                                    </mask>
+                                </variation>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="INi-mJ-v3t">
                                 <rect key="frame" x="38" y="332" width="562" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Create a Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0mG-BI-fOh">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0mG-BI-fOh">
                                 <rect key="frame" x="38" y="362" width="562" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hhi-bF-XEV">
+                                <rect key="frame" x="38" y="392" width="562" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
@@ -1059,7 +1079,7 @@
                                 <color key="backgroundColor" red="0.99607849120000003" green="0.99215692280000001" blue="0.99215692280000001" alpha="1" colorSpace="deviceRGB"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="twY-ek-tdr">
-                                <rect key="frame" x="30" y="302" width="8" height="90"/>
+                                <rect key="frame" x="30" y="302" width="8" height="120"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KPn-If-HBc">
@@ -1076,44 +1096,51 @@
                                     <constraint firstAttribute="height" constant="1" id="VWt-Gu-uzA"/>
                                 </constraints>
                             </view>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Create a Username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UYK-u5-zyU">
-                                <rect key="frame" x="38" y="302" width="562" height="30"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5bC-Ah-cj1">
+                                <rect key="frame" x="30" y="392" width="570" height="1"/>
+                                <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="562" id="yqF-ys-J52"/>
+                                    <constraint firstAttribute="height" constant="1" id="agu-w2-UUo"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="yqF-ys-J52"/>
-                                    </mask>
-                                </variation>
-                            </textField>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MIC-CH-cvf">
+                                <rect key="frame" x="0.0" y="392" width="30" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
+                            <constraint firstItem="MIC-CH-cvf" firstAttribute="leading" secondItem="TmP-Zr-cTw" secondAttribute="leading" id="38M-Al-O1f"/>
                             <constraint firstItem="KPn-If-HBc" firstAttribute="trailing" secondItem="INi-mJ-v3t" secondAttribute="trailing" id="3hb-ZW-YEc"/>
                             <constraint firstItem="TmP-Zr-cTw" firstAttribute="top" secondItem="MOb-uk-O7q" secondAttribute="bottom" id="4aP-kY-zYC"/>
                             <constraint firstItem="Gmz-Ei-eQ8" firstAttribute="bottom" secondItem="UYK-u5-zyU" secondAttribute="bottom" id="5Io-Uy-g8g"/>
-                            <constraint firstItem="TmP-Zr-cTw" firstAttribute="bottom" secondItem="twY-ek-tdr" secondAttribute="bottom" id="5O3-W9-epm"/>
+                            <constraint firstItem="TmP-Zr-cTw" firstAttribute="bottom" secondItem="twY-ek-tdr" secondAttribute="bottom" constant="-30" id="5O3-W9-epm"/>
+                            <constraint firstItem="MIC-CH-cvf" firstAttribute="bottom" secondItem="twY-ek-tdr" secondAttribute="bottom" id="5w8-9Z-aL3"/>
+                            <constraint firstItem="5bC-Ah-cj1" firstAttribute="trailing" secondItem="0mG-BI-fOh" secondAttribute="trailing" id="7Me-hz-F12"/>
                             <constraint firstItem="0mG-BI-fOh" firstAttribute="top" secondItem="TmP-Zr-cTw" secondAttribute="top" id="7kt-5T-UiQ"/>
                             <constraint firstItem="UYK-u5-zyU" firstAttribute="leading" secondItem="Gmz-Ei-eQ8" secondAttribute="trailing" constant="8" symbolic="YES" id="8VL-nV-N5R"/>
                             <constraint firstItem="INi-mJ-v3t" firstAttribute="bottom" secondItem="MOb-uk-O7q" secondAttribute="bottom" id="9Cg-2Q-tKh"/>
                             <constraint firstItem="2nk-HE-ihj" firstAttribute="trailing" secondItem="0mG-BI-fOh" secondAttribute="trailing" id="9cG-WV-u76"/>
+                            <constraint firstItem="hhi-bF-XEV" firstAttribute="trailing" secondItem="5bC-Ah-cj1" secondAttribute="trailing" id="Bbw-5L-YYK"/>
                             <constraint firstItem="twY-ek-tdr" firstAttribute="top" secondItem="Gmz-Ei-eQ8" secondAttribute="top" id="BsX-Uc-hpe"/>
                             <constraint firstItem="MOb-uk-O7q" firstAttribute="leading" secondItem="TmP-Zr-cTw" secondAttribute="leading" id="Cco-85-qcp"/>
+                            <constraint firstItem="MIC-CH-cvf" firstAttribute="top" secondItem="TmP-Zr-cTw" secondAttribute="bottom" id="Dzf-V3-L4f"/>
                             <constraint firstItem="MOb-uk-O7q" firstAttribute="leading" secondItem="Gmz-Ei-eQ8" secondAttribute="leading" id="EdA-sJ-niu"/>
-                            <constraint firstItem="twY-ek-tdr" firstAttribute="bottom" secondItem="0mG-BI-fOh" secondAttribute="bottom" id="L0c-gU-AHO"/>
-                            <constraint firstItem="MOb-uk-O7q" firstAttribute="centerY" secondItem="twY-ek-tdr" secondAttribute="centerY" id="S7N-yA-ARe"/>
+                            <constraint firstItem="MIC-CH-cvf" firstAttribute="top" secondItem="hhi-bF-XEV" secondAttribute="top" id="K5l-6a-IG4"/>
+                            <constraint firstItem="twY-ek-tdr" firstAttribute="bottom" secondItem="0mG-BI-fOh" secondAttribute="bottom" constant="30" id="L0c-gU-AHO"/>
+                            <constraint firstItem="hhi-bF-XEV" firstAttribute="bottom" secondItem="twY-ek-tdr" secondAttribute="bottom" id="Nh2-xE-zny"/>
+                            <constraint firstItem="hhi-bF-XEV" firstAttribute="leading" secondItem="MIC-CH-cvf" secondAttribute="trailing" constant="8" symbolic="YES" id="QIR-T2-1Hs"/>
+                            <constraint firstItem="MOb-uk-O7q" firstAttribute="centerY" secondItem="twY-ek-tdr" secondAttribute="centerY" constant="-15" id="S7N-yA-ARe"/>
                             <constraint firstItem="KPn-If-HBc" firstAttribute="leading" secondItem="2nk-HE-ihj" secondAttribute="leading" id="SvQ-ef-L8e"/>
                             <constraint firstItem="UYK-u5-zyU" firstAttribute="trailing" secondItem="HAw-E4-Pyj" secondAttribute="trailing" id="TXT-K3-vut"/>
+                            <constraint firstItem="5bC-Ah-cj1" firstAttribute="leading" secondItem="2nk-HE-ihj" secondAttribute="leading" id="Tku-j3-MK9"/>
                             <constraint firstItem="Ueh-v1-ATK" firstAttribute="top" secondItem="2nk-HE-ihj" secondAttribute="bottom" constant="263" id="UGj-fy-nzD"/>
                             <constraint firstItem="INi-mJ-v3t" firstAttribute="leading" secondItem="MOb-uk-O7q" secondAttribute="trailing" constant="8" symbolic="YES" id="V8b-5j-Zg5"/>
                             <constraint firstItem="2nk-HE-ihj" firstAttribute="top" secondItem="0mG-BI-fOh" secondAttribute="top" id="VZE-U0-Wl3"/>
                             <constraint firstItem="HAw-E4-Pyj" firstAttribute="top" secondItem="UWr-JV-viK" secondAttribute="bottom" constant="1" id="WY1-Xb-WkM"/>
                             <constraint firstItem="UYK-u5-zyU" firstAttribute="trailing" secondItem="INi-mJ-v3t" secondAttribute="trailing" id="Ye2-O4-4jk"/>
                             <constraint firstItem="0mG-BI-fOh" firstAttribute="leading" secondItem="twY-ek-tdr" secondAttribute="trailing" id="a0W-Ef-naj"/>
+                            <constraint firstItem="hhi-bF-XEV" firstAttribute="top" secondItem="5bC-Ah-cj1" secondAttribute="top" id="bIG-8V-Uub"/>
                             <constraint firstItem="KPn-If-HBc" firstAttribute="leading" secondItem="twY-ek-tdr" secondAttribute="leading" id="c5U-Po-aXB"/>
                             <constraint firstItem="0mG-BI-fOh" firstAttribute="leading" secondItem="xae-x6-E4o" secondAttribute="leading" constant="38" id="cNH-7R-AMV"/>
                             <constraint firstItem="INi-mJ-v3t" firstAttribute="top" secondItem="MOb-uk-O7q" secondAttribute="top" id="chd-4A-5Cf"/>
@@ -1131,6 +1158,7 @@
                             <constraint firstItem="HAw-E4-Pyj" firstAttribute="leading" secondItem="Gmz-Ei-eQ8" secondAttribute="leading" id="wOa-iQ-7t7"/>
                             <constraint firstItem="2nk-HE-ihj" firstAttribute="top" secondItem="KPn-If-HBc" secondAttribute="bottom" constant="29" id="xSW-W8-uzw"/>
                             <constraint firstItem="MOb-uk-O7q" firstAttribute="top" secondItem="Gmz-Ei-eQ8" secondAttribute="bottom" id="xl1-bq-m18"/>
+                            <constraint firstItem="hhi-bF-XEV" firstAttribute="leading" secondItem="0mG-BI-fOh" secondAttribute="leading" id="zkD-f8-Eub"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -1141,6 +1169,7 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="confirmPasswordField" destination="hhi-bF-XEV" id="A3D-wb-FND"/>
                         <outlet property="emailField" destination="INi-mJ-v3t" id="unX-DT-aB2"/>
                         <outlet property="handleField" destination="UYK-u5-zyU" id="xQa-Bt-bWq"/>
                         <outlet property="passwordField" destination="0mG-BI-fOh" id="Oax-Qh-Bs6"/>
