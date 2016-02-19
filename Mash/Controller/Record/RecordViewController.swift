@@ -291,7 +291,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     func showVolume(sender: UIButton) {
         self.stopAll()
         
-        let slider = UISlider(frame: CGRectZero)
+        let slider = ExtUISlider(frame: CGRectZero)
         slider.addTarget(self, action: "volumeDidChange:", forControlEvents: UIControlEvents.ValueChanged)
         slider.value = self.metronome!.tickPlayer!.volume
         
@@ -301,14 +301,14 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         
         let metronomeView = CustomIOSAlertView(frame: CGRectZero)
         metronomeView.buttonTitles = ["Close"]
-        metronomeView.addSubview(slider)
         metronomeView.addSubview(title)
+        metronomeView.addSubview(slider)
         metronomeView.delegate = self
         metronomeView.show()
 
-        slider.frame = CGRect(x: metronomeView.frame.midX, y: metronomeView.frame.midY, width: metronomeView.frame.width/1.5, height: 3.0)
         title.frame = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 30.0)
         title.center = CGPoint(x: metronomeView.center.x, y: metronomeView.center.y - 40.0)
+        slider.frame = CGRect(x: metronomeView.frame.midX, y: metronomeView.frame.midY, width: metronomeView.frame.width/1.5, height: 3.0)
         slider.center = metronomeView.center
         slider.tintColor = lightBlue()
         metronomeView.bringSubviewToFront(title)
@@ -587,58 +587,5 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasLoginKey")
         NSUserDefaults.standardUserDefaults().synchronize()
     }
-    
-    /*
-    // TableView Delegate
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("SwipeBar") as! SwipeBar
-        let up = UISwipeGestureRecognizer(target: self, action: "showTools:")
-        up.direction = .Up
-        let down = UISwipeGestureRecognizer(target: self, action: "hideTools:")
-        down.direction = .Down
-        header.swipeView.addGestureRecognizer(up)
-        header.swipeView.addGestureRecognizer(down)
-        
-        self.upTap = UITapGestureRecognizer(target: self, action: "showTools:")
-        self.downTap = UITapGestureRecognizer(target: self, action: "hideTools:")
-        self.swipeArrow = header.swipeArrow
-        self.swipeArrow?.addGestureRecognizer(self.upTap!)
-        return header
-    }
-
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 30.0
-    }
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        } else {
-            return 0
-        }
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let metronome = Metronome.createView()
-            metronome.delegate = self
-            metronome.backgroundColor = lightGray()
-            self.metronome = metronome
-            return metronome
-        } else {
-            return UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "Default")
-        }
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 100.0
-        }
-        return 60.0
-    }*/
 
 }

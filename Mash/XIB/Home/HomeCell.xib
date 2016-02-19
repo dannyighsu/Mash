@@ -118,13 +118,6 @@
                                     <constraint firstAttribute="height" constant="1" id="FeC-FC-wug"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wIc-EV-UDL">
-                                <rect key="frame" x="8" y="207" width="20" height="22"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="20" id="o2m-Oo-cmS"/>
-                                </constraints>
-                                <state key="normal" image="Play_2"/>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CpZ-qy-Ngo">
                                 <rect key="frame" x="475" y="200" width="35" height="35"/>
                                 <constraints>
@@ -168,6 +161,13 @@
                                     </mask>
                                 </variation>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wIc-EV-UDL">
+                                <rect key="frame" x="8" y="206" width="22" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="22" id="o2m-Oo-cmS"/>
+                                </constraints>
+                                <state key="normal" image="Play_4"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -181,7 +181,7 @@
                             <constraint firstItem="wIc-EV-UDL" firstAttribute="leading" secondItem="GM1-Dy-YdQ" secondAttribute="leading" id="BCb-hV-jHj"/>
                             <constraint firstItem="8RP-tj-KBl" firstAttribute="top" secondItem="gxM-bJ-ekW" secondAttribute="bottom" constant="14" id="BF2-SF-nLG"/>
                             <constraint firstItem="0T1-wt-gl5" firstAttribute="firstBaseline" secondItem="Ati-SW-F80" secondAttribute="firstBaseline" id="BWd-Vw-yTh"/>
-                            <constraint firstItem="Ati-SW-F80" firstAttribute="leading" secondItem="wIc-EV-UDL" secondAttribute="trailing" constant="8" symbolic="YES" id="F2N-1C-Zpn"/>
+                            <constraint firstItem="Ati-SW-F80" firstAttribute="leading" secondItem="wIc-EV-UDL" secondAttribute="trailing" constant="6" id="F2N-1C-Zpn"/>
                             <constraint firstItem="iB9-fy-hJR" firstAttribute="centerY" secondItem="CpZ-qy-Ngo" secondAttribute="centerY" id="I8b-1l-C1n"/>
                             <constraint firstItem="Ati-SW-F80" firstAttribute="centerY" secondItem="wIc-EV-UDL" secondAttribute="centerY" id="JGp-lk-PHI"/>
                             <constraint firstItem="tCQ-Pj-pdh" firstAttribute="leading" secondItem="fsE-C7-WYi" secondAttribute="leadingMargin" id="KZw-nW-bzC"/>
@@ -195,7 +195,7 @@
                             <constraint firstItem="nVG-Ae-MDB" firstAttribute="top" secondItem="8RP-tj-KBl" secondAttribute="bottom" constant="9" id="PzE-I6-art"/>
                             <constraint firstItem="GM1-Dy-YdQ" firstAttribute="trailing" secondItem="tCQ-Pj-pdh" secondAttribute="trailing" id="QG8-zc-ZZu"/>
                             <constraint firstItem="tCQ-Pj-pdh" firstAttribute="top" secondItem="8RP-tj-KBl" secondAttribute="bottom" constant="-74" id="RXR-WE-giZ"/>
-                            <constraint firstItem="wIc-EV-UDL" firstAttribute="top" secondItem="GM1-Dy-YdQ" secondAttribute="bottom" constant="6" id="Rd2-Gl-AQb"/>
+                            <constraint firstItem="wIc-EV-UDL" firstAttribute="top" secondItem="GM1-Dy-YdQ" secondAttribute="bottom" constant="5" id="Rd2-Gl-AQb"/>
                             <constraint firstItem="sKl-nI-klk" firstAttribute="leading" secondItem="fsE-C7-WYi" secondAttribute="leading" id="SPI-9i-d6p"/>
                             <constraint firstItem="Sxn-4P-2JJ" firstAttribute="leading" secondItem="nVG-Ae-MDB" secondAttribute="leading" id="WMl-T0-Zgd"/>
                             <constraint firstAttribute="trailing" secondItem="8RP-tj-KBl" secondAttribute="trailing" constant="17" id="aoi-a0-fHK"/>
@@ -220,7 +220,7 @@
                             <constraint firstItem="5e9-QK-tnH" firstAttribute="leading" secondItem="tCQ-Pj-pdh" secondAttribute="leading" id="oAz-7V-NR4"/>
                             <constraint firstItem="iB9-fy-hJR" firstAttribute="leading" secondItem="CpZ-qy-Ngo" secondAttribute="trailing" constant="2" id="oUo-A5-32n"/>
                             <constraint firstItem="0T1-wt-gl5" firstAttribute="trailing" secondItem="tCQ-Pj-pdh" secondAttribute="trailing" id="oj9-8g-2Um"/>
-                            <constraint firstItem="Ati-SW-F80" firstAttribute="top" secondItem="wIc-EV-UDL" secondAttribute="top" id="peB-iz-z6G"/>
+                            <constraint firstItem="Ati-SW-F80" firstAttribute="top" secondItem="wIc-EV-UDL" secondAttribute="top" constant="1" id="peB-iz-z6G"/>
                             <constraint firstAttribute="bottom" secondItem="CpZ-qy-Ngo" secondAttribute="bottom" id="pqE-ch-MHl"/>
                             <constraint firstItem="tCQ-Pj-pdh" firstAttribute="top" secondItem="5e9-QK-tnH" secondAttribute="bottom" constant="8" symbolic="YES" id="sOu-aC-cbo"/>
                             <constraint firstItem="c5A-fY-GOV" firstAttribute="centerY" secondItem="yek-5G-nnW" secondAttribute="centerY" constant="6" id="vPE-JW-XqI"/>
@@ -272,7 +272,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="Play_2" width="45" height="75"/>
+        <image name="Play_4" width="120" height="120"/>
         <image name="comment" width="120" height="120"/>
         <image name="like" width="120" height="120"/>
     </resources>

@@ -292,9 +292,3 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     }
     
 }
-
-class MetronomeManualTrigger {
-    init() {
-        
-    }
-}
