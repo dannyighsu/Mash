@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18FBEDBF1C688A0500235F34 /* CellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDBE1C688A0500235F34 /* CellConfigurator.swift */; };
+		18FBEDC11C6C319300235F34 /* HomeCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDC01C6C319300235F34 /* HomeCellConfigurator.swift */; };
+		18FBEDC31C6C432B00235F34 /* UserCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDC21C6C432A00235F34 /* UserCellConfigurator.swift */; };
 		37038FB81C617D1C0043C262 /* DirectUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37038FB31C617D1C0043C262 /* DirectUploadViewController.swift */; };
 		37038FB91C617D1C0043C262 /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37038FB41C617D1C0043C262 /* ExploreViewController.swift */; };
 		37038FBA1C617D1C0043C262 /* ImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37038FB51C617D1C0043C262 /* ImportViewController.swift */; };
@@ -435,6 +438,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		18FBEDBE1C688A0500235F34 /* CellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellConfigurator.swift; sourceTree = "<group>"; };
+		18FBEDC01C6C319300235F34 /* HomeCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeCellConfigurator.swift; sourceTree = "<group>"; };
+		18FBEDC21C6C432A00235F34 /* UserCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCellConfigurator.swift; sourceTree = "<group>"; };
 		37038FB31C617D1C0043C262 /* DirectUploadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectUploadViewController.swift; sourceTree = "<group>"; };
 		37038FB41C617D1C0043C262 /* ExploreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
 		37038FB51C617D1C0043C262 /* ImportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportViewController.swift; sourceTree = "<group>"; };
@@ -894,6 +900,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		181F79CE1C77BD4A00253252 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		18FBEDBB1C6879C000235F34 /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				18FBEDBE1C688A0500235F34 /* CellConfigurator.swift */,
+				18FBEDC01C6C319300235F34 /* HomeCellConfigurator.swift */,
+				18FBEDC21C6C432A00235F34 /* UserCellConfigurator.swift */,
+			);
+			name = "View Models";
+			sourceTree = "<group>";
+		};
 		37038FB21C617CBA0043C262 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
@@ -1457,6 +1480,8 @@
 				37A3C2D01B3CC00600F77F2A /* Images.xcassets */,
 				373F0EF51B3DEFC500DE92AB /* Audio */,
 				37E799BD1B3CC1D000D2E54D /* Classes */,
+				181F79CE1C77BD4A00253252 /* Models */,
+				18FBEDBB1C6879C000235F34 /* View Models */,
 				37E799861B3CC1C600D2E54D /* Controller */,
 				37A3C2D21B3CC00600F77F2A /* LaunchScreen.xib */,
 				37038FBF1C617F0F0043C262 /* Deprecated.storyboard */,
@@ -2208,6 +2233,7 @@
 				379882421C0131200029E56C /* AWSS3.swift in Sources */,
 				379882831C01314F0029E56C /* RecordViewController.swift in Sources */,
 				37C9F50F1C029E2000C80F88 /* SwipeBar.swift in Sources */,
+				18FBEDC11C6C319300235F34 /* HomeCellConfigurator.swift in Sources */,
 				37DE77271B4370B200952987 /* FollowingViewController.swift in Sources */,
 				37C9F5141C029E2000C80F88 /* ChannelPlaceholder.swift in Sources */,
 				37E799AE1B3CC1C600D2E54D /* RootNavigationController.swift in Sources */,
@@ -2264,12 +2290,14 @@
 				37C9F50E1C029E2000C80F88 /* ShareView.swift in Sources */,
 				37038FBA1C617D1C0043C262 /* ImportViewController.swift in Sources */,
 				37C9F5111C029E2000C80F88 /* Profile.swift in Sources */,
+				18FBEDC31C6C432B00235F34 /* UserCellConfigurator.swift in Sources */,
 				37C9F5101C029E2000C80F88 /* HomeCell.swift in Sources */,
 				37D2351F1C3B90CA0091A1D0 /* ProjectDismissAnimationController.swift in Sources */,
 				379882601C01313F0029E56C /* EntryViewController.swift in Sources */,
 				37C9F5161C029E2000C80F88 /* ProjectPlayer.swift in Sources */,
 				37C9F50C1C029E2000C80F88 /* ImportHeaderView.swift in Sources */,
 				37C12E1C1B69797300A4E3A3 /* SuperpoweredIOSAudioOutput.mm in Sources */,
+				18FBEDBF1C688A0500235F34 /* CellConfigurator.swift in Sources */,
 				376CA77A1B8BDCA000ADD1E2 /* Mashservice.pbrpc.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

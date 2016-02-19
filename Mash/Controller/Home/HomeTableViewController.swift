@@ -14,7 +14,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var activityFeed: UITableView!
     var activityData: [HomeCell] = []
     var globalData: [HomeCell] = []
-    var displayData: [HomeCell] = []
+    var displayData: [HomeCellConfigurator] = []
     var activityView: ActivityView = ActivityView.make()
     var audioPlayer: AVAudioPlayer? = nil
     var playerTimer: NSTimer? = nil
@@ -105,49 +105,9 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell") as! HomeCell
-            cell.eventText = self.displayData[indexPath.row].eventText
-            cell.trackButton.setTitle(self.displayData[indexPath.row].eventText, forState: .Normal)
-            cell.artistButton.setTitle(self.displayData[indexPath.row].userText, forState: .Normal)
-            cell.userLabel.setTitle(self.displayData[indexPath.row].userText, forState: .Normal)
-            cell.timeLabel.text = self.displayData[indexPath.row].timeText
-            cell.user = self.displayData[indexPath.row].user
-            cell.track = self.displayData[indexPath.row].track
-            cell.timeLabel.text = parseTimeStamp(cell.timeLabel.text!)
-            cell.backgroundArt.layer.borderWidth = 0.5
-            cell.backgroundArt.layer.borderColor = lightGray().CGColor
-            cell.profileImage.contentMode = UIViewContentMode.ScaleAspectFill
-            cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
-            cell.profileImage.layer.borderWidth = 0.5
-            cell.profileImage.layer.masksToBounds = true
-            cell.userLabel.addTarget(self, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
-            
-            self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
-            self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
-            cell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)
-            cell.likeButton.addTarget(self, action: "like:", forControlEvents: .TouchUpInside)
-    
-            download(getS3WaveformKey(cell.track!), url: filePathURL(getS3WaveformKey(cell.track!)), bucket: waveform_bucket) {
-                (result) in
-                if result != nil {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        cell.audioPlotView.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(cell.track!)))
-                    }
-                } else {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        cell.audioPlotView.image = UIImage(named: "waveform_static")
-                    }
-                }
-                dispatch_async(dispatch_get_main_queue()) {
-                    if cell.backgroundArt.layer.sublayers == nil || !(cell.backgroundArt.layer.sublayers![0] is CAGradientLayer) {
-                        let gradient: CAGradientLayer = CAGradientLayer()
-                        gradient.frame = cell.backgroundArt.bounds
-                        gradient.colors = [lightGray().CGColor, UIColor.clearColor().CGColor, lightGray().CGColor]
-                        cell.backgroundArt.layer.insertSublayer(gradient, atIndex: 0)
-                    }
-                }
-            }
-            
+            let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell")!
+            let configurator = self.displayData[indexPath.row]
+            configurator.configure(cell)
             return cell
         } else {
             let cell = self.activityFeed.dequeueReusableCellWithIdentifier("BufferCell")!
@@ -208,7 +168,9 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                     if i == self.activityData.count {
                         break
                     }
-                    self.displayData.append(self.activityData[i])
+                    let activityData = self.activityData[i]
+                    let configurator = HomeCellConfigurator(activity: activityData)
+                    self.displayData.append(configurator)
                 }
             } else {
                 retrieveActivity()
@@ -220,7 +182,9 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                     if i == self.globalData.count {
                         break
                     }
-                    self.displayData.append(self.globalData[i])
+                    let activityData = self.globalData[i]
+                    let configurator = HomeCellConfigurator(activity: activityData)
+                    self.displayData.append(configurator)
                 }
             } else {
                 retrieveGlobal()
@@ -288,7 +252,9 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             if i > data.count - 1 {
                 break
             }
-            self.displayData.append(data[i])
+            
+            let configurator = HomeCellConfigurator(activity: data[i])
+            self.displayData.append(configurator)
         }
         self.activityFeed.reloadData()
     }
@@ -363,10 +329,11 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 
                 let track = Track(frame: CGRectZero, recid: Int(recording.recid), userid: Int(recording.userid),instruments: recording.instrumentArray.copy() as! [String], instrumentFamilies: recording.familyArray.copy() as! [String], titleText: recording.title, bpm: Int(recording.bpm), trackURL: getS3Key(Int(recording.userid), recid: Int(recording.recid), format: recording.format), user: recording.handle, format: recording.format, time: time)
                 
-                let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower, track: track)
-                data.append(cell)
+                let activityData = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower, track: track)
+                data.append(activityData)
                 if i < DEFAULT_DISPLAY_AMOUNT {
-                    self.displayData.append(cell)
+                    let configurator = HomeCellConfigurator(activity: activityData)
+                    self.displayData.append(configurator)
                 }
             }
         }

@@ -12,7 +12,7 @@ import UIKit
 class FollowingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var users: UITableView!
-    var data: [User] = []
+    var configurators: [UserCellConfigurator] = []
     var user: User = currentUser
     var type: String? = nil
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
@@ -33,32 +33,9 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = self.users.dequeueReusableCellWithIdentifier("User") as! User
-        let follower = self.data[indexPath.row]
-        cell.nameLabel?.setTitle(follower.display_name(), forState: UIControlState.Normal)
-        cell.handle = follower.handle
-        cell.userid = follower.userid
-        cell.username = follower.username
-        follower.setProfilePic(cell.profilePicture!)
-        cell.profilePicture?.layer.cornerRadius = cell.profilePicture!.frame.size.width / 2
-        cell.profilePicture?.layer.borderWidth = 1.0
-        cell.profilePicture?.layer.masksToBounds = true
-        cell.bringSubviewToFront(cell.followButton)
-        var following: Bool = false
-        for u in userFollowing {
-            if u.handle! == follower.handle! {
-                following = true
-            }
-        }
-        if cell.userid == currentUser.userid {
-            cell.followButton.hidden = true
-        } else if following {
-            cell.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
-            cell.followButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
-            cell.followButton.backgroundColor = lightGray()
-        } else {
-            cell.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
-        }
+        let cell = self.users.dequeueReusableCellWithIdentifier("User")!
+        let configurator = self.configurators[indexPath.row]
+        configurator.configure(cell)
         return cell
     }
     
@@ -73,7 +50,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.data.count
+        return self.configurators.count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -119,7 +96,8 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                         follower.handle = dict.handle
                         follower.username = dict.name
                         follower.userid = Int(dict.userid)
-                        self.data.append(follower)
+                        let configurator = UserCellConfigurator(user: follower, isFollower: true)
+                        self.configurators.append(configurator)
                     }
                     dispatch_async(dispatch_get_main_queue()) {
                         self.users.reloadData()
@@ -139,7 +117,8 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                         follower.handle = dict.handle
                         follower.username = dict.name
                         follower.userid = Int(dict.userid)
-                        self.data.append(follower)
+                        let configurator = UserCellConfigurator(user: follower, isFollower: true)
+                        self.configurators.append(configurator)
                     }
                     dispatch_async(dispatch_get_main_queue()) {
                         self.users.reloadData()

@@ -138,6 +138,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             } else {
                 let user = self.tableView.dequeueReusableCellWithIdentifier("User", forIndexPath: indexPath) as! User
                 let userData = self.searchResults[indexPath.row] as! User
+                /// @andy ... Use UserCellConfigurator with isFollower: false.
                 user.handle = userData.handle
                 user.username = userData.username
                 user.userid = userData.userid
