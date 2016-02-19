@@ -308,15 +308,15 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func updateTable(data: UserRecordingsResponse) {
         self.data = []
         for t in data.recArray! {
-            let track = t as! RecordingResponse
-            let instruments = NSArray(array: track.instrumentArray)
-            let families = NSArray(array: track.familyArray)
-            let format = track.format
-            var url = "\(self.user.userid!)~~\(track.recid)\(format!)"
-            let recid = Int(track.recid)
+            let rec = t as! RecordingResponse
+            let instruments = NSArray(array: rec.instrumentArray)
+            let families = NSArray(array: rec.familyArray)
+            let format = rec.format
+            var url = "\(self.user.userid!)~~\(rec.recid)\(format!)"
+            let recid = Int(rec.recid)
             url = filePathString(url)
             
-            let trackData = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: track.title, bpm: Int(track.bpm), trackURL: url, user: self.user.handle!, format: track.format!, time: track.uploaded, playCount: Int(track.playCount), likeCount: Int(track.likeCount), mashCount: Int(track.likeCount))
+            let trackData = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: rec.title, bpm: Int(rec.bpm), timeSignature: Int(rec.bar), trackURL: url, user: self.user.handle!, format: rec.format!, time: rec.uploaded, playCount: Int(rec.playCount), likeCount: Int(rec.likeCount), mashCount: Int(rec.likeCount))
             
             self.data.append(trackData)
         }

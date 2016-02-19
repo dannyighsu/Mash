@@ -320,7 +320,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.stopAll()
         
         if self.timeAlert == nil {
-            let alert = UIAlertView(title: "Set Time Signature", message: "", delegate: self, cancelButtonTitle: "Close")
+            let alert = UIAlertView(title: "Set Time Signature", message: "", delegate: self, cancelButtonTitle: "OK")
             alert.alertViewStyle = .PlainTextInput
             alert.textFieldAtIndex(0)?.textAlignment = .Center
             alert.textFieldAtIndex(0)?.text = self.timeButton.titleLabel?.text
@@ -341,7 +341,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.stopAll()
         
         if self.tempoAlert == nil {
-            let alert = UIAlertView(title: "Set Tempo", message: "", delegate: self, cancelButtonTitle: "Close")
+            let alert = UIAlertView(title: "Set Tempo", message: "", delegate: self, cancelButtonTitle: "OK")
             alert.alertViewStyle = .PlainTextInput
             alert.textFieldAtIndex(0)?.textAlignment = .Center
             alert.textFieldAtIndex(0)?.text = self.tempoButton.titleLabel?.text

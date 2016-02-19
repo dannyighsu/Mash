@@ -101,7 +101,8 @@ class AudioConverter: TPAACAudioConverter {
             while totalDuration + trackDuration <= maxDuration {
                 do {
                     try compositionTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), ofTrack: clip, atTime: totalDuration)
-                } catch _ {
+                } catch let error as NSError {
+                    Debug.printl(error, sender: nil)
                     completion(exportSession: nil)
                     return
                 }

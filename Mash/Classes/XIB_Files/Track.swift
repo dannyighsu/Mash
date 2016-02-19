@@ -24,6 +24,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
     var userText: String = ""
     var trackURL: String = ""
     var bpm: Int = 0
+    var timeSignature: Int = 0
     var format: String = ""
     var id: Int = 0
     var audioFile: EZAudioFile? = nil
@@ -39,7 +40,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         self.titleText = titleText
     }
 
-    convenience init(frame: CGRect, recid: Int, userid: Int, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, trackURL: String, user: String, format: String, time: String, playCount: Int, likeCount: Int, mashCount: Int) {
+    convenience init(frame: CGRect, recid: Int, userid: Int, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, timeSignature: Int, trackURL: String, user: String, format: String, time: String, playCount: Int, likeCount: Int, mashCount: Int) {
         self.init(frame: frame)
         self.instruments = instruments
         self.id = recid
@@ -48,6 +49,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         self.titleText = titleText
         self.trackURL = trackURL
         self.bpm = bpm
+        self.timeSignature = timeSignature
         self.userText = user
         self.format = format
         self.time = time
