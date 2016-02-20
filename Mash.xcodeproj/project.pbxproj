@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		181F79D41C77FA8D00253252 /* TrackCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F79D31C77FA8D00253252 /* TrackCellConfigurator.swift */; };
 		18FBEDBF1C688A0500235F34 /* CellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDBE1C688A0500235F34 /* CellConfigurator.swift */; };
 		18FBEDC11C6C319300235F34 /* HomeCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDC01C6C319300235F34 /* HomeCellConfigurator.swift */; };
 		18FBEDC31C6C432B00235F34 /* UserCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDC21C6C432A00235F34 /* UserCellConfigurator.swift */; };
@@ -438,6 +439,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		181F79D31C77FA8D00253252 /* TrackCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackCellConfigurator.swift; sourceTree = "<group>"; };
 		18FBEDBE1C688A0500235F34 /* CellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellConfigurator.swift; sourceTree = "<group>"; };
 		18FBEDC01C6C319300235F34 /* HomeCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeCellConfigurator.swift; sourceTree = "<group>"; };
 		18FBEDC21C6C432A00235F34 /* UserCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCellConfigurator.swift; sourceTree = "<group>"; };
@@ -906,6 +908,7 @@
 				18FBEDBE1C688A0500235F34 /* CellConfigurator.swift */,
 				18FBEDC01C6C319300235F34 /* HomeCellConfigurator.swift */,
 				18FBEDC21C6C432A00235F34 /* UserCellConfigurator.swift */,
+				181F79D31C77FA8D00253252 /* TrackCellConfigurator.swift */,
 			);
 			name = "View Models";
 			sourceTree = "<group>";
@@ -2250,6 +2253,7 @@
 				37038FC31C6188140043C262 /* CollectionViewLayout.swift in Sources */,
 				379882851C01314F0029E56C /* UploadViewController.swift in Sources */,
 				37A43C2D1C3DDD1300B06A14 /* TabControlBar.swift in Sources */,
+				181F79D41C77FA8D00253252 /* TrackCellConfigurator.swift in Sources */,
 				3798827E1C01314F0029E56C /* SettingsViewController.swift in Sources */,
 				37E799FC1B3CC1F600D2E54D /* KeychainWrapper.m in Sources */,
 				370A39051BF6A8B700FCD060 /* MashResultsHeaderView.swift in Sources */,

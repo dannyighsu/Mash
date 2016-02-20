@@ -10,17 +10,21 @@ import Foundation
 
 class UserCellConfigurator : CellConfigurator {
     var user: User?
+    var shouldShowFollowButton: Bool
     
-    init(user : User) {
+    init(user : User, shouldShowFollowButton: Bool) {
         self.user = user;
+        self.shouldShowFollowButton = shouldShowFollowButton
     }
     
     override func configure(cell: UITableViewCell, viewController: UIViewController) {
         let userCell = cell as! User
+        
         userCell.handle = self.user!.handle
         userCell.username = self.user!.username
         userCell.userid = self.user!.userid
-        userCell.updateDisplays()
+        
+        userCell.updateDisplays(self.shouldShowFollowButton)
         userCell.bringSubviewToFront(userCell.followButton)
     }
 }

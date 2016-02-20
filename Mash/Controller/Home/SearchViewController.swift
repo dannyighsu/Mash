@@ -106,50 +106,20 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if tableView == self.tableView {
+            var cell: UITableViewCell? = nil
             if self.scope == 0 {
-                let track = self.tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
-                let trackData = self.searchResults[indexPath.row] as! Track
-                track.title.text = trackData.titleText
-                track.titleText = track.title.text!
-                track.instruments = trackData.instruments
-                track.instrumentFamilies = trackData.instrumentFamilies
-                track.trackURL = filePathString(trackData.trackURL)
-                track.instrumentImage.image = findImage(track.instrumentFamilies)
-                track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
-                track.titleText = trackData.titleText
-                track.title.text = trackData.titleText
-                track.userText = trackData.userText
-                track.userLabel.setTitle(track.userText, forState: .Normal)
-                track.format = trackData.format
-                track.bpm = trackData.bpm
-                track.userid = trackData.userid
-                track.id = trackData.id
-                download(getS3WaveformKey(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: waveform_bucket) {
-                    (result) in
-                    dispatch_async(dispatch_get_main_queue()) {
-                        if result != nil {
-                            track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
-                        } else {
-                            track.staticAudioPlot.image = UIImage(named: "waveform_static")
-                        }
-                    }
-                }
-                return track
+                cell = self.tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
             } else {
-                let user = self.tableView.dequeueReusableCellWithIdentifier("User", forIndexPath: indexPath) as! User
-                let userData = self.searchResults[indexPath.row] as! User
-                /// @andy ... Use UserCellConfigurator with isFollower: false.
-                user.handle = userData.handle
-                user.username = userData.username
-                user.userid = userData.userid
-                user.updateDisplays()
-                return user
+                cell = self.tableView.dequeueReusableCellWithIdentifier("User", forIndexPath: indexPath) as! Track
             }
+            let configurator = self.searchResults[indexPath.row] as! CellConfigurator
+            configurator.configure(cell!, viewController: self)
+            return cell!
         } else {
-            let cell = SuggestionCell(style: UITableViewCellStyle.Default, reuseIdentifier: "SuggestionCell")
-            cell.textLabel!.text = self.suggestions[indexPath.row].first
-            cell.type = self.suggestions[indexPath.row].last!
-            return cell
+            let suggestionCell = SuggestionCell(style: UITableViewCellStyle.Default, reuseIdentifier: "SuggestionCell")
+            suggestionCell.textLabel!.text = self.suggestions[indexPath.row].first
+            suggestionCell.type = self.suggestions[indexPath.row].last!
+            return suggestionCell
         }
     }
 
@@ -419,47 +389,16 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             for i in 0...response.recordingArray.count - 1 {
                 let rec = response.recordingArray[i] as! RecordingResponse
                 let track = Track(frame: CGRectZero, recid: Int(rec.recid), userid: Int(rec.userid),instruments: rec.instrumentArray.copy() as! [String], instrumentFamilies: rec.familyArray.copy() as! [String], titleText: rec.title, bpm: Int(rec.bpm), trackURL: getS3Key(Int(rec.userid), recid: Int(rec.recid), format: rec.format), user: rec.handle, format: rec.format, time: rec.uploaded, playCount: Int(rec.playCount), likeCount: Int(rec.likeCount), mashCount: Int(rec.likeCount))
-                self.allResults.append(track)
+                let configurator = TrackCellConfigurator(track: track)
+                self.allResults.append(configurator)
                 if i < DEFAULT_DISPLAY_AMOUNT {
-                    self.searchResults.append(track)
+                    self.searchResults.append(configurator)
                 }
             }
         } else {
             raiseAlert("No Results Found")
         }
         self.tableView.reloadData()
-        /*
-        self.allResults = []
-        self.searchResults = []
-        let tracks = data["recordings"] as! NSArray
-        if tracks.count == 0 {
-            return
-        }
-        for i in 0...tracks.count - 1 {
-            let dict = tracks[i] as! NSDictionary
-            let instruments = dict["instrument"] as! NSArray
-            var instrument = ""
-            if instruments.count != 0 {
-                instrument = instruments[0] as! String
-            }
-            let families = dict["family"] as! NSArray
-            var family = ""
-            if families.count != 0 {
-                family = families[0] as! String
-            }
-            let trackName = dict["song_name"] as! String
-            let format = dict["format"] as! String
-            let user = dict["handle"] as! String
-            var url = "\(user)~~\(trackName)\(format)"
-            url = filePathString(url)
-            
-            let track = Track(frame: CGRectZero, recid:0, instruments: [instrument], instrumentFamilies: [family], titleText: trackName, bpm: dict["bpm"] as! Int, trackURL: url, user: user, format: format)
-            
-            self.allResults.append(track)
-            if i < DEFAULT_DISPLAY_AMOUNT {
-                self.searchResults.append(track)
-            }
-        }*/
     }
     
     func updateUserResults(response: UserPreviews) {
@@ -472,9 +411,10 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 user.handle = data.handle
                 user.username = data.name
                 user.userid = Int(data.userid)
-                self.allResults.append(user)
+                let configurator = UserCellConfigurator(user: user, shouldShowFollowButton: false) 
+                self.allResults.append(configurator)
                 if i < DEFAULT_DISPLAY_AMOUNT {
-                    self.searchResults.append(user)
+                    self.searchResults.append(configurator)
                 }
             }
         } else {
@@ -495,7 +435,5 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
 }
 
 class SuggestionCell: UITableViewCell {
-    
     var type: String = ""
-    
 }

@@ -58,13 +58,13 @@ class HomeCellConfigurator : CellConfigurator {
         // each time the download completes.
         */
         
-        download(getS3WaveformKey(cell.track!),
-            url: filePathURL(getS3WaveformKey(cell.track!)),
+        download(getS3WaveformKey(self.activity!.track!),
+            url: filePathURL(getS3WaveformKey(self.activity!.track!)),
             bucket: waveform_bucket) {
                 (result) in
             if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
-                    cell.audioPlotView.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(cell.track!)))
+                    cell.audioPlotView.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(self.activity!.track!)))
                 }
             } else {
                 dispatch_async(dispatch_get_main_queue()) {

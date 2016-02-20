@@ -35,7 +35,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = self.users.dequeueReusableCellWithIdentifier("User")!
         let configurator = self.configurators[indexPath.row]
-        configurator.configure(cell)
+        configurator.configure(cell, viewController: self)
         return cell
     }
     
@@ -96,7 +96,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                         follower.handle = dict.handle
                         follower.username = dict.name
                         follower.userid = Int(dict.userid)
-                        let configurator = UserCellConfigurator(user: follower, isFollower: true)
+                        let configurator = UserCellConfigurator(user: follower, shouldShowFollowButton: true)
                         self.configurators.append(configurator)
                     }
                     dispatch_async(dispatch_get_main_queue()) {
@@ -117,7 +117,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                         follower.handle = dict.handle
                         follower.username = dict.name
                         follower.userid = Int(dict.userid)
-                        let configurator = UserCellConfigurator(user: follower, isFollower: true)
+                        let configurator = UserCellConfigurator(user: follower, shouldShowFollowButton: true)
                         self.configurators.append(configurator)
                     }
                     dispatch_async(dispatch_get_main_queue()) {

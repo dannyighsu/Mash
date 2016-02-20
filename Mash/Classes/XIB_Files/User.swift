@@ -83,10 +83,8 @@ class User: UITableViewCell {
     
     // Update all displays of the view
     // @TODO: @andy: move this to the UserCellConfigurator
-    func updateDisplays() {
-        if self.userid == currentUser.userid {
-            self.followButton.hidden = true
-        } else {
+    func updateDisplays(shouldShowFollowButton: Bool) {
+        if (shouldShowFollowButton && self.userid != currentUser.userid) {
             var following = false
             for u in userFollowing {
                 if u.handle! == self.handle {

@@ -107,7 +107,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         if indexPath.section == 0 {
             let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell")!
             let configurator = self.displayData[indexPath.row]
-            configurator.configure(cell)
+            configurator.configure(cell, viewController: self)
             return cell
         } else {
             let cell = self.activityFeed.dequeueReusableCellWithIdentifier("BufferCell")!
