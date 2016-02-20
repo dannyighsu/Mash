@@ -13,14 +13,13 @@ import AVFoundation
 class MashResultsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, AudioModuleDelegate {
     
     @IBOutlet weak var trackTable: UITableView!
-    var results: [Track] = []
-    var allResults: [Track] = []
+    var results: [TrackCellConfigurator] = []
+    var allResults: [TrackCellConfigurator] = []
     var projectRecordings: [Track] = []
     var projectPlayers: [AVAudioPlayer] = []
     var audioPlayer: AVAudioPlayer? = nil
     var playerTimer: NSTimer? = nil
     var currTrackID: Int = 0
-    var downloadedTracks: Set<Int> = Set<Int>()
     var audioModule: AudioModule = AudioModule()
     var currentTrackURL: String = ""
     
@@ -68,37 +67,10 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let track = tableView.dequeueReusableCellWithIdentifier("Track") as! Track
-        let trackData = self.results[indexPath.row]
-        track.titleText = trackData.titleText
-        track.userText = trackData.userText
-        track.title.text = track.titleText
-        track.userLabel.setTitle(track.userText, forState: .Normal)
-        track.bpm = trackData.bpm
-        track.format = trackData.format
-        track.userid = trackData.userid
-        track.id = trackData.id
-        track.instrumentFamilies = trackData.instrumentFamilies
-        track.instruments = trackData.instruments
-        track.trackURL = filePathString(getS3Key(track))
-        if !self.downloadedTracks.contains(indexPath.row) {
-            track.activityView.startAnimating()
-            download(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket) {
-                (result) in
-                dispatch_async(dispatch_get_main_queue()) {
-                    track.activityView.stopAnimating()
-                    if result != nil {
-                        track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
-                    } else {
-                        track.staticAudioPlot.image = UIImage(named: "waveform_static")
-                    }
-                }
-            }
-        }
-        
-        track.instrumentImage.image = findImage(self.results[indexPath.row].instrumentFamilies)
-        track.addButton.addTarget(self, action: "add:", forControlEvents: UIControlEvents.TouchDown)
-        return track
+        let cell = tableView.dequeueReusableCellWithIdentifier("Track") as! Track
+        let configurator = self.results[indexPath.row]
+        configurator.configure(cell, viewController: self)
+        return cell
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -119,7 +91,6 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
                 }
             }
         }
-        self.downloadedTracks.insert(indexPath.row)
         
         Debug.printl("Playing track \(track.titleText)", sender: self)
     }
@@ -199,7 +170,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func add(sender: UIButton) {
+    func addTrack(sender: UIButton) {
         let track = sender.superview?.superview?.superview as! Track
         ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
     }

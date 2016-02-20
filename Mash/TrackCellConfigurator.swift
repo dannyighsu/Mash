@@ -24,18 +24,34 @@ class TrackCellConfigurator : CellConfigurator {
         
         trackCell.addButton.addTarget(viewController, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
         
-        configureAudioPlot(trackCell);
+        if ((self.track!.staticAudioPlot) != nil) {
+            trackCell.staticAudioPlot = self.track!.staticAudioPlot
+        } else {
+            configureAudioPlot(trackCell);
+        }
     }
     
     func configureAudioPlot(cell: Track) {
+        // Set the placeholder image before the download
+        cell.staticAudioPlot.image = UIImage(named: "waveform_static")
+        cell.activityView.startAnimating()
         download(getS3WaveformKey(self.track!), url: NSURL(fileURLWithPath: self.track!.trackURL), bucket: waveform_bucket) {
             (result) in
             dispatch_async(dispatch_get_main_queue()) {
+                cell.activityView.stopAnimating()
                 if result != nil {
-                    cell.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(self.track!)))
+                    // Store the static audio plot in the model
+                    self.track!.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(self.track!)))
                 } else {
-                    cell.staticAudioPlot.image = UIImage(named: "waveform_static")
+                    // For now, we will just store the placeholder into the model.
+                    // @TODO: @andy: Come up with a way to tell the difference between
+                    // getting no audio plot back because there is no audio plot available (don't retry)
+                    // and getting no audio plot back because the request failed (in which case, retry).
+                    self.track!.staticAudioPlot.image = UIImage(named: "waveform_static")
                 }
+                
+                // Update the cell with the audio plot in the model
+                cell.staticAudioPlot = self.track!.staticAudioPlot
             }
         }
     }
