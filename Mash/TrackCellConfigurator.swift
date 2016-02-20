@@ -15,7 +15,7 @@ class TrackCellConfigurator : CellConfigurator {
         self.track = track;
     }
     
-    override func configure(cell: UITableViewCell, viewController: UIViewController) {
+    override func configure(cell: AnyObject, viewController: UIViewController) {
         let trackCell = cell as! Track
         
         trackCell.title.text = track!.titleText

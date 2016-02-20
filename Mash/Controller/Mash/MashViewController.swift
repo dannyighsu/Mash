@@ -11,10 +11,10 @@ import UIKit
 import AVFoundation
 
 class MashViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIAlertViewDelegate {
-    
     @IBOutlet weak var instrumentsCollection: UICollectionView!
     var recordings: [Track] = []
     var bpm: Int? = nil
+    var instrumentCellConfigurators: [InstrumentCellConfigurator] = []
     var instruments: [String] = []
     var activityView: ActivityView = ActivityView.make()
     var cellWidth: CGFloat = 75.0
@@ -24,6 +24,10 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        for instrument in Array(instrumentArray.keys) {
+            self.instrumentCellConfigurators.append(InstrumentCellConfigurator(instrument: instrument))
+        }
         
         self.instrumentsCollection.delegate = self
         self.instrumentsCollection.dataSource = self
@@ -57,7 +61,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return instrumentArray.count
+        return self.instrumentCellConfigurators.count
     }
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
@@ -65,41 +69,34 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = self.instrumentsCollection.dequeueReusableCellWithReuseIdentifier("InstrumentCell", forIndexPath: indexPath) as! InstrumentCell
-        /* let screenRect:CGRect = UIScreen.mainScreen().bounds
-        let screenWidth:CGFloat = screenRect.size.width
-        
-        let index = CGFloat(indexPath.row % 3)
-        
-        cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, screenWidth / 3, screenWidth / 3)*/
-        let selection = UIImageView(frame: cell.frame)
-        selection.layer.borderColor = lightGray().CGColor
-        cell.selectedBackgroundView = selection
-        cell.instrument = Array(instrumentArray.keys)[indexPath.row]
-        cell.instrumentImage.image = findImage([cell.instrument])
-        cell.backgroundColor = offWhite()
-        cell.instrumentLabel.text = cell.instrument
+        let cell = self.instrumentsCollection.dequeueReusableCellWithReuseIdentifier("InstrumentCell", forIndexPath: indexPath)
+        let configurator = self.instrumentCellConfigurators[indexPath.item]
+        configurator.configure(cell, viewController: self)
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
-        if !self.instruments.contains(cell.instrument) {
-            self.instruments.append(cell.instrument)
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! InstrumentCell
+        let configurator = self.instrumentCellConfigurators[indexPath.item]
+        configurator.highlightCellSelection(cell, isSelected: true)
+        
+        if !self.instruments.contains(configurator.instrument) {
+            self.instruments.append(configurator.instrument)
         }
-        cell.layer.borderColor = lightGray().CGColor
-        cell.layer.borderWidth = 5.0
     }
     
     func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! InstrumentCell
+        let configurator = self.instrumentCellConfigurators[indexPath.item]
+        configurator.highlightCellSelection(cell, isSelected: false)
+        
+        // @TODO: @andy: isn't there something you can call to remove a String from an Array?
         for i in 0...self.instruments.count - 1 {
             if self.instruments[i] == cell.instrument {
                 self.instruments.removeAtIndex(i)
                 break
             }
         }
-        cell.layer.borderWidth = 0.0
     }
 
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {

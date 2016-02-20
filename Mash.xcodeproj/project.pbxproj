@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		181F79D41C77FA8D00253252 /* TrackCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F79D31C77FA8D00253252 /* TrackCellConfigurator.swift */; };
+		181F79D61C784F2200253252 /* InstrumentCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F79D51C784F2200253252 /* InstrumentCellConfigurator.swift */; };
 		18FBEDBF1C688A0500235F34 /* CellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDBE1C688A0500235F34 /* CellConfigurator.swift */; };
 		18FBEDC11C6C319300235F34 /* HomeCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDC01C6C319300235F34 /* HomeCellConfigurator.swift */; };
 		18FBEDC31C6C432B00235F34 /* UserCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDC21C6C432A00235F34 /* UserCellConfigurator.swift */; };
@@ -440,6 +441,7 @@
 
 /* Begin PBXFileReference section */
 		181F79D31C77FA8D00253252 /* TrackCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackCellConfigurator.swift; sourceTree = "<group>"; };
+		181F79D51C784F2200253252 /* InstrumentCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstrumentCellConfigurator.swift; sourceTree = "<group>"; };
 		18FBEDBE1C688A0500235F34 /* CellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellConfigurator.swift; sourceTree = "<group>"; };
 		18FBEDC01C6C319300235F34 /* HomeCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeCellConfigurator.swift; sourceTree = "<group>"; };
 		18FBEDC21C6C432A00235F34 /* UserCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCellConfigurator.swift; sourceTree = "<group>"; };
@@ -909,6 +911,7 @@
 				18FBEDC01C6C319300235F34 /* HomeCellConfigurator.swift */,
 				18FBEDC21C6C432A00235F34 /* UserCellConfigurator.swift */,
 				181F79D31C77FA8D00253252 /* TrackCellConfigurator.swift */,
+				181F79D51C784F2200253252 /* InstrumentCellConfigurator.swift */,
 			);
 			name = "View Models";
 			sourceTree = "<group>";
@@ -2262,6 +2265,7 @@
 				37C9F5171C029E2000C80F88 /* ProjectTools.swift in Sources */,
 				3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */,
 				37B934A61C3B4B680001E468 /* ProjectTransitionAnimationController.swift in Sources */,
+				181F79D61C784F2200253252 /* InstrumentCellConfigurator.swift in Sources */,
 				3711F0A31B6FFD9D00C75F2B /* SuperpoweredAudioModule.mm in Sources */,
 				37C9F50D1C029E2000C80F88 /* MixerChannel.swift in Sources */,
 				379882471C0131360029E56C /* HelperData.swift in Sources */,

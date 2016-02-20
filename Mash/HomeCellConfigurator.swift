@@ -15,7 +15,7 @@ class HomeCellConfigurator : CellConfigurator {
         self.activity = activity;
     }
     
-    override func configure(cell: UITableViewCell, viewController: UIViewController) {
+    override func configure(cell: AnyObject, viewController: UIViewController) {
         let homeCell = cell as! HomeCell
         
         // Configure the labels and buttons

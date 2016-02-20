@@ -17,7 +17,7 @@ class UserCellConfigurator : CellConfigurator {
         self.shouldShowFollowButton = shouldShowFollowButton
     }
     
-    override func configure(cell: UITableViewCell, viewController: UIViewController) {
+    override func configure(cell: AnyObject, viewController: UIViewController) {
         let userCell = cell as! User
         
         userCell.handle = self.user!.handle
