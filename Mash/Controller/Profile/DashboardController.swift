@@ -371,12 +371,17 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             (collection, idx, stop) in
             Debug.printl("album title \(collection.localizedTitle)", sender: self)
         }*/
+        
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("ImageViewController") as! ImageViewController
-        var data: [PHAsset] = []
+        var configurators: [ImageCellConfigurator] = []
+        let cellDimension = (UIScreen.mainScreen().bounds.size.width / 3 - 4.0) 
         for (var i = photoResults.count - 1; i >= 0; i--) {
-            data.append(photoResults[i] as! PHAsset)
+            let photoAsset = photoResults[i] as! PHAsset
+            let configurator = ImageCellConfigurator(photoAsset: photoAsset, cellWidth: cellDimension, cellHeight: cellDimension)
+            configurators.append(configurator)
+            
         }
-        controller.data = data
+        controller.imageCellConfigurators = configurators
         controller.type = type
         self.navigationController?.pushViewController(controller, animated: true)
     }

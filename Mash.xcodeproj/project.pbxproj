@@ -11,6 +11,7 @@
 		181F79D61C784F2200253252 /* InstrumentCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F79D51C784F2200253252 /* InstrumentCellConfigurator.swift */; };
 		181F79D81C78717F00253252 /* ProfileTrackCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F79D71C78717F00253252 /* ProfileTrackCellConfigurator.swift */; };
 		181F79DA1C7877EE00253252 /* BufferCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F79D91C7877EE00253252 /* BufferCellConfigurator.swift */; };
+		181F79DC1C787FE900253252 /* ImageCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F79DB1C787FE900253252 /* ImageCellConfigurator.swift */; };
 		18FBEDBF1C688A0500235F34 /* CellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDBE1C688A0500235F34 /* CellConfigurator.swift */; };
 		18FBEDC11C6C319300235F34 /* HomeCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDC01C6C319300235F34 /* HomeCellConfigurator.swift */; };
 		18FBEDC31C6C432B00235F34 /* UserCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDC21C6C432A00235F34 /* UserCellConfigurator.swift */; };
@@ -446,6 +447,7 @@
 		181F79D51C784F2200253252 /* InstrumentCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstrumentCellConfigurator.swift; sourceTree = "<group>"; };
 		181F79D71C78717F00253252 /* ProfileTrackCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTrackCellConfigurator.swift; sourceTree = "<group>"; };
 		181F79D91C7877EE00253252 /* BufferCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferCellConfigurator.swift; sourceTree = "<group>"; };
+		181F79DB1C787FE900253252 /* ImageCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCellConfigurator.swift; sourceTree = "<group>"; };
 		18FBEDBE1C688A0500235F34 /* CellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellConfigurator.swift; sourceTree = "<group>"; };
 		18FBEDC01C6C319300235F34 /* HomeCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeCellConfigurator.swift; sourceTree = "<group>"; };
 		18FBEDC21C6C432A00235F34 /* UserCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCellConfigurator.swift; sourceTree = "<group>"; };
@@ -918,6 +920,7 @@
 				181F79D71C78717F00253252 /* ProfileTrackCellConfigurator.swift */,
 				181F79D51C784F2200253252 /* InstrumentCellConfigurator.swift */,
 				181F79D91C7877EE00253252 /* BufferCellConfigurator.swift */,
+				181F79DB1C787FE900253252 /* ImageCellConfigurator.swift */,
 			);
 			name = "View Models";
 			sourceTree = "<group>";
@@ -2248,6 +2251,7 @@
 				379882801C01314F0029E56C /* ProjectPreferencesViewController.swift in Sources */,
 				379882631C01313F0029E56C /* MashResultsController.swift in Sources */,
 				370AC1A91C3C9D45002ED357 /* HomeTableViewController.swift in Sources */,
+				181F79DC1C787FE900253252 /* ImageCellConfigurator.swift in Sources */,
 				376CA7781B8BDCA000ADD1E2 /* Mashservice.pbobjc.m in Sources */,
 				37C9F5131C029E2000C80F88 /* Channel.swift in Sources */,
 				37C9F5121C029E2000C80F88 /* ProfileTrack.swift in Sources */,

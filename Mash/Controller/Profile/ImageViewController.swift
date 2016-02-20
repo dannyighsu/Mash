@@ -13,9 +13,7 @@ import Photos
 class ImageViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet var images: UICollectionView!
-    var data: [PHAsset] = []
-    var photoManager: PHImageManager = PHImageManager.defaultManager()
-    var cellWidth: CGFloat = 75.0
+    var imageCellConfigurators: [ImageCellConfigurator] = []
     var type: String? = nil
     
     override func viewDidLoad() {
@@ -25,17 +23,12 @@ class ImageViewController: UICollectionViewController, UICollectionViewDelegateF
         self.images.registerNib(image, forCellWithReuseIdentifier: "ImageCell")
         self.images.delegate = self
         self.images.dataSource = self
-        self.cellWidth = UIScreen.mainScreen().bounds.size.width / 3 - 4.0
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = self.images.dequeueReusableCellWithReuseIdentifier("ImageCell", forIndexPath: indexPath) as! ImageCell
-        let photo = self.data[indexPath.row]
-        self.photoManager.requestImageForAsset(photo, targetSize: CGSize(width: self.cellWidth, height: self.cellWidth), contentMode: PHImageContentMode.AspectFit, options: nil) {
-            (image, info) in
-            cell.photoView.image = image
-            cell.photo = photo
-        }
+        let configurator = self.imageCellConfigurators[indexPath.row]
+        configurator.configure(cell, viewController: self)
         return cell
     }
     
@@ -44,22 +37,23 @@ class ImageViewController: UICollectionViewController, UICollectionViewDelegateF
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.data.count
+        return self.imageCellConfigurators.count
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let dashboard = getTabBarController("dashboard", navcontroller: self.navigationController!) as! DashboardController
-        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! ImageCell
+        let configurator = self.imageCellConfigurators[indexPath.item]
         self.navigationController?.popViewControllerAnimated(true)
         if self.type == "profile" {
-            dashboard.updateProfilePic(cell.photo!)
+            dashboard.updateProfilePic(configurator.photoAsset)
         } else {
-            dashboard.updateBanner(cell.photo!)
+            dashboard.updateBanner(configurator.photoAsset)
         }
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSize(width: self.cellWidth, height: self.cellWidth)
+        let configurator = self.imageCellConfigurators[indexPath.item]
+        return CGSize(width: configurator.cellWidth, height: configurator.cellHeight)
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {

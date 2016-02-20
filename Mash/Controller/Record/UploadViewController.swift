@@ -21,6 +21,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     var bpm: Int? = nil
     var audioPlayer: AVAudioPlayer? = nil
     var timeSignature: String? = nil
+    var instrumentCellConfigurators: [InstrumentCellConfigurator] = []
     var instruments: [String] = []
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     var cellWidth: CGFloat = 75.0
@@ -28,6 +29,10 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        for instrument in Array(instrumentArray.keys) {
+            self.instrumentCellConfigurators.append(InstrumentCellConfigurator(instrument: instrument))
+        }
 
         self.instrumentsCollection.delegate = self
         self.instrumentsCollection.dataSource = self
@@ -68,7 +73,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     // Collection View Delegate
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.instrumentsCollection {
-            return instrumentArray.count
+            return self.instrumentCellConfigurators.count
         } else {
             return 0
         }
@@ -77,34 +82,34 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = self.instrumentsCollection.dequeueReusableCellWithReuseIdentifier("InstrumentCell", forIndexPath: indexPath) as! InstrumentCell
         if collectionView == self.instrumentsCollection {
-            cell.instrument = Array(instrumentArray.keys)[indexPath.row]
-            cell.instrumentImage.image = findImage([cell.instrument])
-            cell.instrumentLabel.text = cell.instrument
-            cell.backgroundColor = offWhite()
+            let configurator = self.instrumentCellConfigurators[indexPath.item]
+            configurator.configure(cell, viewController: self)
         }
         return cell
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
-        self.instruments.append(cell.instrument)
-        cell.layer.borderColor = lightGray().CGColor
-        cell.layer.borderWidth = 5.0
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! InstrumentCell
+        let configurator = self.instrumentCellConfigurators[indexPath.item]
+        configurator.highlightCellSelection(cell, isSelected: true)
+        
+        if !self.instruments.contains(configurator.instrument) {
+            self.instruments.append(configurator.instrument)
+        }
     }
     
     func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
-        if collectionView == self.instrumentsCollection {
-            if self.instruments.count != 0 {
-                for i in 0...self.instruments.count - 1 {
-                    if self.instruments[i] == cell.instrument {
-                        self.instruments.removeAtIndex(i)
-                        break
-                    }
-                }
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! InstrumentCell
+        let configurator = self.instrumentCellConfigurators[indexPath.item]
+        configurator.highlightCellSelection(cell, isSelected: false)
+        
+        // @TODO: @andy: isn't there something you can call to remove a String from an Array?
+        for i in 0...self.instruments.count - 1 {
+            if self.instruments[i] == cell.instrument {
+                self.instruments.removeAtIndex(i)
+                break
             }
         }
-        cell.layer.borderWidth = 0.0
     }
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
