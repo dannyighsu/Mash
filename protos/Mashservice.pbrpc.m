@@ -333,4 +333,28 @@ static NSString *const kServiceName = @"MashService";
              responseClass:[SuccessResponse class]
         responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
+#pragma mark RecordingLikers(RecordingRequest) returns (UserPreviews)
+
+- (void)recordingLikersWithRequest:(RecordingRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler{
+  [[self RPCToRecordingLikersWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToRecordingLikersWithRequest:(RecordingRequest *)request handler:(void(^)(UserPreviews *response, NSError *error))handler{
+  return [self RPCToMethod:@"RecordingLikers"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[UserPreviews class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
+#pragma mark RecordingAdd(RecordingRequest) returns (SuccessResponse)
+
+- (void)recordingAddWithRequest:(RecordingRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  [[self RPCToRecordingAddWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToRecordingAddWithRequest:(RecordingRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  return [self RPCToMethod:@"RecordingAdd"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[SuccessResponse class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
 @end

@@ -22,7 +22,7 @@ func sendPlayRequest(trackid: Int) {
     }
 }
 
-func sendLikeRequest(trackid: Int) {
+func sendLikeRequest(trackid: Int, completion: (success: Bool) -> Void) {
     let request = RecordingRequest()
     request.loginToken = currentUser.loginToken
     request.userid = UInt32(currentUser.userid!)
@@ -32,7 +32,25 @@ func sendLikeRequest(trackid: Int) {
         (response, error) in
         if error != nil {
             Debug.printl(error, sender: "helpers")
+            completion(success: false)
         }
+        completion(success: true)
+    }
+}
+
+func sendUnlikeRequest(trackid: Int, completion: (success: Bool) -> Void) {
+    let request = RecordingRequest()
+    request.loginToken = currentUser.loginToken
+    request.userid = UInt32(currentUser.userid!)
+    request.recid = UInt32(trackid)
+    
+    server.recordingUnlikeWithRequest(request) {
+        (response, error) in
+        if error != nil {
+            Debug.printl(error, sender: "helpers")
+            completion(success: false)
+        }
+        completion(success: true)
     }
 }
 
@@ -47,7 +65,7 @@ func sendTokenRequest() {
         if error != nil {
             Debug.printl(error, sender: "helpers")
             // TODO: Add a direct link to notification center
-            raiseAlert("There was an issue registering your device for push notifications.", message: "Please enable notifications in the Notification Center.")
+            Flurry.logError("\(error.code)", message: "Device token registration invalid", error: error)
         }
     }
 }

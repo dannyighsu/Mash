@@ -57,10 +57,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewWillAppear(animated)
         
         if self.user != currentUser {
-            self.parentViewController?.navigationItem.setHidesBackButton(false, animated: false)
+            self.parentViewController!.navigationItem.setHidesBackButton(false, animated: false)
             self.navigationItem.title = "Profile"
         } else {
-            self.parentViewController?.navigationItem.title = "Profile"
+            self.parentViewController!.navigationItem.title = "Profile"
             User.updateSelf(self)
         }
         self.retrieveTracks()
@@ -100,7 +100,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         self.parentViewController?.navigationItem.setHidesBackButton(true, animated: false)
         if self.user == currentUser {
             self.parentViewController?.navigationItem.rightBarButtonItem = nil
-            self.parentViewController?.navigationItem.title = nil
         } else {
             self.navigationItem.rightBarButtonItem = nil
         }
@@ -309,15 +308,15 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func updateTable(data: UserRecordingsResponse) {
         self.data = []
         for t in data.recArray! {
-            let track = t as! RecordingResponse
-            let instruments = NSArray(array: track.instrumentArray)
-            let families = NSArray(array: track.familyArray)
-            let format = track.format
-            var url = "\(self.user.userid!)~~\(track.recid)\(format!)"
-            let recid = Int(track.recid)
+            let rec = t as! RecordingResponse
+            let instruments = NSArray(array: rec.instrumentArray)
+            let families = NSArray(array: rec.familyArray)
+            let format = rec.format
+            var url = "\(self.user.userid!)~~\(rec.recid)\(format!)"
+            let recid = Int(rec.recid)
             url = filePathString(url)
             
-            let trackData = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: track.title, bpm: Int(track.bpm), trackURL: url, user: self.user.handle!, format: track.format!, time: track.uploaded)
+            let trackData = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: rec.title, bpm: Int(rec.bpm), timeSignature: Int(rec.bar), trackURL: url, user: self.user.handle!, format: rec.format!, time: rec.uploaded, playCount: Int(rec.playCount), likeCount: Int(rec.likeCount), mashCount: Int(rec.likeCount))
             
             self.data.append(trackData)
         }

@@ -25,6 +25,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     var cellWidth: CGFloat = 75.0
     var currFamilySelection: String = ""
+    var titleText: String? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +59,23 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationItem.title = "Name Your Track"
+        self.navigationItem.title = "Tag Your Track"
+        if self.titleText != nil {
+            self.titleTextField.text = self.titleText
+        }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if self.instruments.count > 0 {
+            let instrumentsToAdd = self.instruments
+            self.instruments = []
+            for instrument in instrumentsToAdd {
+                let indexPath = NSIndexPath(forRow: findInstrument(instrument), inSection: 0)
+                self.instrumentsCollection.selectItemAtIndexPath(indexPath, animated: false, scrollPosition: .Bottom)
+                self.collectionView(self.instrumentsCollection, didSelectItemAtIndexPath: indexPath)
+            }
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -160,21 +177,12 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     // Upload Methods
     func uploadAction() {
-        let times = self.timeSignature!.characters.split {$0 == "/"}.map(String.init)
-        let numer = times[0]
-        var denom = times[1]
-        if denom.characters.count == 1 {
-            denom = "0\(denom)"
-        }
-        
-        let timeSigString = "\(numer)\(denom)"
-        
         let request = RecordingUploadRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         request.title = "\(self.titleTextField.text!)"
         request.bpm = UInt32(self.bpm!)
-        request.bar = UInt32(timeSigString)!
+        request.bar = UInt32(timeSigStringToInt(self.timeSignature!))
         request.key = "X"
         request.familyArray = NSMutableArray(array: self.instruments)
         request.instrumentArray = []
@@ -214,41 +222,6 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                 }
             }
         }
-        
-        /*
-        let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/upload")!)
-        var instrumentString = String(stringInterpolationSegment: self.instruments)
-        instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: advance(instrumentString.startIndex, 1), end: advance(instrumentString.endIndex, -1)))
-        var params: [String: String] = ["handle": handle, "password_hash": passwordHash, "title": self.titleTextField.text, "bpm": "0", "bar": "0", "key": "0", "family": "{\(instrumentString)}", "instrument": "{}", "genre": "{}", "subgenre": "{}", "feel": "0", "solo": "0", "format": ".m4a"]
-        httpPost(params, request) {
-            (data, statusCode, error) -> Void in
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
-                return
-            } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("Error: \(error)", sender: self)
-                    return
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    return
-                } else if statusCode == HTTP_SUCCESS {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.activityView.stopAnimating()
-                        let key = "\(currentUser.handle!)~~\(self.titleTextField.text).m4a"
-                        upload(key, self.recording!.url, track_bucket)
-                        self.finish()
-                    }
-                    Debug.printl("Data: \(data)", sender: self)
-                    return
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                    return
-                }
-            }
-        }*/
     }
     
     func deleteTrack(recid: UInt32) {
@@ -286,12 +259,14 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             Flurry.logEvent("Recording_Upload", withParameters: ["userid": currentUser.userid!, "instrument": self.instruments])
         }
         
-        let track = Track(frame: CGRectZero, recid: recid, userid: currentUser.userid!, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, trackURL: "\(currentUser.userid!)~~\(recid).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a", time: "Just now")
+        let track = Track(frame: CGRectZero, recid: recid, userid: currentUser.userid!, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, timeSignature: timeSigStringToInt(self.timeSignature!), trackURL: "\(currentUser.userid!)~~\(recid).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a", time: "Just now", playCount: 0, likeCount: 0, mashCount: 0)
         self.saveWaveform(track)
         
         self.navigationController?.popViewControllerAnimated(true)
-        let tabbarcontroller = self.navigationController?.viewControllers[2] as! TabBarController
-        tabbarcontroller.selectedIndex = getTabBarController("dashboard")
+        if self.navigationController is RootNavigationController {
+            let tabbarcontroller = self.navigationController?.viewControllers[2] as! TabBarController
+            tabbarcontroller.selectedIndex = getTabBarController("dashboard")
+        }
     }
     
     func cancel(sender: AnyObject?) {

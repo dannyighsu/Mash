@@ -49,6 +49,20 @@ func findInstrument(instrument: String) -> Int {
     return -1
 }
 
+func getAllInstrumentFamilies(data: [Track]) -> [String] {
+    var result: [String] = []
+    var seen: Set<String> = Set<String>()
+    for track in data {
+        for family in track.instrumentFamilies {
+            if !seen.contains(family) {
+                result.append(family)
+                seen.insert(family)
+            }
+        }
+    }
+    return result
+}
+
 func getTabBarController(input: String) -> Int {
     if input == "home" {
         return 0
@@ -160,6 +174,25 @@ func parseTimeStamp(timestamp: String) -> String {
     }
     
     return result
+}
+
+// Time signature functions
+func timeSigStringToInt(timeSignature: String) -> Int {
+    let times = timeSignature.characters.split {$0 == "/"}.map(String.init)
+    let numer = times[0]
+    var denom = times[1]
+    if denom.characters.count == 1{
+        denom = "0\(denom)"
+    }
+    
+    return Int("\(numer)\(denom)")!
+}
+
+func timeSigIntToString(timeSignature: Int) -> String {
+    let numer = timeSignature / 100
+    let denom = timeSignature % 100
+    
+    return "\(numer)/\(denom)"
 }
 
 func stringFromTimeInterval(interval: NSTimeInterval) -> String {

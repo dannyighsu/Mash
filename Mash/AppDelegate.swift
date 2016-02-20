@@ -43,19 +43,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
         UIApplication.sharedApplication().registerForRemoteNotifications()
         
-        // Load AVAudioSession
-        let session = AVAudioSession.sharedInstance()
-        do {
-            try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
-        } catch let error1 as NSError {
-            Debug.printl("Error setting up session: \(error1.localizedDescription)", sender: self)
-        }
-        do {
-            try session.setActive(true)
-        } catch let error1 as NSError {
-            Debug.printl("Error setting session active: \(error1.localizedDescription)", sender: self)
-        }
-        
         // Set up Optimizely
         Optimizely.startOptimizelyWithAPIToken("AAM7hIkBvc0Hcq4ni8hGis3hDg6-xDW4~3701484372", launchOptions: launchOptions)
         

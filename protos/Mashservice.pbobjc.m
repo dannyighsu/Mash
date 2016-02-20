@@ -702,10 +702,13 @@ typedef struct RecordingRequest__storage_ {
 @dynamic hasRecid, recid;
 @dynamic hasUserid, userid;
 @dynamic hasHandle, handle;
+@dynamic hasMashCount, mashCount;
+@dynamic hasLiked, liked;
 
 typedef struct RecordingResponse__storage_ {
   uint32_t _has_storage_[1];
   BOOL solo;
+  BOOL liked;
   uint32_t bpm;
   uint32_t bar;
   uint32_t feel;
@@ -713,6 +716,7 @@ typedef struct RecordingResponse__storage_ {
   uint32_t likeCount;
   uint32_t recid;
   uint32_t userid;
+  uint32_t mashCount;
   NSString *title;
   NSString *key;
   NSMutableArray *instrumentArray;
@@ -914,6 +918,28 @@ typedef struct RecordingResponse__storage_ {
         .dataType = GPBDataTypeString,
         .offset = offsetof(RecordingResponse__storage_, handle),
         .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "mashCount",
+        .number = RecordingResponse_FieldNumber_MashCount,
+        .hasIndex = 17,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(RecordingResponse__storage_, mashCount),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "liked",
+        .number = RecordingResponse_FieldNumber_Liked,
+        .hasIndex = 18,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeBool,
+        .offset = offsetof(RecordingResponse__storage_, liked),
+        .defaultValue.valueBool = NO,
         .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },

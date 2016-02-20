@@ -19,12 +19,29 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Configure tab bar appearance
         UITabBar.appearance().tintColor = lightBlue()
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         blurView.frame = self.tabBar.bounds
-        blurView.contentView.backgroundColor = UIColor(red: 20/255, green: 20/255, blue: 40/255, alpha: 0.7)
+        blurView.contentView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
         self.tabBar.insertSubview(blurView, atIndex: 0)
         
+        // Hardcode image tints
+        let home = self.tabBar.items![0]
+        home.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+        let homeImage = UIImage(named: "home")
+        home.image = homeImage?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+        
+        let record = self.tabBar.items![1]
+        record.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+        let recordImage = UIImage(named: "record")
+        record.image = recordImage?.imageWithRenderingMode(.AlwaysOriginal)
+        
+        let profile = self.tabBar.items![2]
+        profile.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+        let profileImage = UIImage(named: "dashboard")
+        profile.image = profileImage?.imageWithRenderingMode(.AlwaysOriginal)
+                
         self.navigationController?.hidesBarsWhenKeyboardAppears = false
         self.navigationController?.hidesBarsOnSwipe = false
         self.navigationItem.setHidesBackButton(true, animated: false)
