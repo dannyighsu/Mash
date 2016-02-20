@@ -17,10 +17,10 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     var audioPlayer: AVAudioPlayer? = nil
     var playerTimer: NSTimer? = nil
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
-    // Holds current search results
-    var searchResults: [AnyObject] = []
-    // Holds all search results
-    var allResults: [AnyObject] = []
+    // Holds the configurators for the currently displayed search results
+    var searchResultConfigurators: [AnyObject] = []
+    // Holds the configurators for all search results
+    var allSearchResultConfigurators: [AnyObject] = []
     // Holds current suggestion results
     var suggestions: [[String]] = []
     var tags: [[String]] = []
@@ -92,14 +92,14 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     // Table View Delegate
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == self.tableView {
-            return self.searchResults.count
+            return self.searchResultConfigurators.count
         } else {
             return self.suggestions.count
         }
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == self.searchResults.count - 1 {
+        if indexPath.row == self.searchResultConfigurators.count - 1 {
             self.loadNextData()
         }
     }
@@ -110,9 +110,9 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             if self.scope == 0 {
                 cell = self.tableView.dequeueReusableCellWithIdentifier("Track", forIndexPath: indexPath) as! Track
             } else {
-                cell = self.tableView.dequeueReusableCellWithIdentifier("User", forIndexPath: indexPath) as! Track
+                cell = self.tableView.dequeueReusableCellWithIdentifier("User", forIndexPath: indexPath) as! User
             }
-            let configurator = self.searchResults[indexPath.row] as! CellConfigurator
+            let configurator = self.searchResultConfigurators[indexPath.row] as! CellConfigurator
             configurator.configure(cell!, viewController: self)
             return cell!
         } else {
@@ -137,32 +137,33 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 self.audioPlayer!.stop()
             }
             if self.scope == 0 {
-                let track = self.tableView.cellForRowAtIndexPath(indexPath) as! Track
-                track.activityView.startAnimating()
-                download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
+                let cell = self.tableView.cellForRowAtIndexPath(indexPath) as! Track
+                let configurator = self.searchResultConfigurators[indexPath.row] as! TrackCellConfigurator
+                
+                cell.activityView.startAnimating()
+                download(getS3Key(configurator.track!), url: NSURL(fileURLWithPath: configurator.track!.trackURL), bucket: track_bucket) {
                     (result) in
                     dispatch_async(dispatch_get_main_queue()) {
-                        track.activityView.stopAnimating()
-                        track.generateWaveform()
+                        cell.activityView.stopAnimating()
+                        cell.generateWaveform(configurator.track!.trackURL)
                         self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
-                        self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
+                        self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: configurator.track!.trackURL))
                         self.audioPlayer!.play()
                         if self.playerTimer != nil {
                             self.playerTimer!.invalidate()
                         }
                         self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
-                        self.currTrackID = track.id
+                        self.currTrackID = configurator.track!.id
                     }
                 }
             } else {
-                let user = self.tableView.cellForRowAtIndexPath(indexPath) as! User
-                User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
+                let configurator = self.searchResultConfigurators[indexPath.row] as! UserCellConfigurator
+                User.getUser(configurator.user!, storyboard: self.storyboard!, navigationController: self.navigationController!)
                 self.tableView.cellForRowAtIndexPath(indexPath)!.selected = false
             }
         } else {
-            let cell = tableView.cellForRowAtIndexPath(indexPath) as! SuggestionCell
-            let inputString = cell.textLabel!.text!
-            let type = cell.type
+            let inputString = self.suggestions[indexPath.row].first!
+            let type = self.suggestions[indexPath.row].last!
             
             if self.searchController!.searchBar.text != nil {
                 var searchStringArray = searchController!.searchBar.text!.characters.split {$0 == ","}.map(String.init)
@@ -177,15 +178,15 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     func loadNextData() {
-        let currentNumResults = self.searchResults.count
-        if currentNumResults == self.allResults.count {
+        let currentNumResults = self.searchResultConfigurators.count
+        if currentNumResults == self.allSearchResultConfigurators.count {
             return
         }
         for i in currentNumResults...currentNumResults + 15 {
-            if i > self.allResults.count - 1 {
+            if i > self.allSearchResultConfigurators.count - 1 {
                 break
             }
-            self.searchResults.append(self.allResults[i])
+            self.searchResultConfigurators.append(self.allSearchResultConfigurators[i])
         }
         self.tableView.reloadData()
     }
@@ -209,7 +210,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     // Search Bar & Controller
     func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         self.scope = selectedScope
-        self.searchResults = []
+        self.searchResultConfigurators = []
         self.completionTableView!.hidden = true
         self.tableView.reloadData()
     }
@@ -383,16 +384,16 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     func updateResults(response: Recordings) {
-        self.allResults = []
-        self.searchResults = []
+        self.allSearchResultConfigurators = []
+        self.searchResultConfigurators = []
         if response.recordingArray.count != 0 {
             for i in 0...response.recordingArray.count - 1 {
                 let rec = response.recordingArray[i] as! RecordingResponse
                 let track = Track(frame: CGRectZero, recid: Int(rec.recid), userid: Int(rec.userid),instruments: rec.instrumentArray.copy() as! [String], instrumentFamilies: rec.familyArray.copy() as! [String], titleText: rec.title, bpm: Int(rec.bpm), trackURL: getS3Key(Int(rec.userid), recid: Int(rec.recid), format: rec.format), user: rec.handle, format: rec.format, time: rec.uploaded, playCount: Int(rec.playCount), likeCount: Int(rec.likeCount), mashCount: Int(rec.likeCount))
                 let configurator = TrackCellConfigurator(track: track)
-                self.allResults.append(configurator)
+                self.allSearchResultConfigurators.append(configurator)
                 if i < DEFAULT_DISPLAY_AMOUNT {
-                    self.searchResults.append(configurator)
+                    self.searchResultConfigurators.append(configurator)
                 }
             }
         } else {
@@ -402,8 +403,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     func updateUserResults(response: UserPreviews) {
-        self.allResults = []
-        self.searchResults = []
+        self.allSearchResultConfigurators = []
+        self.searchResultConfigurators = []
         if response.userArray.count != 0 {
             for i in 0...response.userArray.count - 1 {
                 let data = response.userArray[i] as! UserPreview
@@ -412,9 +413,9 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 user.username = data.name
                 user.userid = Int(data.userid)
                 let configurator = UserCellConfigurator(user: user, shouldShowFollowButton: false) 
-                self.allResults.append(configurator)
+                self.allSearchResultConfigurators.append(configurator)
                 if i < DEFAULT_DISPLAY_AMOUNT {
-                    self.searchResults.append(configurator)
+                    self.searchResultConfigurators.append(configurator)
                 }
             }
         } else {

@@ -57,21 +57,23 @@ class Track: UITableViewCell, EZAudioFileDelegate {
     }
     
     // Should only be called in the completion block of a download function.
-    func generateWaveform() {
+    // @andy: This is a view-type method, so it should pass in a track URL
+    // @TODO: @andy: figure out the FIXME and whether or not we should store that audioFile somewhere.
+    func generateWaveform(trackUrl: String) {
         self.staticAudioPlot.hidden = true
         self.audioPlot.color = lightBlue()
-        
-        // FIXME: figure out why this is called before file finishes download and remove the hacky shit below
-        while !NSFileManager.defaultManager().fileExistsAtPath(self.trackURL) {
-            NSThread.sleepForTimeInterval(0.1)
-        }
-        self.audioFile = EZAudioFile(URL: NSURL(fileURLWithPath: self.trackURL), delegate: self)
         self.audioPlot.plotType = .Buffer
         self.audioPlot.shouldFill = true
         self.audioPlot.shouldMirror = true
         self.audioPlot.gain = 2.0
+        
+        // FIXME: figure out why this is called before file finishes download and remove the hacky shit below
+        while !NSFileManager.defaultManager().fileExistsAtPath(trackURL) {
+            NSThread.sleepForTimeInterval(0.1)
+        }
+        
+        self.audioFile = EZAudioFile(URL: NSURL(fileURLWithPath: trackURL), delegate: self)
         let data = self.audioFile!.getWaveformData()
         self.audioPlot.updateBuffer(data.buffers[0], withBufferSize: data.bufferSize)
     }
-
 }
