@@ -127,45 +127,5 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                 }
             }
         }
-        
-        /*
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = currentUser.handle
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/user/\(type)")!)
-        var params = ["handle": handle!, "password_hash": passwordHash, "query_name": user.handle!] as Dictionary
-        httpPost(params, request) {
-            (data, statusCode, error) -> Void in
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: self)
-            } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("HTTP Error: \(error)", sender: self)
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    
-                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        var error: NSError? = nil
-                        var data = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary
-                        
-                        var users = data[type] as! NSArray
-                        for u in users {
-                            var dict = u as! NSDictionary
-                            var follower = User()
-                            follower.handle = dict["handle"] as? String
-                            follower.username = dict["name"] as? String
-                            follower.profilePicKey = "\(follower.handle!)~~profile_pic.jpg"
-                            self.data.append(follower)
-                        }
-                        self.users.reloadData()
-                    }
-                } else if statusCode == HTTP_SERVER_ERROR {
-                    Debug.printl("Internal server error.", sender: self)
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: self)
-                }
-            }
-        }*/
     }
-
 }

@@ -900,13 +900,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		181F79CE1C77BD4A00253252 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Models;
-			sourceTree = "<group>";
-		};
 		18FBEDBB1C6879C000235F34 /* View Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -1480,7 +1473,6 @@
 				37A3C2D01B3CC00600F77F2A /* Images.xcassets */,
 				373F0EF51B3DEFC500DE92AB /* Audio */,
 				37E799BD1B3CC1D000D2E54D /* Classes */,
-				181F79CE1C77BD4A00253252 /* Models */,
 				18FBEDBB1C6879C000235F34 /* View Models */,
 				37E799861B3CC1C600D2E54D /* Controller */,
 				37A3C2D21B3CC00600F77F2A /* LaunchScreen.xib */,

@@ -9,5 +9,5 @@
 import Foundation
 
 class CellConfigurator {
-    func configure(cell : UITableViewCell) {}
+    func configure(cell : UITableViewCell, viewController : UIViewController) {}
 }

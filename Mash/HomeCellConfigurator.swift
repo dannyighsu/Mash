@@ -15,16 +15,15 @@ class HomeCellConfigurator : CellConfigurator {
         self.activity = activity;
     }
     
-    override func configure(cell: UITableViewCell) {
+    override func configure(cell: UITableViewCell, viewController: UIViewController) {
         let homeCell = cell as! HomeCell
-        homeCell.eventText = self.activity!.eventText
+        // Configure the labels
         homeCell.trackButton.setTitle(self.activity!.eventText, forState: .Normal)
         homeCell.artistButton.setTitle(self.activity!.userText, forState: .Normal)
         homeCell.userLabel.setTitle(self.activity!.userText, forState: .Normal)
-        homeCell.timeLabel.text = self.activity!.timeText
-        homeCell.user = self.activity!.user
-        homeCell.track = self.activity!.track
-        homeCell.timeLabel.text = parseTimeStamp(homeCell.timeLabel.text!)
+        homeCell.timeLabel.text = parseTimeStamp(self.activity!.timeText!)
+        
+        // Setup the background art and profile image
         homeCell.backgroundArt.layer.borderWidth = 0.5
         homeCell.backgroundArt.layer.borderColor = lightGray().CGColor
         homeCell.profileImage.contentMode = UIViewContentMode.ScaleAspectFill
@@ -35,10 +34,9 @@ class HomeCellConfigurator : CellConfigurator {
         self.activity!.user!.setProfilePic(homeCell.profileImage)
         self.activity!.user!.setBannerPic(homeCell.backgroundArt)
         
-        // @TODO: @andy: Do this in the storyboard instead
-        homeCell.userLabel.addTarget(self, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
-        homeCell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)
-        homeCell.likeButton.addTarget(self, action: "like:", forControlEvents: .TouchUpInside)
+        homeCell.userLabel.addTarget(viewController, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
+        homeCell.artistButton.addTarget(viewController, action: "getUser:", forControlEvents: .TouchUpInside)
+        homeCell.likeButton.addTarget(viewController, action: "like:", forControlEvents: .TouchUpInside)
         
         configureCoverArt(homeCell);
     }

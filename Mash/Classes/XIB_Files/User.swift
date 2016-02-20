@@ -82,23 +82,29 @@ class User: UITableViewCell {
     }
     
     // Update all displays of the view
+    // @TODO: @andy: move this to the UserCellConfigurator
     func updateDisplays() {
-        if self.nameLabel.titleLabel!.text != self.display_name() {
-            self.nameLabel.setTitle(self.display_name(), forState: UIControlState.Normal)
-        }
-        var following = false
-        for u in userFollowing {
-            if u.handle! == self.handle {
-                following = true
-                break
+        if self.userid == currentUser.userid {
+            self.followButton.hidden = true
+        } else {
+            var following = false
+            for u in userFollowing {
+                if u.handle! == self.handle {
+                    following = true
+                    break
+                }
+            }
+            if following {
+                self.followButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
+                self.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
+                self.followButton.backgroundColor = lightGray()
+            } else {
+                self.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
             }
         }
-        if following {
-            self.followButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
-            self.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
-            self.followButton.backgroundColor = lightGray()
-        } else {
-            self.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        if self.nameLabel.titleLabel!.text != self.display_name() {
+            self.nameLabel.setTitle(self.display_name(), forState: UIControlState.Normal)
         }
         self.setProfilePic(self.profilePicture)
         self.profilePicture?.layer.cornerRadius = self.profilePicture!.frame.size.width / 2
