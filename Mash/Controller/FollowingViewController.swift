@@ -12,7 +12,7 @@ import UIKit
 class FollowingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var users: UITableView!
-    var configurators: [UserCellConfigurator] = []
+    var userCellConfigurators: [UserCellConfigurator] = []
     var user: User = currentUser
     var type: String? = nil
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
@@ -34,23 +34,26 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = self.users.dequeueReusableCellWithIdentifier("User")!
-        let configurator = self.configurators[indexPath.row]
+        let configurator = self.userCellConfigurators[indexPath.row]
         configurator.configure(cell, viewController: self)
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let user = tableView.cellForRowAtIndexPath(indexPath) as! User
-        if user.handle == currentUser.handle {
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! User
+        let configurator = userCellConfigurators[indexPath.row]
+        
+        if configurator.user!.handle == currentUser.handle {
             tableView.deselectRowAtIndexPath(indexPath, animated: false)
             return
         }
+        
         User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
-        tableView.cellForRowAtIndexPath(indexPath)!.selected = false
+        cell.selected = false
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.configurators.count
+        return self.userCellConfigurators.count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -97,7 +100,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                         follower.username = dict.name
                         follower.userid = Int(dict.userid)
                         let configurator = UserCellConfigurator(user: follower, shouldShowFollowButton: true)
-                        self.configurators.append(configurator)
+                        self.userCellConfigurators.append(configurator)
                     }
                     dispatch_async(dispatch_get_main_queue()) {
                         self.users.reloadData()
@@ -118,7 +121,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
                         follower.username = dict.name
                         follower.userid = Int(dict.userid)
                         let configurator = UserCellConfigurator(user: follower, shouldShowFollowButton: true)
-                        self.configurators.append(configurator)
+                        self.userCellConfigurators.append(configurator)
                     }
                     dispatch_async(dispatch_get_main_queue()) {
                         self.users.reloadData()

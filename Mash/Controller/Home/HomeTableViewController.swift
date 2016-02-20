@@ -14,7 +14,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var activityFeed: UITableView!
     var activityData: [HomeCell] = []
     var globalData: [HomeCell] = []
-    var displayData: [HomeCellConfigurator] = []
+    var homeCellConfigurators: [HomeCellConfigurator] = []
     var activityView: ActivityView = ActivityView.make()
     var audioPlayer: AVAudioPlayer? = nil
     var playerTimer: NSTimer? = nil
@@ -85,7 +85,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     // TableView delegate
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return self.displayData.count
+            return self.homeCellConfigurators.count
         } else {
             return 1
         }
@@ -106,7 +106,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell")!
-            let configurator = self.displayData[indexPath.row]
+            let configurator = self.homeCellConfigurators[indexPath.row]
             configurator.configure(cell, viewController: self)
             return cell
         } else {
@@ -118,17 +118,15 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {
-            let cell = tableView.cellForRowAtIndexPath(indexPath) as! HomeCell
-            self.playTrack(cell)
+            let configurator = self.homeCellConfigurators[indexPath.row]
+            self.playTrack(configurator.activity!.track!)
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        } else {
-            return
         }
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {
-            if indexPath.row == self.displayData.count - 1 {
+            if indexPath.row == self.homeCellConfigurators.count - 1 {
                 self.loadNextData()
             }
         }
@@ -153,7 +151,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                     }
                     let activityData = self.activityData[i]
                     let configurator = HomeCellConfigurator(activity: activityData)
-                    self.displayData.append(configurator)
+                    self.homeCellConfigurators.append(configurator)
                 }
             } else {
                 retrieveActivity()
@@ -167,7 +165,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                     }
                     let activityData = self.globalData[i]
                     let configurator = HomeCellConfigurator(activity: activityData)
-                    self.displayData.append(configurator)
+                    self.homeCellConfigurators.append(configurator)
                 }
             } else {
                 retrieveGlobal()
@@ -178,14 +176,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     // Auxiliary methods
-    func getUser(sender: UIButton) {
-        let cell = sender.superview?.superview?.superview as! HomeCell
-        let user = User()
-        user.handle = cell.userLabel.titleLabel!.text
-        user.userid = cell.user!.userid
-        User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
-    }
-    
     func play(sender: NSTimer) {
         if self.audioPlayer!.currentTime >= (self.audioPlayer!.duration / 2) || self.audioPlayer!.currentTime > 10.0 {
             sendPlayRequest(self.currTrackID)
@@ -193,28 +183,19 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
-    func playButton(sender: UIButton) {
-        var cell = sender.superview
-        while cell != nil && !(cell is HomeCell) {
-            cell = cell!.superview
-        }
-        let homecell = cell as! HomeCell
-        self.playTrack(homecell)
-    }
-    
-    func playTrack(cell: HomeCell) {
-        download(getS3Key(cell.track!), url: NSURL(fileURLWithPath: cell.track!.trackURL), bucket: track_bucket) {
+    func playTrack(track: Track) {
+        download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
             (result) in
             if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
                     do {
-                        try self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: cell.track!.trackURL))
+                        try self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
                         self.audioPlayer!.play()
                         if self.playerTimer != nil {
                             self.playerTimer!.invalidate()
                         }
                         self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
-                        self.currTrackID = cell.track!.id
+                        self.currTrackID = track.id
                     } catch _ as NSError {
                         Debug.printl("Error downloading track", sender: self)
                     }
@@ -223,13 +204,27 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
+    func playButton(sender: UIButton) {
+        let indexPath = self.getIndexPathForButton(sender)
+        let configurator = self.homeCellConfigurators[indexPath.row]
+        self.playTrack(configurator.activity!.track!)
+    }
+    
+    func getUser(sender: UIButton) {
+        let indexPath = self.getIndexPathForButton(sender)
+        let configurator = self.homeCellConfigurators[indexPath.row]
+        
+        let user = User()
+        user.handle = configurator.activity!.user!.handle
+        user.userid = configurator.activity!.user!.userid
+        User.getUser(user, storyboard: self.storyboard!, navigationController: self.navigationController!)
+    }
+    
     func like(sender: UIButton) {
-        var cell = sender.superview
-        while cell != nil && !(cell is HomeCell) {
-            cell = cell!.superview
-        }
-        let homecell = cell as! HomeCell
-        sendLikeRequest(homecell.track!.id) {
+        let indexPath = self.getIndexPathForButton(sender)
+        let configurator = self.homeCellConfigurators[indexPath.row]
+        
+        sendLikeRequest(configurator.activity!.track!.id) {
             (success) in
             if success {
                 sender.setImage(UIImage(named: "liked"), forState: .Normal)
@@ -238,12 +233,18 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func add(sender: UIButton) {
-        var cell = sender.superview
-        while cell != nil && !(cell is HomeCell) {
-            cell = cell!.superview
-        }
-        let homecell = cell as! HomeCell
-        ProjectViewController.importTracks([homecell.track!], navigationController: self.navigationController!, storyboard: self.storyboard!)
+        let indexPath = self.getIndexPathForButton(sender)
+        let configurator = self.homeCellConfigurators[indexPath.row]
+        
+        ProjectViewController.importTracks([configurator.activity!.track!], navigationController: self.navigationController!, storyboard: self.storyboard!)
+    }
+    
+    // Magic Method for getting the NSIndexPath of a button relative to the tableview
+    // @andy: Personally speaking, I hate this method, and I'd rather add a tag with the indexPath's row
+    // for each button that gets configured (and use that tag to figure out the index path), but this will work for now.
+    func getIndexPathForButton(button: UIButton) -> NSIndexPath {
+        let buttonFrame = button.convertRect(button.bounds, toView: self.activityFeed)
+        return self.activityFeed.indexPathForRowAtPoint(buttonFrame.origin)!
     }
     
     // Check if project view exists in memory, if not, create one.
@@ -270,7 +271,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         } else {
             data = self.globalData
         }
-        let currentNumResults = self.displayData.count
+        let currentNumResults = self.homeCellConfigurators.count
         if currentNumResults == data.count {
             return
         }
@@ -280,7 +281,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             
             let configurator = HomeCellConfigurator(activity: data[i])
-            self.displayData.append(configurator)
+            self.homeCellConfigurators.append(configurator)
         }
         self.activityFeed.reloadData()
     }
@@ -339,7 +340,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             data = self.globalData
         }
         data = []
-        self.displayData = []
+        self.homeCellConfigurators = []
         
         if response.storyArray.count != 0 {
             for i in 0...response.storyArray.count - 1 {
@@ -359,7 +360,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 data.append(activityData)
                 if i < DEFAULT_DISPLAY_AMOUNT {
                     let configurator = HomeCellConfigurator(activity: activityData)
-                    self.displayData.append(configurator)
+                    self.homeCellConfigurators.append(configurator)
                 }
             }
         }
