@@ -207,6 +207,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             if buttonIndex == 1 {
                 let title = alertView.textFieldAtIndex(0)!.text
                 self.titleButton.setTitle(title, forState: UIControlState.Normal)
+                self.titleButton.sizeToFit()
                 rootTabBarController!.tabBarButton!.tapButton.setTitle(title, forState: .Normal)
                 self.uploadSavedTrack(title!)
             }
@@ -214,6 +215,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             if buttonIndex == 1 {
                 let title = alertView.textFieldAtIndex(0)!.text
                 self.titleButton.setTitle(title, forState: UIControlState.Normal)
+                self.titleButton.sizeToFit()
                 rootTabBarController!.tabBarButton!.tapButton.setTitle(title, forState: .Normal)
                 self.shareTrack(title!)
             }
@@ -221,6 +223,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             if buttonIndex == 1 {
                 let title = alertView.textFieldAtIndex(0)!.text
                 self.titleButton.setTitle(title, forState: UIControlState.Normal)
+                self.titleButton.sizeToFit()
                 rootTabBarController!.tabBarButton!.tapButton.setTitle(title, forState: .Normal)
             }
         }

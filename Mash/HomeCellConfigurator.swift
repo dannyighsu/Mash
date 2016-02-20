@@ -17,11 +17,14 @@ class HomeCellConfigurator : CellConfigurator {
     
     override func configure(cell: UITableViewCell, viewController: UIViewController) {
         let homeCell = cell as! HomeCell
-        // Configure the labels
+        
+        // Configure the labels and buttons
         homeCell.trackButton.setTitle(self.activity!.eventText, forState: .Normal)
         homeCell.artistButton.setTitle(self.activity!.userText, forState: .Normal)
         homeCell.userLabel.setTitle(self.activity!.userText, forState: .Normal)
         homeCell.timeLabel.text = parseTimeStamp(self.activity!.timeText!)
+        homeCell.playCountLabel.text = "\(self.activity!.track!.playCount)"
+        homeCell.likeCountLabel.text = "\(self.activity!.track!.likeCount) likes"
         
         // Setup the background art and profile image
         homeCell.backgroundArt.layer.borderWidth = 0.5
@@ -31,14 +34,19 @@ class HomeCellConfigurator : CellConfigurator {
         homeCell.profileImage.layer.borderWidth = 0.5
         homeCell.profileImage.layer.masksToBounds = true
         
+        // Use the activity's user model to download profile pic and background art
         self.activity!.user!.setProfilePic(homeCell.profileImage)
         self.activity!.user!.setBannerPic(homeCell.backgroundArt)
         
-        homeCell.userLabel.addTarget(viewController, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
+        // Download the cover art (audio plot)
+        configureCoverArt(homeCell);
+        
+        // Add button targets
+        homeCell.userLabel.addTarget(viewController, action: "getUser:", forControlEvents: .TouchUpInside)
+        homeCell.playButton.addTarget(viewController, action: "playButton:", forControlEvents: .TouchUpInside)
         homeCell.artistButton.addTarget(viewController, action: "getUser:", forControlEvents: .TouchUpInside)
         homeCell.likeButton.addTarget(viewController, action: "like:", forControlEvents: .TouchUpInside)
-        
-        configureCoverArt(homeCell);
+        homeCell.addButton.addTarget(viewController, action: "add:", forControlEvents: .TouchUpInside)
     }
     
     func configureCoverArt(cell: HomeCell) {
@@ -50,28 +58,27 @@ class HomeCellConfigurator : CellConfigurator {
         // each time the download completes.
         */
         
-        download(getS3WaveformKey(self.activity!.track!),
-            url: filePathURL(getS3WaveformKey(self.activity!.track!)),
+        download(getS3WaveformKey(cell.track!),
+            url: filePathURL(getS3WaveformKey(cell.track!)),
             bucket: waveform_bucket) {
                 (result) in
-                
-                if result != nil {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        cell.audioPlotView.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(self.activity!.track!)))
-                    }
-                } else {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        cell.audioPlotView.image = UIImage(named: "waveform_static")
-                    }
-                }
+            if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
-                    if cell.backgroundArt.layer.sublayers == nil || !(cell.backgroundArt.layer.sublayers![0] is CAGradientLayer) {
-                        let gradient: CAGradientLayer = CAGradientLayer()
-                        gradient.frame = cell.backgroundArt.bounds
-                        gradient.colors = [lightGray().CGColor, UIColor.clearColor().CGColor, lightGray().CGColor]
-                        cell.backgroundArt.layer.insertSublayer(gradient, atIndex: 0)
-                    }
+                    cell.audioPlotView.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(cell.track!)))
                 }
+            } else {
+                dispatch_async(dispatch_get_main_queue()) {
+                    cell.audioPlotView.image = UIImage(named: "waveform_static")
+                }
+            }
+            dispatch_async(dispatch_get_main_queue()) {
+                if cell.backgroundArt.layer.sublayers == nil || !(cell.backgroundArt.layer.sublayers![0] is CAGradientLayer) {
+                    let gradient: CAGradientLayer = CAGradientLayer()
+                    gradient.frame = cell.backgroundArt.bounds
+                    gradient.colors = [lightGray().CGColor, UIColor.clearColor().CGColor, lightGray().CGColor]
+                    cell.backgroundArt.layer.insertSublayer(gradient, atIndex: 0)
+                }
+            }
         }
     }
 }
