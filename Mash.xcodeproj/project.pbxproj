@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		181F79D41C77FA8D00253252 /* TrackCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F79D31C77FA8D00253252 /* TrackCellConfigurator.swift */; };
 		181F79D61C784F2200253252 /* InstrumentCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F79D51C784F2200253252 /* InstrumentCellConfigurator.swift */; };
+		181F79D81C78717F00253252 /* ProfileTrackCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F79D71C78717F00253252 /* ProfileTrackCellConfigurator.swift */; };
+		181F79DA1C7877EE00253252 /* BufferCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F79D91C7877EE00253252 /* BufferCellConfigurator.swift */; };
 		18FBEDBF1C688A0500235F34 /* CellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDBE1C688A0500235F34 /* CellConfigurator.swift */; };
 		18FBEDC11C6C319300235F34 /* HomeCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDC01C6C319300235F34 /* HomeCellConfigurator.swift */; };
 		18FBEDC31C6C432B00235F34 /* UserCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FBEDC21C6C432A00235F34 /* UserCellConfigurator.swift */; };
@@ -442,6 +444,8 @@
 /* Begin PBXFileReference section */
 		181F79D31C77FA8D00253252 /* TrackCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackCellConfigurator.swift; sourceTree = "<group>"; };
 		181F79D51C784F2200253252 /* InstrumentCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstrumentCellConfigurator.swift; sourceTree = "<group>"; };
+		181F79D71C78717F00253252 /* ProfileTrackCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTrackCellConfigurator.swift; sourceTree = "<group>"; };
+		181F79D91C7877EE00253252 /* BufferCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferCellConfigurator.swift; sourceTree = "<group>"; };
 		18FBEDBE1C688A0500235F34 /* CellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellConfigurator.swift; sourceTree = "<group>"; };
 		18FBEDC01C6C319300235F34 /* HomeCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeCellConfigurator.swift; sourceTree = "<group>"; };
 		18FBEDC21C6C432A00235F34 /* UserCellConfigurator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCellConfigurator.swift; sourceTree = "<group>"; };
@@ -911,7 +915,9 @@
 				18FBEDC01C6C319300235F34 /* HomeCellConfigurator.swift */,
 				18FBEDC21C6C432A00235F34 /* UserCellConfigurator.swift */,
 				181F79D31C77FA8D00253252 /* TrackCellConfigurator.swift */,
+				181F79D71C78717F00253252 /* ProfileTrackCellConfigurator.swift */,
 				181F79D51C784F2200253252 /* InstrumentCellConfigurator.swift */,
+				181F79D91C7877EE00253252 /* BufferCellConfigurator.swift */,
 			);
 			name = "View Models";
 			sourceTree = "<group>";
@@ -2228,6 +2234,7 @@
 			files = (
 				370A39061BF6A8B700FCD060 /* Metronome.swift in Sources */,
 				37D235231C3BABFE0091A1D0 /* SwipeInteractionController.swift in Sources */,
+				181F79D81C78717F00253252 /* ProfileTrackCellConfigurator.swift in Sources */,
 				379882421C0131200029E56C /* AWSS3.swift in Sources */,
 				379882831C01314F0029E56C /* RecordViewController.swift in Sources */,
 				37C9F50F1C029E2000C80F88 /* SwipeBar.swift in Sources */,
@@ -2293,6 +2300,7 @@
 				18FBEDC31C6C432B00235F34 /* UserCellConfigurator.swift in Sources */,
 				37C9F5101C029E2000C80F88 /* HomeCell.swift in Sources */,
 				37D2351F1C3B90CA0091A1D0 /* ProjectDismissAnimationController.swift in Sources */,
+				181F79DA1C7877EE00253252 /* BufferCellConfigurator.swift in Sources */,
 				379882601C01313F0029E56C /* EntryViewController.swift in Sources */,
 				37C9F5161C029E2000C80F88 /* ProjectPlayer.swift in Sources */,
 				37C9F50C1C029E2000C80F88 /* ImportHeaderView.swift in Sources */,

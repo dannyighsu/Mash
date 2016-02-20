@@ -15,7 +15,8 @@ import QuartzCore
 class DashboardController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate {
     
     @IBOutlet var tracks: UITableView!
-    var data: [Track] = []
+    var profileTrackCellConfigurators: [ProfileTrackCellConfigurator] = []
+    var bufferCellConfigurator: BufferCellConfigurator = BufferCellConfigurator()
     var audioPlayer: AVAudioPlayer? = nil
     var playerTimer: NSTimer? = nil
     var currTrackID: Int = 0
@@ -118,7 +119,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         if section == 0 {
             return 0
         } else if section == 1 {
-            return self.data.count
+            return self.profileTrackCellConfigurators.count
         } else {
             return 1
         }
@@ -126,46 +127,13 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 1 {
-            let track = tableView.dequeueReusableCellWithIdentifier("ProfileTrack", forIndexPath: indexPath) as! ProfileTrack
-            let index = indexPath.row
-            track.backgroundColor = UIColor.clearColor()
-            track.instrumentImage.backgroundColor = UIColor.clearColor()
-            track.title.textColor = UIColor.blackColor()
-            track.title.text = self.data[index].titleText
-            track.userid = self.data[index].userid
-            track.id = self.data[index].id
-            track.titleText = track.title.text!
-            track.format = self.data[index].format
-            track.userText = self.data[index].userText
-            track.instruments = self.data[index].instruments
-            track.instrumentFamilies = self.data[index].instrumentFamilies
-            track.trackURL = self.data[index].trackURL
-            track.bpm = self.data[index].bpm
-            track.instrumentImage.image = findImage(track.instrumentFamilies)
-            track.instrumentImage.backgroundColor = UIColor.clearColor()
-            track.dateLabel.text = parseTimeStamp(self.data[index].time)
-            track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
-            track.activityView.startAnimating()
-            
-            download(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket) {
-                (result) in
-                dispatch_async(dispatch_get_main_queue()) {
-                    track.activityView.stopAnimating()
-                }
-                if result != nil {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        track.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(track)))
-                    }
-                } else {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        track.staticAudioPlot.image = UIImage(named: "waveform_static")
-                    }
-                }
-            }
-            return track
+            let cell = tableView.dequeueReusableCellWithIdentifier("ProfileTrack", forIndexPath: indexPath)
+            let configurator = self.profileTrackCellConfigurators[indexPath.row]
+            configurator.configure(cell, viewController: self)
+            return cell
         } else if indexPath.section == 2 {
             let cell = self.tracks.dequeueReusableCellWithIdentifier("BufferCell")!
-            cell.backgroundColor = UIColor.clearColor()
+            self.bufferCellConfigurator.configure(cell, viewController: self)
             return cell
         }
         return UITableViewCell(style: .Default, reuseIdentifier: nil)
@@ -198,7 +166,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             header.informationView.insertSubview(blurView, atIndex: 0)
             
             header.editButton.setTitle(self.user.display_name(), forState: .Normal)
-            // TODO: implement
+            // @TODO: implement
             header.locationButton.setTitle(self.user.handle!, forState: .Normal)
             
             let tap1 = UITapGestureRecognizer(target: self, action: "goToFollowers:")
@@ -240,23 +208,25 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 1 {
-            let track = self.tracks.cellForRowAtIndexPath(indexPath) as! ProfileTrack
-            track.activityView.startAnimating()
-            download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
+            let cell = self.tracks.cellForRowAtIndexPath(indexPath) as! ProfileTrack
+            let configurator = self.profileTrackCellConfigurators[indexPath.row]
+            
+            cell.activityView.startAnimating()
+            download(getS3Key(configurator.track!), url: NSURL(fileURLWithPath: configurator.track!.trackURL), bucket: track_bucket) {
                 (result) in
                 dispatch_async(dispatch_get_main_queue()) {
-                    track.activityView.stopAnimating()
+                    cell.activityView.stopAnimating()
                     tableView.deselectRowAtIndexPath(indexPath, animated: true)
                     if result != nil {
-                        track.generateWaveform()
-                        self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
+                        cell.generateWaveform(configurator.track!.trackURL)
+                        self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: configurator.track!.trackURL))
                         self.audioPlayer!.play()
-                        self.currTrackID = track.id
+                        self.currTrackID = configurator.track!.id
                         if self.playerTimer != nil {
                             self.playerTimer!.invalidate()
                         }
                         self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
-                        Debug.printl("Playing track \(track.titleText)", sender: self)
+                        Debug.printl("Playing track \(configurator.track!.titleText)", sender: self)
                     }
                 }
             }
@@ -273,7 +243,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 return
             }
             if editingStyle == UITableViewCellEditingStyle.Delete {
-                self.deleteTrack(self.data[indexPath.row], indexPath: indexPath)
+                let configurator = self.profileTrackCellConfigurators[indexPath.row]
+                self.deleteTrack(configurator.track!, indexPath: indexPath)
             }
         }
     }
@@ -306,19 +277,20 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     func updateTable(data: UserRecordingsResponse) {
-        self.data = []
+        self.profileTrackCellConfigurators = []
         for t in data.recArray! {
-            let track = t as! RecordingResponse
-            let instruments = NSArray(array: track.instrumentArray)
-            let families = NSArray(array: track.familyArray)
-            let format = track.format
-            var url = "\(self.user.userid!)~~\(track.recid)\(format!)"
-            let recid = Int(track.recid)
+            let recordingResponse = t as! RecordingResponse
+            let instruments = NSArray(array: recordingResponse.instrumentArray)
+            let families = NSArray(array: recordingResponse.familyArray)
+            let format = recordingResponse.format
+            var url = "\(self.user.userid!)~~\(recordingResponse.recid)\(format!)"
+            let recid = Int(recordingResponse.recid)
             url = filePathString(url)
             
-            let trackData = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: track.title, bpm: Int(track.bpm), trackURL: url, user: self.user.handle!, format: track.format!, time: track.uploaded, playCount: Int(track.playCount), likeCount: Int(track.likeCount), mashCount: Int(track.likeCount))
+            let track = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: recordingResponse.title, bpm: Int(recordingResponse.bpm), trackURL: url, user: self.user.handle!, format: recordingResponse.format!, time: recordingResponse.uploaded, playCount: Int(recordingResponse.playCount), likeCount: Int(recordingResponse.likeCount), mashCount: Int(recordingResponse.likeCount))
+            let configurator = ProfileTrackCellConfigurator(track: track)
             
-            self.data.append(trackData)
+            self.profileTrackCellConfigurators.append(configurator)
         }
         dispatch_async(dispatch_get_main_queue()) {
             self.tracks.reloadSections(NSIndexSet(index: 1), withRowAnimation: .None)
@@ -327,14 +299,18 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func addTrack(sender: UIButton) {
-        let trackData = sender.superview!.superview!.superview as! ProfileTrack
-        var track: Track? = nil
-        for t in self.data {
-            if t.id == trackData.id {
-                track = t
-            }
-        }
-        ProjectViewController.importTracks([track!], navigationController: self.navigationController, storyboard: self.storyboard)
+        let indexPath = self.getIndexPathForButton(sender)
+        let configurator = self.profileTrackCellConfigurators[indexPath.row]
+        
+        ProjectViewController.importTracks([configurator.track!], navigationController: self.navigationController, storyboard: self.storyboard)
+    }
+    
+    // Magic Method for getting the NSIndexPath of a button relative to the tableview
+    // @andy: Personally speaking, I hate this method, and I'd rather add a tag with the indexPath's row
+    // for each button that gets configured (and use that tag to figure out the index path), but this will work for now.
+    func getIndexPathForButton(button: UIButton) -> NSIndexPath {
+        let buttonFrame = button.convertRect(button.bounds, toView: self.tracks)
+        return self.tracks.indexPathForRowAtPoint(buttonFrame.origin)!
     }
     
     func deleteTrack(track: Track, indexPath: NSIndexPath) {
@@ -351,7 +327,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             } else {
                 deleteFromBucket("\(currentUser.userid!)~~\(track.id)\(track.format)", bucket: track_bucket)
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.data.removeAtIndex(indexPath.row)
+                    self.profileTrackCellConfigurators.removeAtIndex(indexPath.row)
                     self.activityView.stopAnimating()
                     self.tracks.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
                 }

@@ -13,8 +13,8 @@ import AVFoundation
 class MashResultsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, AudioModuleDelegate {
     
     @IBOutlet weak var trackTable: UITableView!
-    var results: [TrackCellConfigurator] = []
-    var allResults: [TrackCellConfigurator] = []
+    var resultConfigurators: [TrackCellConfigurator] = []
+    var allResultConfigurators: [TrackCellConfigurator] = []
     var projectRecordings: [Track] = []
     var projectPlayers: [AVAudioPlayer] = []
     var audioPlayer: AVAudioPlayer? = nil
@@ -57,18 +57,18 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.results.count
+        return self.resultConfigurators.count
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == self.results.count - 1 {
+        if indexPath.row == self.resultConfigurators.count - 1 {
             self.loadNextData()
         }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Track") as! Track
-        let configurator = self.results[indexPath.row]
+        let configurator = self.resultConfigurators[indexPath.row]
         configurator.configure(cell, viewController: self)
         return cell
     }
@@ -78,21 +78,22 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let track = self.trackTable.cellForRowAtIndexPath(indexPath) as! Track
+        let cell = self.trackTable.cellForRowAtIndexPath(indexPath) as! Track
+        let configurator = self.resultConfigurators[indexPath.row]
 
-        track.activityView.startAnimating()
-        download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
+        cell.activityView.startAnimating()
+        download(getS3Key(configurator.track!), url: NSURL(fileURLWithPath: configurator.track!.trackURL), bucket: track_bucket) {
             (result) in
             dispatch_async(dispatch_get_main_queue()) {
-                track.activityView.stopAnimating()
+                cell.activityView.stopAnimating()
                 if result != nil {
-                    track.generateWaveform()
-                    self.playTracks(track)
+                    cell.generateWaveform(configurator.track!.trackURL)
+                    self.playTracks(configurator.track!)
                 }
             }
         }
         
-        Debug.printl("Playing track \(track.titleText)", sender: self)
+        Debug.printl("Playing track \(configurator.track!.titleText)", sender: self)
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
@@ -116,15 +117,15 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func loadNextData() {
-        let currentNumResults = self.results.count
-        if currentNumResults == self.allResults.count {
+        let currentNumResults = self.resultConfigurators.count
+        if currentNumResults == self.allResultConfigurators.count {
             return
         }
         for i in currentNumResults...currentNumResults + 15 {
-            if i > self.allResults.count - 1 {
+            if i > self.allResultConfigurators.count - 1 {
                 break
             }
-            self.results.append(self.allResults[i])
+            self.resultConfigurators.append(self.allResultConfigurators[i])
         }
         self.trackTable.reloadData()
     }

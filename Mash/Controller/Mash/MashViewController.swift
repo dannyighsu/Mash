@@ -138,9 +138,9 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 let track = Track(frame: CGRectZero, recid: Int(rec.recid), userid: Int(rec.userid), instruments: rec.instrumentArray.copy() as! [String], instrumentFamilies: rec.familyArray.copy() as! [String], titleText: rec.title, bpm: Int(rec.bpm), trackURL: getS3Key(Int(rec.userid), recid: Int(rec.recid), format: rec.format), user: rec.handle, format: rec.format, time: rec.uploaded, playCount: Int(rec.playCount), likeCount: Int(rec.likeCount), mashCount: Int(rec.likeCount))
                 let configurator = TrackCellConfigurator(track: track)
                 if i < DEFAULT_DISPLAY_AMOUNT {
-                    controller.results.append(configurator)
+                    controller.resultConfigurators.append(configurator)
                 }
-                controller.allResults.append(configurator)
+                controller.allResultConfigurators.append(configurator)
             }
         } else {
             raiseAlert("No results found.")

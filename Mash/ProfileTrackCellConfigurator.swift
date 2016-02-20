@@ -1,37 +1,38 @@
 //
-//  TrackCellConfigurator.swift
+//  ProfileTrackCellConfigurator.swift
 //  Mash
 //
-//  Created by Andy Lee on 2016.02.19.
+//  Created by Andy Lee on 2016.02.20.
 //  Copyright © 2016 Mash. All rights reserved.
 //
 
 import Foundation
 
-class TrackCellConfigurator : CellConfigurator {
-    var track: Track?
-    
-    init(track: Track) {
-        self.track = track;
-    }
+class ProfileTrackCellConfigurator : TrackCellConfigurator {
     
     override func configure(cell: AnyObject, viewController: UIViewController) {
-        let trackCell = cell as! Track
+        let profileTrackCell = cell as! ProfileTrack
         
-        trackCell.title.text = self.track!.titleText
-        trackCell.instrumentImage.image = findImage(self.track!.instrumentFamilies)
-        trackCell.userLabel.setTitle(trackCell.userText, forState: .Normal)
+        profileTrackCell.backgroundColor = UIColor.clearColor()
+        profileTrackCell.instrumentImage.backgroundColor = UIColor.clearColor()
+        profileTrackCell.title.textColor = UIColor.blackColor()
+        profileTrackCell.title.text = self.track!.titleText
+        profileTrackCell.instrumentImage.image = findImage(self.track!.instrumentFamilies)
+        profileTrackCell.instrumentImage.backgroundColor = UIColor.clearColor()
+        profileTrackCell.dateLabel.text = parseTimeStamp(self.track!.time)
         
-        trackCell.addButton.addTarget(viewController, action: "addTrack:", forControlEvents: UIControlEvents.TouchUpInside)
+        profileTrackCell.addButton.addTarget(viewController, action: "addTrack:", forControlEvents: UIControlEvents.TouchUpInside)
         
         if ((self.track!.staticAudioPlot) != nil) {
-            trackCell.staticAudioPlot = self.track!.staticAudioPlot
+            profileTrackCell.staticAudioPlot = self.track!.staticAudioPlot
         } else {
-            configureAudioPlot(trackCell);
+            self.configureAudioPlot(profileTrackCell);
         }
     }
     
-    func configureAudioPlot(cell: Track) {
+    // @TODO: @andy: Remove this once we create dedicated models for Track and ProfileTrack, because right now,
+    // you can't make ProfileTrack a subclass of Track due to the IBOutlets that can't be overridden.
+    func configureAudioPlot(cell: ProfileTrack) {
         // Set the placeholder image before the download
         cell.staticAudioPlot.image = UIImage(named: "waveform_static")
         cell.activityView.startAnimating()
