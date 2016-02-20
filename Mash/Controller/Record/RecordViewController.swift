@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import AVFoundation
 
-class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlayerDelegate, EZAudioFileDelegate,MetronomeDelegate, CustomIOSAlertViewDelegate, UIAlertViewDelegate {
+class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlayerDelegate, EZAudioFileDelegate, EZOutputDelegate, MetronomeDelegate, CustomIOSAlertViewDelegate, UIAlertViewDelegate {
     
     @IBOutlet weak var audioPlot: EZAudioPlotGL!
     @IBOutlet weak var recordButton: UIButton!
@@ -52,6 +52,19 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.tabBarController!.view.addSubview(self.coverView)
         self.activityView.startAnimating()
         
+        // Load AVAudioSession
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
+        } catch let error1 as NSError {
+            Debug.printl("Error setting up session: \(error1.localizedDescription)", sender: self)
+        }
+        do {
+            try session.setActive(true)
+        } catch let error1 as NSError {
+            Debug.printl("Error setting session active: \(error1.localizedDescription)", sender: self)
+        }
+        
         // Set up metronome
         let metronome = Metronome.createView()
         metronome.delegate = self
@@ -73,6 +86,13 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.timeButton.addTarget(self, action: "showTime:", forControlEvents: UIControlEvents.TouchUpInside)
         self.tempoButton.addTarget(self, action: "showTempo:", forControlEvents: UIControlEvents.TouchUpInside)
         self.metronomeButton.addTarget(self, action: "muteMetronome:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        do {
+            try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
+        } catch let error1 as NSError {
+            Debug.printl("\(error1.localizedDescription)", sender: self)
+            raiseAlert("Error setting up audio.")
+        }
         
         // Request server address synchronously
         self.requestServerAddress()
