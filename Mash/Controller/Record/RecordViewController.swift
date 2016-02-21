@@ -38,7 +38,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var tempoAlert: UIAlertView? = nil
     var timeAlert: UIAlertView? = nil
     var muted: Bool = false
-    var activityView: ActivityView = ActivityView.make()
+    var activityView: ActivityView = ActivityView.createView()
     var coverView: UIView = UIView()
 
     override func viewDidLoad() {
@@ -516,15 +516,14 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         server.versionWithRequest(request) {
             (response, error) in
             if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
+            } else {
                 if response.outdated {
                     raiseAlert("Version is oudated. Please update.", delegate: self)
                 } else {
                     self.checkLogin()
                 }
-            } else {
-                Debug.printl("Error: \(error)", sender: nil)
             }
-            
         }
     }
     

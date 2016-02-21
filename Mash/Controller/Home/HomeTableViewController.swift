@@ -15,7 +15,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     var activityData: [HomeCell] = []
     var globalData: [HomeCell] = []
     var displayData: [HomeCell] = []
-    var activityView: ActivityView = ActivityView.make()
+    var activityView: ActivityView = ActivityView.createView()
     var audioPlayer: AVAudioPlayer? = nil
     var playerTimer: NSTimer? = nil
     var currTrackID: Int = 0

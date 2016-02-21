@@ -20,7 +20,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     var playerTimer: NSTimer? = nil
     var currTrackID: Int = 0
     var user: User = currentUser
-    var activityView: ActivityView = ActivityView.make()
+    var activityView: ActivityView = ActivityView.createView()
     
     override func viewDidLoad() {
         super.viewDidLoad()

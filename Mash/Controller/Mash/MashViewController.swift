@@ -16,7 +16,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var recordings: [Track] = []
     var bpm: Int? = nil
     var instruments: [String] = []
-    var activityView: ActivityView = ActivityView.make()
+    var activityView: ActivityView = ActivityView.createView()
     var cellWidth: CGFloat = 75.0
     
     // Testing

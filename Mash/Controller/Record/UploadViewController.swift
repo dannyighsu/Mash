@@ -22,7 +22,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     var audioPlayer: AVAudioPlayer? = nil
     var timeSignature: String? = nil
     var instruments: [String] = []
-    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+    var activityView: ActivityView = ActivityView.createView()
     var cellWidth: CGFloat = 75.0
     var currFamilySelection: String = ""
     var titleText: String? = nil
@@ -192,6 +192,8 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         request.solo = true
         request.format = ".m4a"
         
+        self.activityView.startAnimating()
+        
         server.recordingUploadWithRequest(request) {
             (response, error) in
             if error != nil {
@@ -243,8 +245,6 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func saveWaveform(track: Track) {
         track.titleText = self.titleTextField.text!
-        /*let waveform = takeShotOfView(self.audioPlot)
-        UIImageJPEGRepresentation(waveform, 1.0)!.writeToFile(filePathString(getS3WaveformKey(track)), atomically: true)*/
         UIGraphicsBeginImageContext(self.audioPlot.bounds.size)
         self.audioPlot.layer.renderInContext(UIGraphicsGetCurrentContext()!)
         let image = UIGraphicsGetImageFromCurrentImageContext()
