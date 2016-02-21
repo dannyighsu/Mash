@@ -33,6 +33,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
     var playCount: Int = 0
     var likeCount: Int = 0
     var mashCount: Int = 0
+    var liked: Bool = false
     
     convenience init(frame: CGRect, instruments: [String], titleText: String) {
         self.init(frame: frame)
@@ -40,7 +41,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         self.titleText = titleText
     }
 
-    convenience init(frame: CGRect, recid: Int, userid: Int, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, timeSignature: Int, trackURL: String, user: String, format: String, time: String, playCount: Int, likeCount: Int, mashCount: Int) {
+    convenience init(frame: CGRect, recid: Int, userid: Int, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, timeSignature: Int, trackURL: String, user: String, format: String, time: String, playCount: Int, likeCount: Int, mashCount: Int, liked: Bool) {
         self.init(frame: frame)
         self.instruments = instruments
         self.id = recid
@@ -56,6 +57,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         self.playCount = playCount
         self.likeCount = likeCount
         self.mashCount = mashCount
+        self.liked = liked
     }
     
     // Should only be called in the completion block of a download function.

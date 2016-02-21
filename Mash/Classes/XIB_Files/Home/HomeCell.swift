@@ -40,4 +40,23 @@ class HomeCell: UITableViewCell {
         self.track = track
     }
 
+    @IBAction func likeButtonPressed(sender: UIButton) {
+        if self.track!.liked {
+            sendUnlikeRequest(self.track!.id) {
+                (success) in
+                if success {
+                    sender.setImage(UIImage(named: "like"), forState: .Normal)
+                    self.track!.liked = false
+                }
+            }
+        } else {
+            sendLikeRequest(self.track!.id) {
+                (success) in
+                if success {
+                    sender.setImage(UIImage(named: "liked"), forState: .Normal)
+                    self.track!.liked = true
+                }
+            }
+        }
+    }
 }

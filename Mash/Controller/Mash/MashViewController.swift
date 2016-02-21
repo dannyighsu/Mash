@@ -138,7 +138,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         if response.recordingArray.count != 0 {
             for i in 0...response.recordingArray.count - 1 {
                 let rec = response.recordingArray[i] as! RecordingResponse
-                let track = Track(frame: CGRectZero, recid: Int(rec.recid), userid: Int(rec.userid), instruments: rec.instrumentArray.copy() as! [String], instrumentFamilies: rec.familyArray.copy() as! [String], titleText: rec.title, bpm: Int(rec.bpm), timeSignature: Int(rec.bar), trackURL: getS3Key(Int(rec.userid), recid: Int(rec.recid), format: rec.format), user: rec.handle, format: rec.format, time: rec.uploaded, playCount: Int(rec.playCount), likeCount: Int(rec.likeCount), mashCount: Int(rec.likeCount))
+                let track = Track(frame: CGRectZero, recid: Int(rec.recid), userid: Int(rec.userid), instruments: rec.instrumentArray.copy() as! [String], instrumentFamilies: rec.familyArray.copy() as! [String], titleText: rec.title, bpm: Int(rec.bpm), timeSignature: Int(rec.bar), trackURL: getS3Key(Int(rec.userid), recid: Int(rec.recid), format: rec.format), user: rec.handle, format: rec.format, time: rec.uploaded, playCount: Int(rec.playCount), likeCount: Int(rec.likeCount), mashCount: Int(rec.likeCount), liked: rec.liked)
                 if i < DEFAULT_DISPLAY_AMOUNT {
                     controller.results.append(track)
                 }

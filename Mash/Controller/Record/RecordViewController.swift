@@ -515,11 +515,16 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         
         server.versionWithRequest(request) {
             (response, error) in
-            if response.outdated {
-                raiseAlert("Version is oudated. Please update.", delegate: self)
+            if error != nil {
+                if response.outdated {
+                    raiseAlert("Version is oudated. Please update.", delegate: self)
+                } else {
+                    self.checkLogin()
+                }
             } else {
-                self.checkLogin()
+                Debug.printl("Error: \(error)", sender: nil)
             }
+            
         }
     }
     

@@ -125,29 +125,32 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.playCountLabel.text = "\(cell.track!.playCount)"
             cell.likeCountLabel.text = "\(cell.track!.likeCount) likes"
             
+            if cell.track!.liked {
+                cell.likeButton.setImage(UIImage(named: "liked"), forState: .Normal)
+            }
+            
             self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
             self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
             cell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)
-            cell.likeButton.addTarget(self, action: "like:", forControlEvents: .TouchUpInside)
             cell.addButton.addTarget(self, action: "add:", forControlEvents: .TouchUpInside)
     
             download(getS3WaveformKey(cell.track!), url: filePathURL(getS3WaveformKey(cell.track!)), bucket: waveform_bucket) {
                 (result) in
-                if result != nil {
-                    dispatch_async(dispatch_get_main_queue()) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    if result != nil {
                         cell.audioPlotView.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(cell.track!)))
-                    }
-                } else {
-                    dispatch_async(dispatch_get_main_queue()) {
+                    } else {
                         cell.audioPlotView.image = UIImage(named: "waveform_static")
                     }
-                }
-                dispatch_async(dispatch_get_main_queue()) {
-                    if cell.backgroundArt.layer.sublayers == nil || !(cell.backgroundArt.layer.sublayers![0] is CAGradientLayer) {
-                        let gradient: CAGradientLayer = CAGradientLayer()
+                    if cell.backgroundArt.subviews.count == 0 || !(cell.backgroundArt.subviews[0] is UIVisualEffectView) {
+                        /*let gradient: CAGradientLayer = CAGradientLayer()
                         gradient.frame = cell.backgroundArt.bounds
                         gradient.colors = [lightGray().CGColor, UIColor.clearColor().CGColor, lightGray().CGColor]
-                        cell.backgroundArt.layer.insertSublayer(gradient, atIndex: 0)
+                        cell.backgroundArt.layer.insertSublayer(gradient, atIndex: 0)*/
+                        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+                        blurView.frame = cell.backgroundArt.bounds
+                        blurView.alpha = 0.8
+                        cell.backgroundArt.insertSubview(blurView, atIndex: 0)
                     }
                 }
             }
@@ -259,20 +262,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                         Debug.printl("Error downloading track", sender: self)
                     }
                 }
-            }
-        }
-    }
-    
-    func like(sender: UIButton) {
-        var cell = sender.superview
-        while cell != nil && !(cell is HomeCell) {
-            cell = cell!.superview
-        }
-        let homecell = cell as! HomeCell
-        sendLikeRequest(homecell.track!.id) {
-            (success) in
-            if success {
-                sender.setImage(UIImage(named: "liked"), forState: .Normal)
             }
         }
     }
@@ -391,7 +380,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 follower.handle = user
                 follower.userid = Int(userid)
                 
-                let track = Track(frame: CGRectZero, recid: Int(recording.recid), userid: Int(recording.userid), instruments: recording.instrumentArray.copy() as! [String], instrumentFamilies: recording.familyArray.copy() as! [String], titleText: recording.title, bpm: Int(recording.bpm), timeSignature: Int(recording.bar), trackURL: filePathString("\(userid)~~\(Int(recording.recid)).\(recording.format)"), user: recording.handle, format: recording.format, time: time, playCount: Int(recording.playCount), likeCount: Int(recording.likeCount), mashCount: Int(recording.likeCount))
+                let track = Track(frame: CGRectZero, recid: Int(recording.recid), userid: Int(recording.userid), instruments: recording.instrumentArray.copy() as! [String], instrumentFamilies: recording.familyArray.copy() as! [String], titleText: recording.title, bpm: Int(recording.bpm), timeSignature: Int(recording.bar), trackURL: filePathString("\(userid)~~\(Int(recording.recid)).\(recording.format)"), user: recording.handle, format: recording.format, time: time, playCount: Int(recording.playCount), likeCount: Int(recording.likeCount), mashCount: Int(recording.likeCount), liked: recording.liked)
                 
                 let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower, track: track)
                 data.append(cell)
