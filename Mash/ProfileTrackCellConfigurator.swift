@@ -42,17 +42,17 @@ class ProfileTrackCellConfigurator : TrackCellConfigurator {
                 cell.activityView.stopAnimating()
                 if result != nil {
                     // Store the static audio plot in the model
-                    self.track!.staticAudioPlot.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(self.track!)))
+                    self.track!.staticAudioPlotImage = UIImage(contentsOfFile: filePathString(getS3WaveformKey(self.track!)))
                 } else {
                     // For now, we will just store the placeholder into the model.
                     // @TODO: @andy: Come up with a way to tell the difference between
                     // getting no audio plot back because there is no audio plot available (don't retry)
                     // and getting no audio plot back because the request failed (in which case, retry).
-                    self.track!.staticAudioPlot.image = UIImage(named: "waveform_static")
+                    self.track!.staticAudioPlotImage = UIImage(named: "waveform_static")
                 }
                 
                 // Update the cell with the audio plot in the model
-                cell.staticAudioPlot = self.track!.staticAudioPlot
+                cell.staticAudioPlot.image = self.track!.staticAudioPlotImage
             }
         }
     }

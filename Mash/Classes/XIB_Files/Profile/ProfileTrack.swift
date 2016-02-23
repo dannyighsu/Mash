@@ -29,6 +29,7 @@ class ProfileTrack: UITableViewCell, EZAudioFileDelegate {
     var id: Int = 0
     var audioFile: EZAudioFile? = nil
     var userid: Int = 0
+    var staticAudioPlotImage: UIImage!
     
     convenience init(frame: CGRect, recid: Int, userid: Int, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, trackURL: String, user: String, format: String, date: String) {
         self.init(frame: frame)
@@ -64,5 +65,4 @@ class ProfileTrack: UITableViewCell, EZAudioFileDelegate {
         let data = self.audioFile!.getWaveformData()
         self.audioPlot.updateBuffer(data.buffers[0], withBufferSize: data.bufferSize)
     }
-    
 }

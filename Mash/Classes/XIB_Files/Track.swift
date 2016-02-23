@@ -32,6 +32,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
     var playCount: Int = 0
     var likeCount: Int = 0
     var mashCount: Int = 0
+    var staticAudioPlotImage: UIImage!
     
     convenience init(frame: CGRect, instruments: [String], titleText: String) {
         self.init(frame: frame)
