@@ -19,6 +19,7 @@ class ActivityView: UIView {
         let activityView = view[0] as! ActivityView
         activityView.layer.cornerRadius = 8.0
         activityView.clipsToBounds = true
+        activityView.hidden = true
         return activityView
     }
     
