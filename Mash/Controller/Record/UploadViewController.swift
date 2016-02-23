@@ -278,7 +278,6 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             Flurry.logEvent("Recording_Upload", withParameters: ["userid": currentUser.userid!, "instrument": self.instruments])
         }
         
-        print(self.recid)
         let track = Track(frame: CGRectZero, recid: self.recid!, userid: currentUser.userid!, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, timeSignature: timeSigStringToInt(self.timeSignature!), trackURL: "\(currentUser.userid!)~~\(recid).m4a", user: currentUser.handle!, format: ".m4a", time: "Just now", playCount: 0, likeCount: 0, mashCount: 0, liked: false)
         self.saveWaveform(track)
         
