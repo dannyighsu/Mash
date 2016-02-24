@@ -60,6 +60,28 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         self.liked = liked
     }
     
+    func like(sender: UIButton) -> Bool {
+        if self.liked {
+            sendUnlikeRequest(self.id) {
+                (success) in
+                if success {
+                    sender.setImage(UIImage(named: "like"), forState: .Normal)
+                    self.liked = false
+                }
+            }
+            return false
+        } else {
+            sendLikeRequest(self.id) {
+                (success) in
+                if success {
+                    sender.setImage(UIImage(named: "liked"), forState: .Normal)
+                    self.liked = true
+                }
+            }
+            return true
+        }
+    }
+    
     // Should only be called in the completion block of a download function.
     func generateWaveform() {
         self.staticAudioPlot.hidden = true

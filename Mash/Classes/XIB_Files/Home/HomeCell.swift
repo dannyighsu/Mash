@@ -41,22 +41,13 @@ class HomeCell: UITableViewCell {
     }
 
     @IBAction func likeButtonPressed(sender: UIButton) {
-        if self.track!.liked {
-            sendUnlikeRequest(self.track!.id) {
-                (success) in
-                if success {
-                    sender.setImage(UIImage(named: "like"), forState: .Normal)
-                    self.track!.liked = false
-                }
-            }
+        let liked = self.track!.like(sender)
+        let likeText = self.likeCountLabel.text!
+        let likeCount = likeText.characters.split {$0 == " "}.map(String.init)[0]
+        if liked {
+            self.likeCountLabel.text = "\(Int(likeCount)! + 1) likes"
         } else {
-            sendLikeRequest(self.track!.id) {
-                (success) in
-                if success {
-                    sender.setImage(UIImage(named: "liked"), forState: .Normal)
-                    self.track!.liked = true
-                }
-            }
+            self.likeCountLabel.text = "\(Int(likeCount)! - 1) likes"
         }
     }
 }

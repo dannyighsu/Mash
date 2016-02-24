@@ -106,6 +106,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         // Set up nav buttons
         self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItemStyle.Plain, target: self, action: "save:")
         self.parentViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Clear", style: UIBarButtonItemStyle.Plain, target: self, action: "clear:")
+        self.navigationController?.navigationBar.tintColor = UIColor.blackColor()
     }
     
     override func viewWillAppear(animated: Bool) {

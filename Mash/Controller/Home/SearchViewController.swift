@@ -113,7 +113,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 track.titleText = track.title.text!
                 track.instruments = trackData.instruments
                 track.instrumentFamilies = trackData.instrumentFamilies
-                track.trackURL = filePathString(trackData.trackURL)
+                track.trackURL = trackData.trackURL
                 track.instrumentImage.image = findImage(track.instrumentFamilies)
                 track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
                 track.titleText = trackData.titleText
@@ -124,7 +124,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 track.bpm = trackData.bpm
                 track.userid = trackData.userid
                 track.id = trackData.id
-                download(getS3WaveformKey(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: waveform_bucket) {
+                download(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket) {
                     (result) in
                     dispatch_async(dispatch_get_main_queue()) {
                         if result != nil {
@@ -270,6 +270,12 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         }
         return true
     }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            self.tags = []
+        }
+    }
 
     func searchController(controller: UISearchController, shouldReloadTableForSearchString searchString: String!) -> Bool {
         if searchString == "" {
@@ -363,6 +369,11 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             }
         }
         
+        if request.instrumentArray.count == 0 && request.familyArray.count == 0 && request.genreArray.count == 0 && request.subgenreArray.count == 0 {
+            raiseAlert("Please select tags to search with.")
+            return
+        }
+    
         server.searchTagWithRequest(request) {
             (response, error) in
             if error != nil {
@@ -417,7 +428,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         if response.recordingArray.count != 0 {
             for i in 0...response.recordingArray.count - 1 {
                 let rec = response.recordingArray[i] as! RecordingResponse
-                let track = Track(frame: CGRectZero, recid: Int(rec.recid), userid: Int(rec.userid),instruments: rec.instrumentArray.copy() as! [String], instrumentFamilies: rec.familyArray.copy() as! [String], titleText: rec.title, bpm: Int(rec.bpm), timeSignature: Int(rec.bar), trackURL: getS3Key(Int(rec.userid), recid: Int(rec.recid), format: rec.format), user: rec.handle, format: rec.format, time: rec.uploaded, playCount: Int(rec.playCount), likeCount: Int(rec.likeCount), mashCount: Int(rec.likeCount), liked: rec.liked)
+                let track = Track(frame: CGRectZero, recid: Int(rec.recid), userid: Int(rec.userid),instruments: rec.instrumentArray.copy() as! [String], instrumentFamilies: rec.familyArray.copy() as! [String], titleText: rec.title, bpm: Int(rec.bpm), timeSignature: Int(rec.bar), trackURL: filePathString(getS3Key(Int(rec.userid), recid: Int(rec.recid), format: rec.format)), user: rec.handle, format: rec.format, time: rec.uploaded, playCount: Int(rec.playCount), likeCount: Int(rec.likeCount), mashCount: Int(rec.likeCount), liked: rec.liked)
                 self.allResults.append(track)
                 if i < DEFAULT_DISPLAY_AMOUNT {
                     self.searchResults.append(track)
