@@ -20,7 +20,7 @@ class TrackCellConfigurator : CellConfigurator {
         
         trackCell.title.text = self.track!.titleText
         trackCell.instrumentImage.image = findImage(self.track!.instrumentFamilies)
-        trackCell.userLabel.setTitle(trackCell.userText, forState: .Normal)
+        trackCell.userLabel.setTitle(self.track!.userText, forState: .Normal)
         
         trackCell.addButton.addTarget(viewController, action: "addTrack:", forControlEvents: UIControlEvents.TouchUpInside)
         
