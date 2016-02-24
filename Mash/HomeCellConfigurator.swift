@@ -86,8 +86,4 @@ class HomeCellConfigurator : CellConfigurator {
                 }
         }
     }
-    
-    func changeLikeCountOnCell(cell: HomeCell, newLikeCount: Int) {
-        cell.likeCountLabel.text = "\(newLikeCount) likes"
-    }
 }

@@ -67,6 +67,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
                 (success) in
                 if success {
                     sender.setImage(UIImage(named: "like"), forState: .Normal)
+                    self.likeCount -= 1
                     self.liked = false
                 }
             }
@@ -76,6 +77,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
                 (success) in
                 if success {
                     sender.setImage(UIImage(named: "liked"), forState: .Normal)
+                    self.likeCount += 1
                     self.liked = true
                 }
             }

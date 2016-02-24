@@ -14,13 +14,8 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var activityFeed: UITableView!
     var activityData: [HomeCell] = []
     var globalData: [HomeCell] = []
-<<<<<<< HEAD
     var homeCellConfigurators: [HomeCellConfigurator] = []
-    var activityView: ActivityView = ActivityView.make()
-=======
-    var displayData: [HomeCell] = []
     var activityView: ActivityView = ActivityView.createView()
->>>>>>> develop
     var audioPlayer: AVAudioPlayer? = nil
     var playerTimer: NSTimer? = nil
     var currTrackID: Int = 0
@@ -228,13 +223,9 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func like(sender: UIButton) {
         let indexPath = self.getIndexPathForButton(sender)
         let configurator = self.homeCellConfigurators[indexPath.row]
-        let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell") as! HomeCell
         
-        let liked = configurator.activity!.track!.like(sender)
-        let likeCount = configurator.activity!.track!.likeCount
-        if liked {
-            configurator.changeLikeCountOnCell(cell, newLikeCount: (likeCount + (liked ? 1 : -1)))
-        }
+        configurator.activity!.track!.like(sender)
+        self.activityFeed.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
     }
     
     func add(sender: UIButton) {
