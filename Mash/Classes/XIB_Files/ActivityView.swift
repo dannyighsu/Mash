@@ -11,7 +11,7 @@ import UIKit
 
 class ActivityView: UIView {
     
-    @IBOutlet weak var titleLabel: UITextField!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var activityView: UIActivityIndicatorView!
     
     class func createView() -> ActivityView {
@@ -20,7 +20,13 @@ class ActivityView: UIView {
         activityView.layer.cornerRadius = 8.0
         activityView.clipsToBounds = true
         activityView.hidden = true
+        
         return activityView
+    }
+    
+    func setText(text: String) {
+        self.titleLabel.text = text
+        self.titleLabel.sizeToFit()
     }
     
     func startAnimating() {

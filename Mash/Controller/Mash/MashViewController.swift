@@ -33,7 +33,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         self.activityView.center = self.view.center
         self.view.addSubview(self.activityView)
-        self.activityView.titleLabel.text = "Mashing..."
+        self.activityView.setText("Mashing...")
         
         self.cellWidth = UIScreen.mainScreen().bounds.size.width / 2 - 4.0
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)

@@ -50,6 +50,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewWillDisappear(animated)
         self.navigationItem.setHidesBackButton(true, animated: false)
         self.navigationItem.rightBarButtonItem = nil
+        
     }
     
     // Table View Delegate
@@ -176,7 +177,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
             if self.playerTimer != nil {
                 self.playerTimer!.invalidate()
             }
-            self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "sendPlayRequest:", userInfo: nil, repeats: true)
+            self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
             self.currTrackID = track.id
             for player in self.projectPlayers {
                 player.play()

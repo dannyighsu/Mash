@@ -46,7 +46,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         
         self.coverView = UIView(frame: CGRect(x: self.view.frame.minX, y: self.view.frame.minY, width: self.view.frame.size.width, height: self.view.frame.size.height))
         self.coverView.backgroundColor = UIColor.clearColor()
-        self.activityView.titleLabel.text = "Logging In..."
+        self.activityView.setText("Logging In...")
         self.activityView.center = CGPoint(x: self.coverView.center.x, y: self.coverView.center.y - 30.0)
         self.coverView.addSubview(self.activityView)
         self.tabBarController!.view.addSubview(self.coverView)

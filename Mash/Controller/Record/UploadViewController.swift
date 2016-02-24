@@ -44,7 +44,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         self.audioPlayer = try? AVAudioPlayer(contentsOfURL: recording!.url)
         
-        self.activityView.titleLabel.text = "Uploading..."
+        self.activityView.setText("Uploading...")
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
         

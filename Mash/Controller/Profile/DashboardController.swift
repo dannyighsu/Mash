@@ -41,7 +41,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
-        self.activityView.titleLabel.text = "Fetching your sounds"
+        self.activityView.setText("Fetching your sounds")
+        self.activityView.titleLabel.sizeToFit()
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
 
