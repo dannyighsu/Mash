@@ -39,5 +39,4 @@ class HomeCell: UITableViewCell {
         self.user = user
         self.track = track
     }
-
 }

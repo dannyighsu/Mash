@@ -21,7 +21,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     var playerTimer: NSTimer? = nil
     var currTrackID: Int = 0
     var user: User = currentUser
-    var activityView: ActivityView = ActivityView.make()
+    var activityView: ActivityView = ActivityView.createView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +42,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
-        self.activityView.titleLabel.text = "Fetching your sounds"
+        self.activityView.setText("Fetching your sounds")
+        self.activityView.titleLabel.sizeToFit()
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
 
@@ -279,15 +280,15 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func updateTable(data: UserRecordingsResponse) {
         self.profileTrackCellConfigurators = []
         for t in data.recArray! {
-            let recordingResponse = t as! RecordingResponse
-            let instruments = NSArray(array: recordingResponse.instrumentArray)
-            let families = NSArray(array: recordingResponse.familyArray)
-            let format = recordingResponse.format
-            var url = "\(self.user.userid!)~~\(recordingResponse.recid)\(format!)"
-            let recid = Int(recordingResponse.recid)
+            let rec = t as! RecordingResponse
+            let instruments = NSArray(array: rec.instrumentArray)
+            let families = NSArray(array: rec.familyArray)
+            let format = rec.format
+            var url = "\(self.user.userid!)~~\(rec.recid)\(format!)"
+            let recid = Int(rec.recid)
             url = filePathString(url)
             
-            let track = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: recordingResponse.title, bpm: Int(recordingResponse.bpm), trackURL: url, user: self.user.handle!, format: recordingResponse.format!, time: recordingResponse.uploaded, playCount: Int(recordingResponse.playCount), likeCount: Int(recordingResponse.likeCount), mashCount: Int(recordingResponse.likeCount))
+            let track = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: rec.title, bpm: Int(rec.bpm), timeSignature: Int(rec.bar), trackURL: url, user: self.user.handle!, format: rec.format!, time: rec.uploaded, playCount: Int(rec.playCount), likeCount: Int(rec.likeCount), mashCount: Int(rec.likeCount), liked: rec.liked)
             let configurator = ProfileTrackCellConfigurator(track: track)
             
             self.profileTrackCellConfigurators.append(configurator)

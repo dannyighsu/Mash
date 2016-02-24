@@ -23,9 +23,11 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     var timeSignature: String? = nil
     var instrumentCellConfigurators: [InstrumentCellConfigurator] = []
     var instruments: [String] = []
-    var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+    var activityView: ActivityView = ActivityView.createView()
     var cellWidth: CGFloat = 75.0
     var currFamilySelection: String = ""
+    var titleText: String? = nil
+    var recid: Int? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +49,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         self.audioPlayer = try? AVAudioPlayer(contentsOfURL: recording!.url)
         
+        self.activityView.setText("Uploading...")
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
         
@@ -63,7 +66,23 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationItem.title = "Name Your Track"
+        self.navigationItem.title = "Tag Your Track"
+        if self.titleText != nil {
+            self.titleTextField.text = self.titleText
+        }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if self.instruments.count > 0 {
+            let instrumentsToAdd = self.instruments
+            self.instruments = []
+            for instrument in instrumentsToAdd {
+                let indexPath = NSIndexPath(forRow: findInstrument(instrument), inSection: 0)
+                self.instrumentsCollection.selectItemAtIndexPath(indexPath, animated: false, scrollPosition: .Bottom)
+                self.collectionView(self.instrumentsCollection, didSelectItemAtIndexPath: indexPath)
+            }
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -137,6 +156,17 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         return 1
     }
     
+    // Alert View Delegate
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if alertView.title == "Success!" {
+            if buttonIndex == 0 {
+                self.finish()
+            } else {
+                self.mashFinish()
+            }
+        }
+    }
+    
     // Pre-Upload Checks
     func checkInput(sender: AnyObject?) {
         let title = self.titleTextField.text
@@ -165,21 +195,12 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     // Upload Methods
     func uploadAction() {
-        let times = self.timeSignature!.characters.split {$0 == "/"}.map(String.init)
-        let numer = times[0]
-        var denom = times[1]
-        if denom.characters.count == 1 {
-            denom = "0\(denom)"
-        }
-        
-        let timeSigString = "\(numer)\(denom)"
-        
         let request = RecordingUploadRequest()
         request.userid = UInt32(currentUser.userid!)
         request.loginToken = currentUser.loginToken
         request.title = "\(self.titleTextField.text!)"
         request.bpm = UInt32(self.bpm!)
-        request.bar = UInt32(timeSigString)!
+        request.bar = UInt32(timeSigStringToInt(self.timeSignature!))
         request.key = "X"
         request.familyArray = NSMutableArray(array: self.instruments)
         request.instrumentArray = []
@@ -188,6 +209,8 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         request.feel = 0
         request.solo = true
         request.format = ".m4a"
+        
+        self.activityView.startAnimating()
         
         server.recordingUploadWithRequest(request) {
             (response, error) in
@@ -209,7 +232,13 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                         (result) in
                         if result != nil {
                             dispatch_async(dispatch_get_main_queue()) {
-                                self.finish(Int(response.recid))
+                                self.recid = Int(response.recid)
+                                if self.navigationController is RootNavigationController {
+                                    let alert = UIAlertView(title: "Success!", message: "Would you like to mash your new sound?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "Yes")
+                                    alert.show()
+                                } else {
+                                    self.finish()
+                                }
                             }
                         } else {
                             self.deleteTrack(response.recid)
@@ -240,8 +269,6 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func saveWaveform(track: Track) {
         track.titleText = self.titleTextField.text!
-        /*let waveform = takeShotOfView(self.audioPlot)
-        UIImageJPEGRepresentation(waveform, 1.0)!.writeToFile(filePathString(getS3WaveformKey(track)), atomically: true)*/
         UIGraphicsBeginImageContext(self.audioPlot.bounds.size)
         self.audioPlot.layer.renderInContext(UIGraphicsGetCurrentContext()!)
         let image = UIGraphicsGetImageFromCurrentImageContext()
@@ -251,17 +278,33 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         upload(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket)
     }
     
-    func finish(recid: Int) {
+    func finish() {
         if !testing {
             Flurry.logEvent("Recording_Upload", withParameters: ["userid": currentUser.userid!, "instrument": self.instruments])
         }
         
-        let track = Track(frame: CGRectZero, recid: recid, userid: currentUser.userid!, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, trackURL: "\(currentUser.userid!)~~\(recid).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a", time: "Just now", playCount: 0, likeCount: 0, mashCount: 0)
+        let track = Track(frame: CGRectZero, recid: self.recid!, userid: currentUser.userid!, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, timeSignature: timeSigStringToInt(self.timeSignature!), trackURL: "\(currentUser.userid!)~~\(recid).m4a", user: currentUser.handle!, format: ".m4a", time: "Just now", playCount: 0, likeCount: 0, mashCount: 0, liked: false)
         self.saveWaveform(track)
         
         self.navigationController?.popViewControllerAnimated(true)
-        let tabbarcontroller = self.navigationController?.viewControllers[2] as! TabBarController
-        tabbarcontroller.selectedIndex = getTabBarController("dashboard")
+        if self.navigationController is RootNavigationController {
+            let tabbarcontroller = self.navigationController?.viewControllers[2] as! TabBarController
+            tabbarcontroller.selectedIndex = getTabBarController("dashboard")
+        }
+    }
+    
+    func mashFinish() {
+        if !testing {
+            Flurry.logEvent("Recording_Upload", withParameters: ["userid": currentUser.userid!, "instrument": self.instruments])
+        }
+        
+        let track = Track(frame: CGRectZero, recid: self.recid!, userid: currentUser.userid!, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, timeSignature: timeSigStringToInt(self.timeSignature!), trackURL: "\(currentUser.userid!)~~\(recid).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a", time: "Just now", playCount: 0, likeCount: 0, mashCount: 0, liked: false)
+        self.saveWaveform(track)
+        
+        self.navigationController?.popViewControllerAnimated(false)
+        if self.navigationController is RootNavigationController {
+            ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
+        }
     }
     
     func cancel(sender: AnyObject?) {

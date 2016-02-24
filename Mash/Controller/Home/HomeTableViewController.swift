@@ -14,8 +14,13 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var activityFeed: UITableView!
     var activityData: [HomeCell] = []
     var globalData: [HomeCell] = []
+<<<<<<< HEAD
     var homeCellConfigurators: [HomeCellConfigurator] = []
     var activityView: ActivityView = ActivityView.make()
+=======
+    var displayData: [HomeCell] = []
+    var activityView: ActivityView = ActivityView.createView()
+>>>>>>> develop
     var audioPlayer: AVAudioPlayer? = nil
     var playerTimer: NSTimer? = nil
     var currTrackID: Int = 0
@@ -223,12 +228,12 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func like(sender: UIButton) {
         let indexPath = self.getIndexPathForButton(sender)
         let configurator = self.homeCellConfigurators[indexPath.row]
+        let cell = self.activityFeed.dequeueReusableCellWithIdentifier("HomeCell") as! HomeCell
         
-        sendLikeRequest(configurator.activity!.track!.id) {
-            (success) in
-            if success {
-                sender.setImage(UIImage(named: "liked"), forState: .Normal)
-            }
+        let liked = configurator.activity!.track!.like(sender)
+        let likeCount = configurator.activity!.track!.likeCount
+        if liked {
+            configurator.changeLikeCountOnCell(cell, newLikeCount: (likeCount + (liked ? 1 : -1)))
         }
     }
     
@@ -354,7 +359,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 follower.handle = user
                 follower.userid = Int(userid)
                 
-                let track = Track(frame: CGRectZero, recid: Int(recording.recid), userid: Int(recording.userid), instruments: recording.instrumentArray.copy() as! [String], instrumentFamilies: recording.familyArray.copy() as! [String], titleText: recording.title, bpm: Int(recording.bpm), trackURL: filePathString("\(userid)~~\(Int(recording.recid)).\(recording.format)"), user: recording.handle, format: recording.format, time: time, playCount: Int(recording.playCount), likeCount: Int(recording.likeCount), mashCount: Int(recording.likeCount))
+                let track = Track(frame: CGRectZero, recid: Int(recording.recid), userid: Int(recording.userid), instruments: recording.instrumentArray.copy() as! [String], instrumentFamilies: recording.familyArray.copy() as! [String], titleText: recording.title, bpm: Int(recording.bpm), timeSignature: Int(recording.bar), trackURL: filePathString("\(userid)~~\(Int(recording.recid)).\(recording.format)"), user: recording.handle, format: recording.format, time: time, playCount: Int(recording.playCount), likeCount: Int(recording.likeCount), mashCount: Int(recording.likeCount), liked: recording.liked)
                 
                 let activityData = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower, track: track)
                 data.append(activityData)

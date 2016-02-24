@@ -41,6 +41,11 @@ class HomeCellConfigurator : CellConfigurator {
         // Download the cover art (audio plot)
         configureCoverArt(homeCell);
         
+        // Set the like button's image to the like's status
+        if self.activity!.track!.liked {
+            homeCell.likeButton.setImage(UIImage(named: "liked"), forState: .Normal)
+        }
+        
         // Add button targets
         homeCell.userLabel.addTarget(viewController, action: "getUser:", forControlEvents: .TouchUpInside)
         homeCell.playButton.addTarget(viewController, action: "playButton:", forControlEvents: .TouchUpInside)
@@ -62,23 +67,27 @@ class HomeCellConfigurator : CellConfigurator {
             url: filePathURL(getS3WaveformKey(self.activity!.track!)),
             bucket: waveform_bucket) {
                 (result) in
-            if result != nil {
                 dispatch_async(dispatch_get_main_queue()) {
-                    cell.audioPlotView.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(self.activity!.track!)))
+                    if result != nil {
+                        cell.audioPlotView.image = UIImage(contentsOfFile: filePathString(getS3WaveformKey(self.activity!.track!)))
+                    } else {
+                        cell.audioPlotView.image = UIImage(named: "waveform_static")
+                    }
+                    if cell.backgroundArt.subviews.count == 0 || !(cell.backgroundArt.subviews[0] is UIVisualEffectView) {
+                        /*let gradient: CAGradientLayer = CAGradientLayer()
+                        gradient.frame = cell.backgroundArt.bounds
+                        gradient.colors = [lightGray().CGColor, UIColor.clearColor().CGColor, lightGray().CGColor]
+                        cell.backgroundArt.layer.insertSublayer(gradient, atIndex: 0)*/
+                        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+                        blurView.frame = cell.backgroundArt.bounds
+                        blurView.alpha = 0.8
+                        cell.backgroundArt.insertSubview(blurView, atIndex: 0)
+                    }
                 }
-            } else {
-                dispatch_async(dispatch_get_main_queue()) {
-                    cell.audioPlotView.image = UIImage(named: "waveform_static")
-                }
-            }
-            dispatch_async(dispatch_get_main_queue()) {
-                if cell.backgroundArt.layer.sublayers == nil || !(cell.backgroundArt.layer.sublayers![0] is CAGradientLayer) {
-                    let gradient: CAGradientLayer = CAGradientLayer()
-                    gradient.frame = cell.backgroundArt.bounds
-                    gradient.colors = [lightGray().CGColor, UIColor.clearColor().CGColor, lightGray().CGColor]
-                    cell.backgroundArt.layer.insertSublayer(gradient, atIndex: 0)
-                }
-            }
         }
+    }
+    
+    func changeLikeCountOnCell(cell: HomeCell, newLikeCount: Int) {
+        cell.likeCountLabel.text = "\(newLikeCount) likes"
     }
 }

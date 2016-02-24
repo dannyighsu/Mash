@@ -14,6 +14,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var handleField: UITextField!
+    @IBOutlet weak var confirmPasswordField: UITextField!
     
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
 
@@ -30,11 +31,13 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         self.passwordField.delegate = self
         self.emailField.delegate = self
         self.handleField.delegate = self
+        self.confirmPasswordField.delegate = self
         self.emailField.autocapitalizationType = .None
         self.handleField.autocapitalizationType = .None
 
         // Set textfield actions
-        self.passwordField.returnKeyType = UIReturnKeyType.Go
+        self.passwordField.returnKeyType = UIReturnKeyType.Next
+        self.confirmPasswordField.returnKeyType = UIReturnKeyType.Go
         self.emailField.returnKeyType = UIReturnKeyType.Next
         self.handleField.returnKeyType = UIReturnKeyType.Next
     }
@@ -68,6 +71,9 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         } else if textField == self.emailField {
             textField.resignFirstResponder()
             self.passwordField.becomeFirstResponder()
+        } else if textField == self.passwordField {
+            textField.resignFirstResponder()
+            self.confirmPasswordField.becomeFirstResponder()
         } else {
             textField.resignFirstResponder()
             self.signUpAction(nil)
@@ -104,6 +110,9 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
             return
         } else if self.handleField.text!.rangeOfString(" ") != nil {
             raiseAlert("Username cannot contain spaces.", delegate: self)
+            return
+        } else if self.confirmPasswordField.text != self.passwordField.text {
+            raiseAlert("Passwords do not match.", delegate: self)
             return
         }
 

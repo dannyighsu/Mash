@@ -368,6 +368,7 @@
 		37A43C2D1C3DDD1300B06A14 /* TabControlBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A43C2C1C3DDD1300B06A14 /* TabControlBar.swift */; };
 		37AF7B011C125D4D009DA251 /* TPAACAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 37AF7AFF1C125D4D009DA251 /* TPAACAudioConverter.h */; };
 		37AF7B021C125D4D009DA251 /* TPAACAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 37AF7B001C125D4D009DA251 /* TPAACAudioConverter.m */; };
+		37B742C01C77C31900E4EDBE /* HelperClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B742BF1C77C31900E4EDBE /* HelperClasses.swift */; };
 		37B934A61C3B4B680001E468 /* ProjectTransitionAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B934A51C3B4B680001E468 /* ProjectTransitionAnimationController.swift */; };
 		37C12E0E1B69797300A4E3A3 /* Superpowered3BandEQ.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C12DF31B69797300A4E3A3 /* Superpowered3BandEQ.h */; };
 		37C12E0F1B69797300A4E3A3 /* SuperpoweredAdvancedAudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C12DF41B69797300A4E3A3 /* SuperpoweredAdvancedAudioPlayer.h */; };
@@ -808,6 +809,7 @@
 		37A43C2C1C3DDD1300B06A14 /* TabControlBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabControlBar.swift; sourceTree = "<group>"; };
 		37AF7AFF1C125D4D009DA251 /* TPAACAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPAACAudioConverter.h; sourceTree = "<group>"; };
 		37AF7B001C125D4D009DA251 /* TPAACAudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPAACAudioConverter.m; sourceTree = "<group>"; };
+		37B742BF1C77C31900E4EDBE /* HelperClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperClasses.swift; sourceTree = "<group>"; };
 		37B934A51C3B4B680001E468 /* ProjectTransitionAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTransitionAnimationController.swift; sourceTree = "<group>"; };
 		37C12DF31B69797300A4E3A3 /* Superpowered3BandEQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Superpowered3BandEQ.h; sourceTree = "<group>"; };
 		37C12DF41B69797300A4E3A3 /* SuperpoweredAdvancedAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperpoweredAdvancedAudioPlayer.h; sourceTree = "<group>"; };
@@ -1402,6 +1404,7 @@
 				37038FC21C6188140043C262 /* CollectionViewLayout.swift */,
 				379882451C0131360029E56C /* HelperData.swift */,
 				379882461C0131360029E56C /* HelperFunctions.swift */,
+				37B742BF1C77C31900E4EDBE /* HelperClasses.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -2275,6 +2278,7 @@
 				3709D5AB1C0E7E6A00491CA7 /* Options.swift in Sources */,
 				37C9F5171C029E2000C80F88 /* ProjectTools.swift in Sources */,
 				3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */,
+				37B742C01C77C31900E4EDBE /* HelperClasses.swift in Sources */,
 				37B934A61C3B4B680001E468 /* ProjectTransitionAnimationController.swift in Sources */,
 				181F79D61C784F2200253252 /* InstrumentCellConfigurator.swift in Sources */,
 				3711F0A31B6FFD9D00C75F2B /* SuperpoweredAudioModule.mm in Sources */,

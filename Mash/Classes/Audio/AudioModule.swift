@@ -61,8 +61,9 @@ class AudioConverter: TPAACAudioConverter {
     class func mixTracks(name: String, tracks: [Track], completion: (exportSession: AVAssetExportSession?) -> ()) {
         let composition: AVMutableComposition = AVMutableComposition()
         var compositionTracks: [AVMutableCompositionTrack] = []
+        var assets: [AVAsset] = []
         
-        // Create track assets and insert into composition
+        // Create track assets
         var maxDuration: CMTime = kCMTimeZero
         for (var i = 0; i < tracks.count; i++) {
             let track: Track = tracks[i]
@@ -70,38 +71,27 @@ class AudioConverter: TPAACAudioConverter {
             let compositionTrack: AVMutableCompositionTrack = composition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID(kCMPersistentTrackID_Invalid))
             compositionTracks.append(compositionTrack)
             let asset: AVAsset = AVURLAsset(URL: NSURL(fileURLWithPath: track.trackURL), options: nil)
-            let tracks: NSArray = asset.tracksWithMediaType(AVMediaTypeAudio)
-            
-            // Check if tracks are valid
-            if tracks.count == 0 {
-                completion(exportSession: nil)
-                return
-            }
-            
-            let clip: AVAssetTrack = tracks.objectAtIndex(0) as! AVAssetTrack
+            assets.append(asset)
             maxDuration = max(maxDuration, asset.duration)
-            do {
-                try compositionTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), ofTrack: clip, atTime: kCMTimeZero)
-            } catch _ {
-                completion(exportSession: nil)
-                return
-            }
         }
         
-        // Loop shorter tracks
-        for (var i = 0; i < compositionTracks.count; i++) {
-            let track = compositionTracks[i]
-            let trackDuration: CMTime = track.asset!.duration
-            var totalDuration: CMTime = track.asset!.duration
-            let compositionTrack: AVMutableCompositionTrack = composition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID(kCMPersistentTrackID_Invalid))
-            let asset: AVAsset = AVURLAsset(URL: NSURL(fileURLWithPath: tracks[i].trackURL))
-            let tracks: NSArray = asset.tracksWithMediaType(AVMediaTypeAudio)
-            let clip: AVAssetTrack = tracks.objectAtIndex(0) as! AVAssetTrack
+        // Insert into composition
+        for (var i = 0; i < tracks.count; i++) {
+            let compositionTrack = compositionTracks[i]
+            let asset: AVAsset = assets[i]
+            let trackDuration: CMTime = asset.duration
+            var totalDuration: CMTime = kCMTimeZero
             
+            
+            // Loop shorter tracks
             while totalDuration + trackDuration <= maxDuration {
                 do {
-                    try compositionTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), ofTrack: clip, atTime: totalDuration)
-                } catch _ {
+                    let shorterAsset: AVAsset = AVURLAsset(URL: NSURL(fileURLWithPath: tracks[i].trackURL))
+                    let tracks: NSArray = shorterAsset.tracksWithMediaType(AVMediaTypeAudio)
+                    let clip: AVAssetTrack = tracks.objectAtIndex(0) as! AVAssetTrack
+                    try compositionTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, shorterAsset.duration), ofTrack: clip, atTime: totalDuration)
+                } catch let error as NSError {
+                    Debug.printl(error, sender: nil)
                     completion(exportSession: nil)
                     return
                 }

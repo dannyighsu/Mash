@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import AVFoundation
 
-class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlayerDelegate, EZAudioFileDelegate,MetronomeDelegate, CustomIOSAlertViewDelegate, UIAlertViewDelegate {
+class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlayerDelegate, EZAudioFileDelegate, EZOutputDelegate, MetronomeDelegate, CustomIOSAlertViewDelegate, UIAlertViewDelegate {
     
     @IBOutlet weak var audioPlot: EZAudioPlotGL!
     @IBOutlet weak var recordButton: UIButton!
@@ -38,7 +38,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var tempoAlert: UIAlertView? = nil
     var timeAlert: UIAlertView? = nil
     var muted: Bool = false
-    var activityView: ActivityView = ActivityView.make()
+    var activityView: ActivityView = ActivityView.createView()
     var coverView: UIView = UIView()
 
     override func viewDidLoad() {
@@ -46,11 +46,24 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         
         self.coverView = UIView(frame: CGRect(x: self.view.frame.minX, y: self.view.frame.minY, width: self.view.frame.size.width, height: self.view.frame.size.height))
         self.coverView.backgroundColor = UIColor.clearColor()
-        self.activityView.titleLabel.text = "Logging In..."
+        self.activityView.setText("Logging In...")
         self.activityView.center = CGPoint(x: self.coverView.center.x, y: self.coverView.center.y - 30.0)
         self.coverView.addSubview(self.activityView)
         self.tabBarController!.view.addSubview(self.coverView)
         self.activityView.startAnimating()
+        
+        // Load AVAudioSession
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
+        } catch let error1 as NSError {
+            Debug.printl("Error setting up session: \(error1.localizedDescription)", sender: self)
+        }
+        do {
+            try session.setActive(true)
+        } catch let error1 as NSError {
+            Debug.printl("Error setting session active: \(error1.localizedDescription)", sender: self)
+        }
         
         // Set up metronome
         let metronome = Metronome.createView()
@@ -74,6 +87,13 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.tempoButton.addTarget(self, action: "showTempo:", forControlEvents: UIControlEvents.TouchUpInside)
         self.metronomeButton.addTarget(self, action: "muteMetronome:", forControlEvents: UIControlEvents.TouchUpInside)
         
+        do {
+            try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
+        } catch let error1 as NSError {
+            Debug.printl("\(error1.localizedDescription)", sender: self)
+            raiseAlert("Error setting up audio.")
+        }
+        
         // Request server address synchronously
         self.requestServerAddress()
     }
@@ -86,6 +106,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         // Set up nav buttons
         self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItemStyle.Plain, target: self, action: "save:")
         self.parentViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Clear", style: UIBarButtonItemStyle.Plain, target: self, action: "clear:")
+        self.navigationController?.navigationBar.tintColor = UIColor.blackColor()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -291,7 +312,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     func showVolume(sender: UIButton) {
         self.stopAll()
         
-        let slider = UISlider(frame: CGRectZero)
+        let slider = ExtUISlider(frame: CGRectZero)
         slider.addTarget(self, action: "volumeDidChange:", forControlEvents: UIControlEvents.ValueChanged)
         slider.value = self.metronome!.tickPlayer!.volume
         
@@ -301,14 +322,14 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         
         let metronomeView = CustomIOSAlertView(frame: CGRectZero)
         metronomeView.buttonTitles = ["Close"]
-        metronomeView.addSubview(slider)
         metronomeView.addSubview(title)
+        metronomeView.addSubview(slider)
         metronomeView.delegate = self
         metronomeView.show()
 
-        slider.frame = CGRect(x: metronomeView.frame.midX, y: metronomeView.frame.midY, width: metronomeView.frame.width/1.5, height: 3.0)
         title.frame = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 30.0)
         title.center = CGPoint(x: metronomeView.center.x, y: metronomeView.center.y - 40.0)
+        slider.frame = CGRect(x: metronomeView.frame.midX, y: metronomeView.frame.midY, width: metronomeView.frame.width/1.5, height: 3.0)
         slider.center = metronomeView.center
         slider.tintColor = lightBlue()
         metronomeView.bringSubviewToFront(title)
@@ -320,7 +341,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.stopAll()
         
         if self.timeAlert == nil {
-            let alert = UIAlertView(title: "Set Time Signature", message: "", delegate: self, cancelButtonTitle: "Close")
+            let alert = UIAlertView(title: "Set Time Signature", message: "", delegate: self, cancelButtonTitle: "OK")
             alert.alertViewStyle = .PlainTextInput
             alert.textFieldAtIndex(0)?.textAlignment = .Center
             alert.textFieldAtIndex(0)?.text = self.timeButton.titleLabel?.text
@@ -341,7 +362,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.stopAll()
         
         if self.tempoAlert == nil {
-            let alert = UIAlertView(title: "Set Tempo", message: "", delegate: self, cancelButtonTitle: "Close")
+            let alert = UIAlertView(title: "Set Tempo", message: "", delegate: self, cancelButtonTitle: "OK")
             alert.alertViewStyle = .PlainTextInput
             alert.textFieldAtIndex(0)?.textAlignment = .Center
             alert.textFieldAtIndex(0)?.text = self.tempoButton.titleLabel?.text
@@ -495,10 +516,14 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         
         server.versionWithRequest(request) {
             (response, error) in
-            if response.outdated {
-                raiseAlert("Version is oudated. Please update.", delegate: self)
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
             } else {
-                self.checkLogin()
+                if response.outdated {
+                    raiseAlert("Version is oudated. Please update.", delegate: self)
+                } else {
+                    self.checkLogin()
+                }
             }
         }
     }
@@ -587,58 +612,5 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasLoginKey")
         NSUserDefaults.standardUserDefaults().synchronize()
     }
-    
-    /*
-    // TableView Delegate
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("SwipeBar") as! SwipeBar
-        let up = UISwipeGestureRecognizer(target: self, action: "showTools:")
-        up.direction = .Up
-        let down = UISwipeGestureRecognizer(target: self, action: "hideTools:")
-        down.direction = .Down
-        header.swipeView.addGestureRecognizer(up)
-        header.swipeView.addGestureRecognizer(down)
-        
-        self.upTap = UITapGestureRecognizer(target: self, action: "showTools:")
-        self.downTap = UITapGestureRecognizer(target: self, action: "hideTools:")
-        self.swipeArrow = header.swipeArrow
-        self.swipeArrow?.addGestureRecognizer(self.upTap!)
-        return header
-    }
-
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 30.0
-    }
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        } else {
-            return 0
-        }
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let metronome = Metronome.createView()
-            metronome.delegate = self
-            metronome.backgroundColor = lightGray()
-            self.metronome = metronome
-            return metronome
-        } else {
-            return UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "Default")
-        }
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 100.0
-        }
-        return 60.0
-    }*/
 
 }

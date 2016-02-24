@@ -16,7 +16,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     var audioPlayer: ProjectPlayer? = nil
     var toolsTap: UITapGestureRecognizer? = nil
     var mixerShowing: Bool = false
-    var activityView: ActivityView = ActivityView.make()
+    var activityView: ActivityView = ActivityView.createView()
     var metronome: Metronome = Metronome.createView()
     var bpm: Int = 120
     var audioModule: AudioModule = AudioModule()
@@ -45,7 +45,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
-        self.activityView.titleLabel.text = "Loading sounds..."
+        self.activityView.setText("Loading sounds...")
         self.activityView.hidden = true
         
         self.metronome.delegate = self
@@ -343,7 +343,16 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 raiseAlert("Error exporting file.", delegate: self)
             } else {
                 Debug.printl("File export of track \(name) completed", sender: self)
-                self.uploadAction(exportSession!.outputURL!, name: name)
+                //self.uploadAction(exportSession!.outputURL!, name: name)
+                dispatch_async(dispatch_get_main_queue()) {
+                    let controller = self.storyboard!.instantiateViewControllerWithIdentifier("UploadViewController") as! UploadViewController
+                    controller.recording = EZAudioFile(URL: exportSession!.outputURL!)
+                    controller.bpm = Int(60.0 / Double(self.metronome.duration))
+                    controller.timeSignature = timeSigIntToString(self.data[0].timeSignature)
+                    controller.titleText = name
+                    controller.instruments = getAllInstrumentFamilies(self.data)
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
             }
         }
         
@@ -487,8 +496,11 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                     let id = Int(response.recid)
                     upload("\(currentUser.userid!)~~\(id).m4a", url: url, bucket: track_bucket)
                     
-                    let waveformKey = "\(currentUser.userid!)~~\(id)_waveform.jpg"
-                    upload(waveformKey, url: filePathURL("\(currentUser.userid!)~~\(self.data[0].id)_waveform.jpg"), bucket: waveform_bucket)
+                    let waveformKey = "\(currentUser.userid!)~~\(id)_waveform.png"
+                    /*if !NSFileManager.defaultManager().fileExistsAtPath(filePathString(waveformKey)) {
+                        NSThread.sleepForTimeInterval(0.5)
+                    }*/
+                    upload(waveformKey, url: filePathURL(waveformKey), bucket: waveform_bucket)
                     let alert = UIAlertView(title: "Success!", message: "Your Mash has been Saved.", delegate: self, cancelButtonTitle: "OK")
                     alert.show()
                 }

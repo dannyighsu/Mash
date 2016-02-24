@@ -34,7 +34,7 @@ class TrackCellConfigurator : CellConfigurator {
     func configureAudioPlot(cell: Track) {
         // Set the placeholder image before the download
         cell.staticAudioPlot.image = UIImage(named: "waveform_static")
-        download(getS3WaveformKey(self.track!), url: NSURL(fileURLWithPath: self.track!.trackURL), bucket: waveform_bucket) {
+        download(getS3WaveformKey(self.track!), url: filePathURL(getS3WaveformKey(self.track!)), bucket: waveform_bucket) {
             (result) in
             dispatch_async(dispatch_get_main_queue()) {
                 if result != nil {

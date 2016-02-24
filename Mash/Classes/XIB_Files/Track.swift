@@ -24,6 +24,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
     var userText: String = ""
     var trackURL: String = ""
     var bpm: Int = 0
+    var timeSignature: Int = 0
     var format: String = ""
     var id: Int = 0
     var audioFile: EZAudioFile? = nil
@@ -33,6 +34,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
     var likeCount: Int = 0
     var mashCount: Int = 0
     var staticAudioPlotImage: UIImage!
+    var liked: Bool = false
     
     convenience init(frame: CGRect, instruments: [String], titleText: String) {
         self.init(frame: frame)
@@ -40,7 +42,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         self.titleText = titleText
     }
 
-    convenience init(frame: CGRect, recid: Int, userid: Int, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, trackURL: String, user: String, format: String, time: String, playCount: Int, likeCount: Int, mashCount: Int) {
+    convenience init(frame: CGRect, recid: Int, userid: Int, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, timeSignature: Int, trackURL: String, user: String, format: String, time: String, playCount: Int, likeCount: Int, mashCount: Int, liked: Bool) {
         self.init(frame: frame)
         self.instruments = instruments
         self.id = recid
@@ -49,12 +51,36 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         self.titleText = titleText
         self.trackURL = trackURL
         self.bpm = bpm
+        self.timeSignature = timeSignature
         self.userText = user
         self.format = format
         self.time = time
         self.playCount = playCount
         self.likeCount = likeCount
         self.mashCount = mashCount
+        self.liked = liked
+    }
+    
+    func like(sender: UIButton) -> Bool {
+        if self.liked {
+            sendUnlikeRequest(self.id) {
+                (success) in
+                if success {
+                    sender.setImage(UIImage(named: "like"), forState: .Normal)
+                    self.liked = false
+                }
+            }
+            return false
+        } else {
+            sendLikeRequest(self.id) {
+                (success) in
+                if success {
+                    sender.setImage(UIImage(named: "liked"), forState: .Normal)
+                    self.liked = true
+                }
+            }
+            return true
+        }
     }
     
     // Should only be called in the completion block of a download function.
