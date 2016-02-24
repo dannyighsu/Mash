@@ -21,6 +21,11 @@ class ActivityView: UIView {
         activityView.clipsToBounds = true
         activityView.hidden = true
         
+        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+        blurView.frame = activityView.bounds
+        blurView.contentView.backgroundColor = lightBlueTranslucent()
+        activityView.insertSubview(blurView, atIndex: 0)
+        
         return activityView
     }
     

@@ -50,7 +50,12 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewWillDisappear(animated)
         self.navigationItem.setHidesBackButton(true, animated: false)
         self.navigationItem.rightBarButtonItem = nil
-        
+        if self.audioPlayer != nil {
+            self.audioPlayer?.stop()
+        }
+        for audioPlayer in self.projectPlayers {
+            audioPlayer.stop()
+        }
     }
     
     // Table View Delegate

@@ -126,6 +126,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             let cell = tableView.dequeueReusableCellWithIdentifier("Channel") as! Channel
             let trackData = self.data[indexPath.row]
             cell.trackTitle.text = trackData.titleText
+            cell.trackTitle.sizeToFit()
             cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
             cell.track = trackData
             cell.trackNumber = indexPath.row
@@ -194,6 +195,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             }
             
             self.audioPlayer!.audioPlayers.removeAtIndex(indexPath.row)
+            self.audioPlayer!.tracks.removeAtIndex(indexPath.row)
         }
     }
     

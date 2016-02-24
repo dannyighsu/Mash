@@ -125,10 +125,12 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.playCountLabel.text = "\(cell.track!.playCount)"
             cell.likeCountLabel.text = "\(cell.track!.likeCount) likes"
             
+            // TODO: implement comment
+            cell.commentButton.hidden = true
+            
             if cell.track!.liked {
                 cell.likeButton.setImage(UIImage(named: "liked"), forState: .Normal)
             }
-            
             self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
             self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
             cell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)

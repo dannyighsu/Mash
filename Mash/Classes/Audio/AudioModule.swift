@@ -126,7 +126,7 @@ class AudioConverter: TPAACAudioConverter {
         converter.trackid = trackid
         converter.start()
         
-        return result
+        return filePathString("\(newName).wav")
     }
     
     func AACAudioConverter(converter: TPAACAudioConverter!, didFailWithError error: NSError!) {
