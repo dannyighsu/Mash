@@ -11,15 +11,27 @@ import UIKit
 
 class ActivityView: UIView {
     
-    @IBOutlet weak var titleLabel: UITextField!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var activityView: UIActivityIndicatorView!
     
-    class func make() -> ActivityView {
+    class func createView() -> ActivityView {
         let view = NSBundle.mainBundle().loadNibNamed("ActivityView", owner: nil, options: nil)
         let activityView = view[0] as! ActivityView
         activityView.layer.cornerRadius = 8.0
         activityView.clipsToBounds = true
+        activityView.hidden = true
+        
+        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+        blurView.frame = activityView.bounds
+        blurView.contentView.backgroundColor = lightBlueTranslucent()
+        activityView.insertSubview(blurView, atIndex: 0)
+        
         return activityView
+    }
+    
+    func setText(text: String) {
+        self.titleLabel.text = text
+        self.titleLabel.sizeToFit()
     }
     
     func startAnimating() {

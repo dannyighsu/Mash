@@ -20,7 +20,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     var playerTimer: NSTimer? = nil
     var currTrackID: Int = 0
     var user: User = currentUser
-    var activityView: ActivityView = ActivityView.make()
+    var activityView: ActivityView = ActivityView.createView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +41,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
-        self.activityView.titleLabel.text = "Fetching your sounds"
+        self.activityView.setText("Fetching your sounds")
+        self.activityView.titleLabel.sizeToFit()
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
 
@@ -316,7 +317,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             let recid = Int(rec.recid)
             url = filePathString(url)
             
-            let trackData = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: rec.title, bpm: Int(rec.bpm), timeSignature: Int(rec.bar), trackURL: url, user: self.user.handle!, format: rec.format!, time: rec.uploaded, playCount: Int(rec.playCount), likeCount: Int(rec.likeCount), mashCount: Int(rec.likeCount))
+            let trackData = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: rec.title, bpm: Int(rec.bpm), timeSignature: Int(rec.bar), trackURL: url, user: self.user.handle!, format: rec.format!, time: rec.uploaded, playCount: Int(rec.playCount), likeCount: Int(rec.likeCount), mashCount: Int(rec.likeCount), liked: rec.liked)
             
             self.data.append(trackData)
         }

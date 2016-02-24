@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '89508A1377398DF16570EE51'
+               BlueprintIdentifier = 'CBF44BB1490C3703E4C8A11C'
                BlueprintName = 'EZAudio'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libEZAudio.a'>

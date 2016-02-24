@@ -16,7 +16,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     var audioPlayer: ProjectPlayer? = nil
     var toolsTap: UITapGestureRecognizer? = nil
     var mixerShowing: Bool = false
-    var activityView: ActivityView = ActivityView.make()
+    var activityView: ActivityView = ActivityView.createView()
     var metronome: Metronome = Metronome.createView()
     var bpm: Int = 120
     var audioModule: AudioModule = AudioModule()
@@ -45,7 +45,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
-        self.activityView.titleLabel.text = "Loading sounds..."
+        self.activityView.setText("Loading sounds...")
         self.activityView.hidden = true
         
         self.metronome.delegate = self
@@ -126,6 +126,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             let cell = tableView.dequeueReusableCellWithIdentifier("Channel") as! Channel
             let trackData = self.data[indexPath.row]
             cell.trackTitle.text = trackData.titleText
+            cell.trackTitle.sizeToFit()
             cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
             cell.track = trackData
             cell.trackNumber = indexPath.row
@@ -194,6 +195,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             }
             
             self.audioPlayer!.audioPlayers.removeAtIndex(indexPath.row)
+            self.audioPlayer!.tracks.removeAtIndex(indexPath.row)
         }
     }
     

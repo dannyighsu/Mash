@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -13,41 +13,35 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="9vE-fl-qzi">
-                    <rect key="frame" x="65" y="62" width="20" height="20"/>
-                    <animations/>
+                    <rect key="frame" x="65" y="60" width="20" height="20"/>
                 </activityIndicatorView>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="rvj-AW-ZGU">
-                    <rect key="frame" x="8" y="8" width="134" height="46"/>
-                    <animations/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fyK-4r-kUj">
+                    <rect key="frame" x="31" y="11" width="88" height="35"/>
                     <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="95" id="1Dh-3G-SOL"/>
-                        <constraint firstAttribute="height" constant="46" id="g8g-bN-rWX"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="88" id="GYk-4P-wkF"/>
                     </constraints>
-                    <attributedString key="attributedText">
-                        <fragment content="Loading...">
-                            <attributes>
-                                <color key="NSColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                <font key="NSFont" size="15" name="HelveticaNeue-Light"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                    </attributedString>
-                    <textInputTraits key="textInputTraits"/>
-                </textField>
+                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
-            <animations/>
-            <color key="backgroundColor" red="0.78431372549019607" green="0.78431372549019607" blue="0.78431372549019607" alpha="0.84999999999999998" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="rvj-AW-ZGU" firstAttribute="trailing" secondItem="V0F-Ff-dXc" secondAttribute="trailingMargin" id="B3g-jg-rx8"/>
-                <constraint firstItem="rvj-AW-ZGU" firstAttribute="leading" secondItem="V0F-Ff-dXc" secondAttribute="leadingMargin" id="Shy-Fg-ftL"/>
-                <constraint firstItem="9vE-fl-qzi" firstAttribute="top" secondItem="rvj-AW-ZGU" secondAttribute="bottom" constant="8" id="aDt-pW-uBW"/>
-                <constraint firstItem="rvj-AW-ZGU" firstAttribute="centerX" secondItem="9vE-fl-qzi" secondAttribute="centerX" id="etb-MP-6R0"/>
-                <constraint firstItem="9vE-fl-qzi" firstAttribute="bottom" secondItem="V0F-Ff-dXc" secondAttribute="bottomMargin" constant="-10" id="fuS-Oj-ntC"/>
+                <constraint firstItem="fyK-4r-kUj" firstAttribute="centerX" secondItem="V0F-Ff-dXc" secondAttribute="centerX" id="3ZX-Hj-S4r"/>
+                <constraint firstItem="fyK-4r-kUj" firstAttribute="centerX" secondItem="9vE-fl-qzi" secondAttribute="centerX" id="Lds-JD-tUo"/>
+                <constraint firstItem="9vE-fl-qzi" firstAttribute="top" secondItem="fyK-4r-kUj" secondAttribute="bottom" constant="14" id="QU7-Ht-gov"/>
+                <constraint firstItem="fyK-4r-kUj" firstAttribute="top" secondItem="V0F-Ff-dXc" secondAttribute="top" constant="11" id="UKG-WU-ZJR"/>
+                <constraint firstItem="9vE-fl-qzi" firstAttribute="bottom" secondItem="V0F-Ff-dXc" secondAttribute="bottomMargin" constant="-12" id="fuS-Oj-ntC"/>
+                <constraint firstItem="fyK-4r-kUj" firstAttribute="leading" secondItem="V0F-Ff-dXc" secondAttribute="leading" constant="31" id="llg-P8-Xpu"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="llg-P8-Xpu"/>
+                </mask>
+            </variation>
             <connections>
                 <outlet property="activityView" destination="9vE-fl-qzi" id="8YJ-kG-l2f"/>
-                <outlet property="titleLabel" destination="rvj-AW-ZGU" id="rN7-iD-eeT"/>
+                <outlet property="titleLabel" destination="fyK-4r-kUj" id="YEc-VF-lJh"/>
             </connections>
             <point key="canvasLocation" x="342" y="611"/>
         </view>

@@ -38,7 +38,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var tempoAlert: UIAlertView? = nil
     var timeAlert: UIAlertView? = nil
     var muted: Bool = false
-    var activityView: ActivityView = ActivityView.make()
+    var activityView: ActivityView = ActivityView.createView()
     var coverView: UIView = UIView()
 
     override func viewDidLoad() {
@@ -46,7 +46,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         
         self.coverView = UIView(frame: CGRect(x: self.view.frame.minX, y: self.view.frame.minY, width: self.view.frame.size.width, height: self.view.frame.size.height))
         self.coverView.backgroundColor = UIColor.clearColor()
-        self.activityView.titleLabel.text = "Logging In..."
+        self.activityView.setText("Logging In...")
         self.activityView.center = CGPoint(x: self.coverView.center.x, y: self.coverView.center.y - 30.0)
         self.coverView.addSubview(self.activityView)
         self.tabBarController!.view.addSubview(self.coverView)
@@ -106,6 +106,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         // Set up nav buttons
         self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItemStyle.Plain, target: self, action: "save:")
         self.parentViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Clear", style: UIBarButtonItemStyle.Plain, target: self, action: "clear:")
+        self.navigationController?.navigationBar.tintColor = UIColor.blackColor()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -515,10 +516,14 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         
         server.versionWithRequest(request) {
             (response, error) in
-            if response.outdated {
-                raiseAlert("Version is oudated. Please update.", delegate: self)
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: nil)
             } else {
-                self.checkLogin()
+                if response.outdated {
+                    raiseAlert("Version is oudated. Please update.", delegate: self)
+                } else {
+                    self.checkLogin()
+                }
             }
         }
     }

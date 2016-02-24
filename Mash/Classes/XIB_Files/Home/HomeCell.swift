@@ -40,4 +40,14 @@ class HomeCell: UITableViewCell {
         self.track = track
     }
 
+    @IBAction func likeButtonPressed(sender: UIButton) {
+        let liked = self.track!.like(sender)
+        let likeText = self.likeCountLabel.text!
+        let likeCount = likeText.characters.split {$0 == " "}.map(String.init)[0]
+        if liked {
+            self.likeCountLabel.text = "\(Int(likeCount)! + 1) likes"
+        } else {
+            self.likeCountLabel.text = "\(Int(likeCount)! - 1) likes"
+        }
+    }
 }

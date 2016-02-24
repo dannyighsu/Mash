@@ -58,6 +58,11 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="136" id="xdj-5q-ekm"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="xdj-5q-ekm"/>
+                                    </mask>
+                                </variation>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yek-5G-nnW">
                                 <rect key="frame" x="56" y="7" width="46" height="30"/>
@@ -160,6 +165,9 @@
                                         <exclude reference="fc0-ee-xfI"/>
                                     </mask>
                                 </variation>
+                                <connections>
+                                    <action selector="likeButtonPressed:" destination="Non-ho-d3k" eventType="touchUpInside" id="GU6-ka-kcB"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wIc-EV-UDL">
                                 <rect key="frame" x="8" y="206" width="22" height="24"/>
@@ -232,6 +240,7 @@
                                 <exclude reference="ktn-WY-sSv"/>
                                 <exclude reference="BF2-SF-nLG"/>
                                 <exclude reference="aoi-a0-fHK"/>
+                                <exclude reference="75z-j9-Jhg"/>
                                 <exclude reference="PzE-I6-art"/>
                                 <exclude reference="lCc-8M-aqS"/>
                                 <exclude reference="1Yl-Kv-TSg"/>
@@ -268,7 +277,7 @@
                 <outlet property="trackButton" destination="Sxn-4P-2JJ" id="mtB-xw-BOQ"/>
                 <outlet property="userLabel" destination="yek-5G-nnW" id="Qph-WR-6zP"/>
             </connections>
-            <point key="canvasLocation" x="568" y="619"/>
+            <point key="canvasLocation" x="484" y="778"/>
         </tableViewCell>
     </objects>
     <resources>
