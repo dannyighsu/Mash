@@ -84,7 +84,8 @@ class User: UITableViewCell {
     // Update all displays of the view
     // @TODO: @andy: move this to the UserCellConfigurator
     func updateDisplays(shouldShowFollowButton: Bool) {
-        if (shouldShowFollowButton && self.userid != currentUser.userid) {
+        let shouldShowFollowButton = shouldShowFollowButton && self.userid != currentUser.userid
+        if (shouldShowFollowButton) {
             var following = false
             for u in userFollowing {
                 if u.handle! == self.handle {
@@ -100,6 +101,7 @@ class User: UITableViewCell {
                 self.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
             }
         }
+        self.followButton.hidden = !shouldShowFollowButton
         
         if self.nameLabel.titleLabel!.text != self.display_name() {
             self.nameLabel.setTitle(self.display_name(), forState: UIControlState.Normal)

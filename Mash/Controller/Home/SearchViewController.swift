@@ -412,7 +412,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 user.handle = data.handle
                 user.username = data.name
                 user.userid = Int(data.userid)
-                let configurator = UserCellConfigurator(user: user, shouldShowFollowButton: false) 
+                let configurator = UserCellConfigurator(user: user, shouldShowFollowButton: true)
                 self.allSearchResultConfigurators.append(configurator)
                 if i < DEFAULT_DISPLAY_AMOUNT {
                     self.searchResultConfigurators.append(configurator)
