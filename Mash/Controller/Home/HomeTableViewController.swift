@@ -248,20 +248,24 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func playTrack(cell: HomeCell) {
-        download(getS3Key(cell.track!), url: NSURL(fileURLWithPath: cell.track!.trackURL), bucket: track_bucket) {
-            (result) in
-            if result != nil {
-                dispatch_async(dispatch_get_main_queue()) {
-                    do {
-                        try self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: cell.track!.trackURL))
-                        self.audioPlayer!.play()
-                        if self.playerTimer != nil {
-                            self.playerTimer!.invalidate()
+        if self.audioPlayer != nil && self.audioPlayer!.playing {
+            self.audioPlayer!.stop()
+        } else {
+            download(getS3Key(cell.track!), url: NSURL(fileURLWithPath: cell.track!.trackURL), bucket: track_bucket) {
+                (result) in
+                if result != nil {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        do {
+                            try self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: cell.track!.trackURL))
+                            self.audioPlayer!.play()
+                            if self.playerTimer != nil {
+                                self.playerTimer!.invalidate()
+                            }
+                            self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
+                            self.currTrackID = cell.track!.id
+                        } catch _ as NSError {
+                            Debug.printl("Error downloading track", sender: self)
                         }
-                        self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
-                        self.currTrackID = cell.track!.id
-                    } catch _ as NSError {
-                        Debug.printl("Error downloading track", sender: self)
                     }
                 }
             }
