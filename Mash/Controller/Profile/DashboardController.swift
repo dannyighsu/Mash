@@ -167,6 +167,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         } else if indexPath.section == 2 {
             let cell = self.tracks.dequeueReusableCellWithIdentifier("BufferCell")!
             cell.backgroundColor = UIColor.clearColor()
+            cell.selectionStyle = .None
+            cell.userInteractionEnabled = false
             return cell
         }
         return UITableViewCell(style: .Default, reuseIdentifier: nil)
@@ -213,11 +215,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             header.followingCount.text = "    \(self.user.following!)\n    FOLLOWING"
             header.trackCount.text = "    \(self.user.tracks!)\n    TRACKS"
             
-            // Add gradient to banner
-            /*let gradient: CAGradientLayer = CAGradientLayer()
-            gradient.frame = header.bounds
-            gradient.colors = [UIColor.clearColor().CGColor, UIColor.clearColor().CGColor, offWhite().CGColor]
-            header.bannerImage.layer.insertSublayer(gradient, atIndex: 0)*/
             return header
         }
         return nil

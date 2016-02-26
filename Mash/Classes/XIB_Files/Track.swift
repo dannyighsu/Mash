@@ -18,6 +18,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
     @IBOutlet weak var audioPlot: EZAudioPlot!
     @IBOutlet weak var staticAudioPlot: UIImageView!
     @IBOutlet weak var activityView: UIActivityIndicatorView!
+    @IBOutlet weak var menuButton: UIButton!
     var instruments: [String] = []
     var instrumentFamilies: [String] = []
     var titleText: String = ""

@@ -70,13 +70,14 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         if self.instruments.count > 0 {
-            let instrumentsToAdd = self.instruments
+            //let instrumentsToAdd = self.instruments
             self.instruments = []
-            for instrument in instrumentsToAdd {
+            // FIXME: Currently crashes the app due to memory issue
+            /*for instrument in instrumentsToAdd {
                 let indexPath = NSIndexPath(forRow: findInstrument(instrument), inSection: 0)
                 self.instrumentsCollection.selectItemAtIndexPath(indexPath, animated: false, scrollPosition: .Bottom)
                 self.collectionView(self.instrumentsCollection, didSelectItemAtIndexPath: indexPath)
-            }
+            }*/
         }
     }
     
@@ -107,7 +108,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = self.instrumentsCollection.cellForItemAtIndexPath(indexPath) as! InstrumentCell
         self.instruments.append(cell.instrument)
-        cell.layer.borderColor = lightGray().CGColor
+        cell.layer.borderColor = lightBlue().CGColor
         cell.layer.borderWidth = 5.0
     }
     
@@ -228,8 +229,12 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                         if result != nil {
                             dispatch_async(dispatch_get_main_queue()) {
                                 self.recid = Int(response.recid)
+                                if !testing {
+                                    Flurry.logEvent("Recording_Upload", withParameters: ["userid": currentUser.userid!, "instrument": self.instruments])
+                                }
                                 if self.navigationController is RootNavigationController {
                                     let alert = UIAlertView(title: "Success!", message: "Would you like to mash your new sound?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "Yes")
+                                    alert.delegate = self
                                     alert.show()
                                 } else {
                                     self.finish()
@@ -274,11 +279,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func finish() {
-        if !testing {
-            Flurry.logEvent("Recording_Upload", withParameters: ["userid": currentUser.userid!, "instrument": self.instruments])
-        }
-        
-        let track = Track(frame: CGRectZero, recid: self.recid!, userid: currentUser.userid!, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, timeSignature: timeSigStringToInt(self.timeSignature!), trackURL: "\(currentUser.userid!)~~\(recid).m4a", user: currentUser.handle!, format: ".m4a", time: "Just now", playCount: 0, likeCount: 0, mashCount: 0, liked: false)
+        let track = Track(frame: CGRectZero, recid: self.recid!, userid: currentUser.userid!, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, timeSignature: timeSigStringToInt(self.timeSignature!), trackURL: filePathString("\(currentUser.userid!)~~\(recid!).m4a"), user: currentUser.handle!, format: ".m4a", time: "Just now", playCount: 0, likeCount: 0, mashCount: 0, liked: false)
         self.saveWaveform(track)
         
         self.navigationController?.popViewControllerAnimated(true)
@@ -289,15 +290,12 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func mashFinish() {
-        if !testing {
-            Flurry.logEvent("Recording_Upload", withParameters: ["userid": currentUser.userid!, "instrument": self.instruments])
-        }
-        
-        let track = Track(frame: CGRectZero, recid: self.recid!, userid: currentUser.userid!, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, timeSignature: timeSigStringToInt(self.timeSignature!), trackURL: "\(currentUser.userid!)~~\(recid).m4a", user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a", time: "Just now", playCount: 0, likeCount: 0, mashCount: 0, liked: false)
+        let track = Track(frame: CGRectZero, recid: self.recid!, userid: currentUser.userid!, instruments: [], instrumentFamilies: self.instruments, titleText: self.titleTextField.text!, bpm: self.bpm!, timeSignature: timeSigStringToInt(self.timeSignature!), trackURL: filePathString("\(currentUser.userid!)~~\(recid!).m4a"), user: NSUserDefaults.standardUserDefaults().valueForKey("username") as! String, format: ".m4a", time: "Just now", playCount: 0, likeCount: 0, mashCount: 0, liked: false)
         self.saveWaveform(track)
         
+        let navController = self.navigationController
         self.navigationController?.popViewControllerAnimated(false)
-        if self.navigationController is RootNavigationController {
+        if navController is RootNavigationController {
             ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
         }
     }

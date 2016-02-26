@@ -165,4 +165,9 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         }
     }
     
+    // Show menu view
+    func showMenu() {
+        
+    }
+    
 }

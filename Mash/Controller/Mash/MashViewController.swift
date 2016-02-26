@@ -87,7 +87,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         if !self.instruments.contains(cell.instrument) {
             self.instruments.append(cell.instrument)
         }
-        cell.layer.borderColor = lightGray().CGColor
+        cell.layer.borderColor = lightBlue().CGColor
         cell.layer.borderWidth = 5.0
     }
     

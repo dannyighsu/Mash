@@ -161,6 +161,8 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         } else {
             let cell = self.activityFeed.dequeueReusableCellWithIdentifier("BufferCell")!
             cell.backgroundColor = UIColor.clearColor()
+            cell.selectionStyle = .None
+            cell.userInteractionEnabled = false
             return cell
         }
     }
