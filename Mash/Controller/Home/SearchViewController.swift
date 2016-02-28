@@ -73,7 +73,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.setHidesBackButton(true, animated: false)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        //self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     override func viewDidAppear(animated: Bool) {

@@ -69,3 +69,8 @@ func sendTokenRequest() {
         }
     }
 }
+
+func sendPushNotification(userid: Int, message: String) {
+    let request = APNServerRequest()
+    
+}

@@ -801,6 +801,27 @@ typedef GPB_ENUM(DeviceRequest_FieldNumber) {
 
 @end
 
+#pragma mark - APNServerRequest
+
+typedef GPB_ENUM(APNServerRequest_FieldNumber) {
+  APNServerRequest_FieldNumber_Userid = 1,
+  APNServerRequest_FieldNumber_LoginToken = 2,
+  APNServerRequest_FieldNumber_Message = 3,
+};
+
+@interface APNServerRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasUserid;
+@property(nonatomic, readwrite) uint32_t userid;
+
+@property(nonatomic, readwrite) BOOL hasLoginToken;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *loginToken;
+
+@property(nonatomic, readwrite) BOOL hasMessage;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *message;
+
+@end
+
 NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END

@@ -213,6 +213,12 @@ message DeviceRequest {
     required string device_token = 3;
 }
 
+message APNServerRequest {
+    required uint32 userid = 1;
+    required string login_token = 2;
+    required string message = 3;
+}
+
 service MashService {
     rpc Register        (RegisterRequest) returns (RegisterResponse);
     rpc SignIn          (SignInRequest) returns (SignInResponse);
@@ -242,4 +248,5 @@ service MashService {
     rpc UserDevice      (DeviceRequest) returns (SuccessResponse);
     rpc RecordingLikers (RecordingRequest) returns (UserPreviews);
     rpc RecordingAdd    (RecordingRequest) returns (SuccessResponse);
+    rpc APNSend         (APNServerRequest) returns (SuccessResponse);
 }

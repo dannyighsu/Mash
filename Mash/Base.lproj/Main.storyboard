@@ -640,7 +640,7 @@
                                     <color key="titleShadowColor" red="0.48235297199999999" green="0.67450982329999998" blue="0.90196084980000002" alpha="1" colorSpace="deviceRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="cuM-e2-ioQ" kind="show" id="pLL-M1-hVg"/>
+                                    <segue destination="cuM-e2-ioQ" kind="show" identifier="Register" id="pLL-M1-hVg"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="4Ja-I6-gXo">
@@ -662,7 +662,7 @@
                                     <color key="titleShadowColor" red="0.48235297199999999" green="0.67450982329999998" blue="0.90196084980000002" alpha="1" colorSpace="deviceRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="jmm-Gs-5Qj" kind="show" id="xa9-mU-dev"/>
+                                    <segue destination="jmm-Gs-5Qj" kind="show" identifier="Login" id="xa9-mU-dev"/>
                                 </connections>
                             </button>
                             <button opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IY2-kH-oKJ">

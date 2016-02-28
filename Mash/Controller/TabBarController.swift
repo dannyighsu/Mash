@@ -166,8 +166,39 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
     }
     
     // Show menu view
-    func showMenu() {
+    func showMenu(track: Track) {
+        let alertController = UIAlertController(title: "More options", message: nil, preferredStyle: .ActionSheet)
+        let addAction = UIAlertAction(title: "Add to Project", style: .Default, handler: {
+            (action) in
+            ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
+        })
+        var likeAction: UIAlertAction
+        if track.liked {
+            likeAction = UIAlertAction(title: "Unlike", style: .Default, handler: {
+                (action) in
+                track.like(nil)
+            })
+        } else {
+            likeAction = UIAlertAction(title: "Like", style: .Default, handler: {
+                (action) in
+                track.like(nil)
+            })
+        }
+        let reportAction = UIAlertAction(title: "Report", style: .Default, handler: {
+            (action) in
+            //TODO: Report action
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
+            (action) in
+            alertController.dismissViewControllerAnimated(true, completion: nil)
+        })
         
+        alertController.addAction(addAction)
+        alertController.addAction(likeAction)
+        alertController.addAction(reportAction)
+        alertController.addAction(cancelAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
 }

@@ -18,6 +18,7 @@ class ProfileTrack: UITableViewCell, EZAudioFileDelegate {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var activityView: UIActivityIndicatorView!
+    @IBOutlet weak var menuButton: UIButton!
     
     var instruments: [String] = []
     var instrumentFamilies: [String] = []
@@ -29,8 +30,9 @@ class ProfileTrack: UITableViewCell, EZAudioFileDelegate {
     var id: Int = 0
     var audioFile: EZAudioFile? = nil
     var userid: Int = 0
+    var track: Track? = nil
     
-    convenience init(frame: CGRect, recid: Int, userid: Int, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, trackURL: String, user: String, format: String, date: String) {
+    convenience init(frame: CGRect, recid: Int, userid: Int, instruments: [String], instrumentFamilies: [String], titleText: String, bpm: Int, trackURL: String, user: String, format: String, date: String, track: Track) {
         self.init(frame: frame)
         self.instruments = instruments
         self.id = recid
@@ -42,6 +44,11 @@ class ProfileTrack: UITableViewCell, EZAudioFileDelegate {
         self.userText = user
         self.format = format
         self.dateLabel.text = parseTimeStamp(date)
+        self.track = track
+    }
+    
+    @IBAction func menuButtonPressed(sender: AnyObject) {
+        rootTabBarController!.showMenu(self.track!)
     }
     
     // Should only be called in the completion block of a download function.

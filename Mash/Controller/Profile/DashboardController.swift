@@ -147,6 +147,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             track.dateLabel.text = parseTimeStamp(self.data[index].time)
             track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
             track.activityView.startAnimating()
+            track.track = self.data[index]
             
             download(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket) {
                 (result) in
@@ -284,6 +285,18 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         return true
     }
+    
+    // Button targets
+    func addTrack(sender: UIButton) {
+        let trackData = sender.superview!.superview!.superview as! ProfileTrack
+        var track: Track? = nil
+        for t in self.data {
+            if t.id == trackData.id {
+                track = t
+            }
+        }
+        ProjectViewController.importTracks([track!], navigationController: self.navigationController, storyboard: self.storyboard)
+    }
 
     // Track management
     func retrieveTracks() {
@@ -315,6 +328,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             url = filePathString(url)
             
             let trackData = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: rec.title, bpm: Int(rec.bpm), timeSignature: Int(rec.bar), trackURL: url, user: self.user.handle!, format: rec.format!, time: rec.uploaded, playCount: Int(rec.playCount), likeCount: Int(rec.likeCount), mashCount: Int(rec.likeCount), liked: rec.liked)
+            print(rec)
             
             self.data.append(trackData)
         }
@@ -322,17 +336,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             self.tracks.reloadSections(NSIndexSet(index: 1), withRowAnimation: .None)
             self.activityView.stopAnimating()
         }
-    }
-    
-    func addTrack(sender: UIButton) {
-        let trackData = sender.superview!.superview!.superview as! ProfileTrack
-        var track: Track? = nil
-        for t in self.data {
-            if t.id == trackData.id {
-                track = t
-            }
-        }
-        ProjectViewController.importTracks([track!], navigationController: self.navigationController, storyboard: self.storyboard)
     }
     
     func deleteTrack(track: Track, indexPath: NSIndexPath) {
@@ -381,7 +384,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let alert = UIAlertView(title: "Are you Sure?", message: "Delete your account?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "Yes")
         alert.show()
     }
-    
+
     // Profile editing
     func fetchPhotos(type: String) {
         let photoResults = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: nil)

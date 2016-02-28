@@ -357,4 +357,16 @@ static NSString *const kServiceName = @"MashService";
              responseClass:[SuccessResponse class]
         responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
+#pragma mark APNSend(APNServerRequest) returns (SuccessResponse)
+
+- (void)aPNSendWithRequest:(APNServerRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  [[self RPCToAPNSendWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToAPNSendWithRequest:(APNServerRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  return [self RPCToMethod:@"APNSend"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[SuccessResponse class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
 @end

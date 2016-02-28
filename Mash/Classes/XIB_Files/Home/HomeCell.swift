@@ -45,9 +45,19 @@ class HomeCell: UITableViewCell {
         let likeText = self.likeCountLabel.text!
         let likeCount = likeText.characters.split {$0 == " "}.map(String.init)[0]
         if liked {
-            self.likeCountLabel.text = "\(Int(likeCount)! + 1) likes"
+            let newCount = Int(likeCount)! + 1
+            if newCount == 1 {
+                self.likeCountLabel.text = "\(newCount) like"
+            } else {
+                self.likeCountLabel.text = "\(newCount) likes"
+            }
         } else {
-            self.likeCountLabel.text = "\(Int(likeCount)! - 1) likes"
+            let newCount = Int(likeCount)! - 1
+            if newCount == 1 {
+                self.likeCountLabel.text = "\(newCount) like"
+            } else {
+                self.likeCountLabel.text = "\(newCount) likes"
+            }
         }
     }
 }
