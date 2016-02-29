@@ -12,6 +12,8 @@ import AVFoundation
 class HomeTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet var activityFeed: UITableView!
+    @IBOutlet weak var musicImage: UIImageView!
+    @IBOutlet weak var noneText: UILabel!
     var activityData: [HomeCell] = []
     var globalData: [HomeCell] = []
     var displayData: [HomeCell] = []
@@ -35,6 +37,9 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
+        
+        self.musicImage.hidden = true
+        self.noneText.hidden = true
         
         // Home cell and header registration
         let nib = UINib(nibName: "HomeCell", bundle: nil)
@@ -196,6 +201,8 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     // Scope tab
     func didChangeScope(sender: UISegmentedControl) {
         self.currentScope = sender.selectedSegmentIndex
+        self.musicImage.hidden = true
+        self.noneText.hidden = true
         if self.currentScope == 0 {
             if self.activityData.count > 0 {
                 for i in 0...DEFAULT_DISPLAY_AMOUNT {
@@ -375,6 +382,11 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         data = []
         self.displayData = []
+        
+        if response.storyArray.count == 0 {
+            self.musicImage.hidden = false
+            self.noneText.hidden = false
+        }
         
         if response.storyArray.count != 0 {
             for i in 0...response.storyArray.count - 1 {

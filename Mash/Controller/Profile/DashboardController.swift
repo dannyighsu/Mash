@@ -328,7 +328,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             url = filePathString(url)
             
             let trackData = Track(frame: CGRectZero, recid: recid, userid: self.user.userid!, instruments: instruments as! [String], instrumentFamilies: families as! [String], titleText: rec.title, bpm: Int(rec.bpm), timeSignature: Int(rec.bar), trackURL: url, user: self.user.handle!, format: rec.format!, time: rec.uploaded, playCount: Int(rec.playCount), likeCount: Int(rec.likeCount), mashCount: Int(rec.likeCount), liked: rec.liked)
-            print(rec)
             
             self.data.append(trackData)
         }

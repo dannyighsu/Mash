@@ -369,4 +369,16 @@ static NSString *const kServiceName = @"MashService";
              responseClass:[SuccessResponse class]
         responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
+#pragma mark ReportRecording(ReportRecRequest) returns (SuccessResponse)
+
+- (void)reportRecordingWithRequest:(ReportRecRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  [[self RPCToReportRecordingWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToReportRecordingWithRequest:(ReportRecRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  return [self RPCToMethod:@"ReportRecording"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[SuccessResponse class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
 @end

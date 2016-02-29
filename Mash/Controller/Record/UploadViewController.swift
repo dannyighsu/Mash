@@ -205,11 +205,14 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         request.feel = 0
         request.solo = true
         request.format = ".m4a"
-        
+
         self.activityView.startAnimating()
         
         server.recordingUploadWithRequest(request) {
             (response, error) in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityView.stopAnimating()
+            }
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)
                 if error.code == 13 {
@@ -222,7 +225,6 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                 }
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.activityView.stopAnimating()
                     let key = "\(currentUser.userid!)~~\(response.recid).m4a"
                     upload(key, url: self.recording!.url, bucket: track_bucket) {
                         (result) in

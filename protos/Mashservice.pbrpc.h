@@ -210,6 +210,13 @@
 - (ProtoRPC *)RPCToAPNSendWithRequest:(APNServerRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
 
 
+#pragma mark ReportRecording(ReportRecRequest) returns (SuccessResponse)
+
+- (void)reportRecordingWithRequest:(ReportRecRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToReportRecordingWithRequest:(ReportRecRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+
 @end
 
 // Basic service implementation, over gRPC, that only does marshalling and parsing.

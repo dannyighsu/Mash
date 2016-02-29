@@ -806,7 +806,8 @@ typedef GPB_ENUM(DeviceRequest_FieldNumber) {
 typedef GPB_ENUM(APNServerRequest_FieldNumber) {
   APNServerRequest_FieldNumber_Userid = 1,
   APNServerRequest_FieldNumber_LoginToken = 2,
-  APNServerRequest_FieldNumber_Message = 3,
+  APNServerRequest_FieldNumber_QueryUserid = 3,
+  APNServerRequest_FieldNumber_Message = 4,
 };
 
 @interface APNServerRequest : GPBMessage
@@ -816,6 +817,34 @@ typedef GPB_ENUM(APNServerRequest_FieldNumber) {
 
 @property(nonatomic, readwrite) BOOL hasLoginToken;
 @property(nonatomic, readwrite, copy, null_resettable) NSString *loginToken;
+
+@property(nonatomic, readwrite) BOOL hasQueryUserid;
+@property(nonatomic, readwrite) uint32_t queryUserid;
+
+@property(nonatomic, readwrite) BOOL hasMessage;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *message;
+
+@end
+
+#pragma mark - ReportRecRequest
+
+typedef GPB_ENUM(ReportRecRequest_FieldNumber) {
+  ReportRecRequest_FieldNumber_Userid = 1,
+  ReportRecRequest_FieldNumber_LoginToken = 2,
+  ReportRecRequest_FieldNumber_Recid = 3,
+  ReportRecRequest_FieldNumber_Message = 4,
+};
+
+@interface ReportRecRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasUserid;
+@property(nonatomic, readwrite) uint32_t userid;
+
+@property(nonatomic, readwrite) BOOL hasLoginToken;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *loginToken;
+
+@property(nonatomic, readwrite) BOOL hasRecid;
+@property(nonatomic, readwrite) uint32_t recid;
 
 @property(nonatomic, readwrite) BOOL hasMessage;
 @property(nonatomic, readwrite, copy, null_resettable) NSString *message;

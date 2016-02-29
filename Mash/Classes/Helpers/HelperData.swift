@@ -78,7 +78,7 @@ var instrumentArray: [String: [String]] = [
     "Brass": ["", "French Horn", "Trombone", "Trumpet", "Tuba"],
     "Woodwinds": ["", "Saxophone", "Flute", "Piccolo", "Oboe", "English Horn", "Bassoon", "Clarinet", "Harmonia", "Accordians"],
     "Percussion": ["", "Electronic", "Cajon", "Drum Kit", "Triangle", "Snare", "Bass Drum", "Bongo", "Tamborine", "Darbuka"],
-    "Tuned Percussion": ["", "Xylophone", "Vibraphone", "Marimba"],
+    "Tuned_Percussion": ["", "Xylophone", "Vibraphone", "Marimba"],
     "Electronic": ["", "Synth Lead", "Synth Bass", "Synth Pad", "Synth Brass", "Gated Synth", "Other"],
     "Strings": ["", "Violin", "Voila", "Cello", "Ukulele", "Harp", "Sitar", "Banjo", "Lyre", "Upright Bass", "Mandolin"],
     "Other": ["", "Other"]
@@ -87,7 +87,7 @@ var instrumentArray: [String: [String]] = [
 // Lists all genres
 var genreArray: [String: [String]] = [
     "Blues": ["", "Blues Rock", "Acoustic Blues", "Classic Blues"],
-    "Country": ["", "Bluegrass", "Country Folk", "Country_Rock", "Cowboy"],
+    "Country": ["", "Bluegrass", "Country Folk", "Country Rock", "Cowboy"],
     "EDM/Electronic": ["", "House", "Trance", "Trap", "Electro", "Hard Style", "Ambient", "Dub Step", "Electronica", "Experimental"],
     "Hip-Hop/Rap": ["", "Rap"],
     "Jazz": ["", "Swing", "Bebop", "Big Band", "Contemporary Jazz", "Ragtime", "Slow Jazz", "Latin Jazz", "Bossa Nova"],
