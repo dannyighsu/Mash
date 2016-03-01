@@ -275,6 +275,18 @@ func raiseAlert(input: String, delegate: UIViewController, message: String) {
     }
 }
 
+// Get cell
+// TODO: abstract to all types
+func getUserCell(input: UIButton) -> User {
+    if input.superview as? User != nil {
+        return input.superview as! User
+    } else if input.superview!.superview as? User != nil {
+        return input.superview!.superview as! User
+    } else {
+        return input.superview!.superview!.superview as! User
+    }
+}
+
 // Save view as UIImage
 func takeShotOfView(view: UIView) -> UIImage {
     UIGraphicsBeginImageContext(CGSizeMake(view.frame.size.width, view.frame.size.height))

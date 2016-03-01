@@ -40,7 +40,7 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = self.users.dequeueReusableCellWithIdentifier("User") as! User
         let follower = self.data[indexPath.row]
-        cell.nameLabel?.setTitle(follower.display_name(), forState: UIControlState.Normal)
+        cell.nameLabel?.setTitle(follower.displayName(), forState: UIControlState.Normal)
         cell.handle = follower.handle
         cell.userid = follower.userid
         cell.username = follower.username
@@ -95,16 +95,6 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func unfollow(sender: UIButton) {
         User.unfollowUser(getUserCell(sender), target: self)
-    }
-    
-    func getUserCell(input: UIButton) -> User {
-        if input.superview as? User != nil {
-            return input.superview as! User
-        } else if input.superview!.superview as? User != nil {
-            return input.superview!.superview as! User
-        } else {
-            return input.superview!.superview!.superview as! User
-        }
     }
     
     func getUserFollowing(user: User, type: String) {

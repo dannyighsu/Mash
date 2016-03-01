@@ -136,13 +136,34 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 }
                 return track
             } else {
-                let user = self.tableView.dequeueReusableCellWithIdentifier("User", forIndexPath: indexPath) as! User
+                let cell = self.tableView.dequeueReusableCellWithIdentifier("User", forIndexPath: indexPath) as! User
                 let userData = self.searchResults[indexPath.row] as! User
-                user.handle = userData.handle
-                user.username = userData.username
-                user.userid = userData.userid
-                user.updateDisplays()
-                return user
+                //user.updateDisplays()
+                cell.nameLabel?.setTitle(userData.displayName(), forState: UIControlState.Normal)
+                cell.handle = userData.handle
+                cell.userid = userData.userid
+                cell.username = userData.username
+                cell.setProfilePic(cell.profilePicture!)
+                cell.profilePicture?.layer.cornerRadius = cell.profilePicture!.frame.size.width / 2
+                cell.profilePicture?.layer.borderWidth = 1.0
+                cell.profilePicture?.layer.masksToBounds = true
+                cell.bringSubviewToFront(cell.followButton)
+                var following: Bool = false
+                for u in userFollowing {
+                    if u.handle! == cell.handle! {
+                        following = true
+                    }
+                }
+                if cell.userid == currentUser.userid {
+                    cell.followButton.hidden = true
+                } else if following {
+                    cell.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
+                    cell.followButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
+                    cell.followButton.backgroundColor = lightGray()
+                } else {
+                    cell.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
+                }
+                return cell
             }
         } else {
             let cell = SuggestionCell(style: UITableViewCellStyle.Default, reuseIdentifier: "SuggestionCell")
@@ -224,6 +245,14 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             sendPlayRequest(self.currTrackID)
             sender.invalidate()
         }
+    }
+    
+    func follow(sender: UIButton) {
+        User.followUser(getUserCell(sender), target: self)
+    }
+    
+    func unfollow(sender: UIButton) {
+        User.unfollowUser(getUserCell(sender), target: self)
     }
     
     // Text Field Delegate

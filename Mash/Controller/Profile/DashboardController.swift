@@ -201,7 +201,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             blurView.contentView.backgroundColor = lightGrayTranslucent()
             header.informationView.insertSubview(blurView, atIndex: 0)
             
-            header.editButton.setTitle(self.user.display_name(), forState: .Normal)
+            header.editButton.setTitle(self.user.displayName(), forState: .Normal)
             // TODO: implement
             header.locationButton.setTitle(self.user.handle!, forState: .Normal)
             

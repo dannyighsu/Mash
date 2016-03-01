@@ -41,10 +41,10 @@ class User: UITableViewCell {
         self.following = following
         self.tracks = tracks
         self.userDescription = description
-        self.nameLabel.titleLabel?.text = self.display_name()
+        self.nameLabel.titleLabel?.text = self.displayName()
     }
     
-    func display_name() -> String? {
+    func displayName() -> String? {
         if (self.username!).characters.count == 0 {
             return self.handle
         }
@@ -83,8 +83,8 @@ class User: UITableViewCell {
     
     // Update all displays of the view
     func updateDisplays() {
-        if self.nameLabel.titleLabel!.text != self.display_name() {
-            self.nameLabel.setTitle(self.display_name(), forState: UIControlState.Normal)
+        if self.nameLabel.titleLabel!.text != self.displayName() {
+            self.nameLabel.setTitle(self.displayName(), forState: UIControlState.Normal)
         }
         var following = false
         for u in userFollowing {
@@ -165,7 +165,7 @@ class User: UITableViewCell {
                 dispatch_async(dispatch_get_main_queue()) {
                     if controller != nil && controller!.tracks.headerViewForSection(0) != nil {
                         let profile = controller!.tracks.headerViewForSection(0) as! Profile
-                        profile.editButton.setTitle(currentUser.display_name()!, forState: .Normal)
+                        profile.editButton.setTitle(currentUser.displayName()!, forState: .Normal)
                         currentUser.setProfilePic(profile.profilePic)
                         currentUser.setBannerPic(profile.bannerImage)
                         //profile.descriptionLabel.text = currentUser.userDescription
@@ -193,7 +193,7 @@ class User: UITableViewCell {
                 Debug.printl("Error: \(error)", sender: "user")
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
-                    sendPushNotification(user.userid!, message: "\(currentUser.handle) just followed you!")
+                    sendPushNotification(user.userid!, message: "\(currentUser.handle!) just followed you!")
                     userFollowing.append(user)
                     Debug.printl("Followed user \(user.handle!)", sender: nil)
                     if user.followButton != nil {
@@ -219,11 +219,12 @@ class User: UITableViewCell {
                 Debug.printl("Error: \(error)", sender: "user")
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
-                    if userFollowing.count != 0 {
+                    if userFollowing.count > 0 {
                         for i in 0...userFollowing.count - 1 {
                             if user.userid == userFollowing[i].userid {
                                 userFollowing.removeAtIndex(i)
                                 Debug.printl("Unfollowed user \(user.handle!)", sender: nil)
+                                break
                             }
                         }
                     }

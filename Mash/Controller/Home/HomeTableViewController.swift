@@ -128,7 +128,11 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.userLabel.addTarget(self, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
             cell.playButton.addTarget(self, action: "playButton:", forControlEvents: .TouchUpInside)
             cell.playCountLabel.text = "\(cell.track!.playCount)"
-            cell.likeCountLabel.text = "\(cell.track!.likeCount) likes"
+            if cell.track!.likeCount == 1 {
+                cell.likeCountLabel.text = "\(cell.track!.likeCount) like"
+            } else {
+                cell.likeCountLabel.text = "\(cell.track!.likeCount) likes"
+            }
             
             // TODO: implement comment
             cell.commentButton.hidden = true

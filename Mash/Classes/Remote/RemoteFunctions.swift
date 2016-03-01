@@ -22,7 +22,7 @@ func sendPlayRequest(trackid: Int) {
     }
 }
 
-func sendLikeRequest(trackid: Int, completion: (success: Bool) -> Void) {
+func sendLikeRequest(queryUserId: Int, trackid: Int, trackName: String, completion: (success: Bool) -> Void) {
     let request = RecordingRequest()
     request.loginToken = currentUser.loginToken
     request.userid = UInt32(currentUser.userid!)
@@ -34,6 +34,7 @@ func sendLikeRequest(trackid: Int, completion: (success: Bool) -> Void) {
             Debug.printl(error, sender: "helpers")
             completion(success: false)
         }
+        sendPushNotification(queryUserId, message: "\(currentUser.handle!) just liked your sound \(trackName)!")
         completion(success: true)
     }
 }
@@ -66,7 +67,7 @@ func sendTokenRequest() {
             Debug.printl(error, sender: "helpers")
             // TODO: Add a direct link to notification center
             if !testing {
-                Flurry.logError("\(error.code)", message: "Device token registration invalid", error: error)
+                Flurry.logError("\(error.code)", message: "Device token registration invalid: \(error)", error: error)
             }
         }
     }
@@ -78,15 +79,15 @@ func sendPushNotification(userid: Int, message: String) {
     request.loginToken = currentUser.loginToken!
     request.queryUserid = UInt32(userid)
     request.message = message
-    
     server.aPNSendWithRequest(request) {
         (response, error) in
         if error != nil {
-            Debug.printl("Error sending push notification", sender: nil)
+            Debug.printl("Error sending push notification: \(error)", sender: nil)
             if !testing {
                 Flurry.logError("\(error.code)", message: "Error sending push notification", error: error)
             }
         }
+        Debug.printl(response, sender: nil)
     }
 }
 
@@ -104,7 +105,7 @@ func sendReportRequest(message: String?, trackid: Int) {
     server.reportRecordingWithRequest(request) {
         (responser, error) in
         if error != nil {
-            Debug.printl("Error sending recording report.", sender: nil)
+            Debug.printl("Error sending recording report: \(error).", sender: nil)
         } else {
             raiseAlert("Thank you", message: "We will review your report shortly.")
         }

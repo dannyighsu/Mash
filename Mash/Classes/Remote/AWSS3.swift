@@ -23,10 +23,10 @@ func download(key: String, url: NSURL, bucket: String) {
         (task: AWSTask!) -> AnyObject! in
         if (task.error != nil) {
             if task.error.domain == AWSS3TransferManagerErrorDomain {
-                Debug.printl("Download Error: \(task.error)", sender: "helpers")
+                Debug.printl("Download Error for \(key), url \(url): \(task.error)", sender: "helpers")
                 return nil
             } else {
-                Debug.printl("Download Error: \(task.error)", sender: "helpers")
+                Debug.printl("Download Error for \(key), url \(url): \(task.error)", sender: "helpers")
             }
         } else if (task.result != nil) {
             let downloadOutput: AWSS3TransferManagerDownloadOutput = task.result as! AWSS3TransferManagerDownloadOutput
@@ -51,9 +51,9 @@ func download(key: String, url: NSURL, bucket: String, completion: (result: AWSS
         (task: AWSTask!) -> AnyObject! in
         if (task.error != nil) {
             if task.error.domain == AWSS3TransferManagerErrorDomain {
-                Debug.printl("Download Error: \(task.error)", sender: "helpers")
+                Debug.printl("Download Error for \(key), url \(url): \(task.error)", sender: "helpers")
             } else {
-                Debug.printl("Download Error: \(task.error)", sender: "helpers")
+                Debug.printl("Download Error for \(key), url \(url): \(task.error)", sender: "helpers")
             }
             completion(result: nil)
         } else if (task.result != nil) {
