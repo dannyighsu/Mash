@@ -78,7 +78,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
             }
             return false
         } else {
-            sendLikeRequest(self.id) {
+            sendLikeRequest(self.userid, trackid: self.id, trackName: self.titleText) {
                 (success) in
                 if success {
                     if sender != nil {
