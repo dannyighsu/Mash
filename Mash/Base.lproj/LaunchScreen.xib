@@ -11,7 +11,7 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_white" translatesAutoresizingMaskIntoConstraints="NO" id="efo-po-bhu">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="efo-po-bhu">
                     <rect key="frame" x="133" y="129" width="215" height="221"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="221" id="BAJ-N0-ZwT"/>
@@ -30,6 +30,6 @@
         </view>
     </objects>
     <resources>
-        <image name="logo_white" width="512" height="512"/>
+        <image name="logo" width="512" height="512"/>
     </resources>
 </document>

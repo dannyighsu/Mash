@@ -13,6 +13,7 @@ class ActivityView: UIView {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var activityView: UIActivityIndicatorView!
+    var timer: NSTimer = NSTimer()
     
     class func createView() -> ActivityView {
         let view = NSBundle.mainBundle().loadNibNamed("ActivityView", owner: nil, options: nil)
@@ -35,13 +36,18 @@ class ActivityView: UIView {
     }
     
     func startAnimating() {
-        self.hidden = false
         self.activityView.startAnimating()
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "showSpinner:", userInfo: nil, repeats: false)
     }
     
     func stopAnimating() {
+        self.timer.invalidate()
         self.hidden = true
         self.activityView.startAnimating()
+    }
+    
+    func showSpinner(sender: NSTimer) {
+        self.hidden = false
     }
 
 }

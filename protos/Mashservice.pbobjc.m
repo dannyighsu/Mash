@@ -2694,5 +2694,185 @@ typedef struct DeviceRequest__storage_ {
 
 @end
 
+#pragma mark - APNServerRequest
+
+@implementation APNServerRequest
+
+@dynamic hasUserid, userid;
+@dynamic hasLoginToken, loginToken;
+@dynamic hasQueryUserid, queryUserid;
+@dynamic hasMessage, message;
+
+typedef struct APNServerRequest__storage_ {
+  uint32_t _has_storage_[1];
+  uint32_t userid;
+  uint32_t queryUserid;
+  NSString *loginToken;
+  NSString *message;
+} APNServerRequest__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "userid",
+        .number = APNServerRequest_FieldNumber_Userid,
+        .hasIndex = 0,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(APNServerRequest__storage_, userid),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "loginToken",
+        .number = APNServerRequest_FieldNumber_LoginToken,
+        .hasIndex = 1,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(APNServerRequest__storage_, loginToken),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "queryUserid",
+        .number = APNServerRequest_FieldNumber_QueryUserid,
+        .hasIndex = 2,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(APNServerRequest__storage_, queryUserid),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "message",
+        .number = APNServerRequest_FieldNumber_Message,
+        .hasIndex = 3,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(APNServerRequest__storage_, message),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[APNServerRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(APNServerRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - ReportRecRequest
+
+@implementation ReportRecRequest
+
+@dynamic hasUserid, userid;
+@dynamic hasLoginToken, loginToken;
+@dynamic hasRecid, recid;
+@dynamic hasMessage, message;
+
+typedef struct ReportRecRequest__storage_ {
+  uint32_t _has_storage_[1];
+  uint32_t userid;
+  uint32_t recid;
+  NSString *loginToken;
+  NSString *message;
+} ReportRecRequest__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "userid",
+        .number = ReportRecRequest_FieldNumber_Userid,
+        .hasIndex = 0,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(ReportRecRequest__storage_, userid),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "loginToken",
+        .number = ReportRecRequest_FieldNumber_LoginToken,
+        .hasIndex = 1,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(ReportRecRequest__storage_, loginToken),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "recid",
+        .number = ReportRecRequest_FieldNumber_Recid,
+        .hasIndex = 2,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(ReportRecRequest__storage_, recid),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "message",
+        .number = ReportRecRequest_FieldNumber_Message,
+        .hasIndex = 3,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(ReportRecRequest__storage_, message),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[ReportRecRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(ReportRecRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 
 // @@protoc_insertion_point(global_scope)

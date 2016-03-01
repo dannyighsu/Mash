@@ -12,6 +12,8 @@ import AVFoundation
 class HomeTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet var activityFeed: UITableView!
+    @IBOutlet weak var musicImage: UIImageView!
+    @IBOutlet weak var noneText: UILabel!
     var activityData: [HomeCell] = []
     var globalData: [HomeCell] = []
     var displayData: [HomeCell] = []
@@ -35,6 +37,9 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
+        
+        self.musicImage.hidden = true
+        self.noneText.hidden = true
         
         // Home cell and header registration
         let nib = UINib(nibName: "HomeCell", bundle: nil)
@@ -161,6 +166,8 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         } else {
             let cell = self.activityFeed.dequeueReusableCellWithIdentifier("BufferCell")!
             cell.backgroundColor = UIColor.clearColor()
+            cell.selectionStyle = .None
+            cell.userInteractionEnabled = false
             return cell
         }
     }
@@ -194,6 +201,8 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     // Scope tab
     func didChangeScope(sender: UISegmentedControl) {
         self.currentScope = sender.selectedSegmentIndex
+        self.musicImage.hidden = true
+        self.noneText.hidden = true
         if self.currentScope == 0 {
             if self.activityData.count > 0 {
                 for i in 0...DEFAULT_DISPLAY_AMOUNT {
@@ -248,20 +257,24 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func playTrack(cell: HomeCell) {
-        download(getS3Key(cell.track!), url: NSURL(fileURLWithPath: cell.track!.trackURL), bucket: track_bucket) {
-            (result) in
-            if result != nil {
-                dispatch_async(dispatch_get_main_queue()) {
-                    do {
-                        try self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: cell.track!.trackURL))
-                        self.audioPlayer!.play()
-                        if self.playerTimer != nil {
-                            self.playerTimer!.invalidate()
+        if self.audioPlayer != nil && self.audioPlayer!.playing {
+            self.audioPlayer!.stop()
+        } else {
+            download(getS3Key(cell.track!), url: NSURL(fileURLWithPath: cell.track!.trackURL), bucket: track_bucket) {
+                (result) in
+                if result != nil {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        do {
+                            try self.audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: cell.track!.trackURL))
+                            self.audioPlayer!.play()
+                            if self.playerTimer != nil {
+                                self.playerTimer!.invalidate()
+                            }
+                            self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
+                            self.currTrackID = cell.track!.id
+                        } catch _ as NSError {
+                            Debug.printl("Error downloading track", sender: self)
                         }
-                        self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
-                        self.currTrackID = cell.track!.id
-                    } catch _ as NSError {
-                        Debug.printl("Error downloading track", sender: self)
                     }
                 }
             }
@@ -369,6 +382,11 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         data = []
         self.displayData = []
+        
+        if response.storyArray.count == 0 {
+            self.musicImage.hidden = false
+            self.noneText.hidden = false
+        }
         
         if response.storyArray.count != 0 {
             for i in 0...response.storyArray.count - 1 {

@@ -18,6 +18,7 @@ class Track: UITableViewCell, EZAudioFileDelegate {
     @IBOutlet weak var audioPlot: EZAudioPlot!
     @IBOutlet weak var staticAudioPlot: UIImageView!
     @IBOutlet weak var activityView: UIActivityIndicatorView!
+    @IBOutlet weak var menuButton: UIButton!
     var instruments: [String] = []
     var instrumentFamilies: [String] = []
     var titleText: String = ""
@@ -60,12 +61,18 @@ class Track: UITableViewCell, EZAudioFileDelegate {
         self.liked = liked
     }
     
-    func like(sender: UIButton) -> Bool {
+    @IBAction func menuButtonPressed(sender: AnyObject) {
+        rootTabBarController!.showMenu(self)
+    }
+    
+    func like(sender: UIButton?) -> Bool {
         if self.liked {
             sendUnlikeRequest(self.id) {
                 (success) in
                 if success {
-                    sender.setImage(UIImage(named: "like"), forState: .Normal)
+                    if sender != nil {
+                        sender!.setImage(UIImage(named: "like"), forState: .Normal)
+                    }
                     self.liked = false
                 }
             }
@@ -74,7 +81,9 @@ class Track: UITableViewCell, EZAudioFileDelegate {
             sendLikeRequest(self.id) {
                 (success) in
                 if success {
-                    sender.setImage(UIImage(named: "liked"), forState: .Normal)
+                    if sender != nil {
+                        sender!.setImage(UIImage(named: "liked"), forState: .Normal)
+                    }
                     self.liked = true
                 }
             }

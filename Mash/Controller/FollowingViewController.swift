@@ -30,6 +30,11 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.activityView.startAnimating()
+        if self.type == "followers" {
+            self.navigationItem.title = "Your Followers"
+        } else {
+            self.navigationItem.title = "Following"
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

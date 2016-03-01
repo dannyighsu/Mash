@@ -142,48 +142,6 @@ class User: UITableViewCell {
                 }
             }
         }
-        
-        /*
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = currentUser.handle
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/user")!)
-        var params = ["handle": handle!, "password_hash": passwordHash, "userid": "\(currentUser.userid!)", "query_name": input.handle!] as Dictionary
-        httpPost(params, request) {
-            (data, statusCode, error) -> Void in
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: nil)
-            } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("HTTP Error: \(error)", sender: nil)
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    
-                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        var error: NSError? = nil
-                        var data = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary
-                        
-                        var dict = data["user"] as! NSDictionary
-                        input.handle = dict["handle"] as? String
-                        input.username = dict["name"] as? String
-                        input.userDescription = dict["description"] as? String
-                        input.followers = String(dict["followers"] as! Int)
-                        input.following = String(dict["following"] as! Int)
-                        input.tracks = String(dict["track_count"] as! Int)
-                        input.bannerPicKey = "\(input.handle!)~~banner.jpg"
-                        input.profilePicKey = "\(input.handle!)~~profile_pic.jpg"
-
-                        let controller = storyboard.instantiateViewControllerWithIdentifier("DashboardController") as! DashboardController
-                        controller.user = input
-                        navigationController.pushViewController(controller, animated: true)
-                    }
-                } else if statusCode == HTTP_SERVER_ERROR {
-                    Debug.printl("Internal server error.", sender: nil)
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: nil)
-                }
-            }
-        }*/
     }
     
     class func updateSelf(controller: DashboardController?) {
@@ -221,57 +179,6 @@ class User: UITableViewCell {
                 }
             }
         }
-        /*
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = currentUser.handle
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/retrieve/user")!)
-        var params = ["handle": handle!, "password_hash": passwordHash, "userid": "\(currentUser.userid!)", "query_name": "\(currentUser.handle!)"] as Dictionary
-        httpPost(params, request) {
-            (data, statusCode, error) -> Void in
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: nil)
-            } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("HTTP Error: \(error)", sender: nil)
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    
-                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        var error: NSError? = nil
-                        var data = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary
-                        
-                        var dict = data["user"] as! NSDictionary
-                        currentUser.handle = dict["handle"] as? String
-                        currentUser.username = dict["name"] as? String
-                        currentUser.userDescription = dict["description"] as? String
-                        currentUser.followers = String(dict["followers"] as! Int)
-                        currentUser.following = String(dict["following"] as! Int)
-                        currentUser.tracks = String(dict["track_count"] as! Int)
-                        currentUser.bannerPicKey = "\(currentUser.handle!)~~banner.jpg"
-                        currentUser.profilePicKey = "\(currentUser.handle!)~~profile_pic.jpg"
-                        
-                        if controller != nil {
-                            controller!.parentViewController?.navigationItem.title! = currentUser.display_name()!
-                            let profile = controller!.tracks.headerViewForSection(0) as! Profile
-                            currentUser.setProfilePic(profile.profilePic)
-                            currentUser.setBannerPic(profile.bannerImage)
-                            profile.descriptionLabel.text = currentUser.userDescription
-                            var followers = NSMutableAttributedString(string: "  \(currentUser.followers!)\n  FOLLOWERS")
-                            profile.followerCount.attributedText = followers
-                            var following = NSMutableAttributedString(string: "  \(currentUser.following!)\n  FOLLOWING")
-                            profile.followingCount.attributedText = following
-                            var tracks = NSMutableAttributedString(string: "  \(currentUser.tracks!)\n  TRACKS")
-                            profile.trackCount.attributedText = tracks
-                        }
-                    }
-                } else if statusCode == HTTP_SERVER_ERROR {
-                    Debug.printl("Internal server error.", sender: nil)
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: nil)
-                }
-            }
-        }*/
     }
     
     class func followUser(user: User, target: AnyObject) {
@@ -286,46 +193,18 @@ class User: UITableViewCell {
                 Debug.printl("Error: \(error)", sender: "user")
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
+                    sendPushNotification(user.userid!, message: "\(currentUser.handle) just followed you!")
                     userFollowing.append(user)
                     Debug.printl("Followed user \(user.handle!)", sender: nil)
-                    user.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
-                    user.followButton.backgroundColor = lightGray()
-                    user.followButton.removeTarget(target, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
-                    user.followButton.addTarget(target, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
+                    if user.followButton != nil {
+                        user.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
+                        user.followButton.backgroundColor = lightGray()
+                        user.followButton.removeTarget(target, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
+                        user.followButton.addTarget(target, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
+                    }
                 }
             }
         }
-        
-        /*
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = currentUser.handle
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/follow/user")!)
-        var params = ["handle": handle!, "password_hash": passwordHash, "following_name": user.handle!] as Dictionary
-        httpPost(params, request) {
-            (data, statusCode, error) -> Void in
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: "helper")
-            } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("HTTP Error: \(error)", sender: "helper")
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    
-                } else if statusCode == HTTP_SUCCESS {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        userFollowing.append(user)
-                        user.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
-                        user.followButton.backgroundColor = lightGray()
-                        user.followButton.removeTarget(target, action: "follow:", forControlEvents: UIControlEvents.TouchDown)
-                        user.followButton.addTarget(target, action: "unfollow:", forControlEvents: UIControlEvents.TouchDown)
-                    }
-                } else if statusCode == HTTP_SERVER_ERROR {
-                    Debug.printl("Internal server error.", sender: "helper")
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: "helper")
-                }
-            }
-        }*/
     }
     
     class func unfollowUser(user: User, target: AnyObject) {
@@ -348,10 +227,12 @@ class User: UITableViewCell {
                             }
                         }
                     }
-                    user.followButton.setTitle("Follow", forState: UIControlState.Normal)
-                    user.followButton.backgroundColor = lightBlue()
-                    user.followButton.removeTarget(target, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
-                    user.followButton.addTarget(target, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
+                    if user.followButton != nil {
+                        user.followButton.setTitle("Follow", forState: UIControlState.Normal)
+                        user.followButton.backgroundColor = lightBlue()
+                        user.followButton.removeTarget(target, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
+                        user.followButton.addTarget(target, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
+                    }
                 }
             }
         }
@@ -382,48 +263,7 @@ class User: UITableViewCell {
                 }
             }
         }
-        /*
-        let passwordHash = hashPassword(keychainWrapper.myObjectForKey("v_Data") as! String)
-        let handle = currentUser.handle
-        var request = NSMutableURLRequest(URL: NSURL(string: "\(db)/user/following")!)
-        var params = ["handle": handle!, "password_hash": passwordHash, "query_name": currentUser.handle!] as Dictionary
-        var result: [User] = []
-        httpPost(params, request) {
-            (data, statusCode, error) -> Void in
-            if error != nil {
-                Debug.printl("Error: \(error)", sender: "user")
-            } else {
-                // Check status codes
-                if statusCode == HTTP_ERROR {
-                    Debug.printl("HTTP Error: \(error)", sender: "user")
-                } else if statusCode == HTTP_WRONG_MEDIA {
-                    
-                } else if statusCode == HTTP_SUCCESS_WITH_MESSAGE {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        var error: NSError? = nil
-                        var data = NSJSONSerialization.JSONObjectWithData(data.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary
-                        
-                        var users = data["following"] as! NSArray
-                        var result: [User] = []
-                        for u in users {
-                            var dict = u as! NSDictionary
-                            var user = User()
-                            user.handle = dict["handle"] as? String
-                            user.username = dict["name"] as? String
-                            user.profilePicKey = "\(user.handle!)~~profile_pic.jpg"
-                            result.append(user)
-                        }
-                        userFollowing = result
-                    }
-                } else if statusCode == HTTP_SERVER_ERROR {
-                    Debug.printl("Internal server error.", sender: "user")
-                } else {
-                    Debug.printl("Unrecognized status code from server: \(statusCode)", sender: "user")
-                }
-            }
-        }*/
     }
-    
 }
 
 

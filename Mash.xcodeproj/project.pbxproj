@@ -332,6 +332,7 @@
 		37737B971BDF865C00FA9EB7 /* LoadBalancer.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 37737B921BDF865C00FA9EB7 /* LoadBalancer.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		37737B981BDF865C00FA9EB7 /* LoadBalancer.pbrpc.h in Headers */ = {isa = PBXBuildFile; fileRef = 37737B931BDF865C00FA9EB7 /* LoadBalancer.pbrpc.h */; };
 		37737B991BDF865C00FA9EB7 /* LoadBalancer.pbrpc.m in Sources */ = {isa = PBXBuildFile; fileRef = 37737B941BDF865C00FA9EB7 /* LoadBalancer.pbrpc.m */; };
+		3786F8B21C83D4C50018659B /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3786F8B11C83D4C50018659B /* WelcomeViewController.swift */; };
 		379442D51BF80DC600A32DE1 /* CustomIOSAlertView.h in Headers */ = {isa = PBXBuildFile; fileRef = 379442D31BF80DC600A32DE1 /* CustomIOSAlertView.h */; };
 		379442D61BF80DC600A32DE1 /* CustomIOSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 379442D41BF80DC600A32DE1 /* CustomIOSAlertView.m */; };
 		379882401C0131200029E56C /* AudioModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3798823A1C0131200029E56C /* AudioModule.swift */; };
@@ -761,6 +762,7 @@
 		37737B921BDF865C00FA9EB7 /* LoadBalancer.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadBalancer.pbobjc.m; path = protos/LoadBalancer.pbobjc.m; sourceTree = SOURCE_ROOT; };
 		37737B931BDF865C00FA9EB7 /* LoadBalancer.pbrpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadBalancer.pbrpc.h; path = protos/LoadBalancer.pbrpc.h; sourceTree = SOURCE_ROOT; };
 		37737B941BDF865C00FA9EB7 /* LoadBalancer.pbrpc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadBalancer.pbrpc.m; path = protos/LoadBalancer.pbrpc.m; sourceTree = SOURCE_ROOT; };
+		3786F8B11C83D4C50018659B /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		379442D31BF80DC600A32DE1 /* CustomIOSAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomIOSAlertView.h; sourceTree = "<group>"; };
 		379442D41BF80DC600A32DE1 /* CustomIOSAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomIOSAlertView.m; sourceTree = "<group>"; };
 		3798823A1C0131200029E56C /* AudioModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioModule.swift; sourceTree = "<group>"; };
@@ -1384,6 +1386,7 @@
 				3798824D1C01313F0029E56C /* EntryViewController.swift */,
 				3798824E1C01313F0029E56C /* LoginViewController.swift */,
 				3798824F1C01313F0029E56C /* SignupViewController.swift */,
+				3786F8B11C83D4C50018659B /* WelcomeViewController.swift */,
 			);
 			path = Entry;
 			sourceTree = "<group>";
@@ -2247,6 +2250,7 @@
 				3711F0A31B6FFD9D00C75F2B /* SuperpoweredAudioModule.mm in Sources */,
 				37C9F50D1C029E2000C80F88 /* MixerChannel.swift in Sources */,
 				379882471C0131360029E56C /* HelperData.swift in Sources */,
+				3786F8B21C83D4C50018659B /* WelcomeViewController.swift in Sources */,
 				379882401C0131200029E56C /* AudioModule.swift in Sources */,
 				370AC1AA1C3C9D45002ED357 /* SearchViewController.swift in Sources */,
 				37038FB81C617D1C0043C262 /* DirectUploadViewController.swift in Sources */,

@@ -65,7 +65,48 @@ func sendTokenRequest() {
         if error != nil {
             Debug.printl(error, sender: "helpers")
             // TODO: Add a direct link to notification center
-            Flurry.logError("\(error.code)", message: "Device token registration invalid", error: error)
+            if !testing {
+                Flurry.logError("\(error.code)", message: "Device token registration invalid", error: error)
+            }
+        }
+    }
+}
+
+func sendPushNotification(userid: Int, message: String) {
+    let request = APNServerRequest()
+    request.userid = UInt32(currentUser.userid!)
+    request.loginToken = currentUser.loginToken!
+    request.queryUserid = UInt32(userid)
+    request.message = message
+    
+    server.aPNSendWithRequest(request) {
+        (response, error) in
+        if error != nil {
+            Debug.printl("Error sending push notification", sender: nil)
+            if !testing {
+                Flurry.logError("\(error.code)", message: "Error sending push notification", error: error)
+            }
+        }
+    }
+}
+
+func sendReportRequest(message: String?, trackid: Int) {
+    if message == nil {
+        raiseAlert("You must enter a reason for your report.")
+        return
+    }
+    let request = ReportRecRequest()
+    request.userid = UInt32(currentUser.userid!)
+    request.loginToken = currentUser.loginToken
+    request.recid = UInt32(trackid)
+    request.message = message
+    
+    server.reportRecordingWithRequest(request) {
+        (responser, error) in
+        if error != nil {
+            Debug.printl("Error sending recording report.", sender: nil)
+        } else {
+            raiseAlert("Thank you", message: "We will review your report shortly.")
         }
     }
 }

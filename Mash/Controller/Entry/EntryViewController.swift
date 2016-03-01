@@ -34,6 +34,7 @@ class EntryViewController: UIViewController {
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         blurView.frame = self.registerButton.bounds
         blurView.contentView.backgroundColor = lightBlueTranslucent()
+        blurView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "register:"))
         self.registerButton.insertSubview(blurView, atIndex: 0)
         
         self.logo.contentMode = UIViewContentMode.ScaleAspectFit
@@ -47,6 +48,10 @@ class EntryViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         self.navigationController?.navigationBarHidden = true
+    }
+    
+    func register(sender: AnyObject?) {
+        self.performSegueWithIdentifier("Register", sender: self)
     }
     
     func facebookLogin(sender: AnyObject?) {

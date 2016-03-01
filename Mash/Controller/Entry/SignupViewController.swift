@@ -81,13 +81,6 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         return true
     }
     
-    // Define alert view return behavior
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        if alertView.title == "Success!" {
-            self.loginAction()
-        }
-    }
-    
     /* func finishedWithAuth(auth: GTMOAuth2Authentication!, error: NSError!) {
         Debug.printl("Received error \(error) and authentication \(auth)", sender: self)
     }*/
@@ -173,7 +166,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
                     if !testing {
                         Flurry.setUserID("\(response.userid)")
                     }
-                    raiseAlert("Success!", delegate: self, message: "Welcome to Mash.")
+                    self.loginAction()
                 }
             }
         }
@@ -181,8 +174,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     
     func loginAction() {
         Debug.printl("Successful registration - pushing tab bar controller onto navigation controller", sender: self)
-        let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController
-        self.navigationController?.pushViewController(tabbarcontroller, animated: true)
+        self.performSegueWithIdentifier("welcome", sender: nil)
     }
     
     func saveLoginItems() {

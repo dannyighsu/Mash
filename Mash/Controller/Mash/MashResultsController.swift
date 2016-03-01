@@ -208,6 +208,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     func add(sender: UIButton) {
         let track = sender.superview?.superview?.superview as! Track
         ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
+        sendPushNotification(track.userid, message: "You've just been mashed!")
     }
     
     func done(sender: AnyObject?) {

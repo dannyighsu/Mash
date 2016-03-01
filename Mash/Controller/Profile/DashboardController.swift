@@ -147,6 +147,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             track.dateLabel.text = parseTimeStamp(self.data[index].time)
             track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
             track.activityView.startAnimating()
+            track.track = self.data[index]
             
             download(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket) {
                 (result) in
@@ -167,6 +168,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         } else if indexPath.section == 2 {
             let cell = self.tracks.dequeueReusableCellWithIdentifier("BufferCell")!
             cell.backgroundColor = UIColor.clearColor()
+            cell.selectionStyle = .None
+            cell.userInteractionEnabled = false
             return cell
         }
         return UITableViewCell(style: .Default, reuseIdentifier: nil)
@@ -213,11 +216,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             header.followingCount.text = "    \(self.user.following!)\n    FOLLOWING"
             header.trackCount.text = "    \(self.user.tracks!)\n    TRACKS"
             
-            // Add gradient to banner
-            /*let gradient: CAGradientLayer = CAGradientLayer()
-            gradient.frame = header.bounds
-            gradient.colors = [UIColor.clearColor().CGColor, UIColor.clearColor().CGColor, offWhite().CGColor]
-            header.bannerImage.layer.insertSublayer(gradient, atIndex: 0)*/
             return header
         }
         return nil
@@ -287,6 +285,18 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         return true
     }
+    
+    // Button targets
+    func addTrack(sender: UIButton) {
+        let trackData = sender.superview!.superview!.superview as! ProfileTrack
+        var track: Track? = nil
+        for t in self.data {
+            if t.id == trackData.id {
+                track = t
+            }
+        }
+        ProjectViewController.importTracks([track!], navigationController: self.navigationController, storyboard: self.storyboard)
+    }
 
     // Track management
     func retrieveTracks() {
@@ -325,17 +335,6 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             self.tracks.reloadSections(NSIndexSet(index: 1), withRowAnimation: .None)
             self.activityView.stopAnimating()
         }
-    }
-    
-    func addTrack(sender: UIButton) {
-        let trackData = sender.superview!.superview!.superview as! ProfileTrack
-        var track: Track? = nil
-        for t in self.data {
-            if t.id == trackData.id {
-                track = t
-            }
-        }
-        ProjectViewController.importTracks([track!], navigationController: self.navigationController, storyboard: self.storyboard)
     }
     
     func deleteTrack(track: Track, indexPath: NSIndexPath) {
@@ -384,7 +383,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         let alert = UIAlertView(title: "Are you Sure?", message: "Delete your account?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "Yes")
         alert.show()
     }
-    
+
     // Profile editing
     func fetchPhotos(type: String) {
         let photoResults = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: nil)
