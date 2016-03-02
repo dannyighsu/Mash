@@ -412,7 +412,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Other" translatesAutoresizingMaskIntoConstraints="NO" id="jvt-Kg-Fzg">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no_following" translatesAutoresizingMaskIntoConstraints="NO" id="jvt-Kg-Fzg">
                                 <rect key="frame" x="200" y="150" width="200" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="HWS-iz-Gpj"/>
@@ -1282,7 +1282,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Other" width="538" height="521"/>
         <image name="Play_2" width="120" height="120"/>
         <image name="Record_button" width="626" height="626"/>
         <image name="Volume_bars" width="698" height="402"/>
@@ -1294,6 +1293,7 @@
         <image name="logo" width="512" height="512"/>
         <image name="metronome_2" width="200" height="200"/>
         <image name="mixer_background" width="960" height="600"/>
+        <image name="no_following" width="200" height="200"/>
         <image name="password" width="512" height="512"/>
         <image name="project" width="30" height="30"/>
         <image name="record" width="30" height="30"/>

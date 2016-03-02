@@ -139,7 +139,10 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             
             if cell.track!.liked {
                 cell.likeButton.setImage(UIImage(named: "liked"), forState: .Normal)
+            } else {
+                cell.likeButton.setImage(UIImage(named: "like"), forState: .Normal)
             }
+            
             self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
             self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
             cell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)
@@ -378,13 +381,11 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func updateActivity(response: FeedResponse, scope: Int) {
-        var data: [HomeCell]
         if scope == 0 {
-            data = self.activityData
+            self.activityData = []
         } else {
-            data = self.globalData
+            self.globalData = []
         }
-        data = []
         self.displayData = []
         
         if response.storyArray.count == 0 {
@@ -407,7 +408,11 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 let track = Track(frame: CGRectZero, recid: Int(recording.recid), userid: Int(recording.userid), instruments: recording.instrumentArray.copy() as! [String], instrumentFamilies: recording.familyArray.copy() as! [String], titleText: recording.title, bpm: Int(recording.bpm), timeSignature: Int(recording.bar), trackURL: filePathString("\(userid)~~\(Int(recording.recid)).\(recording.format)"), user: recording.handle, format: recording.format, time: time, playCount: Int(recording.playCount), likeCount: Int(recording.likeCount), mashCount: Int(recording.likeCount), liked: recording.liked)
                 
                 let cell = HomeCell(frame: CGRectZero, eventText: title, userText: user, timeText: time, user: follower, track: track)
-                data.append(cell)
+                if scope == 0 {
+                    self.activityData.append(cell)
+                } else {
+                    self.globalData.append(cell)
+                }
                 if i < DEFAULT_DISPLAY_AMOUNT {
                     self.displayData.append(cell)
                 }
