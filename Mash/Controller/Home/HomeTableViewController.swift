@@ -128,11 +128,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.userLabel.addTarget(self, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
             cell.playButton.addTarget(self, action: "playButton:", forControlEvents: .TouchUpInside)
             cell.playCountLabel.text = "\(cell.track!.playCount)"
-            if cell.track!.likeCount == 1 {
-                cell.likeCountLabel.text = "\(cell.track!.likeCount) like"
-            } else {
-                cell.likeCountLabel.text = "\(cell.track!.likeCount) likes"
-            }
+            cell.likeCountLabel.text = "\(cell.track!.likeCount)"
             
             // TODO: implement comment
             cell.commentButton.hidden = true
@@ -146,7 +142,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
             self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
             cell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)
-            cell.addButton.addTarget(self, action: "add:", forControlEvents: .TouchUpInside)
     
             download(getS3WaveformKey(cell.track!), url: filePathURL(getS3WaveformKey(cell.track!)), bucket: waveform_bucket) {
                 (result) in

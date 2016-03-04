@@ -19,10 +19,10 @@ class HomeCell: UITableViewCell {
     @IBOutlet weak var trackButton: UIButton!
     @IBOutlet weak var commentButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
-    @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var audioPlotView: UIImageView!
     @IBOutlet weak var backgroundArt: UIImageView!
     @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var playCountLabel: UILabel!
     @IBOutlet weak var likeCountLabel: UILabel!
     var eventText: String? = nil
@@ -40,24 +40,20 @@ class HomeCell: UITableViewCell {
         self.track = track
     }
 
+    @IBAction func menuButtonPressed(sender: AnyObject) {
+        rootTabBarController!.showMenu(self.track!)
+    }
+
     @IBAction func likeButtonPressed(sender: UIButton) {
         let liked = self.track!.like(sender)
         let likeText = self.likeCountLabel.text!
         let likeCount = likeText.characters.split {$0 == " "}.map(String.init)[0]
         if liked {
             let newCount = Int(likeCount)! + 1
-            if newCount == 1 {
-                self.likeCountLabel.text = "\(newCount) like"
-            } else {
-                self.likeCountLabel.text = "\(newCount) likes"
-            }
+            self.likeCountLabel.text = "\(newCount)"
         } else {
             let newCount = Int(likeCount)! - 1
-            if newCount == 1 {
-                self.likeCountLabel.text = "\(newCount) like"
-            } else {
-                self.likeCountLabel.text = "\(newCount) likes"
-            }
+            self.likeCountLabel.text = "\(newCount)"
         }
     }
 }

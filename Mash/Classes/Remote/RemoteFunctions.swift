@@ -107,7 +107,7 @@ func sendReportRequest(message: String?, trackid: Int) {
         if error != nil {
             Debug.printl("Error sending recording report: \(error).", sender: nil)
         } else {
-            raiseAlert("Thank you", message: "We will review your report shortly.")
+            raiseAlert("Thank you", message: "We will review your report as soon as possible.")
         }
     }
 }
