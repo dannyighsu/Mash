@@ -135,7 +135,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
                     self.tabBarButton?.addButton.hidden = true
                 }
             }
-        } else if alertView.title == "Reporting a sound" {
+        } else if alertView.title == "Reporting a Sound" {
             if buttonIndex == 1 {
                 sendReportRequest(alertView.textFieldAtIndex(0)!.text, trackid: self.currTrack!.id)
             }
@@ -191,9 +191,11 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         }
         let reportAction = UIAlertAction(title: "Report", style: .Default, handler: {
             (action) in
+            self.currTrack = track
             //TODO: Report action
             let alert = UIAlertView(title: "Reporting a Sound", message: "Please enter a reason for your report.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Report")
             alert.alertViewStyle = .PlainTextInput
+            alert.show()
         })
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {

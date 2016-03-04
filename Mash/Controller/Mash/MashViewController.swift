@@ -120,12 +120,12 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
         self.activityView.startAnimating()
         server.recordingMashWithRequest(request) {
             (response, error) in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityView.stopAnimating()
+            }
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
                 raiseAlert("No results found.")
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.activityView.stopAnimating()
-                }
             } else {
                 self.finish(response)
             }
