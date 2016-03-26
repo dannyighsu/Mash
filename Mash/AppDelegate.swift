@@ -130,7 +130,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if Optimizely.handleOpenURL(url) {
             optimizely = true
         }
-        return optimizely && /*GPPURLHandler.handleURL(url, sourceApplication: sourceApplication, annotation: annotation) && */FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+        let facebook = FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+        return optimizely && facebook// && GPPURLHandler.handleURL(url, sourceApplication: sourceApplication, annotation: annotation)
     }
     
     func application(application: UIApplication, supportedInterfaceOrientationsForWindow window: UIWindow?) -> UIInterfaceOrientationMask {

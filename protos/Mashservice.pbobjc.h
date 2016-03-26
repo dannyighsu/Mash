@@ -851,6 +851,61 @@ typedef GPB_ENUM(ReportRecRequest_FieldNumber) {
 
 @end
 
+#pragma mark - FbAccessToken
+
+typedef GPB_ENUM(FbAccessToken_FieldNumber) {
+  FbAccessToken_FieldNumber_Userid = 1,
+  FbAccessToken_FieldNumber_FbToken = 2,
+};
+
+@interface FbAccessToken : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasUserid;
+@property(nonatomic, readwrite) uint32_t userid;
+
+@property(nonatomic, readwrite) BOOL hasFbToken;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *fbToken;
+
+@end
+
+#pragma mark - FbLoginTokenRequest
+
+typedef GPB_ENUM(FbLoginTokenRequest_FieldNumber) {
+  FbLoginTokenRequest_FieldNumber_Userid = 1,
+  FbLoginTokenRequest_FieldNumber_FbToken = 2,
+  FbLoginTokenRequest_FieldNumber_LoginToken = 3,
+};
+
+@interface FbLoginTokenRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasUserid;
+@property(nonatomic, readwrite) uint32_t userid;
+
+@property(nonatomic, readwrite) BOOL hasFbToken;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *fbToken;
+
+@property(nonatomic, readwrite) BOOL hasLoginToken;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *loginToken;
+
+@end
+
+#pragma mark - FbUnlinkRequest
+
+typedef GPB_ENUM(FbUnlinkRequest_FieldNumber) {
+  FbUnlinkRequest_FieldNumber_Userid = 1,
+  FbUnlinkRequest_FieldNumber_LoginToken = 2,
+};
+
+@interface FbUnlinkRequest : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hasUserid;
+@property(nonatomic, readwrite) uint32_t userid;
+
+@property(nonatomic, readwrite) BOOL hasLoginToken;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *loginToken;
+
+@end
+
 NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END

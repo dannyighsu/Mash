@@ -15,7 +15,6 @@ class RootNavigationController: UINavigationController {
         super.viewDidLoad()
         
         self.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 20)!, NSForegroundColorAttributeName: UIColor.blackColor()]
-        self.navigationBar.tintColor = UIColor.blackColor()
         self.edgesForExtendedLayout = UIRectEdge.None
         rootNavigationController = self
     }

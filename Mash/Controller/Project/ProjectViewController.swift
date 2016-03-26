@@ -25,6 +25,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.navigationBar.tintColor = UIColor.blackColor()
+        
         // Set up table options
         self.tracks.delegate = self
         self.tracks.dataSource = self
@@ -69,6 +71,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.titleView = self.titleButton
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "dismiss:")
         if self.tracks != nil {
             self.tracks.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
             self.metronome.setTempo(self.bpm)

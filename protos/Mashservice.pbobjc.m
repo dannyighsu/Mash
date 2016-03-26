@@ -2874,5 +2874,210 @@ typedef struct ReportRecRequest__storage_ {
 
 @end
 
+#pragma mark - FbAccessToken
+
+@implementation FbAccessToken
+
+@dynamic hasUserid, userid;
+@dynamic hasFbToken, fbToken;
+
+typedef struct FbAccessToken__storage_ {
+  uint32_t _has_storage_[1];
+  uint32_t userid;
+  NSString *fbToken;
+} FbAccessToken__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "userid",
+        .number = FbAccessToken_FieldNumber_Userid,
+        .hasIndex = 0,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(FbAccessToken__storage_, userid),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "fbToken",
+        .number = FbAccessToken_FieldNumber_FbToken,
+        .hasIndex = 1,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(FbAccessToken__storage_, fbToken),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[FbAccessToken class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(FbAccessToken__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - FbLoginTokenRequest
+
+@implementation FbLoginTokenRequest
+
+@dynamic hasUserid, userid;
+@dynamic hasFbToken, fbToken;
+@dynamic hasLoginToken, loginToken;
+
+typedef struct FbLoginTokenRequest__storage_ {
+  uint32_t _has_storage_[1];
+  uint32_t userid;
+  NSString *fbToken;
+  NSString *loginToken;
+} FbLoginTokenRequest__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "userid",
+        .number = FbLoginTokenRequest_FieldNumber_Userid,
+        .hasIndex = 0,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(FbLoginTokenRequest__storage_, userid),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "fbToken",
+        .number = FbLoginTokenRequest_FieldNumber_FbToken,
+        .hasIndex = 1,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(FbLoginTokenRequest__storage_, fbToken),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "loginToken",
+        .number = FbLoginTokenRequest_FieldNumber_LoginToken,
+        .hasIndex = 2,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(FbLoginTokenRequest__storage_, loginToken),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[FbLoginTokenRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(FbLoginTokenRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - FbUnlinkRequest
+
+@implementation FbUnlinkRequest
+
+@dynamic hasUserid, userid;
+@dynamic hasLoginToken, loginToken;
+
+typedef struct FbUnlinkRequest__storage_ {
+  uint32_t _has_storage_[1];
+  uint32_t userid;
+  NSString *loginToken;
+} FbUnlinkRequest__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "userid",
+        .number = FbUnlinkRequest_FieldNumber_Userid,
+        .hasIndex = 0,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(FbUnlinkRequest__storage_, userid),
+        .defaultValue.valueUInt32 = 0U,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "loginToken",
+        .number = FbUnlinkRequest_FieldNumber_LoginToken,
+        .hasIndex = 1,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(FbUnlinkRequest__storage_, loginToken),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[FbUnlinkRequest class]
+                                     rootClass:[MashserviceRoot class]
+                                          file:MashserviceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
+                                        oneofs:NULL
+                                    oneofCount:0
+                                         enums:NULL
+                                     enumCount:0
+                                        ranges:NULL
+                                    rangeCount:0
+                                   storageSize:sizeof(FbUnlinkRequest__storage_)
+                                    wireFormat:NO];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 
 // @@protoc_insertion_point(global_scope)

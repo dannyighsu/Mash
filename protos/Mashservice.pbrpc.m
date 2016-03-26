@@ -381,4 +381,52 @@ static NSString *const kServiceName = @"MashService";
              responseClass:[SuccessResponse class]
         responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
 }
+#pragma mark FbLogin(FbAccessToken) returns (FbAccessToken)
+
+- (void)fbLoginWithRequest:(FbAccessToken *)request handler:(void(^)(FbAccessToken *response, NSError *error))handler{
+  [[self RPCToFbLoginWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToFbLoginWithRequest:(FbAccessToken *)request handler:(void(^)(FbAccessToken *response, NSError *error))handler{
+  return [self RPCToMethod:@"FbLogin"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[FbAccessToken class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
+#pragma mark FbLinkToken(FbLoginTokenRequest) returns (SuccessResponse)
+
+- (void)fbLinkTokenWithRequest:(FbLoginTokenRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  [[self RPCToFbLinkTokenWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToFbLinkTokenWithRequest:(FbLoginTokenRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  return [self RPCToMethod:@"FbLinkToken"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[SuccessResponse class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
+#pragma mark FbUnlinkToken(FbUnlinkRequest) returns (SuccessResponse)
+
+- (void)fbUnlinkTokenWithRequest:(FbUnlinkRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  [[self RPCToFbUnlinkTokenWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToFbUnlinkTokenWithRequest:(FbUnlinkRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  return [self RPCToMethod:@"FbUnlinkToken"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[SuccessResponse class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
+#pragma mark FbUpdateToken(FbLoginTokenRequest) returns (SuccessResponse)
+
+- (void)fbUpdateTokenWithRequest:(FbLoginTokenRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  [[self RPCToFbUpdateTokenWithRequest:request handler:handler] start];
+}
+// Returns a not-yet-started RPC object.
+- (ProtoRPC *)RPCToFbUpdateTokenWithRequest:(FbLoginTokenRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler{
+  return [self RPCToMethod:@"FbUpdateToken"
+            requestsWriter:[GRXWriter writerWithValue:request]
+             responseClass:[SuccessResponse class]
+        responsesWriteable:[GRXWriteable writeableWithSingleValueHandler:handler]];
+}
 @end

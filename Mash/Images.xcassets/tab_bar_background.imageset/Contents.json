@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "tabBarBackground.png",
+      "filename" : "tab_bar_background.png",
       "scale" : "1x"
     },
     {
