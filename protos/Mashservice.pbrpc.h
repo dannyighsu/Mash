@@ -217,6 +217,34 @@
 - (ProtoRPC *)RPCToReportRecordingWithRequest:(ReportRecRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
 
 
+#pragma mark FbLogin(FbAccessToken) returns (FbAccessToken)
+
+- (void)fbLoginWithRequest:(FbAccessToken *)request handler:(void(^)(FbAccessToken *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToFbLoginWithRequest:(FbAccessToken *)request handler:(void(^)(FbAccessToken *response, NSError *error))handler;
+
+
+#pragma mark FbLinkToken(FbLoginTokenRequest) returns (SuccessResponse)
+
+- (void)fbLinkTokenWithRequest:(FbLoginTokenRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToFbLinkTokenWithRequest:(FbLoginTokenRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+
+#pragma mark FbUnlinkToken(FbUnlinkRequest) returns (SuccessResponse)
+
+- (void)fbUnlinkTokenWithRequest:(FbUnlinkRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToFbUnlinkTokenWithRequest:(FbUnlinkRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+
+#pragma mark FbUpdateToken(FbLoginTokenRequest) returns (SuccessResponse)
+
+- (void)fbUpdateTokenWithRequest:(FbLoginTokenRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+- (ProtoRPC *)RPCToFbUpdateTokenWithRequest:(FbLoginTokenRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+
+
 @end
 
 // Basic service implementation, over gRPC, that only does marshalling and parsing.

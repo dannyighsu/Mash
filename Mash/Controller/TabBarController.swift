@@ -21,11 +21,12 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         super.viewDidLoad()
         
         // Configure tab bar appearance
+        UITabBar.appearance().barTintColor = darkGray()
         UITabBar.appearance().tintColor = lightBlue()
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         blurView.frame = self.tabBar.bounds
         blurView.contentView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
-        self.tabBar.insertSubview(blurView, atIndex: 0)
+        //self.tabBar.insertSubview(blurView, atIndex: 0)
         
         // Hardcode image tints
         let home = self.tabBar.items![0]
@@ -113,6 +114,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             if buttonIndex == 1 {
                 let titleButton = currentProject!.viewControllers[0].navigationItem.titleView as! UIButton
                 titleButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
+                titleButton.sizeToFit()
                 self.tabBarButton?.tapButton.setTitle(alertView.textFieldAtIndex(0)!.text, forState: .Normal)
                 self.tabBarButton?.addButton.hidden = true
             } else if buttonIndex == 0 {
@@ -131,6 +133,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
                     ProjectViewController.importTracks(tracksToAdd, navigationController: self.navigationController!, storyboard: self.storyboard!)
                     let titleButton = project.navigationItem.titleView as! UIButton
                     titleButton.setTitle(tracksToAdd[0].titleText, forState: .Normal)
+                    titleButton.sizeToFit()
                     self.tabBarButton?.tapButton.setTitle(tracksToAdd[0].titleText, forState: .Normal)
                     self.tabBarButton?.addButton.hidden = true
                 }
@@ -159,6 +162,8 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             let navController = UINavigationController(rootViewController: project)
             currentProject = navController
             currentProject!.transitioningDelegate = self
+            currentProject!.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 20)!, NSForegroundColorAttributeName: UIColor.blackColor()]
+
             // Add for interaction
             //self.swipeInteractionController.addViewController(currentProject)
             self.presentViewController(currentProject!, animated: true, completion: nil)
@@ -207,6 +212,11 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         alertController.addAction(likeAction)
         alertController.addAction(reportAction)
         alertController.addAction(cancelAction)
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) {
+            alertController.popoverPresentationController!.sourceView = self.view
+            alertController.popoverPresentationController!.sourceRect = CGRect(x: self.view.bounds.size.width / 2.0, y: self.view.bounds.size.height / 2.0, width: 1.0, height: 1.0)
+        }
         
         self.presentViewController(alertController, animated: true, completion: nil)
     }

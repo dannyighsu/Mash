@@ -692,7 +692,7 @@
                                     <segue destination="jmm-Gs-5Qj" kind="show" identifier="Login" id="xa9-mU-dev"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IY2-kH-oKJ">
+                            <button opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IY2-kH-oKJ">
                                 <rect key="frame" x="176" y="400" width="249" height="30"/>
                                 <color key="backgroundColor" red="0.1764705882352941" green="0.27058823529411763" blue="0.52941176470588236" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>

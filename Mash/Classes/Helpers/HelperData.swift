@@ -76,7 +76,7 @@ var instrumentArray: [String: [String]] = [
     "Keyboard": ["", "Piano", "Organ", "Electric Piano"],
     "Guitar": ["", "Acoustic Guitar", "Electric Guitar", "Bass Guitar"],
     "Brass": ["", "French Horn", "Trombone", "Trumpet", "Tuba"],
-    "Woodwinds": ["", "Saxophone", "Flute", "Piccolo", "Oboe", "English Horn", "Bassoon", "Clarinet", "Harmonia", "Accordians"],
+    "Woodwinds": ["", "Saxophone", "Flute", "Piccolo", "Oboe", "English Horn", "Bassoon", "Clarinet", "Harmonica", "Accordians"],
     "Percussion": ["", "Electronic", "Cajon", "Drum Kit", "Triangle", "Snare", "Bass Drum", "Bongo", "Tamborine", "Darbuka"],
     "Tuned_Percussion": ["", "Xylophone", "Vibraphone", "Marimba"],
     "Electronic": ["", "Synth Lead", "Synth Bass", "Synth Pad", "Synth Brass", "Gated Synth", "Other"],

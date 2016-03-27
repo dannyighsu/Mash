@@ -27,10 +27,9 @@ class EntryViewController: UIViewController {
         self.facebookButton.imageView?.image = UIImage(named: "fb_logo_invert")
         self.facebookButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
         self.facebookButton.addTarget(self, action: "facebookLogin:", forControlEvents: UIControlEvents.TouchDown)
+        self.facebookButton.hidden = true
         
         // TODO: implement facebook login
-        self.facebookButton.hidden = true
-        UITabBar.appearance().tintColor = lightBlue()
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         blurView.frame = self.registerButton.bounds
         blurView.contentView.backgroundColor = lightBlueTranslucent()
@@ -63,21 +62,21 @@ class EntryViewController: UIViewController {
             } else if result.isCancelled {
                 Debug.printl("Login was cancelled by user.", sender: self)
             } else {
-                self.login(result)
+                self.loginWithFacebook(result)
             }
         }
     }
     
-    func login(permissions: FBSDKLoginManagerLoginResult) {
+    func loginWithFacebook(permissions: FBSDKLoginManagerLoginResult) {
         if permissions.grantedPermissions.contains("email") && permissions.grantedPermissions.contains("public_profile") {
-            FBSDKGraphRequest(graphPath: "me", parameters: nil).startWithCompletionHandler() {
+            /*FBSDKGraphRequest(graphPath: "me", parameters: nil).startWithCompletionHandler() {
                 (connection, result, error) -> Void in
                 if (error == nil ) {
                     Debug.printl("Error: \(error)", sender: self)
                 } else {
                     Debug.printl(result, sender: self)
                 }
-            }
+            }*/
         }
     }
     
