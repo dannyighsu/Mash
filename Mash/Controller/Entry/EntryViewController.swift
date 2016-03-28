@@ -14,6 +14,7 @@ class EntryViewController: UIViewController {
     @IBOutlet weak var facebookButton: UIButton! // Currently disabled
     @IBOutlet weak var registerButton: UIButton!
     @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var termsButton: UIButton!
     @IBOutlet weak var logo: UIImageView!
     
     override func viewDidLoad() {
@@ -47,6 +48,10 @@ class EntryViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         self.navigationController?.navigationBarHidden = true
+    }
+    
+    @IBAction func termsButtonPressed(sender: AnyObject) {
+        UIApplication.sharedApplication().openURL(NSURL(string: "http://mashwithme.us/terms")!)
     }
     
     func register(sender: AnyObject?) {
