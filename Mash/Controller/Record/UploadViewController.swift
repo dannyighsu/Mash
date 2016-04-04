@@ -39,8 +39,8 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         let cell = UINib(nibName: "InstrumentCell", bundle: nil)
         self.instrumentsCollection.registerNib(cell, forCellWithReuseIdentifier: "InstrumentCell")
         
-        self.doneButton.addTarget(self, action: "checkInput:", forControlEvents: UIControlEvents.TouchDown)
-        self.cancelButton.addTarget(self, action: "cancel:", forControlEvents: UIControlEvents.TouchDown)
+        self.doneButton.addTarget(self, action: #selector(UploadViewController.checkInput(_:)), forControlEvents: UIControlEvents.TouchDown)
+        self.cancelButton.addTarget(self, action: #selector(UploadViewController.cancel(_:)), forControlEvents: UIControlEvents.TouchDown)
         
         self.audioPlayer = try? AVAudioPlayer(contentsOfURL: recording!.url)
         

@@ -31,7 +31,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.view.backgroundColor = UIColor(patternImage: background)
         }
         
-        let tap = UITapGestureRecognizer(target: self, action: "resignTextField:")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.resignTextField(_:)))
         self.view.addGestureRecognizer(tap)
         
         self.view.addSubview(self.activityView)
@@ -50,7 +50,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Log In", style: UIBarButtonItemStyle.Plain, target: self, action: "signinAction:"), animated: false)
+        self.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Log In", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(LoginViewController.signinAction(_:))), animated: false)
         self.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
         self.navigationItem.title = "Sign In"
     }
@@ -130,6 +130,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 dispatch_async(dispatch_get_main_queue()) {
                     if !testing {
                         Flurry.setUserID("\(response.userid)")
+                        Flurry.logEvent("User_Login", withParameters: ["userid": Int(response.userid)])
                     }
                     self.completeLogin(handle, password: password)
                 }

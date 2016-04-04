@@ -61,9 +61,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         self.audioPlayer?.delegate = self
         self.tracks.tableHeaderView = head
         
-        self.titleButton.addTarget(self, action: "changeTitle:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.titleButton.addTarget(self, action: #selector(ProjectViewController.changeTitle(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.titleButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        let swipe = UISwipeGestureRecognizer(target: self, action: "dismiss:")
+        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(ProjectViewController.dismiss(_:)))
         swipe.direction = .Down
         self.navigationController?.navigationBar.addGestureRecognizer(swipe)
     }
@@ -71,7 +71,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.titleView = self.titleButton
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "dismiss:")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .Plain, target: self, action: #selector(NSManagedObjectContext.save))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "hide"), style: .Plain, target: self, action: #selector(ProjectViewController.dismiss(_:)))
         if self.tracks != nil {
             self.tracks.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
             self.metronome.setTempo(self.bpm)
@@ -151,7 +152,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier("ProjectAddBar") as! ProjectAddBar
             cell.addButton.layer.cornerRadius = 4.0
-            cell.addButton.addTarget(self, action: "mash", forControlEvents: UIControlEvents.TouchUpInside)
+            cell.addButton.addTarget(self, action: #selector(ProjectViewController.mash), forControlEvents: UIControlEvents.TouchUpInside)
             cell.backgroundColor = UIColor.clearColor()
             return cell
         }
@@ -164,16 +165,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             return 44.0
         }
     }
-    
-    /*func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == 0 {
-            let trackNumber = indexPath.row
-            if trackNumber >= self.audioPlayer!.audioPlayers.count {
-                return
-            }
-        }
-        tableView.cellForRowAtIndexPath(indexPath)?.selected = false
-    }*/
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         if indexPath.section == 0 {
@@ -288,7 +279,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     func removeTrack(sender: UISwipeGestureRecognizer?) {
         let track = sender?.view as! Channel
         Debug.printl("Removing track \(track)", sender: self)
-        for (var i = 0; i < self.data.count; i++) {
+        for i in 0 ..< self.data.count {
             if self.data[i].titleText == track.trackTitle.text {
                 self.data.removeAtIndex(i)
             }
@@ -465,9 +456,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         }
         var instrumentString = String(stringInterpolationSegment: instruments)
-        instrumentString = instrumentString.substringWithRange(Range<String.Index>(start: instrumentString.startIndex.advancedBy(1), end: instrumentString.endIndex.advancedBy(-1)))
+        instrumentString = instrumentString.substringWithRange(Range<String.Index>(instrumentString.startIndex.advancedBy(1) ..< instrumentString.endIndex.advancedBy(-1)))
         var familyString = String(stringInterpolationSegment: families)
-        familyString = familyString.substringWithRange(Range<String.Index>(start: familyString.startIndex.advancedBy(1), end: familyString.endIndex.advancedBy(-1)))
+        familyString = familyString.substringWithRange(Range<String.Index>(familyString.startIndex.advancedBy(1) ..< familyString.endIndex.advancedBy(-1)))
         
         let request = RecordingUploadRequest()
         request.userid = UInt32(currentUser.userid!)

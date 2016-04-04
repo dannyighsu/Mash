@@ -59,10 +59,10 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.followButton.hidden = true
         } else if following {
             cell.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
-            cell.followButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
+            cell.followButton.addTarget(self, action: #selector(FollowingViewController.unfollow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             cell.followButton.backgroundColor = lightGray()
         } else {
-            cell.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
+            cell.followButton.addTarget(self, action: #selector(FollowingViewController.follow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         }
         return cell
     }

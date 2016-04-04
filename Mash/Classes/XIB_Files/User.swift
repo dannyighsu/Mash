@@ -95,11 +95,11 @@ class User: UITableViewCell {
             }
         }
         if following {
-            self.followButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
+            self.followButton.addTarget(self, action: #selector(User.unfollow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             self.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
             self.followButton.backgroundColor = lightGray()
         } else {
-            self.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
+            self.followButton.addTarget(self, action: #selector(User.follow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         }
         self.setProfilePic(self.profilePicture)
         self.profilePicture?.layer.cornerRadius = self.profilePicture!.frame.size.width / 2
@@ -200,8 +200,8 @@ class User: UITableViewCell {
                     if user.followButton != nil {
                         user.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
                         user.followButton.backgroundColor = lightGray()
-                        user.followButton.removeTarget(target, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
-                        user.followButton.addTarget(target, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
+                        user.followButton.removeTarget(target, action: #selector(User.follow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+                        user.followButton.addTarget(target, action: #selector(User.unfollow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                     }
                 }
             }
@@ -232,8 +232,8 @@ class User: UITableViewCell {
                     if user.followButton != nil {
                         user.followButton.setTitle("Follow", forState: UIControlState.Normal)
                         user.followButton.backgroundColor = lightBlue()
-                        user.followButton.removeTarget(target, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
-                        user.followButton.addTarget(target, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
+                        user.followButton.removeTarget(target, action: #selector(User.unfollow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+                        user.followButton.addTarget(target, action: #selector(User.follow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                     }
                 }
             }
