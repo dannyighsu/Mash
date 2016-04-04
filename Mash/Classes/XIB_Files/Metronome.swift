@@ -75,7 +75,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     class func createView() -> Metronome {
         let view = NSBundle.mainBundle().loadNibNamed("Metronome", owner: nil, options: nil)
         let metronome = view[0] as! Metronome
-        metronome.startButton.addTarget(metronome, action: "toggle:", forControlEvents: UIControlEvents.TouchDown)
+        metronome.startButton.addTarget(metronome, action: #selector(Metronome.toggle(_:)), forControlEvents: UIControlEvents.TouchDown)
         
         metronome.tempoField.keyboardType = UIKeyboardType.NumberPad
         metronome.tempoField.delegate = metronome
@@ -84,7 +84,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
         metronome.tempoSlider.minimumValue = 40
         metronome.tempoSlider.maximumValue = 220
         metronome.tempoSlider.value = 120
-        metronome.speakerImage.addTarget(metronome, action: "muteAudio:", forControlEvents: UIControlEvents.TouchDown)
+        metronome.speakerImage.addTarget(metronome, action: #selector(Metronome.muteAudio(_:)), forControlEvents: UIControlEvents.TouchDown)
         
         let picker = UIPickerView(frame: CGRectZero)
         picker.delegate = metronome
@@ -202,7 +202,7 @@ class Metronome: UITableViewCell, UITextFieldDelegate, UIPickerViewDelegate, UIP
     }
     
     func start() {
-        self.soundPlayerThread = NSThread(target: self, selector: "startDriverTimer:", object: nil)
+        self.soundPlayerThread = NSThread(target: self, selector: #selector(Metronome.startDriverTimer(_:)), object: nil)
         self.soundPlayerThread!.start()
         self.isPlaying = true
         /*self.timer = CADisplayLink(target: self, selector: "playSound")

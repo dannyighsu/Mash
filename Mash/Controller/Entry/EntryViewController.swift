@@ -27,14 +27,14 @@ class EntryViewController: UIViewController {
         }
         self.facebookButton.imageView?.image = UIImage(named: "fb_logo_invert")
         self.facebookButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
-        self.facebookButton.addTarget(self, action: "facebookLogin:", forControlEvents: UIControlEvents.TouchDown)
+        self.facebookButton.addTarget(self, action: #selector(EntryViewController.facebookLogin(_:)), forControlEvents: UIControlEvents.TouchDown)
         self.facebookButton.hidden = true
         
         // TODO: implement facebook login
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         blurView.frame = self.registerButton.bounds
         blurView.contentView.backgroundColor = lightBlueTranslucent()
-        blurView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "register:"))
+        blurView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(EntryViewController.register(_:))))
         self.registerButton.insertSubview(blurView, atIndex: 0)
         
         self.logo.contentMode = UIViewContentMode.ScaleAspectFit

@@ -42,7 +42,7 @@ class ExploreViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "goToSearch:")
+        self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: #selector(ExploreViewController.goToSearch(_:)))
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -70,7 +70,7 @@ class ExploreViewController: UIViewController, UITableViewDelegate, UITableViewD
             track.instruments = result.instruments
             track.trackURL = result.trackURL
             track.instrumentImage.image = findImage(result.instruments)
-            track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
+            track.addButton.addTarget(self, action: #selector(ExploreViewController.addTrack(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
     

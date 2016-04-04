@@ -80,12 +80,12 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.microphone?.startFetchingAudio()
         
         // Button targets
-        self.playButton.addTarget(self, action: "play:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.recordButton.addTarget(self, action: "record:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.volumeButton.addTarget(self, action: "showVolume:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.timeButton.addTarget(self, action: "showTime:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.tempoButton.addTarget(self, action: "showTempo:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.metronomeButton.addTarget(self, action: "muteMetronome:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.playButton.addTarget(self, action: #selector(RecordViewController.play(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.recordButton.addTarget(self, action: #selector(RecordViewController.record(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.volumeButton.addTarget(self, action: #selector(RecordViewController.showVolume(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.timeButton.addTarget(self, action: #selector(RecordViewController.showTime(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.tempoButton.addTarget(self, action: #selector(RecordViewController.showTempo(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        self.metronomeButton.addTarget(self, action: #selector(RecordViewController.muteMetronome(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         do {
             try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
@@ -104,8 +104,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
         
         // Set up nav buttons
-        self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItemStyle.Plain, target: self, action: "save:")
-        self.parentViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Clear", style: UIBarButtonItemStyle.Plain, target: self, action: "clear:")
+        self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(RecordViewController.save(_:)))
+        self.parentViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Clear", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(RecordViewController.clear(_:)))
         self.navigationController?.navigationBar.tintColor = UIColor.blackColor()
     }
     
@@ -127,6 +127,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     // Button methods
     func record(sender: AnyObject?) {
+        if !testing {
+            Flurry.logEvent("User_Recording", withParameters: ["userid": currentUser.userid!])
+        }
         if self.player != nil && self.player!.isPlaying {
             self.stop(nil)
         }
@@ -199,6 +202,9 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 Debug.printl("Error trimming track.", sender: nil)
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
+                    if !testing {
+                        Flurry.logEvent("Recording_Save", withParameters: ["userid": currentUser.userid!, "duration": self.audioFile!.duration])
+                    }
                     controller.recording = EZAudioFile(URL: outputURL)
                     controller.bpm = Int(60.0 / Double(self.metronome!.duration))
                     controller.timeSignature = self.metronome!.timeSigField.text
@@ -313,7 +319,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.stopAll()
         
         let slider = ExtUISlider(frame: CGRectZero)
-        slider.addTarget(self, action: "volumeDidChange:", forControlEvents: UIControlEvents.ValueChanged)
+        slider.addTarget(self, action: #selector(RecordViewController.volumeDidChange(_:)), forControlEvents: UIControlEvents.ValueChanged)
         slider.value = self.metronome!.tickPlayer!.volume
         
         let title = UILabel(frame: CGRectZero)
@@ -387,7 +393,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                     secondText = "0\(secondText)"
                 }
                 var milliText = String(stringInterpolationSegment: time % 1)
-                milliText = milliText.substringWithRange(Range<String.Index>(start: milliText.startIndex.advancedBy(2), end: milliText.startIndex.advancedBy(4)))
+                milliText = milliText.substringWithRange(Range<String.Index>(milliText.startIndex.advancedBy(2) ..< milliText.startIndex.advancedBy(4)))
                 self!.timeLabel.text = "\(secondText):\(milliText)"
             }
         }
@@ -422,7 +428,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 secondText = "0\(secondText)"
             }
             var milliText = String(stringInterpolationSegment: time % 1)
-            milliText = milliText.substringWithRange(Range<String.Index>(start: milliText.startIndex.advancedBy(2), end: milliText.startIndex.advancedBy(4)))
+            milliText = milliText.substringWithRange(Range<String.Index>(milliText.startIndex.advancedBy(2) ..< milliText.startIndex.advancedBy(4)))
             self.timeLabel.text = "\(secondText):\(milliText)"
         }
     }

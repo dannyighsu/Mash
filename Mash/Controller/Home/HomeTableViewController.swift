@@ -49,7 +49,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         let head = UINib(nibName: "TabControlBar", bundle: nil)
         self.activityFeed.registerNib(head, forHeaderFooterViewReuseIdentifier: "TabControlBar")
         let header = self.activityFeed.dequeueReusableHeaderFooterViewWithIdentifier("TabControlBar") as! TabControlBar
-        header.scopeTab.addTarget(self, action: "didChangeScope:", forControlEvents: .ValueChanged)
+        header.scopeTab.addTarget(self, action: #selector(HomeTableViewController.didChangeScope(_:)), forControlEvents: .ValueChanged)
         header.scopeTab.selectedSegmentIndex = 0
         self.tabControlBar = header
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
@@ -75,7 +75,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidAppear(animated)
         let value = UIInterfaceOrientation.Portrait.rawValue
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
-        self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "goToSearch:")
+        self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: #selector(HomeTableViewController.goToSearch(_:)))
         /*if UIDevice.currentDevice().systemVersion.compare("9.0") == NSComparisonResult.OrderedAscending {
             self.activityView.frame = CGRect(x: self.activityView.frame.minX + self.navigationController!.navigationBar.frame.size.height, y: self.activityView.frame.minY, width: self.activityView.frame.width, height: self.activityView.frame.height)
         }*/
@@ -131,8 +131,8 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width / 2
             cell.profileImage.layer.borderWidth = 0.5
             cell.profileImage.layer.masksToBounds = true
-            cell.userLabel.addTarget(self, action: "getUser:", forControlEvents: UIControlEvents.TouchUpInside)
-            cell.playButton.addTarget(self, action: "playButton:", forControlEvents: .TouchUpInside)
+            cell.userLabel.addTarget(self, action: #selector(HomeTableViewController.getUser(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            cell.playButton.addTarget(self, action: #selector(HomeTableViewController.playButton(_:)), forControlEvents: .TouchUpInside)
             cell.playCountLabel.text = "\(cell.track!.playCount)"
             cell.likeCountLabel.text = "\(cell.track!.likeCount)"
             
@@ -147,7 +147,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             
             self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
             self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
-            cell.artistButton.addTarget(self, action: "getUser:", forControlEvents: .TouchUpInside)
+            cell.artistButton.addTarget(self, action: #selector(HomeTableViewController.getUser(_:)), forControlEvents: .TouchUpInside)
     
             download(getS3WaveformKey(cell.track!), url: filePathURL(getS3WaveformKey(cell.track!)), bucket: waveform_bucket) {
                 (result) in
@@ -278,7 +278,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
                             if self.playerTimer != nil {
                                 self.playerTimer!.invalidate()
                             }
-                            self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
+                            self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(HomeTableViewController.play(_:)), userInfo: nil, repeats: true)
                             self.currTrackID = cell.track!.id
                         } catch _ as NSError {
                             Debug.printl("Error downloading track", sender: self)
@@ -301,7 +301,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     // Check if project view exists in memory, if not, create one.
     func showProjectView() {
         let count = (self.navigationController?.viewControllers.count)! as Int
-        for (var i = 0; i < count; i++) {
+        for i in 0 ..< count {
             let controller = self.navigationController?.viewControllers[i] as? ProjectViewController
             if controller != nil {
                 Debug.printl("Showing Project View", sender: self)

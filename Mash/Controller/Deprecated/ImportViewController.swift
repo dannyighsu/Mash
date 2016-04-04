@@ -26,9 +26,9 @@ class ImportViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let head = tableView.dequeueReusableHeaderFooterViewWithIdentifier("ImportHeaderView") as! ImportHeaderView
-        head.addButton.addTarget(self, action: "addAllTracks:", forControlEvents: UIControlEvents.TouchDown)
-        let tap = UITapGestureRecognizer(target: self, action: "search:")
-        head.addGestureRecognizer(tap)
+        head.addButton.addTarget(self, action: #selector(ImportViewController.addAllTracks(_:)), forControlEvents: UIControlEvents.TouchDown)
+        /*let tap = UITapGestureRecognizer(target: self, action: Selector("search:"))
+        head.addGestureRecognizer(tap)*/
         return head
     }
 
@@ -40,7 +40,7 @@ class ImportViewController: UITableViewController {
         track.title.text = track.titleText
         track.instrumentImage.image = findImage(track.instruments)
         track.trackURL = self.data[i].trackURL
-        let tap = UITapGestureRecognizer(target: self, action: "addTrack:")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(ImportViewController.addTrack(_:)))
         track.addButton.addGestureRecognizer(tap)
         return track
     }
@@ -53,7 +53,7 @@ class ImportViewController: UITableViewController {
         let track = self.tracks.cellForRowAtIndexPath(indexPath) as! Track
         if (track.accessoryType == UITableViewCellAccessoryType.Checkmark) {
             track.accessoryType = UITableViewCellAccessoryType.None
-            for (var i = 0; i < self.tracksToAdd.count; i++) {
+            for i in 0 ..< self.tracksToAdd.count {
                 if track == self.tracksToAdd[i] {
                     self.tracksToAdd.removeAtIndex(i)
                     break

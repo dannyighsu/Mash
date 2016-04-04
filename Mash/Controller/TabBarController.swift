@@ -50,7 +50,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.selectedIndex = getTabBarController("record")
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "update:", name: "UpdateUINotification", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TabBarController.update(_:)), name: "UpdateUINotification", object: nil)
         rootTabBarController = self
     }
     
@@ -59,8 +59,8 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         
         if self.tabBarButton == nil {
             let button = NSBundle.mainBundle().loadNibNamed("ProjectTabBar", owner: nil, options: nil)[0] as! ProjectTabBar
-            button.tapButton.addTarget(self, action: "showProject:", forControlEvents: .TouchUpInside)
-            button.addButton.addTarget(self, action: "showProject:", forControlEvents: .TouchUpInside)
+            button.tapButton.addTarget(self, action: #selector(TabBarController.showProject(_:)), forControlEvents: .TouchUpInside)
+            button.addButton.addTarget(self, action: #selector(TabBarController.showProject(_:)), forControlEvents: .TouchUpInside)
             button.frame = CGRect(x: 0.0, y: self.tabBar.frame.minY - 30.0, width: UIScreen.mainScreen().bounds.width, height: 35.0)
             self.view.addSubview(button)
             self.tabBarButton = button
@@ -69,7 +69,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
     
     override func shouldAutorotate() -> Bool {
         var result: Bool
-        if self.selectedViewController!.respondsToSelector("shouldAutorotate") {
+        if self.selectedViewController!.respondsToSelector(#selector(UIViewController.shouldAutorotate)) {
             result = self.selectedViewController!.shouldAutorotate()
         } else {
             result = super.shouldAutorotate()
@@ -79,7 +79,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
     
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         var result: UIInterfaceOrientationMask
-        if self.selectedViewController!.respondsToSelector("supportedInterfaceOrientations") {
+        if self.selectedViewController!.respondsToSelector(#selector(UIViewController.supportedInterfaceOrientations)) {
             result = self.selectedViewController!.supportedInterfaceOrientations()
         } else {
             result = super.supportedInterfaceOrientations()

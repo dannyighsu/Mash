@@ -10,10 +10,14 @@ target 'Mash' do
     pod 'EZAudio'
     pod 'IQKeyboardManager'
     pod 'google-plus-ios-sdk'
+    pod 'Buglife'
+
+    # Facebook Pods
     pod 'FBSDKCoreKit'
     pod 'FBSDKLoginKit'
     pod 'FBSDKShareKit'
-    #AWS Pods
+
+    # AWS Pods
     source 'https://github.com/CocoaPods/Specs.git'
     pod 'AWSCore'
     pod 'AWSS3'

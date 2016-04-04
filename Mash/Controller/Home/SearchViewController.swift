@@ -115,7 +115,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 track.instrumentFamilies = trackData.instrumentFamilies
                 track.trackURL = trackData.trackURL
                 track.instrumentImage.image = findImage(track.instrumentFamilies)
-                track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
+                track.addButton.addTarget(self, action: #selector(SearchViewController.addTrack(_:)), forControlEvents: UIControlEvents.TouchDown)
                 track.titleText = trackData.titleText
                 track.title.text = trackData.titleText
                 track.userText = trackData.userText
@@ -158,10 +158,10 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                     cell.followButton.hidden = true
                 } else if following {
                     cell.followButton.setTitle("Unfollow", forState: UIControlState.Normal)
-                    cell.followButton.addTarget(self, action: "unfollow:", forControlEvents: UIControlEvents.TouchUpInside)
+                    cell.followButton.addTarget(self, action: #selector(SearchViewController.unfollow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                     cell.followButton.backgroundColor = lightGray()
                 } else {
-                    cell.followButton.addTarget(self, action: "follow:", forControlEvents: UIControlEvents.TouchUpInside)
+                    cell.followButton.addTarget(self, action: #selector(SearchViewController.follow(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                 }
                 return cell
             }
@@ -200,7 +200,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                         if self.playerTimer != nil {
                             self.playerTimer!.invalidate()
                         }
-                        self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
+                        self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(SearchViewController.play(_:)), userInfo: nil, repeats: true)
                         self.currTrackID = track.id
                     }
                 }

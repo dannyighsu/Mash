@@ -42,7 +42,7 @@ class MashViewController: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.title = "Mash an Instrument"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Go", style: .Plain, target: self, action: "done")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Go", style: .Plain, target: self, action: #selector(MashViewController.done))
         self.navigationItem.setHidesBackButton(false, animated: false)
     }
     
