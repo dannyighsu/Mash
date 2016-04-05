@@ -43,7 +43,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewWillAppear(animated)
         self.navigationItem.setHidesBackButton(false, animated: false)
         self.navigationItem.title = "Results"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "done:")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(MashResultsController.done(_:)))
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -103,7 +103,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         }
         
         track.instrumentImage.image = findImage(self.results[indexPath.row].instrumentFamilies)
-        track.addButton.addTarget(self, action: "add:", forControlEvents: UIControlEvents.TouchDown)
+        track.addButton.addTarget(self, action: #selector(MashResultsController.add(_:)), forControlEvents: UIControlEvents.TouchDown)
         return track
     }
 
@@ -143,7 +143,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         if self.playerTimer != nil {
             self.playerTimer!.invalidate()
         }
-        self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
+        self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(MashResultsController.play(_:)), userInfo: nil, repeats: true)
         self.currTrackID = trackid
         for player in self.projectPlayers {
             player.play()
@@ -182,7 +182,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
             if self.playerTimer != nil {
                 self.playerTimer!.invalidate()
             }
-            self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
+            self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(MashResultsController.play(_:)), userInfo: nil, repeats: true)
             self.currTrackID = track.id
             for player in self.projectPlayers {
                 player.play()
@@ -192,7 +192,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     
     func stopPlaying(sender: AnyObject?) {
         self.audioPlayer!.stop()
-        for (var i = 0; i < self.projectPlayers.count; i++) {
+        for i in 0 ..< self.projectPlayers.count {
             self.projectPlayers[i].stop()
             self.projectPlayers[i].currentTime = 0
         }

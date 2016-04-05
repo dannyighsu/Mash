@@ -55,9 +55,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //Flurry.setDebugLogEnabled(true)
         }
         
+        // Set up Buglife
+        Buglife.sharedBuglife().startWithEmail("daniel@mashwithme.com")
+        Buglife.sharedBuglife().invocationOptions = LIFEInvocationOptions.Shake
+        
         // Set up server timer
         if !localServer {
-            serverTimer = NSTimer.scheduledTimerWithTimeInterval(300, target: self, selector: "requestNewServerAddress:", userInfo: nil, repeats: true)
+            serverTimer = NSTimer.scheduledTimerWithTimeInterval(300, target: self, selector: #selector(AppDelegate.requestNewServerAddress(_:)), userInfo: nil, repeats: true)
         }
 
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)

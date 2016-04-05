@@ -48,7 +48,7 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         self.tempoField.keyboardType = UIKeyboardType.NumberPad
         self.tempoField.delegate = self
         self.tempoField.becomeFirstResponder()
-        self.doneButton.addTarget(self, action: "finish:", forControlEvents: UIControlEvents.TouchDown)
+        self.doneButton.addTarget(self, action: #selector(TaggingViewController.finish(_:)), forControlEvents: UIControlEvents.TouchDown)
         self.tempoField.text = self.bpm
         self.timeField.text = self.time
         
@@ -72,7 +72,7 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         project.tracks?.reloadData()
         
         Debug.printl("Adding track with \(track?.instruments) named \(track?.titleText) to project view", sender: self)
-        for (var i = self.navigationController!.viewControllers.count; i > 2; i -= 1) {
+        for _ in (1 ..< self.navigationController!.viewControllers.count).reverse() {
             self.navigationController?.popViewControllerAnimated(true)
         }
         tabBarController.selectedViewController = project

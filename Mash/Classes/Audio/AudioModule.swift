@@ -65,7 +65,7 @@ class AudioConverter: TPAACAudioConverter {
         
         // Create track assets
         var maxDuration: CMTime = kCMTimeZero
-        for (var i = 0; i < tracks.count; i++) {
+        for i in 0 ..< tracks.count {
             let track: Track = tracks[i]
             
             let compositionTrack: AVMutableCompositionTrack = composition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID(kCMPersistentTrackID_Invalid))
@@ -76,7 +76,7 @@ class AudioConverter: TPAACAudioConverter {
         }
         
         // Insert into composition
-        for (var i = 0; i < tracks.count; i++) {
+        for i in 0 ..< tracks.count {
             let compositionTrack = compositionTracks[i]
             let asset: AVAsset = assets[i]
             let trackDuration: CMTime = asset.duration

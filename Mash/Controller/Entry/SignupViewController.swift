@@ -49,7 +49,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Sign Up", style: UIBarButtonItemStyle.Plain, target: self, action: "signUpAction:"), animated: false)
+        self.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Sign Up", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(SignupViewController.signUpAction(_:))), animated: false)
         self.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
         self.navigationItem.title = "Register An Account"
     }
@@ -165,6 +165,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
                 dispatch_async(dispatch_get_main_queue()) {
                     if !testing {
                         Flurry.setUserID("\(response.userid)")
+                        Flurry.logEvent("User_Register", withParameters: ["userid": Int(response.userid)])
                     }
                     self.loginAction()
                 }

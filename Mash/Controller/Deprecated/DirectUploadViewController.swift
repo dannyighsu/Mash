@@ -23,8 +23,8 @@ class DirectUploadViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.uploadButton.addTarget(self, action: "submit:", forControlEvents: UIControlEvents.TouchDown)
-        self.backButton.addTarget(self, action: "back:", forControlEvents: UIControlEvents.TouchDown)
+        self.uploadButton.addTarget(self, action: #selector(DirectUploadViewController.submit(_:)), forControlEvents: UIControlEvents.TouchDown)
+        self.backButton.addTarget(self, action: #selector(DirectUploadViewController.back(_:)), forControlEvents: UIControlEvents.TouchDown)
         
         self.submit(nil)
     }

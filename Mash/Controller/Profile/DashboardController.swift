@@ -1,3 +1,4 @@
+
 //
 //  DashboardController.swift
 //  Mash-iOS
@@ -71,7 +72,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidAppear(animated)
         let value = UIInterfaceOrientation.Portrait.rawValue
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
-        var editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "goToSettings:")
+        var editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(DashboardController.goToSettings(_:)))
         
         if self.user.userid != currentUser.userid {
             var following: Bool = false
@@ -81,9 +82,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
             if following {
-                editButton = UIBarButtonItem(title: "Unfollow", style: .Plain, target: self, action: "unfollow:")
+                editButton = UIBarButtonItem(title: "Unfollow", style: .Plain, target: self, action: #selector(DashboardController.unfollow(_:)))
             } else {
-                editButton = UIBarButtonItem(title: "Follow", style: .Plain, target: self, action: "follow:")
+                editButton = UIBarButtonItem(title: "Follow", style: .Plain, target: self, action: #selector(DashboardController.follow(_:)))
             }
         }
         if self.user == currentUser {
@@ -145,7 +146,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             track.instrumentImage.image = findImage(track.instrumentFamilies)
             track.instrumentImage.backgroundColor = UIColor.clearColor()
             track.dateLabel.text = parseTimeStamp(self.data[index].time)
-            track.addButton.addTarget(self, action: "addTrack:", forControlEvents: UIControlEvents.TouchDown)
+            track.addButton.addTarget(self, action: #selector(DashboardController.addTrack(_:)), forControlEvents: UIControlEvents.TouchDown)
             track.activityView.startAnimating()
             track.track = self.data[index]
             
@@ -205,9 +206,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             // TODO: implement
             header.locationButton.setTitle(self.user.handle!, forState: .Normal)
             
-            let tap1 = UITapGestureRecognizer(target: self, action: "goToFollowers:")
+            let tap1 = UITapGestureRecognizer(target: self, action: #selector(DashboardController.goToFollowers(_:)))
             header.followerCount.addGestureRecognizer(tap1)
-            let tap2 = UITapGestureRecognizer(target: self, action: "goToFollowing:")
+            let tap2 = UITapGestureRecognizer(target: self, action: #selector(DashboardController.goToFollowing(_:)))
             header.followingCount.addGestureRecognizer(tap2)
             
             self.user.setBannerPic(header.bannerImage)
@@ -254,7 +255,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                         if self.playerTimer != nil {
                             self.playerTimer!.invalidate()
                         }
-                        self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "play:", userInfo: nil, repeats: true)
+                        self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(DashboardController.play(_:)), userInfo: nil, repeats: true)
                         Debug.printl("Playing track \(track.titleText)", sender: self)
                     }
                 }
@@ -397,7 +398,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         }*/
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("ImageViewController") as! ImageViewController
         var data: [PHAsset] = []
-        for (var i = photoResults.count - 1; i >= 0; i--) {
+        for i in (0..<photoResults.count).reverse() {
             data.append(photoResults[i] as! PHAsset)
         }
         controller.data = data
@@ -495,18 +496,18 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func follow(sender: UIButton) {
         self.user.follow(nil)
         if self.user == currentUser {
-            self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Unfollow", style: .Plain, target: self, action: "unfollow:")
+            self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Unfollow", style: .Plain, target: self, action: #selector(DashboardController.unfollow(_:)))
         } else {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Unfollow", style: .Plain, target: self, action: "unfollow:")
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Unfollow", style: .Plain, target: self, action: #selector(DashboardController.unfollow(_:)))
         }
     }
     
     func unfollow(sender: UIButton) {
         self.user.unfollow(nil)
         if self.user == currentUser {
-            self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Follow", style: .Plain, target: self, action: "follow:")
+            self.parentViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Follow", style: .Plain, target: self, action: #selector(DashboardController.follow(_:)))
         } else {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Follow", style: .Plain, target: self, action: "follow:")
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Follow", style: .Plain, target: self, action: #selector(DashboardController.follow(_:)))
         }
     }
     

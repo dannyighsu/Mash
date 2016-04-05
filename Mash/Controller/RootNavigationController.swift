@@ -29,7 +29,7 @@ class RootNavigationController: UINavigationController {
     
     override func shouldAutorotate() -> Bool {
         var result: Bool
-        if self.topViewController!.respondsToSelector("shouldAutorotate") {
+        if self.topViewController!.respondsToSelector(#selector(UIViewController.shouldAutorotate)) {
             result = self.topViewController!.shouldAutorotate()
         } else {
             result = super.shouldAutorotate()
@@ -39,7 +39,7 @@ class RootNavigationController: UINavigationController {
     
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         var result: UIInterfaceOrientationMask
-        if self.topViewController!.respondsToSelector("supportedInterfaceOrientations") {
+        if self.topViewController!.respondsToSelector(#selector(UIViewController.supportedInterfaceOrientations)) {
             result = self.topViewController!.supportedInterfaceOrientations()
         } else {
             result = super.supportedInterfaceOrientations()

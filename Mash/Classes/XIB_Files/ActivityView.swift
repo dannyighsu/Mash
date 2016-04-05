@@ -37,7 +37,7 @@ class ActivityView: UIView {
     
     func startAnimating() {
         self.activityView.startAnimating()
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "showSpinner:", userInfo: nil, repeats: false)
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(ActivityView.showSpinner(_:)), userInfo: nil, repeats: false)
     }
     
     func stopAnimating() {
