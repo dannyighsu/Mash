@@ -71,7 +71,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.titleView = self.titleButton
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .Plain, target: self, action: #selector(NSManagedObjectContext.save))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .Plain, target: self, action: #selector(ProjectViewController.save))
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "hide"), style: .Plain, target: self, action: #selector(ProjectViewController.dismiss(_:)))
         if self.tracks != nil {
             self.tracks.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)

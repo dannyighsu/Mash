@@ -89,7 +89,7 @@ class ProjectPlayer: UITableViewHeaderFooterView {
     }
     
     func play() {
-        for i in 0...self.audioPlayers.count - 1 {
+        for i in 0 ..< self.audioPlayers.count {
             self.audioPlayers[i].play()
         }
         self.playButton.setImage(UIImage(named: "Pause"), forState: UIControlState.Normal)
@@ -97,7 +97,7 @@ class ProjectPlayer: UITableViewHeaderFooterView {
     }
     
     func pause() {
-        for i in 0...self.audioPlayers.count - 1 {
+        for i in 0 ..< self.audioPlayers.count {
             self.audioPlayers[i].pause()
         }
         self.playButton.setImage(UIImage(named: "Play"), forState: UIControlState.Normal)
@@ -105,7 +105,7 @@ class ProjectPlayer: UITableViewHeaderFooterView {
     }
     
     func stop() {
-        for i in 0...self.audioPlayers.count - 1 {
+        for i in 0 ..< self.audioPlayers.count {
             self.audioPlayers[i].stop()
             self.audioPlayers[i].currentTime = 0
         }
