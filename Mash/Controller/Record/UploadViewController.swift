@@ -44,9 +44,10 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         self.audioPlayer = try? AVAudioPlayer(contentsOfURL: recording!.url)
         
-        self.activityView.setText("Uploading...")
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
+        self.activityView.setText("Uploading...")
+        self.activityView.titleLabel.sizeToFit()
         
         self.audioPlot.color = lightBlue()
         self.audioPlot.backgroundColor = UIColor.clearColor()
@@ -210,9 +211,6 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         server.recordingUploadWithRequest(request) {
             (response, error) in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.activityView.stopAnimating()
-            }
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)
                 if error.code == 13 {
@@ -224,28 +222,29 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
                     }
                 }
             } else {
-                dispatch_async(dispatch_get_main_queue()) {
-                    let key = "\(currentUser.userid!)~~\(response.recid).m4a"
-                    upload(key, url: self.recording!.url, bucket: track_bucket) {
-                        (result) in
-                        if result != nil {
-                            dispatch_async(dispatch_get_main_queue()) {
-                                self.recid = Int(response.recid)
-                                if !testing {
-                                    Flurry.logEvent("Recording_Upload", withParameters: ["userid": currentUser.userid!, "instrument": self.instruments])
-                                }
-                                if self.navigationController is RootNavigationController {
-                                    let alert = UIAlertView(title: "Success!", message: "Would you like to mash your new sound?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "Yes")
-                                    alert.delegate = self
-                                    alert.show()
-                                } else {
-                                    self.finish()
-                                }
+                let key = "\(currentUser.userid!)~~\(response.recid).m4a"
+                upload(key, url: self.recording!.url, bucket: track_bucket) {
+                    (result) in
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.activityView.stopAnimating()
+                    }
+                    if result != nil {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.recid = Int(response.recid)
+                            if !testing {
+                                Flurry.logEvent("Recording_Upload", withParameters: ["userid": currentUser.userid!, "instrument": self.instruments])
                             }
-                        } else {
-                            self.deleteTrack(response.recid)
-                            raiseAlert("There was an issue with your upload. Please try again.")
+                            if self.navigationController is RootNavigationController {
+                                let alert = UIAlertView(title: "Success!", message: "Would you like to mash your new sound?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "Yes")
+                                alert.delegate = self
+                                alert.show()
+                            } else {
+                                self.finish()
+                            }
                         }
+                    } else {
+                        self.deleteTrack(response.recid)
+                        raiseAlert("There was an issue with your upload. Please try again.")
                     }
                 }
             }
