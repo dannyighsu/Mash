@@ -28,9 +28,9 @@ class EntryViewController: UIViewController {
         self.facebookButton.imageView?.image = UIImage(named: "fb_logo_invert")
         self.facebookButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
         self.facebookButton.addTarget(self, action: #selector(EntryViewController.facebookLogin(_:)), forControlEvents: UIControlEvents.TouchDown)
-        self.facebookButton.hidden = true
-        
         // TODO: implement facebook login
+        //self.facebookButton.hidden = true
+        
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         blurView.frame = self.registerButton.bounds
         blurView.contentView.backgroundColor = lightBlueTranslucent()
