@@ -26,6 +26,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.handleField.returnKeyType = UIReturnKeyType.Next
         self.passwordField.returnKeyType = UIReturnKeyType.Go
         self.handleField.autocapitalizationType = .None
+        self.handleField.autocorrectionType = .No
         
         if let background = UIImage(named: "concert_faded") {
             self.view.backgroundColor = UIColor(patternImage: background)
@@ -150,6 +151,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         User.getUsersFollowing()
         sendTokenRequest()
+        
+        // Set up notifications
+        let types = UIUserNotificationType.Badge.union(UIUserNotificationType.Sound.union(UIUserNotificationType.Alert))
+        let settings = UIUserNotificationSettings(forTypes: types, categories: nil)
+        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+        UIApplication.sharedApplication().registerForRemoteNotifications()
 
         Debug.printl("Successful login - pushing tab bar controller onto navigation controller", sender: self)
         let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController

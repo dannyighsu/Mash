@@ -34,6 +34,8 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         self.confirmPasswordField.delegate = self
         self.emailField.autocapitalizationType = .None
         self.handleField.autocapitalizationType = .None
+        self.emailField.autocorrectionType = .No
+        self.handleField.autocorrectionType = .No
 
         // Set textfield actions
         self.passwordField.returnKeyType = UIReturnKeyType.Next
@@ -175,6 +177,13 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     
     func loginAction() {
         Debug.printl("Successful registration - pushing tab bar controller onto navigation controller", sender: self)
+        
+        // Set up notifications
+        let types = UIUserNotificationType.Badge.union(UIUserNotificationType.Sound.union(UIUserNotificationType.Alert))
+        let settings = UIUserNotificationSettings(forTypes: types, categories: nil)
+        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+        UIApplication.sharedApplication().registerForRemoteNotifications()
+        
         self.performSegueWithIdentifier("welcome", sender: nil)
     }
     
