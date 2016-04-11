@@ -482,7 +482,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()
                     if error.code == 13 {
-                        raiseAlert("Error", delegate: self, message: "Track exists.")
+                        raiseAlert("Error", delegate: self, message: "You already have a sound with this name.")
                     } else {
                         raiseAlert("Error occurred. \(error.code)")
                     }

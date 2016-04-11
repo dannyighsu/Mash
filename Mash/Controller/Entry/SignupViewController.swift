@@ -52,8 +52,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Register", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(SignupViewController.signUpAction(_:))), animated: false)
-        self.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.blackColor()], forState: UIControlState.Normal)
-        self.navigationItem.title = "Register An Account"
+        self.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 18)!, NSForegroundColorAttributeName: UIColor.blackColor()], forState: UIControlState.Normal)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -97,14 +96,17 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
 
     // Check for length & validity of text fields
     func signUpAction(sender: AnyObject?) {
-        if (((self.handleField.text!).characters.count < 4) || ((self.passwordField.text!).characters.count < 4)) {
-            raiseAlert("Username and Password must have at least 4 character.", delegate: self)
+        if self.handleField.text == nil || self.passwordField.text == nil || self.confirmPasswordField.text == nil || self.emailField.text == nil {
+            shakeScreen(self.view)
+            return
+        } else if (((self.handleField.text!).characters.count < 4) || ((self.passwordField.text!).characters.count < 4)) {
+            raiseAlert("Handles and Passwords must have at least 4 characters.", delegate: self)
             return
         } else if (((self.handleField.text!).characters.count > 40 || ((self.passwordField.text!).characters.count > 40))) {
-            raiseAlert("Username and Password must be less than 40 characters long.", delegate: self)
+            raiseAlert("Handles and Passwords must be less than 40 characters long.", delegate: self)
             return
         } else if self.handleField.text!.rangeOfString(" ") != nil {
-            raiseAlert("Username cannot contain spaces.", delegate: self)
+            raiseAlert("Handles cannot contain spaces.", delegate: self)
             return
         } else if self.confirmPasswordField.text != self.passwordField.text {
             raiseAlert("Passwords do not match.", delegate: self)

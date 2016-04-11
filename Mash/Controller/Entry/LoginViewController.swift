@@ -52,8 +52,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Log In", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(LoginViewController.signinAction(_:))), animated: false)
-        self.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.blackColor()], forState: UIControlState.Normal)
-        self.navigationItem.title = "Sign In"
+        self.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 18)!, NSForegroundColorAttributeName: UIColor.blackColor()], forState: UIControlState.Normal)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -63,8 +62,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     func signinAction(sender: AnyObject?) {
-        if (((self.handleField.text!).characters.count < 1) || ((self.passwordField.text!).characters.count < 1)) {
-            raiseAlert("Incorrect Username and/or Password", delegate: self)
+        if (((self.handleField.text!).characters.count < 4) || ((self.passwordField.text!).characters.count < 4)) {
+            shakeScreen(self.view)
             return
         }
         
@@ -77,7 +76,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.passwordField.becomeFirstResponder()
         } else {
             if textField.text!.isEmpty {
-                raiseAlert("Please enter a password.", delegate: self)
+                dispatch_async(dispatch_get_main_queue()) {
+                    shakeScreen(self.view)
+                }
                 return false
             }
             self.passwordField.resignFirstResponder()
