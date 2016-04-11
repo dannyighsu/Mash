@@ -59,21 +59,33 @@ class EntryViewController: UIViewController {
     }
     
     func facebookLogin(sender: AnyObject?) {
-        let login = FBSDKLoginManager()
-        login.logInWithReadPermissions(["email", "public_profile"]) {
-            (result: FBSDKLoginManagerLoginResult!, error: NSError!) -> Void in
-            if error != nil {
-                Debug.printl(error, sender: self)
-            } else if result.isCancelled {
-                Debug.printl("Login was cancelled by user.", sender: self)
-            } else {
-                self.loginWithFacebook(result)
+        let hasFacebookLoginToken = NSUserDefaults.standardUserDefaults().boolForKey("hasFacebookLoginToken")
+        if hasFacebookLoginToken {
+            let loginToken = NSUserDefaults.standardUserDefaults().valueForKey("facebookLoginToken") as! String
+            // TODO: Send fbauth request to server
+            
+        } else {
+            let login = FBSDKLoginManager()
+            login.logInWithReadPermissions(["email", "public_profile"]) {
+                (result: FBSDKLoginManagerLoginResult!, error: NSError!) -> Void in
+                if error != nil {
+                    Debug.printl(error, sender: self)
+                } else if result.isCancelled {
+                    Debug.printl("Login was cancelled by user.", sender: self)
+                } else {
+                    self.loginWithFacebook(result)
+                }
             }
         }
     }
     
     func loginWithFacebook(permissions: FBSDKLoginManagerLoginResult) {
         if permissions.grantedPermissions.contains("email") && permissions.grantedPermissions.contains("public_profile") {
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasFacebookLoginToken")
+            NSUserDefaults.standardUserDefaults().setValue(permissions.token.tokenString, forKey: "facebookLoginToken")
+            
+            // TODO: Log In
+            
             /*FBSDKGraphRequest(graphPath: "me", parameters: nil).startWithCompletionHandler() {
                 (connection, result, error) -> Void in
                 if (error == nil ) {

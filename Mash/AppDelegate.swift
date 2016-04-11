@@ -37,12 +37,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        // Set up notifications
-        let types = UIUserNotificationType.Badge.union(UIUserNotificationType.Sound.union(UIUserNotificationType.Alert))
-        let settings = UIUserNotificationSettings(forTypes: types, categories: nil)
-        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
-        UIApplication.sharedApplication().registerForRemoteNotifications()
-        
         // Set up Optimizely
         Optimizely.startOptimizelyWithAPIToken("AAM7hIkBvc0Hcq4ni8hGis3hDg6-xDW4~3701484372", launchOptions: launchOptions)
         

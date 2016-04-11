@@ -775,43 +775,6 @@
                                     <constraint firstAttribute="height" constant="191" id="Pb2-oS-xbS"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user" translatesAutoresizingMaskIntoConstraints="NO" id="IZk-PF-mQe">
-                                <rect key="frame" x="0.0" y="300" width="30" height="30"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="password" translatesAutoresizingMaskIntoConstraints="NO" id="Y53-Xo-VNI">
-                                <rect key="frame" x="0.0" y="329" width="30" height="30"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </imageView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username or Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ny3-2N-o3r">
-                                <rect key="frame" x="38" y="300" width="562" height="30"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="Zrp-Ts-c1q"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="o5K-a9-vcI">
-                                <rect key="frame" x="38" y="329" width="562" height="30"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="jyr-LD-3Ps"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
-                            </textField>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oya-yC-XKS">
-                                <rect key="frame" x="30" y="329" width="570" height="1"/>
-                                <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="deviceRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="VaO-SA-z2o"/>
-                                </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FTg-cJ-PGM">
-                                <rect key="frame" x="30" y="300" width="8" height="59"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign In to Your Account" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="omv-B9-Zrq">
                                 <rect key="frame" x="175" y="216" width="250" height="21"/>
                                 <constraints>
@@ -822,6 +785,43 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user" translatesAutoresizingMaskIntoConstraints="NO" id="IZk-PF-mQe">
+                                <rect key="frame" x="0.0" y="284" width="30" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="password" translatesAutoresizingMaskIntoConstraints="NO" id="Y53-Xo-VNI">
+                                <rect key="frame" x="0.0" y="313" width="30" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </imageView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username or Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ny3-2N-o3r">
+                                <rect key="frame" x="38" y="284" width="562" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Zrp-Ts-c1q"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="o5K-a9-vcI">
+                                <rect key="frame" x="38" y="313" width="562" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="jyr-LD-3Ps"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                            </textField>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oya-yC-XKS">
+                                <rect key="frame" x="30" y="313" width="570" height="1"/>
+                                <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="deviceRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="VaO-SA-z2o"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FTg-cJ-PGM">
+                                <rect key="frame" x="30" y="284" width="8" height="59"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
@@ -835,7 +835,7 @@
                             <constraint firstItem="ny3-2N-o3r" firstAttribute="top" secondItem="76e-Ea-16m" secondAttribute="bottom" constant="41" id="CSY-T5-p1h"/>
                             <constraint firstItem="Y53-Xo-VNI" firstAttribute="trailing" secondItem="IZk-PF-mQe" secondAttribute="trailing" id="Iu7-7t-cGj"/>
                             <constraint firstItem="76e-Ea-16m" firstAttribute="leading" secondItem="hOb-mq-uht" secondAttribute="leadingMargin" constant="-16" id="JVb-Ag-Np6"/>
-                            <constraint firstItem="76e-Ea-16m" firstAttribute="top" secondItem="ny3-2N-o3r" secondAttribute="top" constant="-235" id="L5i-Cu-zQK"/>
+                            <constraint firstItem="76e-Ea-16m" firstAttribute="top" secondItem="ny3-2N-o3r" secondAttribute="top" constant="-219" id="L5i-Cu-zQK"/>
                             <constraint firstItem="Oya-yC-XKS" firstAttribute="leading" secondItem="FTg-cJ-PGM" secondAttribute="leading" id="L73-aB-V9W"/>
                             <constraint firstItem="FTg-cJ-PGM" firstAttribute="bottom" secondItem="Y53-Xo-VNI" secondAttribute="bottom" id="MwY-iY-hUE"/>
                             <constraint firstItem="IZk-PF-mQe" firstAttribute="top" secondItem="ny3-2N-o3r" secondAttribute="top" id="NDs-vG-m05"/>
@@ -1072,7 +1072,7 @@
                                 </constraints>
                             </imageView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UYK-u5-zyU">
-                                <rect key="frame" x="38" y="302" width="562" height="30"/>
+                                <rect key="frame" x="38" y="277" width="562" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="562" id="yqF-ys-J52"/>
@@ -1086,25 +1086,25 @@
                                 </variation>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="INi-mJ-v3t">
-                                <rect key="frame" x="38" y="332" width="562" height="30"/>
+                                <rect key="frame" x="38" y="307" width="562" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0mG-BI-fOh">
-                                <rect key="frame" x="38" y="362" width="562" height="30"/>
+                                <rect key="frame" x="38" y="337" width="562" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hhi-bF-XEV">
-                                <rect key="frame" x="38" y="392" width="562" height="30"/>
+                                <rect key="frame" x="38" y="367" width="562" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user" translatesAutoresizingMaskIntoConstraints="NO" id="Gmz-Ei-eQ8">
-                                <rect key="frame" x="0.0" y="302" width="30" height="30"/>
+                                <rect key="frame" x="0.0" y="277" width="30" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="15G-un-kvM"/>
@@ -1112,43 +1112,43 @@
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="email" translatesAutoresizingMaskIntoConstraints="NO" id="MOb-uk-O7q">
-                                <rect key="frame" x="0.0" y="332" width="30" height="30"/>
+                                <rect key="frame" x="0.0" y="307" width="30" height="30"/>
                                 <color key="backgroundColor" red="0.99607849120000003" green="0.99215692280000001" blue="0.99215692280000001" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="RWr-qW-4Hh"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="password" translatesAutoresizingMaskIntoConstraints="NO" id="TmP-Zr-cTw">
-                                <rect key="frame" x="0.0" y="362" width="30" height="30"/>
+                                <rect key="frame" x="0.0" y="337" width="30" height="30"/>
                                 <color key="backgroundColor" red="0.99607849120000003" green="0.99215692280000001" blue="0.99215692280000001" alpha="1" colorSpace="deviceRGB"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="twY-ek-tdr">
-                                <rect key="frame" x="30" y="302" width="8" height="120"/>
+                                <rect key="frame" x="30" y="277" width="8" height="120"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KPn-If-HBc">
-                                <rect key="frame" x="30" y="332" width="570" height="1"/>
+                                <rect key="frame" x="30" y="307" width="570" height="1"/>
                                 <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="IIy-Q6-RFF"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2nk-HE-ihj">
-                                <rect key="frame" x="30" y="362" width="570" height="1"/>
+                                <rect key="frame" x="30" y="337" width="570" height="1"/>
                                 <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="VWt-Gu-uzA"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5bC-Ah-cj1">
-                                <rect key="frame" x="30" y="392" width="570" height="1"/>
+                                <rect key="frame" x="30" y="367" width="570" height="1"/>
                                 <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="agu-w2-UUo"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MIC-CH-cvf">
-                                <rect key="frame" x="0.0" y="392" width="30" height="30"/>
+                                <rect key="frame" x="0.0" y="367" width="30" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
@@ -1197,7 +1197,7 @@
                             <constraint firstItem="0mG-BI-fOh" firstAttribute="leading" secondItem="TmP-Zr-cTw" secondAttribute="trailing" constant="8" symbolic="YES" id="oBY-JD-oLK"/>
                             <constraint firstItem="Ueh-v1-ATK" firstAttribute="top" secondItem="TmP-Zr-cTw" secondAttribute="bottom" constant="235" id="opS-2w-ahr"/>
                             <constraint firstItem="UYK-u5-zyU" firstAttribute="leading" secondItem="INi-mJ-v3t" secondAttribute="leading" id="pJP-Zb-XmG"/>
-                            <constraint firstItem="Gmz-Ei-eQ8" firstAttribute="top" secondItem="HAw-E4-Pyj" secondAttribute="bottom" constant="51" id="qy7-k4-V4a"/>
+                            <constraint firstItem="Gmz-Ei-eQ8" firstAttribute="top" secondItem="HAw-E4-Pyj" secondAttribute="bottom" constant="26" id="qy7-k4-V4a"/>
                             <constraint firstItem="KPn-If-HBc" firstAttribute="top" secondItem="INi-mJ-v3t" secondAttribute="top" id="sdp-ed-7IS"/>
                             <constraint firstItem="HAw-E4-Pyj" firstAttribute="leading" secondItem="Gmz-Ei-eQ8" secondAttribute="leading" id="wOa-iQ-7t7"/>
                             <constraint firstItem="2nk-HE-ihj" firstAttribute="top" secondItem="KPn-If-HBc" secondAttribute="bottom" constant="29" id="xSW-W8-uzw"/>

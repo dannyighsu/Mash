@@ -300,6 +300,7 @@
 		3711F0A31B6FFD9D00C75F2B /* SuperpoweredAudioModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3711F0A21B6FFD9D00C75F2B /* SuperpoweredAudioModule.mm */; };
 		3718EF291B57071D00AA5D26 /* Objective-C.h in Headers */ = {isa = PBXBuildFile; fileRef = 3718EF271B57071D00AA5D26 /* Objective-C.h */; };
 		3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718EF281B57071D00AA5D26 /* Objective-C.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		3719B8391CBB356A0056D11F /* ShareItemSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3719B8381CBB356A0056D11F /* ShareItemSource.swift */; };
 		371F14C71B8D23550044BE5B /* mashservice.proto in Resources */ = {isa = PBXBuildFile; fileRef = 371F14C61B8D23550044BE5B /* mashservice.proto */; };
 		3722ACEA1B4DF1F2008473C3 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3722ACE91B4DF1F2008473C3 /* ImageCell.xib */; };
 		373915D41C5D7FFE0093351B /* RemoteFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373915D31C5D7FFE0093351B /* RemoteFunctions.swift */; };
@@ -730,6 +731,7 @@
 		3711F0A21B6FFD9D00C75F2B /* SuperpoweredAudioModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SuperpoweredAudioModule.mm; sourceTree = "<group>"; };
 		3718EF271B57071D00AA5D26 /* Objective-C.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Objective-C.h"; sourceTree = "<group>"; };
 		3718EF281B57071D00AA5D26 /* Objective-C.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Objective-C.m"; sourceTree = "<group>"; };
+		3719B8381CBB356A0056D11F /* ShareItemSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareItemSource.swift; sourceTree = "<group>"; };
 		371F14C61B8D23550044BE5B /* mashservice.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mashservice.proto; path = protos/mashservice.proto; sourceTree = SOURCE_ROOT; };
 		3722ACE91B4DF1F2008473C3 /* ImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
 		373915D31C5D7FFE0093351B /* RemoteFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteFunctions.swift; sourceTree = "<group>"; };
@@ -1376,6 +1378,7 @@
 				379882451C0131360029E56C /* HelperData.swift */,
 				379882461C0131360029E56C /* HelperFunctions.swift */,
 				37B742BF1C77C31900E4EDBE /* HelperClasses.swift */,
+				3719B8381CBB356A0056D11F /* ShareItemSource.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -2227,6 +2230,7 @@
 				37C9F5131C029E2000C80F88 /* Channel.swift in Sources */,
 				37C9F5121C029E2000C80F88 /* ProfileTrack.swift in Sources */,
 				37038FB91C617D1C0043C262 /* ExploreViewController.swift in Sources */,
+				3719B8391CBB356A0056D11F /* ShareItemSource.swift in Sources */,
 				3798827D1C01314F0029E56C /* ImageViewController.swift in Sources */,
 				37E799D91B3CC1D000D2E54D /* Debug.swift in Sources */,
 				37737B971BDF865C00FA9EB7 /* LoadBalancer.pbobjc.m in Sources */,

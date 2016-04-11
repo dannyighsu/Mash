@@ -52,19 +52,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.tabBarController!.view.addSubview(self.coverView)
         self.activityView.startAnimating()
         
-        // Load AVAudioSession
-        let session = AVAudioSession.sharedInstance()
-        do {
-            try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
-        } catch let error1 as NSError {
-            Debug.printl("Error setting up session: \(error1.localizedDescription)", sender: self)
-        }
-        do {
-            try session.setActive(true)
-        } catch let error1 as NSError {
-            Debug.printl("Error setting session active: \(error1.localizedDescription)", sender: self)
-        }
-        
         // Set up metronome
         let metronome = Metronome.createView()
         metronome.delegate = self
@@ -86,13 +73,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.timeButton.addTarget(self, action: #selector(RecordViewController.showTime(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.tempoButton.addTarget(self, action: #selector(RecordViewController.showTempo(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.metronomeButton.addTarget(self, action: #selector(RecordViewController.muteMetronome(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        
-        do {
-            try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
-        } catch let error1 as NSError {
-            Debug.printl("\(error1.localizedDescription)", sender: self)
-            raiseAlert("Error setting up audio.")
-        }
         
         // Request server address synchronously
         self.requestServerAddress()
@@ -127,6 +107,26 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     // Button methods
     func record(sender: AnyObject?) {
+        // Load AVAudioSession
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
+        } catch let error1 as NSError {
+            Debug.printl("Error setting up session: \(error1.localizedDescription)", sender: self)
+        }
+        do {
+            try session.setActive(true)
+        } catch let error1 as NSError {
+            Debug.printl("Error setting session active: \(error1.localizedDescription)", sender: self)
+        }
+        
+        do {
+            try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
+        } catch let error1 as NSError {
+            Debug.printl("\(error1.localizedDescription)", sender: self)
+            raiseAlert("Error setting up audio.")
+        }
+        
         if !testing {
             Flurry.logEvent("User_Recording", withParameters: ["userid": currentUser.userid!])
         }
@@ -139,6 +139,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         } else {
             self.stopRecording()
             self.validateButtons()
+            NSThread.sleepForTimeInterval(0.5)
+            self.play(nil)
         }
     }
     
@@ -606,8 +608,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         }
         User.getUsersFollowing()
         sendTokenRequest()
-        
-        Debug.printl("Successful login", sender: self)
     }
     
     func saveLoginItems(handle: String, password: String) {

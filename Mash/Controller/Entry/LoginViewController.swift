@@ -26,7 +26,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.handleField.returnKeyType = UIReturnKeyType.Next
         self.passwordField.returnKeyType = UIReturnKeyType.Go
         self.handleField.autocapitalizationType = .None
-        
+        self.handleField.autocorrectionType = .No
+
         if let background = UIImage(named: "concert_faded") {
             self.view.backgroundColor = UIColor(patternImage: background)
         }
@@ -51,8 +52,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Log In", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(LoginViewController.signinAction(_:))), animated: false)
-        self.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.blackColor()], forState: UIControlState.Normal)
-        self.navigationItem.title = "Sign In"
+        self.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 18)!, NSForegroundColorAttributeName: UIColor.blackColor()], forState: UIControlState.Normal)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -62,8 +62,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     func signinAction(sender: AnyObject?) {
-        if (((self.handleField.text!).characters.count < 1) || ((self.passwordField.text!).characters.count < 1)) {
-            raiseAlert("Incorrect Username and/or Password", delegate: self)
+        if (((self.handleField.text!).characters.count < 4) || ((self.passwordField.text!).characters.count < 4)) {
+            shakeScreen(self.view)
             return
         }
         
@@ -76,7 +76,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.passwordField.becomeFirstResponder()
         } else {
             if textField.text!.isEmpty {
-                raiseAlert("Please enter a password.", delegate: self)
+                dispatch_async(dispatch_get_main_queue()) {
+                    shakeScreen(self.view)
+                }
                 return false
             }
             self.passwordField.resignFirstResponder()
@@ -150,6 +152,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         User.getUsersFollowing()
         sendTokenRequest()
+        
+        // Set up notifications
+        let types = UIUserNotificationType.Badge.union(UIUserNotificationType.Sound.union(UIUserNotificationType.Alert))
+        let settings = UIUserNotificationSettings(forTypes: types, categories: nil)
+        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+        UIApplication.sharedApplication().registerForRemoteNotifications()
 
         Debug.printl("Successful login - pushing tab bar controller onto navigation controller", sender: self)
         let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController

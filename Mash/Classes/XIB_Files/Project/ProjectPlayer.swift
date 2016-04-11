@@ -18,6 +18,7 @@ import UIKit
     optional func tempoLabelDidEndEditing(textField: UITextField)
     func addTracks()
     func toggleMetronome()
+    func share()
 }
 
 class ProjectPlayer: UITableViewHeaderFooterView {
@@ -70,7 +71,7 @@ class ProjectPlayer: UITableViewHeaderFooterView {
     }
     
     @IBAction func toolsButtonPressed(sender: AnyObject) {
-        self.delegate?.showTools!()
+        self.delegate?.share()
     }
     
     @IBAction func mixerButtonPressed(sender: AnyObject) {
