@@ -27,7 +27,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.passwordField.returnKeyType = UIReturnKeyType.Go
         self.handleField.autocapitalizationType = .None
         self.handleField.autocorrectionType = .No
-        
+
         if let background = UIImage(named: "concert_faded") {
             self.view.backgroundColor = UIColor(patternImage: background)
         }

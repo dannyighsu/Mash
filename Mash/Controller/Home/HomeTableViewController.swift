@@ -68,7 +68,12 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.parentViewController?.navigationItem.title = "Mash"
-        self.retrieveActivity()
+        if userFollowing.count == 0 {
+            self.tabControlBar!.scopeTab.selectedSegmentIndex = 1
+            self.didChangeScope(self.tabControlBar!.scopeTab)
+        } else {
+            self.retrieveActivity()
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -79,10 +84,6 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         /*if UIDevice.currentDevice().systemVersion.compare("9.0") == NSComparisonResult.OrderedAscending {
             self.activityView.frame = CGRect(x: self.activityView.frame.minX + self.navigationController!.navigationBar.frame.size.height, y: self.activityView.frame.minY, width: self.activityView.frame.width, height: self.activityView.frame.height)
         }*/
-        if userFollowing.count == 0 {
-            self.tabControlBar!.scopeTab.selectedSegmentIndex = 1
-            self.didChangeScope(self.tabControlBar!.scopeTab)
-        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -213,39 +214,39 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     // Scope tab
     func didChangeScope(sender: UISegmentedControl) {
         self.currentScope = sender.selectedSegmentIndex
-        if userFollowing.count == 0 && self.currentScope == 0 {
-            self.musicImage.hidden = false
-            self.noneText.hidden = false
-        } else {
-            self.musicImage.hidden = true
-            self.noneText.hidden = true
-        }
+        self.musicImage.hidden = true
+        self.noneText.hidden = true
         if self.currentScope == 0 {
             if self.activityData.count > 0 {
-                for i in 0...DEFAULT_DISPLAY_AMOUNT {
+                self.displayData = []
+                for i in 0 ..< DEFAULT_DISPLAY_AMOUNT {
                     if i == self.activityData.count {
                         break
                     }
                     self.displayData.append(self.activityData[i])
                 }
+                self.activityFeed.reloadData()
+                self.activityView.stopAnimating()
             } else {
                 retrieveActivity()
                 return
             }
         } else {
             if self.globalData.count > 0 {
-                for i in 0...DEFAULT_DISPLAY_AMOUNT {
+                self.displayData = []
+                for i in 0 ..< DEFAULT_DISPLAY_AMOUNT {
                     if i == self.globalData.count {
                         break
                     }
                     self.displayData.append(self.globalData[i])
                 }
+                self.activityFeed.reloadData()
+                self.activityView.stopAnimating()
             } else {
                 retrieveGlobal()
                 return
             }
         }
-        self.activityFeed.reloadData()
     }
 
     // Auxiliary methods
@@ -425,6 +426,10 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         dispatch_async(dispatch_get_main_queue()) {
+            if self.displayData.count == 0 {
+                self.musicImage.hidden = false
+                self.noneText.hidden = false
+            }
             self.activityFeed.reloadData()
             self.activityView.stopAnimating()
         }

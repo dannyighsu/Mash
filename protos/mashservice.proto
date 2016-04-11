@@ -227,20 +227,20 @@ message ReportRecRequest {
     required string message = 4;
 }
 
-message FbAccessToken {
-    required uint32 userid = 1;
+message FbAuthRequest {
+    required string email = 1;
     required string fb_token = 2;
+    required string handle = 3;
+    required string name = 4;
+    required string fbid = 5;
+    repeated string friend_fbid = 6;
 }
 
-message FbLoginTokenRequest {
-    required uint32 userid = 1;
-    required string fb_token = 2;
-    required string login_token = 3;
-}
-
-message FbUnlinkRequest {
+message AnLikeRequest {
     required uint32 userid = 1;
     required string login_token = 2;
+    repeated uint32 recids = 3;
+    required bool   liked = 4;
 }
 
 service MashService {
@@ -274,8 +274,6 @@ service MashService {
     rpc RecordingAdd    (RecordingRequest) returns (SuccessResponse);
     rpc APNSend         (APNServerRequest) returns (SuccessResponse);
     rpc ReportRecording (ReportRecRequest) returns (SuccessResponse);
-    rpc FbLogin         (FbAccessToken) returns (FbAccessToken);
-    rpc FbLinkToken     (FbLoginTokenRequest) returns (SuccessResponse);
-    rpc FbUnlinkToken   (FbUnlinkRequest) returns (SuccessResponse);
-    rpc FbUpdateToken   (FbLoginTokenRequest) returns (SuccessResponse);
+    rpc FbAuth          (FbAuthRequest) returns (SignInResponse);
+    rpc AnLike          (AnLikeRequest) returns (SuccessResponse);
 }

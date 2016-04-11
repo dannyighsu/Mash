@@ -15,7 +15,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var handleField: UITextField!
     @IBOutlet weak var confirmPasswordField: UITextField!
-    
+
     var activityView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
 
     override func viewDidLoad() {
@@ -51,7 +51,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Sign Up", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(SignupViewController.signUpAction(_:))), animated: false)
+        self.navigationItem.setRightBarButtonItem(UIBarButtonItem(title: "Register", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(SignupViewController.signUpAction(_:))), animated: false)
         self.navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 15)!, NSForegroundColorAttributeName: UIColor.blackColor()], forState: UIControlState.Normal)
         self.navigationItem.title = "Register An Account"
     }

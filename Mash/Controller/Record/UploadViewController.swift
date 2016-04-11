@@ -287,6 +287,8 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         if self.navigationController is RootNavigationController {
             let tabbarcontroller = self.navigationController?.viewControllers[2] as! TabBarController
             tabbarcontroller.selectedIndex = getTabBarController("dashboard")
+        } else {
+            //(currentProject!.viewControllers[0] as! ProjectViewController).share()
         }
     }
     
