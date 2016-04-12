@@ -34,7 +34,7 @@ func sendLikeRequest(queryUserId: Int, trackid: Int, trackName: String, completi
             Debug.printl(error, sender: "helpers")
             completion(success: false)
         }
-        sendPushNotification(queryUserId, message: "\(currentUser.handle!) just liked your sound \(trackName)!")
+        //sendPushNotification(queryUserId, message: "\(currentUser.handle!) just liked your sound \(trackName)!")
         completion(success: true)
     }
 }

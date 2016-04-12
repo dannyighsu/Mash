@@ -409,7 +409,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Oops! Looks like you're not following anyone. Check out the Explore tab to get started!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="baF-hW-FNb">
                                 <rect key="frame" x="200" y="340" width="200" height="88"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no_following" translatesAutoresizingMaskIntoConstraints="NO" id="jvt-Kg-Fzg">
@@ -751,6 +751,7 @@
                         <outlet property="logo" destination="4Ja-I6-gXo" id="mw2-l6-H2h"/>
                         <outlet property="registerButton" destination="nCN-RV-j6A" id="gyN-uL-R9p"/>
                         <outlet property="termsButton" destination="f5a-iD-hxd" id="cAz-yj-ae1"/>
+                        <segue destination="eMn-ic-CvR" kind="show" id="RMA-ez-UEY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uOU-UQ-MJG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1249,7 +1250,7 @@
                                     <constraint firstAttribute="width" constant="200" id="j87-H4-9EM"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uCk-GM-Og3">
@@ -1271,7 +1272,7 @@
                                     <constraint firstAttribute="width" constant="237" id="hsF-U7-kJ4"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -1296,6 +1297,65 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nty-G8-N1P" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2980" y="-135"/>
+        </scene>
+        <!--Handle Controller-->
+        <scene sceneID="OMz-OP-7U1">
+            <objects>
+                <viewController storyboardIdentifier="HandleController" id="eMn-ic-CvR" customClass="HandleController" customModule="Mash" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="9HX-lr-NvU"/>
+                        <viewControllerLayoutGuide type="bottom" id="V6a-uM-aDh"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Xfd-8i-YTt">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Pick a Handle" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ebm-5q-q2L">
+                                <rect key="frame" x="231" y="290" width="138" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="138" id="Bep-O3-CFM"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bWf-Lu-j1k">
+                                <rect key="frame" x="277" y="318" width="46" height="33"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="46" id="cbl-s0-eEA"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
+                                <state key="normal" title="Go!">
+                                    <color key="titleColor" red="0.27450980390000002" green="0.79215686269999996" blue="0.88235294119999996" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="goButtonPressed:" destination="eMn-ic-CvR" eventType="touchUpInside" id="zDc-Nh-VMT"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="bWf-Lu-j1k" firstAttribute="centerX" secondItem="ebm-5q-q2L" secondAttribute="centerX" id="B2m-ej-Uy6"/>
+                            <constraint firstItem="ebm-5q-q2L" firstAttribute="centerY" secondItem="Xfd-8i-YTt" secondAttribute="centerY" id="CVq-gt-N0a"/>
+                            <constraint firstItem="V6a-uM-aDh" firstAttribute="top" secondItem="bWf-Lu-j1k" secondAttribute="bottom" constant="247" id="Cwo-Ru-jiL"/>
+                            <constraint firstItem="bWf-Lu-j1k" firstAttribute="top" secondItem="ebm-5q-q2L" secondAttribute="bottom" constant="8" symbolic="YES" id="cFW-u4-aV7"/>
+                            <constraint firstItem="ebm-5q-q2L" firstAttribute="top" secondItem="9HX-lr-NvU" secondAttribute="bottom" constant="221" id="eB7-N4-94K"/>
+                            <constraint firstItem="ebm-5q-q2L" firstAttribute="centerX" secondItem="Xfd-8i-YTt" secondAttribute="centerX" id="q17-jG-4MP"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="eB7-N4-94K"/>
+                                <exclude reference="Cwo-Ru-jiL"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="goButton" destination="bWf-Lu-j1k" id="HuN-I8-eXQ"/>
+                        <outlet property="handleField" destination="ebm-5q-q2L" id="cpS-Yy-Z0x"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fJw-mC-c8b" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2980" y="-826"/>
         </scene>
     </scenes>
     <resources>

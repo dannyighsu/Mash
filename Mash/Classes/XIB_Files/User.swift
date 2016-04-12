@@ -196,7 +196,7 @@ class User: UITableViewCell {
                 Debug.printl("Error: \(error)", sender: "user")
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
-                    sendPushNotification(user.userid!, message: "\(currentUser.handle!) just followed you!")
+                    //sendPushNotification(user.userid!, message: "\(currentUser.handle!) just followed you!")
                     userFollowing.append(user)
                     Debug.printl("Followed user \(user.handle!)", sender: nil)
                     if user.followButton != nil {

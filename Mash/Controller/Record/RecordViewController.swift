@@ -139,7 +139,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         } else {
             self.stopRecording()
             self.validateButtons()
-            NSThread.sleepForTimeInterval(0.5)
+            NSThread.sleepForTimeInterval(0.3)
             self.play(nil)
         }
     }

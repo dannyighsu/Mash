@@ -230,8 +230,8 @@ message ReportRecRequest {
 message FbAuthRequest {
     required string email = 1;
     required string fb_token = 2;
-    required string handle = 3;
-    required string name = 4;
+    optional string handle = 3;
+    optional string name = 4;
     required string fbid = 5;
     repeated string friend_fbid = 6;
 }

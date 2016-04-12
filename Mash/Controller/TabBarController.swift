@@ -167,9 +167,9 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             // Add for interaction
             //self.swipeInteractionController.addViewController(currentProject)
             self.presentViewController(currentProject!, animated: true, completion: nil)
-            let alert = UIAlertView(title: "New Project", message: "Name your project.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
+            /*let alert = UIAlertView(title: "New Project", message: "Name your project.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
             alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
-            alert.show()
+            alert.show()*/
         } else {
             self.presentViewController(currentProject!, animated: true, completion: nil)
         }

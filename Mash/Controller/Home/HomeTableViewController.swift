@@ -68,7 +68,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.parentViewController?.navigationItem.title = "Mash"
-        if userFollowing.count == 0 {
+        if userFollowing.count < 2 {
             self.tabControlBar!.scopeTab.selectedSegmentIndex = 1
             self.didChangeScope(self.tabControlBar!.scopeTab)
         } else {
