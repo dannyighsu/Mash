@@ -49,6 +49,10 @@ class HandleController: UIViewController {
             if error != nil {
                 Debug.printl(error, sender: self)
             } else {
+                NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasFacebookLoginToken")
+                NSUserDefaults.standardUserDefaults().setValue(self.request!.fbToken, forKey: "facebookLoginToken")
+                NSUserDefaults.standardUserDefaults().setValue(self.request!.email, forKey: "facebookEmail")
+                NSUserDefaults.standardUserDefaults().setValue(self.request!.fbid, forKey: "facebookID")
                 print(response)
                 // Log in
             }

@@ -111,15 +111,12 @@ class EntryViewController: UIViewController {
                     Debug.printl("Error: \(error)", sender: self)
                 } else {
                     Debug.printl(result, sender: self)
-                    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasFacebookLoginToken")
-                    NSUserDefaults.standardUserDefaults().setValue(permissions.token.tokenString, forKey: "facebookLoginToken")
-                    NSUserDefaults.standardUserDefaults().setValue(result.email, forKey: "facebookEmail")
-                    NSUserDefaults.standardUserDefaults().setValue(result.fbid, forKey: "facebookID")
                     
                     // TODO: Log In
                     let request = FbAuthRequest()
                     request.fbToken = NSUserDefaults.standardUserDefaults().valueForKey("facebookLoginToken") as! String
-                    request.email = result.email
+                    request.email = result.emailAddress
+                    print(result.emailAddress)
                     request.fbid = result.fbid
                     request.friendFbidArray = result.friendFbidArray
                     

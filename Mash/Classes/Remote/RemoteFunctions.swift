@@ -103,11 +103,34 @@ func sendReportRequest(message: String?, trackid: Int) {
     request.message = message
     
     server.reportRecordingWithRequest(request) {
-        (responser, error) in
+        (response, error) in
         if error != nil {
             Debug.printl("Error sending recording report: \(error).", sender: nil)
         } else {
             raiseAlert("Thank you", message: "We will review your report as soon as possible.")
+        }
+    }
+}
+
+func sendMashAnalyticsRequest(tracks: [Track], liked: Bool) {
+    let request = AnLikeRequest()
+    request.userid = UInt32(currentUser.userid!)
+    request.loginToken = currentUser.loginToken
+    
+    let recIdsArray = GPBUInt32Array()
+    for track in tracks {
+        recIdsArray.addValue(UInt32(track.id))
+    }
+    
+    request.recidsArray = recIdsArray
+    request.liked = liked
+    
+    server.anLikeWithRequest(request) {
+        (response, error) in
+        if error != nil {
+            Debug.printl("Error sending mash analytics request: \(error)", sender: nil)
+        } else {
+            Debug.printl("Analytics submission successful.", sender: nil)
         }
     }
 }
