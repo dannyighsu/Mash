@@ -295,9 +295,11 @@ void SignInRequest_ClearInputOneOfCase(SignInRequest *message) {
 @dynamic hasFollowingCount, followingCount;
 @dynamic hasTrackCount, trackCount;
 @dynamic hasHandle, handle;
+@dynamic hasNewUser, newUser;
 
 typedef struct SignInResponse__storage_ {
   uint32_t _has_storage_[1];
+  BOOL newUser;
   uint32_t userid;
   uint32_t registerAgent;
   uint32_t followersCount;
@@ -423,6 +425,17 @@ typedef struct SignInResponse__storage_ {
         .dataType = GPBDataTypeString,
         .offset = offsetof(SignInResponse__storage_, handle),
         .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "newUser",
+        .number = SignInResponse_FieldNumber_NewUser,
+        .hasIndex = 10,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeBool,
+        .offset = offsetof(SignInResponse__storage_, newUser),
+        .defaultValue.valueBool = NO,
         .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
@@ -1928,6 +1941,7 @@ typedef struct UserSearchRequest__storage_ {
 @dynamic hasPasswordHash, passwordHash;
 @dynamic hasName, name;
 @dynamic hasUserDescription, userDescription;
+@dynamic hasHandle, handle;
 
 typedef struct UserUpdateRequest__storage_ {
   uint32_t _has_storage_[1];
@@ -1937,6 +1951,7 @@ typedef struct UserUpdateRequest__storage_ {
   NSString *passwordHash;
   NSString *name;
   NSString *userDescription;
+  NSString *handle;
 } UserUpdateRequest__storage_;
 
 // This method is threadsafe because it is initially called
@@ -2007,6 +2022,17 @@ typedef struct UserUpdateRequest__storage_ {
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeString,
         .offset = offsetof(UserUpdateRequest__storage_, userDescription),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "handle",
+        .number = UserUpdateRequest_FieldNumber_Handle,
+        .hasIndex = 6,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserUpdateRequest__storage_, handle),
         .defaultValue.valueString = nil,
         .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
@@ -2874,18 +2900,26 @@ typedef struct ReportRecRequest__storage_ {
 
 @end
 
-#pragma mark - FbAccessToken
+#pragma mark - FbAuthRequest
 
-@implementation FbAccessToken
+@implementation FbAuthRequest
 
-@dynamic hasUserid, userid;
+@dynamic hasEmail, email;
 @dynamic hasFbToken, fbToken;
+@dynamic hasHandle, handle;
+@dynamic hasName, name;
+@dynamic hasFbid, fbid;
+@dynamic friendFbidArray, friendFbidArray_Count;
 
-typedef struct FbAccessToken__storage_ {
+typedef struct FbAuthRequest__storage_ {
   uint32_t _has_storage_[1];
-  uint32_t userid;
+  NSString *email;
   NSString *fbToken;
-} FbAccessToken__storage_;
+  NSString *handle;
+  NSString *name;
+  NSString *fbid;
+  NSMutableArray *friendFbidArray;
+} FbAuthRequest__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -2894,107 +2928,74 @@ typedef struct FbAccessToken__storage_ {
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
-        .name = "userid",
-        .number = FbAccessToken_FieldNumber_Userid,
+        .name = "email",
+        .number = FbAuthRequest_FieldNumber_Email,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
-        .dataType = GPBDataTypeUInt32,
-        .offset = offsetof(FbAccessToken__storage_, userid),
-        .defaultValue.valueUInt32 = 0U,
-        .dataTypeSpecific.className = NULL,
-        .fieldOptions = NULL,
-      },
-      {
-        .name = "fbToken",
-        .number = FbAccessToken_FieldNumber_FbToken,
-        .hasIndex = 1,
-        .flags = GPBFieldRequired,
         .dataType = GPBDataTypeString,
-        .offset = offsetof(FbAccessToken__storage_, fbToken),
-        .defaultValue.valueString = nil,
-        .dataTypeSpecific.className = NULL,
-        .fieldOptions = NULL,
-      },
-    };
-    GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[FbAccessToken class]
-                                     rootClass:[MashserviceRoot class]
-                                          file:MashserviceRoot_FileDescriptor()
-                                        fields:fields
-                                    fieldCount:sizeof(fields) / sizeof(GPBMessageFieldDescription)
-                                        oneofs:NULL
-                                    oneofCount:0
-                                         enums:NULL
-                                     enumCount:0
-                                        ranges:NULL
-                                    rangeCount:0
-                                   storageSize:sizeof(FbAccessToken__storage_)
-                                    wireFormat:NO];
-    NSAssert(descriptor == nil, @"Startup recursed!");
-    descriptor = localDescriptor;
-  }
-  return descriptor;
-}
-
-@end
-
-#pragma mark - FbLoginTokenRequest
-
-@implementation FbLoginTokenRequest
-
-@dynamic hasUserid, userid;
-@dynamic hasFbToken, fbToken;
-@dynamic hasLoginToken, loginToken;
-
-typedef struct FbLoginTokenRequest__storage_ {
-  uint32_t _has_storage_[1];
-  uint32_t userid;
-  NSString *fbToken;
-  NSString *loginToken;
-} FbLoginTokenRequest__storage_;
-
-// This method is threadsafe because it is initially called
-// in +initialize for each subclass.
-+ (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = nil;
-  if (!descriptor) {
-    static GPBMessageFieldDescription fields[] = {
-      {
-        .name = "userid",
-        .number = FbLoginTokenRequest_FieldNumber_Userid,
-        .hasIndex = 0,
-        .flags = GPBFieldRequired,
-        .dataType = GPBDataTypeUInt32,
-        .offset = offsetof(FbLoginTokenRequest__storage_, userid),
-        .defaultValue.valueUInt32 = 0U,
-        .dataTypeSpecific.className = NULL,
-        .fieldOptions = NULL,
-      },
-      {
-        .name = "fbToken",
-        .number = FbLoginTokenRequest_FieldNumber_FbToken,
-        .hasIndex = 1,
-        .flags = GPBFieldRequired,
-        .dataType = GPBDataTypeString,
-        .offset = offsetof(FbLoginTokenRequest__storage_, fbToken),
+        .offset = offsetof(FbAuthRequest__storage_, email),
         .defaultValue.valueString = nil,
         .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
-        .name = "loginToken",
-        .number = FbLoginTokenRequest_FieldNumber_LoginToken,
+        .name = "fbToken",
+        .number = FbAuthRequest_FieldNumber_FbToken,
+        .hasIndex = 1,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(FbAuthRequest__storage_, fbToken),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "handle",
+        .number = FbAuthRequest_FieldNumber_Handle,
         .hasIndex = 2,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(FbAuthRequest__storage_, handle),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "name",
+        .number = FbAuthRequest_FieldNumber_Name,
+        .hasIndex = 3,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(FbAuthRequest__storage_, name),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "fbid",
+        .number = FbAuthRequest_FieldNumber_Fbid,
+        .hasIndex = 4,
         .flags = GPBFieldRequired,
         .dataType = GPBDataTypeString,
-        .offset = offsetof(FbLoginTokenRequest__storage_, loginToken),
+        .offset = offsetof(FbAuthRequest__storage_, fbid),
         .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "friendFbidArray",
+        .number = FbAuthRequest_FieldNumber_FriendFbidArray,
+        .hasIndex = GPBNoHasBit,
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(FbAuthRequest__storage_, friendFbidArray),
+        .defaultValue.valueMessage = nil,
         .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[FbLoginTokenRequest class]
+        [GPBDescriptor allocDescriptorForClass:[FbAuthRequest class]
                                      rootClass:[MashserviceRoot class]
                                           file:MashserviceRoot_FileDescriptor()
                                         fields:fields
@@ -3005,7 +3006,7 @@ typedef struct FbLoginTokenRequest__storage_ {
                                      enumCount:0
                                         ranges:NULL
                                     rangeCount:0
-                                   storageSize:sizeof(FbLoginTokenRequest__storage_)
+                                   storageSize:sizeof(FbAuthRequest__storage_)
                                     wireFormat:NO];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
@@ -3015,18 +3016,22 @@ typedef struct FbLoginTokenRequest__storage_ {
 
 @end
 
-#pragma mark - FbUnlinkRequest
+#pragma mark - AnLikeRequest
 
-@implementation FbUnlinkRequest
+@implementation AnLikeRequest
 
 @dynamic hasUserid, userid;
 @dynamic hasLoginToken, loginToken;
+@dynamic recidsArray, recidsArray_Count;
+@dynamic hasLiked, liked;
 
-typedef struct FbUnlinkRequest__storage_ {
+typedef struct AnLikeRequest__storage_ {
   uint32_t _has_storage_[1];
+  BOOL liked;
   uint32_t userid;
   NSString *loginToken;
-} FbUnlinkRequest__storage_;
+  GPBUInt32Array *recidsArray;
+} AnLikeRequest__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -3036,29 +3041,51 @@ typedef struct FbUnlinkRequest__storage_ {
     static GPBMessageFieldDescription fields[] = {
       {
         .name = "userid",
-        .number = FbUnlinkRequest_FieldNumber_Userid,
+        .number = AnLikeRequest_FieldNumber_Userid,
         .hasIndex = 0,
         .flags = GPBFieldRequired,
         .dataType = GPBDataTypeUInt32,
-        .offset = offsetof(FbUnlinkRequest__storage_, userid),
+        .offset = offsetof(AnLikeRequest__storage_, userid),
         .defaultValue.valueUInt32 = 0U,
         .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
       {
         .name = "loginToken",
-        .number = FbUnlinkRequest_FieldNumber_LoginToken,
+        .number = AnLikeRequest_FieldNumber_LoginToken,
         .hasIndex = 1,
         .flags = GPBFieldRequired,
         .dataType = GPBDataTypeString,
-        .offset = offsetof(FbUnlinkRequest__storage_, loginToken),
+        .offset = offsetof(AnLikeRequest__storage_, loginToken),
         .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "recidsArray",
+        .number = AnLikeRequest_FieldNumber_RecidsArray,
+        .hasIndex = GPBNoHasBit,
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeUInt32,
+        .offset = offsetof(AnLikeRequest__storage_, recidsArray),
+        .defaultValue.valueMessage = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "liked",
+        .number = AnLikeRequest_FieldNumber_Liked,
+        .hasIndex = 3,
+        .flags = GPBFieldRequired,
+        .dataType = GPBDataTypeBool,
+        .offset = offsetof(AnLikeRequest__storage_, liked),
+        .defaultValue.valueBool = NO,
         .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[FbUnlinkRequest class]
+        [GPBDescriptor allocDescriptorForClass:[AnLikeRequest class]
                                      rootClass:[MashserviceRoot class]
                                           file:MashserviceRoot_FileDescriptor()
                                         fields:fields
@@ -3069,7 +3096,7 @@ typedef struct FbUnlinkRequest__storage_ {
                                      enumCount:0
                                         ranges:NULL
                                     rangeCount:0
-                                   storageSize:sizeof(FbUnlinkRequest__storage_)
+                                   storageSize:sizeof(AnLikeRequest__storage_)
                                     wireFormat:NO];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;

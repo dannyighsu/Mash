@@ -217,32 +217,18 @@
 - (ProtoRPC *)RPCToReportRecordingWithRequest:(ReportRecRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
 
 
-#pragma mark FbLogin(FbAccessToken) returns (FbAccessToken)
+#pragma mark FbAuth(FbAuthRequest) returns (SignInResponse)
 
-- (void)fbLoginWithRequest:(FbAccessToken *)request handler:(void(^)(FbAccessToken *response, NSError *error))handler;
+- (void)fbAuthWithRequest:(FbAuthRequest *)request handler:(void(^)(SignInResponse *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToFbLoginWithRequest:(FbAccessToken *)request handler:(void(^)(FbAccessToken *response, NSError *error))handler;
-
-
-#pragma mark FbLinkToken(FbLoginTokenRequest) returns (SuccessResponse)
-
-- (void)fbLinkTokenWithRequest:(FbLoginTokenRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
-
-- (ProtoRPC *)RPCToFbLinkTokenWithRequest:(FbLoginTokenRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+- (ProtoRPC *)RPCToFbAuthWithRequest:(FbAuthRequest *)request handler:(void(^)(SignInResponse *response, NSError *error))handler;
 
 
-#pragma mark FbUnlinkToken(FbUnlinkRequest) returns (SuccessResponse)
+#pragma mark AnLike(AnLikeRequest) returns (SuccessResponse)
 
-- (void)fbUnlinkTokenWithRequest:(FbUnlinkRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+- (void)anLikeWithRequest:(AnLikeRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
 
-- (ProtoRPC *)RPCToFbUnlinkTokenWithRequest:(FbUnlinkRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
-
-
-#pragma mark FbUpdateToken(FbLoginTokenRequest) returns (SuccessResponse)
-
-- (void)fbUpdateTokenWithRequest:(FbLoginTokenRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
-
-- (ProtoRPC *)RPCToFbUpdateTokenWithRequest:(FbLoginTokenRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
+- (ProtoRPC *)RPCToAnLikeWithRequest:(AnLikeRequest *)request handler:(void(^)(SuccessResponse *response, NSError *error))handler;
 
 
 @end

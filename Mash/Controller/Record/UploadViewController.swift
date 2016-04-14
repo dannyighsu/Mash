@@ -214,7 +214,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
             if error != nil {
                 Debug.printl("Error: \(error)", sender: nil)
                 if error.code == 13 {
-                    raiseAlert("Track name exists already.")
+                    raiseAlert("You already have a sound with this name.")
                 } else {
                     if !testing {
                         Flurry.logError("\(error.code)", message: "Unknown Error", error: error)
@@ -258,7 +258,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         server.recordingDeleteWithRequest(request) {
             (response, error) in
             if error != nil {
-                raiseAlert("There was a problem uploading your track.")
+                raiseAlert("Please try again.", message: "There was a problem uploading your sound.")
             } else {
                 raiseAlert("An unknown error occurred.")
                 if !testing {
@@ -287,6 +287,8 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         if self.navigationController is RootNavigationController {
             let tabbarcontroller = self.navigationController?.viewControllers[2] as! TabBarController
             tabbarcontroller.selectedIndex = getTabBarController("dashboard")
+        } else {
+            //(currentProject!.viewControllers[0] as! ProjectViewController).share()
         }
     }
     

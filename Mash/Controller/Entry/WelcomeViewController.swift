@@ -24,8 +24,9 @@ class WelcomeViewController: UIViewController {
     }
     
     @IBAction func doneButtonPressed(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
         let tabBarController = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController
-        self.navigationController?.pushViewController(tabBarController, animated: false)
+        rootNavigationController?.pushViewController(tabBarController, animated: false)
     }
     
 }

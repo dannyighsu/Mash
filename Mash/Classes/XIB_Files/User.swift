@@ -67,16 +67,18 @@ class User: UITableViewCell {
     }
     
     func setBannerPic(imageView: UIImageView) {
-        download("\(self.userid!)~~banner.jpg", url: filePathURL("\(self.userid!)~~banner.jpg"), bucket: banner_bucket) {
-            (result) -> Void in
-            if result != nil {
-                dispatch_async(dispatch_get_main_queue()) {
-                    imageView.image = UIImage(contentsOfFile: filePathString("\(self.userid!)~~banner.jpg"))!
-                }
-            } else {
-                dispatch_async(dispatch_get_main_queue()) {
-                    let rand = arc4random_uniform(11)
-                    imageView.image = UIImage(named: "ProfileCover\(rand)")
+        if imageView.image == nil {
+            download("\(self.userid!)~~banner.jpg", url: filePathURL("\(self.userid!)~~banner.jpg"), bucket: banner_bucket) {
+                (result) -> Void in
+                if result != nil {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        imageView.image = UIImage(contentsOfFile: filePathString("\(self.userid!)~~banner.jpg"))!
+                    }
+                } else {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        let rand = arc4random_uniform(11)
+                        imageView.image = UIImage(named: "ProfileCover\(rand)")
+                    }
                 }
             }
         }
@@ -194,7 +196,7 @@ class User: UITableViewCell {
                 Debug.printl("Error: \(error)", sender: "user")
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
-                    sendPushNotification(user.userid!, message: "\(currentUser.handle!) just followed you!")
+                    //sendPushNotification(user.userid!, message: "\(currentUser.handle!) just followed you!")
                     userFollowing.append(user)
                     Debug.printl("Followed user \(user.handle!)", sender: nil)
                     if user.followButton != nil {

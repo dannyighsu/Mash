@@ -117,6 +117,7 @@ typedef GPB_ENUM(SignInResponse_FieldNumber) {
   SignInResponse_FieldNumber_FollowingCount = 10,
   SignInResponse_FieldNumber_TrackCount = 11,
   SignInResponse_FieldNumber_Handle = 12,
+  SignInResponse_FieldNumber_NewUser = 13,
 };
 
 @interface SignInResponse : GPBMessage
@@ -150,6 +151,9 @@ typedef GPB_ENUM(SignInResponse_FieldNumber) {
 
 @property(nonatomic, readwrite) BOOL hasHandle;
 @property(nonatomic, readwrite, copy, null_resettable) NSString *handle;
+
+@property(nonatomic, readwrite) BOOL hasNewUser;
+@property(nonatomic, readwrite) BOOL newUser;
 
 @end
 
@@ -593,6 +597,7 @@ typedef GPB_ENUM(UserUpdateRequest_FieldNumber) {
   UserUpdateRequest_FieldNumber_PasswordHash = 4,
   UserUpdateRequest_FieldNumber_Name = 5,
   UserUpdateRequest_FieldNumber_UserDescription = 6,
+  UserUpdateRequest_FieldNumber_Handle = 7,
 };
 
 @interface UserUpdateRequest : GPBMessage
@@ -614,6 +619,9 @@ typedef GPB_ENUM(UserUpdateRequest_FieldNumber) {
 
 @property(nonatomic, readwrite) BOOL hasUserDescription;
 @property(nonatomic, readwrite, copy, null_resettable) NSString *userDescription;
+
+@property(nonatomic, readwrite) BOOL hasHandle;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *handle;
 
 @end
 
@@ -851,58 +859,62 @@ typedef GPB_ENUM(ReportRecRequest_FieldNumber) {
 
 @end
 
-#pragma mark - FbAccessToken
+#pragma mark - FbAuthRequest
 
-typedef GPB_ENUM(FbAccessToken_FieldNumber) {
-  FbAccessToken_FieldNumber_Userid = 1,
-  FbAccessToken_FieldNumber_FbToken = 2,
+typedef GPB_ENUM(FbAuthRequest_FieldNumber) {
+  FbAuthRequest_FieldNumber_Email = 1,
+  FbAuthRequest_FieldNumber_FbToken = 2,
+  FbAuthRequest_FieldNumber_Handle = 3,
+  FbAuthRequest_FieldNumber_Name = 4,
+  FbAuthRequest_FieldNumber_Fbid = 5,
+  FbAuthRequest_FieldNumber_FriendFbidArray = 6,
 };
 
-@interface FbAccessToken : GPBMessage
+@interface FbAuthRequest : GPBMessage
 
-@property(nonatomic, readwrite) BOOL hasUserid;
-@property(nonatomic, readwrite) uint32_t userid;
+@property(nonatomic, readwrite) BOOL hasEmail;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *email;
 
 @property(nonatomic, readwrite) BOOL hasFbToken;
 @property(nonatomic, readwrite, copy, null_resettable) NSString *fbToken;
 
-@end
+@property(nonatomic, readwrite) BOOL hasHandle;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *handle;
 
-#pragma mark - FbLoginTokenRequest
+@property(nonatomic, readwrite) BOOL hasName;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *name;
 
-typedef GPB_ENUM(FbLoginTokenRequest_FieldNumber) {
-  FbLoginTokenRequest_FieldNumber_Userid = 1,
-  FbLoginTokenRequest_FieldNumber_FbToken = 2,
-  FbLoginTokenRequest_FieldNumber_LoginToken = 3,
-};
+@property(nonatomic, readwrite) BOOL hasFbid;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *fbid;
 
-@interface FbLoginTokenRequest : GPBMessage
-
-@property(nonatomic, readwrite) BOOL hasUserid;
-@property(nonatomic, readwrite) uint32_t userid;
-
-@property(nonatomic, readwrite) BOOL hasFbToken;
-@property(nonatomic, readwrite, copy, null_resettable) NSString *fbToken;
-
-@property(nonatomic, readwrite) BOOL hasLoginToken;
-@property(nonatomic, readwrite, copy, null_resettable) NSString *loginToken;
+// |friendFbidArray| contains |NSString|
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray *friendFbidArray;
+@property(nonatomic, readonly) NSUInteger friendFbidArray_Count;
 
 @end
 
-#pragma mark - FbUnlinkRequest
+#pragma mark - AnLikeRequest
 
-typedef GPB_ENUM(FbUnlinkRequest_FieldNumber) {
-  FbUnlinkRequest_FieldNumber_Userid = 1,
-  FbUnlinkRequest_FieldNumber_LoginToken = 2,
+typedef GPB_ENUM(AnLikeRequest_FieldNumber) {
+  AnLikeRequest_FieldNumber_Userid = 1,
+  AnLikeRequest_FieldNumber_LoginToken = 2,
+  AnLikeRequest_FieldNumber_RecidsArray = 3,
+  AnLikeRequest_FieldNumber_Liked = 4,
 };
 
-@interface FbUnlinkRequest : GPBMessage
+@interface AnLikeRequest : GPBMessage
 
 @property(nonatomic, readwrite) BOOL hasUserid;
 @property(nonatomic, readwrite) uint32_t userid;
 
 @property(nonatomic, readwrite) BOOL hasLoginToken;
 @property(nonatomic, readwrite, copy, null_resettable) NSString *loginToken;
+
+@property(nonatomic, readwrite, strong, null_resettable) GPBUInt32Array *recidsArray;
+@property(nonatomic, readonly) NSUInteger recidsArray_Count;
+
+@property(nonatomic, readwrite) BOOL hasLiked;
+@property(nonatomic, readwrite) BOOL liked;
 
 @end
 

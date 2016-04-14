@@ -80,6 +80,12 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let player = self.tracks.tableHeaderView as! ProjectPlayer
         player.tempoLabel.text = "\(self.bpm)"
+        
+        if self.titleButton.titleLabel!.text == nil || self.titleButton.titleLabel!.text == "" {
+            self.titleButton.setTitle("My Project", forState: UIControlState.Normal)
+            self.titleButton.sizeToFit()
+            rootTabBarController!.tabBarButton!.tapButton.setTitle("My Project", forState: .Normal)
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -482,7 +488,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 dispatch_async(dispatch_get_main_queue()) {
                     self.activityView.stopAnimating()
                     if error.code == 13 {
-                        raiseAlert("Error", delegate: self, message: "Track exists.")
+                        raiseAlert("Error", delegate: self, message: "You already have a sound with this name.")
                     } else {
                         raiseAlert("Error occurred. \(error.code)")
                     }

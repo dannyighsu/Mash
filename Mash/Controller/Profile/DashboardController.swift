@@ -241,24 +241,29 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 1 {
             let track = self.tracks.cellForRowAtIndexPath(indexPath) as! ProfileTrack
-            track.activityView.startAnimating()
-            download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
-                (result) in
-                dispatch_async(dispatch_get_main_queue()) {
-                    track.activityView.stopAnimating()
-                    tableView.deselectRowAtIndexPath(indexPath, animated: true)
-                    if result != nil {
-                        track.generateWaveform()
-                        self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
-                        self.audioPlayer!.play()
-                        self.currTrackID = track.id
-                        if self.playerTimer != nil {
-                            self.playerTimer!.invalidate()
+            if self.audioPlayer != nil && self.audioPlayer!.playing {
+                self.audioPlayer!.stop()
+            } else {
+                track.activityView.startAnimating()
+                download(getS3Key(track), url: NSURL(fileURLWithPath: track.trackURL), bucket: track_bucket) {
+                    (result) in
+                    dispatch_async(dispatch_get_main_queue()) {
+                        track.activityView.stopAnimating()
+                        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                        if result != nil {
+                            track.generateWaveform()
+                            self.audioPlayer = try? AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: track.trackURL))
+                            self.audioPlayer!.play()
+                            self.currTrackID = track.id
+                            if self.playerTimer != nil {
+                                self.playerTimer!.invalidate()
+                            }
+                            self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(DashboardController.play(_:)), userInfo: nil, repeats: true)
+                            Debug.printl("Playing track \(track.titleText)", sender: self)
                         }
-                        self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(DashboardController.play(_:)), userInfo: nil, repeats: true)
-                        Debug.printl("Playing track \(track.titleText)", sender: self)
                     }
                 }
+
             }
         }
     }
