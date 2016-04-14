@@ -117,6 +117,7 @@ typedef GPB_ENUM(SignInResponse_FieldNumber) {
   SignInResponse_FieldNumber_FollowingCount = 10,
   SignInResponse_FieldNumber_TrackCount = 11,
   SignInResponse_FieldNumber_Handle = 12,
+  SignInResponse_FieldNumber_NewUser = 13,
 };
 
 @interface SignInResponse : GPBMessage
@@ -150,6 +151,9 @@ typedef GPB_ENUM(SignInResponse_FieldNumber) {
 
 @property(nonatomic, readwrite) BOOL hasHandle;
 @property(nonatomic, readwrite, copy, null_resettable) NSString *handle;
+
+@property(nonatomic, readwrite) BOOL hasNewUser;
+@property(nonatomic, readwrite) BOOL newUser;
 
 @end
 
@@ -593,6 +597,7 @@ typedef GPB_ENUM(UserUpdateRequest_FieldNumber) {
   UserUpdateRequest_FieldNumber_PasswordHash = 4,
   UserUpdateRequest_FieldNumber_Name = 5,
   UserUpdateRequest_FieldNumber_UserDescription = 6,
+  UserUpdateRequest_FieldNumber_Handle = 7,
 };
 
 @interface UserUpdateRequest : GPBMessage
@@ -614,6 +619,9 @@ typedef GPB_ENUM(UserUpdateRequest_FieldNumber) {
 
 @property(nonatomic, readwrite) BOOL hasUserDescription;
 @property(nonatomic, readwrite, copy, null_resettable) NSString *userDescription;
+
+@property(nonatomic, readwrite) BOOL hasHandle;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *handle;
 
 @end
 

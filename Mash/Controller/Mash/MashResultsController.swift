@@ -23,6 +23,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     var downloadedTracks: Set<Int> = Set<Int>()
     var audioModule: AudioModule = AudioModule()
     var currentTrackURL: String = ""
+    var analyticsArray: [Track] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -184,6 +185,9 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
             }
             self.playerTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(MashResultsController.play(_:)), userInfo: nil, repeats: true)
             self.currTrackID = track.id
+            
+            self.analyticsArray.append(track)
+            
             for player in self.projectPlayers {
                 player.play()
             }
@@ -209,6 +213,12 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
         let track = sender.superview?.superview?.superview as! Track
         ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
         sendPushNotification(track.userid, message: "You've just been mashed!")
+        sendMashAnalyticsRequest([track], liked: true)
+        for i in 0 ..< self.analyticsArray.count {
+            if track == self.analyticsArray[i] {
+                self.analyticsArray.removeAtIndex(i)
+            }
+        }
     }
     
     func done(sender: AnyObject?) {
@@ -219,6 +229,7 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
                 break
             }
         }
+        sendMashAnalyticsRequest(self.analyticsArray, liked: false)
         self.navigationController!.viewControllers.removeAtIndex(index)
         self.navigationController?.popViewControllerAnimated(true)
     }

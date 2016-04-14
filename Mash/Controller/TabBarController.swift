@@ -65,9 +65,12 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             self.view.addSubview(button)
             self.tabBarButton = button
         }
+        
+        self.navigationController?.navigationBarHidden = false
     }
     
-    override func shouldAutorotate() -> Bool {
+    // FIXME: Some issue to do with coming in from welcome view controller causes these calls to crash.
+    /*override func shouldAutorotate() -> Bool {
         var result: Bool
         if self.selectedViewController!.respondsToSelector(#selector(UIViewController.shouldAutorotate)) {
             result = self.selectedViewController!.shouldAutorotate()
@@ -85,7 +88,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             result = super.supportedInterfaceOrientations()
         }
         return result
-    }
+    }*/
     
     // Animations
     func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -167,9 +170,9 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             // Add for interaction
             //self.swipeInteractionController.addViewController(currentProject)
             self.presentViewController(currentProject!, animated: true, completion: nil)
-            let alert = UIAlertView(title: "New Project", message: "Name your project.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
+            /*let alert = UIAlertView(title: "New Project", message: "Name your project.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Done")
             alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
-            alert.show()
+            alert.show()*/
         } else {
             self.presentViewController(currentProject!, animated: true, completion: nil)
         }

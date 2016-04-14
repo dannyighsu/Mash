@@ -80,6 +80,12 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let player = self.tracks.tableHeaderView as! ProjectPlayer
         player.tempoLabel.text = "\(self.bpm)"
+        
+        if self.titleButton.titleLabel!.text == nil || self.titleButton.titleLabel!.text == "" {
+            self.titleButton.setTitle("My Project", forState: UIControlState.Normal)
+            self.titleButton.sizeToFit()
+            rootTabBarController!.tabBarButton!.tapButton.setTitle("My Project", forState: .Normal)
+        }
     }
     
     override func viewDidAppear(animated: Bool) {

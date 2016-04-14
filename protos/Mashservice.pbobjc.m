@@ -295,9 +295,11 @@ void SignInRequest_ClearInputOneOfCase(SignInRequest *message) {
 @dynamic hasFollowingCount, followingCount;
 @dynamic hasTrackCount, trackCount;
 @dynamic hasHandle, handle;
+@dynamic hasNewUser, newUser;
 
 typedef struct SignInResponse__storage_ {
   uint32_t _has_storage_[1];
+  BOOL newUser;
   uint32_t userid;
   uint32_t registerAgent;
   uint32_t followersCount;
@@ -423,6 +425,17 @@ typedef struct SignInResponse__storage_ {
         .dataType = GPBDataTypeString,
         .offset = offsetof(SignInResponse__storage_, handle),
         .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "newUser",
+        .number = SignInResponse_FieldNumber_NewUser,
+        .hasIndex = 10,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeBool,
+        .offset = offsetof(SignInResponse__storage_, newUser),
+        .defaultValue.valueBool = NO,
         .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
       },
@@ -1928,6 +1941,7 @@ typedef struct UserSearchRequest__storage_ {
 @dynamic hasPasswordHash, passwordHash;
 @dynamic hasName, name;
 @dynamic hasUserDescription, userDescription;
+@dynamic hasHandle, handle;
 
 typedef struct UserUpdateRequest__storage_ {
   uint32_t _has_storage_[1];
@@ -1937,6 +1951,7 @@ typedef struct UserUpdateRequest__storage_ {
   NSString *passwordHash;
   NSString *name;
   NSString *userDescription;
+  NSString *handle;
 } UserUpdateRequest__storage_;
 
 // This method is threadsafe because it is initially called
@@ -2007,6 +2022,17 @@ typedef struct UserUpdateRequest__storage_ {
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeString,
         .offset = offsetof(UserUpdateRequest__storage_, userDescription),
+        .defaultValue.valueString = nil,
+        .dataTypeSpecific.className = NULL,
+        .fieldOptions = NULL,
+      },
+      {
+        .name = "handle",
+        .number = UserUpdateRequest_FieldNumber_Handle,
+        .hasIndex = 6,
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+        .offset = offsetof(UserUpdateRequest__storage_, handle),
         .defaultValue.valueString = nil,
         .dataTypeSpecific.className = NULL,
         .fieldOptions = NULL,
@@ -2927,7 +2953,7 @@ typedef struct FbAuthRequest__storage_ {
         .name = "handle",
         .number = FbAuthRequest_FieldNumber_Handle,
         .hasIndex = 2,
-        .flags = GPBFieldRequired,
+        .flags = GPBFieldOptional,
         .dataType = GPBDataTypeString,
         .offset = offsetof(FbAuthRequest__storage_, handle),
         .defaultValue.valueString = nil,
@@ -2938,7 +2964,7 @@ typedef struct FbAuthRequest__storage_ {
         .name = "name",
         .number = FbAuthRequest_FieldNumber_Name,
         .hasIndex = 3,
-        .flags = GPBFieldRequired,
+        .flags = GPBFieldOptional,
         .dataType = GPBDataTypeString,
         .offset = offsetof(FbAuthRequest__storage_, name),
         .defaultValue.valueString = nil,

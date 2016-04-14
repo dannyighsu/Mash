@@ -411,6 +411,7 @@
 		37C9F5151C029E2000C80F88 /* ProjectAddBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C9F5091C029E2000C80F88 /* ProjectAddBar.swift */; };
 		37C9F5161C029E2000C80F88 /* ProjectPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C9F50A1C029E2000C80F88 /* ProjectPlayer.swift */; };
 		37C9F5171C029E2000C80F88 /* ProjectTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C9F50B1C029E2000C80F88 /* ProjectTools.swift */; };
+		37CEAB661CBCB7D300663716 /* HandleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CEAB651CBCB7D300663716 /* HandleController.swift */; };
 		37D2351F1C3B90CA0091A1D0 /* ProjectDismissAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D2351E1C3B90CA0091A1D0 /* ProjectDismissAnimationController.swift */; };
 		37D235231C3BABFE0091A1D0 /* SwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D235221C3BABFE0091A1D0 /* SwipeInteractionController.swift */; };
 		37DE77251B436F4A00952987 /* User.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37DE77241B436F4A00952987 /* User.xib */; };
@@ -846,6 +847,7 @@
 		37C9F5091C029E2000C80F88 /* ProjectAddBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectAddBar.swift; sourceTree = "<group>"; };
 		37C9F50A1C029E2000C80F88 /* ProjectPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectPlayer.swift; sourceTree = "<group>"; };
 		37C9F50B1C029E2000C80F88 /* ProjectTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTools.swift; sourceTree = "<group>"; };
+		37CEAB651CBCB7D300663716 /* HandleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandleController.swift; sourceTree = "<group>"; };
 		37D2351E1C3B90CA0091A1D0 /* ProjectDismissAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectDismissAnimationController.swift; sourceTree = "<group>"; };
 		37D235221C3BABFE0091A1D0 /* SwipeInteractionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeInteractionController.swift; sourceTree = "<group>"; };
 		37DE77241B436F4A00952987 /* User.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = User.xib; sourceTree = "<group>"; };
@@ -1390,6 +1392,7 @@
 				3798824E1C01313F0029E56C /* LoginViewController.swift */,
 				3798824F1C01313F0029E56C /* SignupViewController.swift */,
 				3786F8B11C83D4C50018659B /* WelcomeViewController.swift */,
+				37CEAB651CBCB7D300663716 /* HandleController.swift */,
 			);
 			path = Entry;
 			sourceTree = "<group>";
@@ -2229,6 +2232,7 @@
 				376CA7781B8BDCA000ADD1E2 /* Mashservice.pbobjc.m in Sources */,
 				37C9F5131C029E2000C80F88 /* Channel.swift in Sources */,
 				37C9F5121C029E2000C80F88 /* ProfileTrack.swift in Sources */,
+				37CEAB661CBCB7D300663716 /* HandleController.swift in Sources */,
 				37038FB91C617D1C0043C262 /* ExploreViewController.swift in Sources */,
 				3719B8391CBB356A0056D11F /* ShareItemSource.swift in Sources */,
 				3798827D1C01314F0029E56C /* ImageViewController.swift in Sources */,

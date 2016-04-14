@@ -139,7 +139,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         } else {
             self.stopRecording()
             self.validateButtons()
-            NSThread.sleepForTimeInterval(0.5)
+            NSThread.sleepForTimeInterval(0.3)
             self.play(nil)
         }
     }
@@ -538,8 +538,14 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     // Check for login key
     func checkLogin() {
-        let hasLoginKey = NSUserDefaults.standardUserDefaults().boolForKey("hasLoginKey")
-        if hasLoginKey == true {
+        if currentUser.loginToken != nil && currentUser.loginToken != "" {
+            // Already logged in
+            self.completeLogin(currentUser.handle!, password: keychainWrapper.myObjectForKey("v_Data") as? String)
+            return
+        }
+        if NSUserDefaults.standardUserDefaults().boolForKey("hasFacebookLoginToken") {
+            self.facebookAuthenticate()
+        } else if NSUserDefaults.standardUserDefaults().boolForKey("hasLoginKey") {
             let handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as! String
             let password = keychainWrapper.myObjectForKey("v_Data") as! String
             Debug.printl("Attempting to log in with username \(handle) and password \(password)", sender: self)
@@ -574,13 +580,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 Debug.printl("Error: \(error)", sender: nil)
                 self.navigationController?.popToRootViewControllerAnimated(true)
             } else {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.activityView.stopAnimating()
-                    self.coverView.removeFromSuperview()
-                    if !testing {
-                        Flurry.setUserID("\(response.userid)")
-                    }
-                }
                 Debug.printl("Logged in successfully.", sender: self)
                 currentUser = User()
                 currentUser.handle = response.handle
@@ -590,24 +589,75 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 currentUser.following = "\(response.followingCount)"
                 currentUser.tracks = "\(response.trackCount)"
                 currentUser.userDescription = response.userDescription
+                User.getUsersFollowing()
+                sendTokenRequest()
+                if !testing {
+                    Flurry.setUserID("\(currentUser.userid)")
+                }
                 
                 self.completeLogin(handle, password: password)
             }
         }
     }
     
-    func completeLogin(handle: String, password: String) {
-        let hasLoginKey = NSUserDefaults.standardUserDefaults().boolForKey("hasLoginKey")
-        if !hasLoginKey {
-            self.saveLoginItems(handle, password: password)
-        } else {
-            if (NSUserDefaults.standardUserDefaults().valueForKey("username") as? String != handle || keychainWrapper.myObjectForKey("v_Data") as? String != password) {
-                Debug.printl("Updating saved username and password", sender: self)
-                self.saveLoginItems(handle, password: password)
+    func facebookAuthenticate() {
+        let loginToken = NSUserDefaults.standardUserDefaults().valueForKey("facebookLoginToken") as! String
+        let request = FbAuthRequest()
+        request.email = NSUserDefaults.standardUserDefaults().valueForKey("facebookEmail") as! String
+        request.fbid = NSUserDefaults.standardUserDefaults().valueForKey("facebookID") as! String
+        request.fbToken = loginToken
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityView.startAnimating()
+        }
+        
+        server.fbAuthWithRequest(request) {
+            (response, error) in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityView.stopAnimating()
+            }
+            if error != nil {
+                // FB Token outdated
+                self.navigationController?.popToRootViewControllerAnimated(true)
+            } else {
+                // FB Token valid
+                Debug.printl("Valid Facebook Token", sender: nil)
+                currentUser = User()
+                currentUser.handle = response.handle
+                currentUser.loginToken = response.loginToken
+                currentUser.userid = Int(response.userid)
+                currentUser.followers = "\(response.followersCount)"
+                currentUser.following = "\(response.followingCount)"
+                currentUser.tracks = "\(response.trackCount)"
+                currentUser.userDescription = response.userDescription
+                User.getUsersFollowing()
+                sendTokenRequest()
+                if !testing {
+                    Flurry.setUserID("\(currentUser.userid)")
+                }
+                
+                self.completeLogin(response.handle, password: nil)
             }
         }
-        User.getUsersFollowing()
-        sendTokenRequest()
+
+    }
+    
+    func completeLogin(handle: String, password: String?) {
+        if !NSUserDefaults.standardUserDefaults().boolForKey("hasFacebookLoginToken") {
+            let hasLoginKey = NSUserDefaults.standardUserDefaults().boolForKey("hasLoginKey")
+            if !hasLoginKey {
+                self.saveLoginItems(handle, password: password!)
+            } else {
+                if (NSUserDefaults.standardUserDefaults().valueForKey("username") as? String != handle || keychainWrapper.myObjectForKey("v_Data") as? String != password) {
+                    Debug.printl("Updating saved username and password", sender: self)
+                    self.saveLoginItems(handle, password: password!)
+                }
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityView.stopAnimating()
+            self.coverView.removeFromSuperview()
+        }
     }
     
     func saveLoginItems(handle: String, password: String) {
