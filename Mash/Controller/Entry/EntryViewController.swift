@@ -16,6 +16,7 @@ class EntryViewController: UIViewController {
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var termsButton: UIButton!
     @IBOutlet weak var logo: UIImageView!
+    var activityView: ActivityView = ActivityView.createView()
     
     override func viewDidLoad() {
         NSUserDefaults.standardUserDefaults().removeObjectForKey("hasFacebookLoginToken")
@@ -29,7 +30,6 @@ class EntryViewController: UIViewController {
         self.facebookButton.imageView?.image = UIImage(named: "fb_logo_invert")
         self.facebookButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
         self.facebookButton.addTarget(self, action: #selector(EntryViewController.facebookLogin(_:)), forControlEvents: UIControlEvents.TouchDown)
-        // TODO: implement facebook login
         //self.facebookButton.hidden = true
         
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
@@ -45,6 +45,9 @@ class EntryViewController: UIViewController {
         self.navigationController?.pushViewController(login, animated: false)
         let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController
         self.navigationController?.pushViewController(tabbarcontroller, animated: false)
+        
+        self.activityView.center = self.view.center
+        self.view.addSubview(self.activityView)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -61,33 +64,11 @@ class EntryViewController: UIViewController {
     
     func facebookLogin(sender: AnyObject?) {
         let hasFacebookLoginToken = NSUserDefaults.standardUserDefaults().boolForKey("hasFacebookLoginToken")
+        
         if hasFacebookLoginToken {
-            let loginToken = NSUserDefaults.standardUserDefaults().valueForKey("facebookLoginToken") as! String
-            // TODO: Send fbauth request to server
-            let request = FbAuthRequest()
-            request.email = NSUserDefaults.standardUserDefaults().valueForKey("facebookEmail") as! String
-            request.fbid = NSUserDefaults.standardUserDefaults().valueForKey("facebookID") as! String
-            request.fbToken = loginToken
-            
-            server.fbAuthWithRequest(request) {
-                (response, error) in
-                if error != nil {
-                    Debug.printl(error, sender: self)
-                    let login = FBSDKLoginManager()
-                    login.logInWithReadPermissions(["email", "public_profile", "user_location", "user_friends"]) {
-                        (result: FBSDKLoginManagerLoginResult!, error: NSError!) -> Void in
-                        if error != nil {
-                            Debug.printl(error, sender: self)
-                        } else {
-                            self.loginWithFacebook(result)
-                        }
-                    }
-                } else {
-                    // Log In
-                    
-                }
-            }
+            self.sendAuthRequest()
         } else {
+            // FB Token not stored; account may not exist
             let login = FBSDKLoginManager()
             login.logInWithReadPermissions(["email", "public_profile", "user_location", "user_friends"]) {
                 (result: FBSDKLoginManagerLoginResult!, error: NSError!) -> Void in
@@ -96,36 +77,155 @@ class EntryViewController: UIViewController {
                 } else if result.isCancelled {
                     Debug.printl("Login was cancelled by user.", sender: self)
                 } else {
-                    self.loginWithFacebook(result)
+                    Debug.printl("Sending graph request.", sender: self)
+                    NSUserDefaults.standardUserDefaults().setValue(result.token.tokenString, forKey: "facebookLoginToken")
+                    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasFacebookLoginToken")
+                    self.sendGraphRequest(result)
                 }
             }
         }
     }
     
-    func loginWithFacebook(permissions: FBSDKLoginManagerLoginResult) {
+    func sendAuthRequest() {
+        let loginToken = NSUserDefaults.standardUserDefaults().valueForKey("facebookLoginToken") as! String
+        let request = FbAuthRequest()
+        request.email = NSUserDefaults.standardUserDefaults().valueForKey("facebookEmail") as! String
+        request.fbid = NSUserDefaults.standardUserDefaults().valueForKey("facebookID") as! String
+        request.fbToken = loginToken
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityView.startAnimating()
+        }
+        
+        server.fbAuthWithRequest(request) {
+            (response, error) in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityView.stopAnimating()
+            }
+            if error != nil {
+                // FB Token outdated
+                Debug.printl(error, sender: self)
+                let login = FBSDKLoginManager()
+                login.logInWithReadPermissions(["email", "public_profile", "user_location", "user_friends"]) {
+                    (result: FBSDKLoginManagerLoginResult!, error: NSError!) -> Void in
+                    if error != nil {
+                        Debug.printl(error, sender: self)
+                        raiseAlert("Please try again.", message: "We could not log you in through Facebook.")
+                    } else {
+                        NSUserDefaults.standardUserDefaults().setValue(result.token.tokenString, forKey: "facebookLoginToken")
+                        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "hasFacebookLoginToken")
+                        self.sendAuthRequest()
+                    }
+                }
+            } else {
+                // FB Token valid
+                Debug.printl("Valid Facebook Token", sender: nil)
+                self.loginAction(response)
+            }
+        }
+    }
+    
+    func sendGraphRequest(permissions: FBSDKLoginManagerLoginResult) {
         if permissions.grantedPermissions.contains("email") && permissions.grantedPermissions.contains("public_profile") && permissions.grantedPermissions.contains("user_location") && permissions.grantedPermissions.contains("user_friends") {
-
+            
             FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, location, email, first_name, last_name, friends"]).startWithCompletionHandler() {
                 (connection, result, error) -> Void in
                 if (error != nil) {
                     Debug.printl("Error: \(error)", sender: self)
                 } else {
-                    Debug.printl(result, sender: self)
-                    
-                    // TODO: Log In
+                    NSUserDefaults.standardUserDefaults().setValue(result.valueForKey("id"), forKey: "facebookID")
+
                     let request = FbAuthRequest()
                     request.fbToken = NSUserDefaults.standardUserDefaults().valueForKey("facebookLoginToken") as! String
-                    request.email = result.emailAddress
-                    print(result.emailAddress)
-                    request.fbid = result.fbid
-                    request.friendFbidArray = result.friendFbidArray
+                    request.email = result.valueForKey("email") as! String
+                    request.fbid = result.valueForKey("id") as! String
+                    request.name = "\(result.valueForKey("first_name")!) \(result.valueForKey("last_name")!)"
+                    //request.friendFbidArray = NSMutableArray(array: (result.valueForKey("friends") as! NSDictionary).valueForKey("data") as! NSArray)
                     
-                    let controller = self.storyboard?.instantiateViewControllerWithIdentifier("HandleController") as! HandleController
-                    controller.request = request
-                    self.navigationController?.pushViewController(controller, animated: true)
+                    self.registerAction(request)
                 }
             }
         }
+    }
+    
+    func registerAction(request: FbAuthRequest) {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityView.startAnimating()
+        }
+        server.fbAuthWithRequest(request) {
+            (response, error) in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityView.stopAnimating()
+            }
+            if error != nil {
+                Debug.printl("Error: \(error)", sender: self)
+                raiseAlert("Please try again.", message: "There was a problem authenticating with your Facebook credentials.")
+            } else {
+                if response.newUser {
+                    // Construct new User
+                    NSUserDefaults.standardUserDefaults().setValue(response.email, forKey: "facebookEmail")
+                    
+                    currentUser = User()
+                    currentUser.loginToken = response.loginToken
+                    currentUser.handle = response.handle
+                    currentUser.userid = Int(response.userid)
+                    currentUser.followers = "\(response.followersCount)"
+                    currentUser.following = "\(response.followingCount)"
+                    currentUser.tracks = "\(response.trackCount)"
+                    currentUser.userDescription = response.userDescription
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if !testing {
+                            Flurry.setUserID("\(response.userid)")
+                            Flurry.logEvent("User_Login", withParameters: ["userid": Int(response.userid)])
+                        }
+                        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("HandleController") as! HandleController
+                        controller.request = request
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    }
+                } else {
+                    self.loginAction(response)
+                }
+            }
+        }
+    }
+    
+    func loginAction(response: SignInResponse) {
+        NSUserDefaults.standardUserDefaults().setValue(response.email, forKey: "facebookEmail")
+        NSUserDefaults.standardUserDefaults().setValue(response.handle, forKey: "handle")
+        
+        currentUser = User()
+        currentUser.handle = response.handle
+        currentUser.loginToken = response.loginToken
+        currentUser.userid = Int(response.userid)
+        currentUser.followers = "\(response.followersCount)"
+        currentUser.following = "\(response.followingCount)"
+        currentUser.tracks = "\(response.trackCount)"
+        currentUser.userDescription = response.userDescription
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            if !testing {
+                Flurry.setUserID("\(response.userid)")
+                Flurry.logEvent("User_Login", withParameters: ["userid": Int(response.userid)])
+            }
+            self.completeLogin()
+        }
+    }
+    
+    func completeLogin() {
+        User.getUsersFollowing()
+        sendTokenRequest()
+        
+        // Set up notifications
+        let types = UIUserNotificationType.Badge.union(UIUserNotificationType.Sound.union(UIUserNotificationType.Alert))
+        let settings = UIUserNotificationSettings(forTypes: types, categories: nil)
+        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+        UIApplication.sharedApplication().registerForRemoteNotifications()
+        
+        Debug.printl("Pushing tab bar controller.", sender: self)
+        let login = self.storyboard?.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+        self.navigationController?.pushViewController(login, animated: false)
+        let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController
+        self.navigationController?.pushViewController(tabbarcontroller, animated: true)
     }
     
 }

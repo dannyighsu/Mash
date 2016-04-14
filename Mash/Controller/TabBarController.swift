@@ -65,9 +65,12 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             self.view.addSubview(button)
             self.tabBarButton = button
         }
+        
+        self.navigationController?.navigationBarHidden = false
     }
     
-    override func shouldAutorotate() -> Bool {
+    // FIXME: Some issue to do with coming in from welcome view controller causes these calls to crash.
+    /*override func shouldAutorotate() -> Bool {
         var result: Bool
         if self.selectedViewController!.respondsToSelector(#selector(UIViewController.shouldAutorotate)) {
             result = self.selectedViewController!.shouldAutorotate()
@@ -85,7 +88,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             result = super.supportedInterfaceOrientations()
         }
         return result
-    }
+    }*/
     
     // Animations
     func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {

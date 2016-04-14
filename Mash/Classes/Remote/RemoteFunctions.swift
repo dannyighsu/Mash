@@ -87,7 +87,6 @@ func sendPushNotification(userid: Int, message: String) {
                 Flurry.logError("\(error.code)", message: "Error sending push notification", error: error)
             }
         }
-        Debug.printl(response, sender: nil)
     }
 }
 

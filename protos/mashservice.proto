@@ -35,6 +35,7 @@ message SignInResponse {
     optional uint32 following_count = 10;
     optional uint32 track_count = 11;
     required string handle = 12;
+    optional bool   new_user = 13;
 }
 
 message UserResponse {
@@ -159,6 +160,7 @@ message UserUpdateRequest {
     optional string password_hash = 4;
     optional string name = 5;
     optional string user_description = 6;
+    optional string handle = 7;
 }
 
 message FeedResponse {

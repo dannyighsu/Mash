@@ -701,7 +701,7 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="17"/>
                                 <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <state key="normal" title="Register With Facebook">
+                                <state key="normal" title="Log In With Facebook">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" red="0.48235297199999999" green="0.67450982329999998" blue="0.90196084980000002" alpha="1" colorSpace="deviceRGB"/>
                                 </state>
@@ -751,7 +751,7 @@
                         <outlet property="logo" destination="4Ja-I6-gXo" id="mw2-l6-H2h"/>
                         <outlet property="registerButton" destination="nCN-RV-j6A" id="gyN-uL-R9p"/>
                         <outlet property="termsButton" destination="f5a-iD-hxd" id="cAz-yj-ae1"/>
-                        <segue destination="eMn-ic-CvR" kind="show" id="RMA-ez-UEY"/>
+                        <segue destination="eMn-ic-CvR" kind="show" identifier="Handle" id="RMA-ez-UEY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uOU-UQ-MJG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1325,7 +1325,7 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
                                 <state key="normal" title="Go!">
-                                    <color key="titleColor" red="0.27450980390000002" green="0.79215686269999996" blue="0.88235294119999996" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="goButtonPressed:" destination="eMn-ic-CvR" eventType="touchUpInside" id="zDc-Nh-VMT"/>
@@ -1351,6 +1351,7 @@
                     <connections>
                         <outlet property="goButton" destination="bWf-Lu-j1k" id="HuN-I8-eXQ"/>
                         <outlet property="handleField" destination="ebm-5q-q2L" id="cpS-Yy-Z0x"/>
+                        <segue destination="Ueu-rB-OMs" kind="show" identifier="welcome" id="nci-ru-Hf7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fJw-mC-c8b" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1376,4 +1377,7 @@
         <image name="record" width="30" height="30"/>
         <image name="user" width="512" height="512"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="nci-ru-Hf7"/>
+    </inferredMetricsTieBreakers>
 </document>
