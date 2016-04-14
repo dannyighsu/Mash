@@ -23,6 +23,12 @@ class HandleController: UIViewController {
         }
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        self.navigationController?.navigationBarHidden = false
+        self.navigationItem.title = "Set a Handle"
+    }
+    
     @IBAction func goButtonPressed(sender: AnyObject) {
         if self.handleField.text == nil || self.handleField.text == "" {
             shakeScreen(self.view)
@@ -38,13 +44,13 @@ class HandleController: UIViewController {
             return
         }
         
-        self.request!.handle = self.handleField.text
-        print(self.request)
-        print(self.request!.email)
-        print(self.request!.fbid)
-        print(self.request!.fbToken)
+        let updateRequest = UserUpdateRequest()
+        updateRequest.userid = UInt32(currentUser.userid!)
+        updateRequest.loginToken = currentUser.loginToken
+        updateRequest.handle = self.handleField.text
         
-        server.fbAuthWithRequest(request) {
+        
+        server.userUpdateWithRequest(updateRequest) {
             (response, error) in
             if error != nil {
                 Debug.printl(error, sender: self)
@@ -53,8 +59,12 @@ class HandleController: UIViewController {
                 NSUserDefaults.standardUserDefaults().setValue(self.request!.fbToken, forKey: "facebookLoginToken")
                 NSUserDefaults.standardUserDefaults().setValue(self.request!.email, forKey: "facebookEmail")
                 NSUserDefaults.standardUserDefaults().setValue(self.request!.fbid, forKey: "facebookID")
-                print(response)
-                // Log in
+                
+                User.updateSelf(nil)
+                let controller = self.storyboard?.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+                self.navigationController?.viewControllers.removeLast()
+                self.navigationController?.pushViewController(controller, animated: false)
+                self.performSegueWithIdentifier("welcome", sender: nil)
             }
         }
     }

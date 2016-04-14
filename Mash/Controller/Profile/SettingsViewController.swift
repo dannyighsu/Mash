@@ -108,6 +108,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
                     NSUserDefaults.standardUserDefaults().removeObjectForKey("hasLoginKey")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("hasFacebookLoginToken")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("facebookID")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("facebookLoginToken")
                     Debug.printl("User has successfully logged out - popping to root view controller.", sender: self)
                     self.navigationController?.popToRootViewControllerAnimated(true)
                 }

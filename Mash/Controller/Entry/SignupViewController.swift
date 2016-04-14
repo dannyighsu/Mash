@@ -177,9 +177,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         }
     }
     
-    func loginAction() {
-        Debug.printl("Successful registration - pushing tab bar controller onto navigation controller", sender: self)
-        
+    func loginAction() {        
         // Set up notifications
         let types = UIUserNotificationType.Badge.union(UIUserNotificationType.Sound.union(UIUserNotificationType.Alert))
         let settings = UIUserNotificationSettings(forTypes: types, categories: nil)
