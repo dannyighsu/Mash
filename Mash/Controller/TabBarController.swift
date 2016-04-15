@@ -63,7 +63,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             try session.setActive(true)
         } catch let error1 as NSError {
             Debug.printl("Error setting session active: \(error1)", sender: self)
-        }j
+        }
         
        /* do {
             try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
