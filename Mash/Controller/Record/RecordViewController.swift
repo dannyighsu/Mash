@@ -120,12 +120,12 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
             Debug.printl("Error setting session active: \(error1.localizedDescription)", sender: self)
         }
         
-        do {
+        /*do {
             try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
         } catch let error1 as NSError {
             Debug.printl("\(error1.localizedDescription)", sender: self)
             raiseAlert("Error setting up audio.")
-        }
+        }*/
         
         if !testing {
             Flurry.logEvent("User_Recording", withParameters: ["userid": currentUser.userid!])
