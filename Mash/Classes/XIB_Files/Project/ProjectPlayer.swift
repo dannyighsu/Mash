@@ -93,7 +93,7 @@ class ProjectPlayer: UITableViewHeaderFooterView {
         for i in 0 ..< self.audioPlayers.count {
             self.audioPlayers[i].play()
         }
-        self.playButton.setImage(UIImage(named: "Pause"), forState: UIControlState.Normal)
+        self.playButton.setImage(UIImage(named: "Pause_2"), forState: UIControlState.Normal)
         self.isPlaying = true
     }
     
@@ -101,7 +101,7 @@ class ProjectPlayer: UITableViewHeaderFooterView {
         for i in 0 ..< self.audioPlayers.count {
             self.audioPlayers[i].pause()
         }
-        self.playButton.setImage(UIImage(named: "Play"), forState: UIControlState.Normal)
+        self.playButton.setImage(UIImage(named: "Play_2"), forState: UIControlState.Normal)
         self.isPlaying = false
     }
     
@@ -110,7 +110,7 @@ class ProjectPlayer: UITableViewHeaderFooterView {
             self.audioPlayers[i].stop()
             self.audioPlayers[i].currentTime = 0
         }
-        self.playButton.setImage(UIImage(named: "Play"), forState: UIControlState.Normal)
+        self.playButton.setImage(UIImage(named: "Play_2"), forState: UIControlState.Normal)
         self.isPlaying = false
     }
     
