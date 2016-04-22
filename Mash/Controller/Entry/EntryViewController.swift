@@ -29,7 +29,6 @@ class EntryViewController: UIViewController {
         self.facebookButton.imageView?.image = UIImage(named: "fb_logo_invert")
         self.facebookButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
         self.facebookButton.addTarget(self, action: #selector(EntryViewController.facebookLogin(_:)), forControlEvents: UIControlEvents.TouchDown)
-        //self.facebookButton.hidden = true
         
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         blurView.frame = self.registerButton.bounds
@@ -63,7 +62,7 @@ class EntryViewController: UIViewController {
     
     func facebookLogin(sender: AnyObject?) {
         let hasFacebookLoginToken = NSUserDefaults.standardUserDefaults().boolForKey("hasFacebookLoginToken")
-        
+        print(hasFacebookLoginToken)
         if hasFacebookLoginToken {
             self.sendAuthRequest()
         } else {
@@ -132,6 +131,7 @@ class EntryViewController: UIViewController {
                     Debug.printl("Error: \(error)", sender: self)
                 } else {
                     NSUserDefaults.standardUserDefaults().setValue(result.valueForKey("id"), forKey: "facebookID")
+                    Debug.printl("Received result for email \(result.valueForKey("email"))", sender: nil)
 
                     let request = FbAuthRequest()
                     request.fbToken = NSUserDefaults.standardUserDefaults().valueForKey("facebookLoginToken") as! String
@@ -150,6 +150,7 @@ class EntryViewController: UIViewController {
         dispatch_async(dispatch_get_main_queue()) {
             self.activityView.startAnimating()
         }
+        Debug.printl("Sending register action with request \(request)", sender: nil)
         server.fbAuthWithRequest(request) {
             (response, error) in
             dispatch_async(dispatch_get_main_queue()) {
@@ -163,6 +164,7 @@ class EntryViewController: UIViewController {
                     // Construct new User
                     NSUserDefaults.standardUserDefaults().setValue(response.email, forKey: "facebookEmail")
                     
+                    Debug.printl("Constructing new user \(response.handle)", sender: nil)
                     currentUser = User()
                     currentUser.loginToken = response.loginToken
                     currentUser.handle = response.handle

@@ -520,6 +520,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         NSUserDefaults.standardUserDefaults().removeObjectForKey("hasLoginKey")
         NSUserDefaults.standardUserDefaults().removeObjectForKey("username")
         Debug.printl("User has successfully logged out - popping to root view controller.", sender: self)
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("hasFacebookLoginToken")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("facebookID")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("facebookLoginToken")
         self.navigationController?.popToRootViewControllerAnimated(true)
     }
     
