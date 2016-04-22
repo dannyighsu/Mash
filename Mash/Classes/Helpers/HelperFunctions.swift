@@ -275,6 +275,14 @@ func raiseAlert(input: String, delegate: UIViewController, message: String) {
     }
 }
 
+func raiseQuickAlertView(input: String) {
+    dispatch_async(dispatch_get_main_queue()) {
+        let alert = QuickActivityView.createView()
+        alert.titleLabel.text = input
+        alert.show()
+    }
+}
+
 // Get cell
 // TODO: abstract to all types
 func getUserCell(input: UIButton) -> User {

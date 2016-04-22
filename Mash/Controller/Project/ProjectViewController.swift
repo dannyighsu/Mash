@@ -570,7 +570,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
             }
         }
-        raiseAlert("Sound added to project.")
+        raiseQuickAlertView("Track Added to Project.")
     }
 
 }

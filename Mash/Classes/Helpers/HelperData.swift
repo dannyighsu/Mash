@@ -76,8 +76,8 @@ var instrumentArray: [String: [String]] = [
     "Keyboard": ["", "Piano", "Organ", "Electric Piano"],
     "Guitar": ["", "Acoustic Guitar", "Electric Guitar", "Bass Guitar"],
     "Brass": ["", "French Horn", "Trombone", "Trumpet", "Tuba"],
-    "Woodwinds": ["", "Saxophone", "Flute", "Piccolo", "Oboe", "English Horn", "Bassoon", "Clarinet", "Harmonica", "Accordians"],
-    "Percussion": ["", "Electronic", "Cajon", "Drum Kit", "Triangle", "Snare", "Bass Drum", "Bongo", "Tamborine", "Darbuka"],
+    "Woodwinds": ["", "Saxophone", "Flute", "Piccolo", "Oboe", "English Horn", "Bassoon", "Clarinet", "Harmonica", "Accordion"],
+    "Percussion": ["", "Electronic", "Cajon", "Drum Kit", "Triangle", "Snare", "Bass Drum", "Bongo", "Tambourine", "Darbuka"],
     "Tuned_Percussion": ["", "Xylophone", "Vibraphone", "Marimba"],
     "Electronic": ["", "Synth Lead", "Synth Bass", "Synth Pad", "Synth Brass", "Gated Synth", "Other"],
     "Strings": ["", "Violin", "Voila", "Cello", "Ukulele", "Harp", "Sitar", "Banjo", "Lyre", "Upright Bass", "Mandolin"],
@@ -93,9 +93,9 @@ var genreArray: [String: [String]] = [
     "Jazz": ["", "Swing", "Bebop", "Big Band", "Contemporary Jazz", "Ragtime", "Slow Jazz", "Latin Jazz", "Bossa Nova"],
     "Rock": ["", "Alternative Rock", "Metal", "Punk Rock", "HardRock", "Psychedelic", "Southern Rock", "Indie Rock", "Acoustic Rock", "Folk Rock", "Experimental Rock"],
     "R&B/Soul": ["", "Contemporary R&B", "Disco", "Soul", "Funk", "Motown"],
-    "Classical": ["", "Chamber Music", "Boroque", "Avant-Garde", "Orchestral", "Opera", "Modern"],
+    "Classical": ["", "Chamber Music", "Baroque", "Avant-Garde", "Orchestral", "Opera", "Modern"],
     "Pop": ["", "K-Pop", "Dance Pop", "Britpop", "Pop/Rock"],
-    "World": ["", "Reggae", "African", "Indian", "Brazillin", "Arabic", "Mexican", "Latin"],
+    "World": ["", "Reggae", "African", "Indian", "Brazilian", "Arabic", "Mexican", "Latin"],
     "Other": ["", "Other"]
 ]
 

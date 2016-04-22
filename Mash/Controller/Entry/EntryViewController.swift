@@ -19,7 +19,6 @@ class EntryViewController: UIViewController {
     var activityView: ActivityView = ActivityView.createView()
     
     override func viewDidLoad() {
-        NSUserDefaults.standardUserDefaults().removeObjectForKey("hasFacebookLoginToken")
         super.viewDidLoad()
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)

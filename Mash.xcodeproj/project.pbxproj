@@ -302,6 +302,8 @@
 		3718EF2A1B57071D00AA5D26 /* Objective-C.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718EF281B57071D00AA5D26 /* Objective-C.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		3719B8391CBB356A0056D11F /* ShareItemSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3719B8381CBB356A0056D11F /* ShareItemSource.swift */; };
 		371F14C71B8D23550044BE5B /* mashservice.proto in Resources */ = {isa = PBXBuildFile; fileRef = 371F14C61B8D23550044BE5B /* mashservice.proto */; };
+		3721126E1CC709D800F2A2DF /* QuickAlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3721126D1CC709D800F2A2DF /* QuickAlertView.xib */; };
+		372112701CC70DF900F2A2DF /* QuickActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3721126F1CC70DF900F2A2DF /* QuickActivityView.swift */; };
 		3722ACEA1B4DF1F2008473C3 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3722ACE91B4DF1F2008473C3 /* ImageCell.xib */; };
 		373915D41C5D7FFE0093351B /* RemoteFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373915D31C5D7FFE0093351B /* RemoteFunctions.swift */; };
 		373F0EFD1B3DEFC500DE92AB /* Basses Legato.aif in Resources */ = {isa = PBXBuildFile; fileRef = 373F0EF61B3DEFC500DE92AB /* Basses Legato.aif */; };
@@ -734,6 +736,8 @@
 		3718EF281B57071D00AA5D26 /* Objective-C.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Objective-C.m"; sourceTree = "<group>"; };
 		3719B8381CBB356A0056D11F /* ShareItemSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareItemSource.swift; sourceTree = "<group>"; };
 		371F14C61B8D23550044BE5B /* mashservice.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mashservice.proto; path = protos/mashservice.proto; sourceTree = SOURCE_ROOT; };
+		3721126D1CC709D800F2A2DF /* QuickAlertView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickAlertView.xib; sourceTree = "<group>"; };
+		3721126F1CC70DF900F2A2DF /* QuickActivityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickActivityView.swift; sourceTree = "<group>"; };
 		3722ACE91B4DF1F2008473C3 /* ImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
 		373915D31C5D7FFE0093351B /* RemoteFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteFunctions.swift; sourceTree = "<group>"; };
 		373F0EF61B3DEFC500DE92AB /* Basses Legato.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Basses Legato.aif"; sourceTree = "<group>"; };
@@ -1303,6 +1307,7 @@
 				370A38FE1BF6A8B700FCD060 /* User.swift */,
 				370AC1AF1C3C9FB8002ED357 /* BufferCell.swift */,
 				376950B11C4EFCDF00F142D1 /* ActivityView.swift */,
+				3721126F1CC70DF900F2A2DF /* QuickActivityView.swift */,
 			);
 			path = XIB_Files;
 			sourceTree = "<group>";
@@ -1668,6 +1673,7 @@
 				37E799D81B3CC1D000D2E54D /* Track.xib */,
 				37DE77241B436F4A00952987 /* User.xib */,
 				376950AF1C4EFAD100F142D1 /* ActivityView.xib */,
+				3721126D1CC709D800F2A2DF /* QuickAlertView.xib */,
 			);
 			path = XIB;
 			sourceTree = "<group>";
@@ -2138,6 +2144,7 @@
 				370A381E1BF6A31D00FCD060 /* ftv2mnode.png in Resources */,
 				370A38A61BF6A31D00FCD060 /* mag_sel.png in Resources */,
 				370A38CF1BF6A31D00FCD060 /* tabs.css in Resources */,
+				3721126E1CC709D800F2A2DF /* QuickAlertView.xib in Resources */,
 				370A37FC1BF6A31D00FCD060 /* class_flurry_ads-members.html in Resources */,
 				37C9F4EE1C029C7000C80F88 /* ImportHeaderView.xib in Resources */,
 				370A388A1BF6A31D00FCD060 /* functions_5f.html in Resources */,
@@ -2224,6 +2231,7 @@
 				37C9F5141C029E2000C80F88 /* ChannelPlaceholder.swift in Sources */,
 				37E799AE1B3CC1C600D2E54D /* RootNavigationController.swift in Sources */,
 				37F92D011C601CBD0087FB34 /* GlobalObjects.swift in Sources */,
+				372112701CC70DF900F2A2DF /* QuickActivityView.swift in Sources */,
 				376950B21C4EFCDF00F142D1 /* ActivityView.swift in Sources */,
 				379882811C01314F0029E56C /* ProjectViewController.swift in Sources */,
 				379882801C01314F0029E56C /* ProjectPreferencesViewController.swift in Sources */,
