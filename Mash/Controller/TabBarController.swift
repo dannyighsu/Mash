@@ -50,10 +50,6 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.selectedIndex = getTabBarController("record")
         
-        // Project Notification setup
-        projectNotification.titleLabel.text = "Track Added to Project."
-        self.view.addSubview(projectNotification)
-        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TabBarController.update(_:)), name: "UpdateUINotification", object: nil)
         rootTabBarController = self
         

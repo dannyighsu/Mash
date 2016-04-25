@@ -18,6 +18,10 @@ class RootNavigationController: UINavigationController {
         self.edgesForExtendedLayout = UIRectEdge.None
         rootNavigationController = self
         mainStoryboard = self.storyboard
+        
+        // Project Notification setup
+        projectNotification.center = self.view.center
+        self.view.addSubview(projectNotification)
     }
     
     override func viewDidAppear(animated: Bool) {

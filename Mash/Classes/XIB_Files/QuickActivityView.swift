@@ -30,18 +30,19 @@ class QuickActivityView: UIView {
         activityView.insertSubview(blurView, atIndex: 0)
         
         activityView.imageView.image = UIImage(named: "checkmark")
+        activityView.titleLabel.text = "Track Added"
         
         return activityView
     }
     
     func show() {
         self.hidden = false
-        UIView.animateWithDuration(0.3, animations: {self.alpha = 1.0})
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(QuickActivityView.hide), userInfo: nil, repeats: false)
+        self.alpha = 1.0
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: #selector(QuickActivityView.hide), userInfo: nil, repeats: false)
     }
     
     func hide() {
-        UIView.animateWithDuration(0.3, animations: {self.alpha = 0.0}) {
+        UIView.animateWithDuration(0.5, animations: {self.alpha = 0.0}) {
             (completion) in
             self.hidden = true
         }
