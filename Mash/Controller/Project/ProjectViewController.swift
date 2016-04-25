@@ -150,8 +150,9 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.content.layer.cornerRadius = 4.0
             cell.backgroundColor = UIColor.clearColor()
             
-            let trans = CGAffineTransformMakeRotation(CGFloat(M_PI * -0.5))
-            cell.volumeSlider.transform = trans
+            // Rotate volume slider
+            /*let trans = CGAffineTransformMakeRotation(CGFloat(M_PI * -0.5))
+            cell.volumeSlider.transform = trans*/
             cell.volumeSlider.minimumTrackTintColor = UIColor.blackColor()
             return cell
         } else {
