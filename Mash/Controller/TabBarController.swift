@@ -50,6 +50,10 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.selectedIndex = getTabBarController("record")
         
+        // Project Notification setup
+        projectNotification.titleLabel.text = "Track Added to Project."
+        self.view.addSubview(projectNotification)
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TabBarController.update(_:)), name: "UpdateUINotification", object: nil)
         rootTabBarController = self
         
@@ -70,7 +74,6 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
         } catch let error1 as NSError {
             Debug.printl("\(error1.localizedDescription)", sender: self)
-            print(error1)
             raiseAlert("Error setting up audio.")
         }
     }
@@ -146,7 +149,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
                 currentProject = nil
             }
         } else if alertView.title == "You have not created a project yet." {
-            if buttonIndex == 1 {
+            /*if buttonIndex == 1 {
                 let project = self.storyboard!.instantiateViewControllerWithIdentifier("ProjectViewController") as! ProjectViewController
                 let navController = UINavigationController(rootViewController: project)
                 currentProject = navController
@@ -154,14 +157,14 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
                 // Add for interaction
                 //self.swipeInteractionController.addViewController(currentProject)
                 self.presentViewController(currentProject!, animated: true) {
-                    ProjectViewController.importTracks(tracksToAdd, navigationController: self.navigationController!, storyboard: self.storyboard!)
+                    ProjectViewController.importTracks(tracksToAdd)
                     let titleButton = project.navigationItem.titleView as! UIButton
                     titleButton.setTitle(tracksToAdd[0].titleText, forState: .Normal)
                     titleButton.sizeToFit()
                     self.tabBarButton?.tapButton.setTitle(tracksToAdd[0].titleText, forState: .Normal)
                     self.tabBarButton?.addButton.hidden = true
                 }
-            }
+            }*/
         } else if alertView.title == "Reporting a Sound" {
             if buttonIndex == 1 {
                 sendReportRequest(alertView.textFieldAtIndex(0)!.text, trackid: self.currTrack!.id)
@@ -204,7 +207,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         let alertController = UIAlertController(title: "More options", message: nil, preferredStyle: .ActionSheet)
         let addAction = UIAlertAction(title: "Add to Project", style: .Default, handler: {
             (action) in
-            ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
+            ProjectViewController.importTracks([track])
         })
         var likeAction: UIAlertAction
         if track.liked {

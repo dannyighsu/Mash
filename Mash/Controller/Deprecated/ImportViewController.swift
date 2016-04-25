@@ -75,12 +75,12 @@ class ImportViewController: UITableViewController {
 
     func addTrack(sender: UITapGestureRecognizer) {
         let track = sender.view?.superview?.superview as! Track
-        ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
+        ProjectViewController.importTracks([track])
         self.navigationController?.popViewControllerAnimated(true)
     }
 
     func addAllTracks(sender: AnyObject?) {
-        ProjectViewController.importTracks(self.tracksToAdd, navigationController: self.navigationController, storyboard: self.storyboard)
+        ProjectViewController.importTracks(self.tracksToAdd)
         self.navigationController?.popViewControllerAnimated(true)
     }
 

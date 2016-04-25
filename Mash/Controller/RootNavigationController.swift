@@ -17,6 +17,7 @@ class RootNavigationController: UINavigationController {
         self.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 20)!, NSForegroundColorAttributeName: UIColor.blackColor()]
         self.edgesForExtendedLayout = UIRectEdge.None
         rootNavigationController = self
+        mainStoryboard = self.storyboard
     }
     
     override func viewDidAppear(animated: Bool) {

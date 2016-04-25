@@ -301,7 +301,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 track = t
             }
         }
-        ProjectViewController.importTracks([track!], navigationController: self.navigationController, storyboard: self.storyboard)
+        ProjectViewController.importTracks([track!])
     }
 
     // Track management
