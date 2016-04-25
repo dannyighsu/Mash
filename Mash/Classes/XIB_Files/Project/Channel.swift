@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol ChannelDelegate {
-    func channelVolumeDidChange(channel: Channel, number: Int, value: Float)
+    func channelVolumeDidChange(channel: Channel, value: Float)
 }
 
 class Channel: UITableViewCell, EZAudioFileDelegate {
@@ -24,7 +24,6 @@ class Channel: UITableViewCell, EZAudioFileDelegate {
     @IBOutlet weak var content: UIView!
     var audioFile: EZAudioFile? = nil
     var track: Track?
-    var trackNumber: Int? = nil
     var delegate: ChannelDelegate? = nil
     
     convenience init(frame: CGRect, track: Track, trackNumber: Int, delegate: ChannelDelegate) {
@@ -32,7 +31,6 @@ class Channel: UITableViewCell, EZAudioFileDelegate {
         self.track = track
         self.trackTitle.text = track.titleText
         self.instrumentImage.image = findImage(track.instruments)
-        self.trackNumber = trackNumber
     }
     
     func generateWaveform() {
@@ -47,7 +45,7 @@ class Channel: UITableViewCell, EZAudioFileDelegate {
     }
     
     @IBAction func volumeDidChange(sender: UISlider) {
-        self.delegate?.channelVolumeDidChange(self, number: self.trackNumber!, value: sender.value)
+        self.delegate?.channelVolumeDidChange(self, value: sender.value)
     }
 
 }

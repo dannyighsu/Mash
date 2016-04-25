@@ -171,6 +171,11 @@ class ProjectPlayer: UITableViewHeaderFooterView {
         self.mutes.append(false)
     }
     
+    func removeTrack(trackNumber: Int) {
+        self.audioPlayers.removeAtIndex(trackNumber)
+        self.tracks.removeAtIndex(trackNumber)
+    }
+    
     func resetPlayer(index: Int) {
         let audioPlayer = try! AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: self.tracks[index].trackURL))
         audioPlayer.numberOfLoops = -1

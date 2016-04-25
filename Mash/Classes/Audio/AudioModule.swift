@@ -58,10 +58,11 @@ class AudioConverter: TPAACAudioConverter {
         }
     }
     
-    class func mixTracks(name: String, tracks: [Track], completion: (exportSession: AVAssetExportSession?) -> ()) {
+    class func mixTracks(name: String, tracks: [Track], volumes: [Float], completion: (exportSession: AVAssetExportSession?) -> ()) {
         let composition: AVMutableComposition = AVMutableComposition()
         var compositionTracks: [AVMutableCompositionTrack] = []
         var assets: [AVAsset] = []
+        var mixes: [AVMutableAudioMixInputParameters] = []
         
         // Create track assets
         var maxDuration: CMTime = kCMTimeZero
@@ -72,6 +73,12 @@ class AudioConverter: TPAACAudioConverter {
             compositionTracks.append(compositionTrack)
             let asset: AVAsset = AVURLAsset(URL: NSURL(fileURLWithPath: track.trackURL), options: nil)
             assets.append(asset)
+            
+            let mix = AVMutableAudioMixInputParameters(track: asset.tracks[0])
+            mix.setVolume(volumes[i], atTime: kCMTimeZero)
+            mix.trackID = asset.tracks[0].trackID
+            mixes.append(mix)
+            
             maxDuration = max(maxDuration, asset.duration)
         }
         
@@ -82,7 +89,6 @@ class AudioConverter: TPAACAudioConverter {
             let trackDuration: CMTime = asset.duration
             var totalDuration: CMTime = kCMTimeZero
             
-            
             // Loop shorter tracks
             while totalDuration + trackDuration <= maxDuration {
                 do {
@@ -90,6 +96,11 @@ class AudioConverter: TPAACAudioConverter {
                     let tracks: NSArray = shorterAsset.tracksWithMediaType(AVMediaTypeAudio)
                     let clip: AVAssetTrack = tracks.objectAtIndex(0) as! AVAssetTrack
                     try compositionTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, shorterAsset.duration), ofTrack: clip, atTime: totalDuration)
+                    
+                    let mix = AVMutableAudioMixInputParameters(track: shorterAsset.tracks[0])
+                    mix.setVolume(volumes[i], atTime: kCMTimeZero)
+                    mix.trackID = asset.tracks[0].trackID
+                    mixes.append(mix)
                 } catch let error as NSError {
                     Debug.printl(error, sender: nil)
                     completion(exportSession: nil)
@@ -112,6 +123,9 @@ class AudioConverter: TPAACAudioConverter {
             completion(exportSession: nil)
             return
         }
+        let audioMix = AVMutableAudioMix()
+        audioMix.inputParameters = mixes
+        exportSession?.audioMix = audioMix
         exportSession?.outputURL = NSURL(fileURLWithPath: newTrack)
         exportSession?.outputFileType = AVFileTypeAppleM4A
         exportSession?.exportAsynchronouslyWithCompletionHandler() {

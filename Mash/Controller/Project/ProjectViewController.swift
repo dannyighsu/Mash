@@ -139,7 +139,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.trackTitle.sizeToFit()
             cell.instrumentImage.image = findImage(self.data[indexPath.row].instrumentFamilies)
             cell.track = trackData
-            cell.trackNumber = indexPath.row
             cell.delegate = self
             
             cell.generateWaveform()
@@ -190,7 +189,6 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             if self.data.count > 1 && indexPath.row < self.data.count {
                 for _ in indexPath.row + 1...self.data.count {
                     let channel = tableView.cellForRowAtIndexPath(indexPath) as! Channel
-                    channel.trackNumber! -= 1
                 }
             }
             
@@ -288,6 +286,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
         for i in 0 ..< self.data.count {
             if self.data[i].titleText == track.trackTitle.text {
                 self.data.removeAtIndex(i)
+                self.audioPlayer!.removeTrack(i)
             }
         }
         
@@ -311,7 +310,14 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     // Channel Delegate
-    func channelVolumeDidChange(channel: Channel, number: Int, value: Float) {
+    func channelVolumeDidChange(channel: Channel, value: Float) {
+        var number = 0
+        for i in 0 ..< self.audioPlayer!.tracks.count {
+            if channel.track == self.audioPlayer!.tracks[i] {
+                number = i
+                break
+            }
+        }
         self.audioPlayer!.audioPlayers[number].volume = value
     }
     
@@ -339,7 +345,11 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func uploadSavedTrack(name: String) -> Bool {
         // Mix audio
-        AudioModule.mixTracks(name, tracks: self.data) {
+        var volumes: [Float] = []
+        for player in self.audioPlayer!.audioPlayers {
+            volumes.append(player.volume)
+        }
+        AudioModule.mixTracks(name, tracks: self.data, volumes: volumes) {
             (exportSession) in
             if exportSession == nil || exportSession!.status == AVAssetExportSessionStatus.Failed {
                 raiseAlert("Error exporting file.", delegate: self)
@@ -376,7 +386,11 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func shareTrack(name: String) {
-        AudioModule.mixTracks(name, tracks: self.data) {
+        var volumes: [Float] = []
+        for player in self.audioPlayer!.audioPlayers {
+            volumes.append(player.volume)
+        }
+        AudioModule.mixTracks(name, tracks: self.data, volumes: volumes) {
             (exportSession) in
             if exportSession == nil || exportSession!.status == AVAssetExportSessionStatus.Failed {
                 raiseAlert("Error exporting file.", delegate: self)
