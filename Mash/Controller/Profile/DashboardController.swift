@@ -72,7 +72,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidAppear(animated)
         let value = UIInterfaceOrientation.Portrait.rawValue
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
-        var editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(DashboardController.goToSettings(_:)))
+        var editButton = UIBarButtonItem(title: "Settings", style: .Plain, target: self, action: #selector(DashboardController.goToSettings(_:)))
         
         if self.user.userid != currentUser.userid {
             var following: Bool = false

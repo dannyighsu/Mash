@@ -186,6 +186,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             currentProject = navController
             currentProject!.transitioningDelegate = self
             currentProject!.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 20)!, NSForegroundColorAttributeName: UIColor.blackColor()]
+            self.tabBarButton!.addButton.hidden = true
 
             // Add for interaction
             //self.swipeInteractionController.addViewController(currentProject)
@@ -241,7 +242,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             alertController.popoverPresentationController!.sourceRect = CGRect(x: self.view.bounds.size.width / 2.0, y: self.view.bounds.size.height / 2.0, width: 1.0, height: 1.0)
         }
         
-        self.presentViewController(alertController, animated: true, completion: nil)
+        topViewController().presentViewController(alertController, animated: true, completion: nil)
     }
     
 }

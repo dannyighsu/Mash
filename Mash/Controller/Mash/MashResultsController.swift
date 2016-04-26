@@ -212,7 +212,6 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     func add(sender: UIButton) {
         let track = sender.superview?.superview?.superview as! Track
         ProjectViewController.importTracks([track])
-        sendPushNotification(track.userid, message: "You've just been mashed!")
         sendMashAnalyticsRequest([track], liked: true)
         for i in 0 ..< self.analyticsArray.count {
             if track == self.analyticsArray[i] {
@@ -229,7 +228,9 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
                 break
             }
         }
-        sendMashAnalyticsRequest(self.analyticsArray, liked: false)
+        if self.analyticsArray.count > 0 {
+            sendMashAnalyticsRequest(self.analyticsArray, liked: false)
+        }
         self.navigationController!.viewControllers.removeAtIndex(index)
         self.navigationController?.popViewControllerAnimated(true)
     }
