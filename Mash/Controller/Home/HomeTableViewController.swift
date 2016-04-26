@@ -305,7 +305,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             cell = cell!.superview
         }
         let homecell = cell as! HomeCell
-        ProjectViewController.importTracks([homecell.track!], navigationController: self.navigationController!, storyboard: self.storyboard!)
+        ProjectViewController.importTracks([homecell.track!])
     }
     
     // Check if project view exists in memory, if not, create one.

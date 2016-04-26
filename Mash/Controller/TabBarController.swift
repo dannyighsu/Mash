@@ -59,19 +59,19 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         } catch let error1 as NSError {
             Debug.printl("Error setting up session: \(error1)", sender: self)
         }
+        
         do {
             try session.setActive(true)
         } catch let error1 as NSError {
             Debug.printl("Error setting session active: \(error1)", sender: self)
         }
         
-       /* do {
+        do {
             try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
         } catch let error1 as NSError {
             Debug.printl("\(error1.localizedDescription)", sender: self)
-            print(error1)
             raiseAlert("Error setting up audio.")
-        }*/
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -145,7 +145,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
                 currentProject = nil
             }
         } else if alertView.title == "You have not created a project yet." {
-            if buttonIndex == 1 {
+            /*if buttonIndex == 1 {
                 let project = self.storyboard!.instantiateViewControllerWithIdentifier("ProjectViewController") as! ProjectViewController
                 let navController = UINavigationController(rootViewController: project)
                 currentProject = navController
@@ -153,14 +153,14 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
                 // Add for interaction
                 //self.swipeInteractionController.addViewController(currentProject)
                 self.presentViewController(currentProject!, animated: true) {
-                    ProjectViewController.importTracks(tracksToAdd, navigationController: self.navigationController!, storyboard: self.storyboard!)
+                    ProjectViewController.importTracks(tracksToAdd)
                     let titleButton = project.navigationItem.titleView as! UIButton
                     titleButton.setTitle(tracksToAdd[0].titleText, forState: .Normal)
                     titleButton.sizeToFit()
                     self.tabBarButton?.tapButton.setTitle(tracksToAdd[0].titleText, forState: .Normal)
                     self.tabBarButton?.addButton.hidden = true
                 }
-            }
+            }*/
         } else if alertView.title == "Reporting a Sound" {
             if buttonIndex == 1 {
                 sendReportRequest(alertView.textFieldAtIndex(0)!.text, trackid: self.currTrack!.id)
@@ -186,6 +186,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             currentProject = navController
             currentProject!.transitioningDelegate = self
             currentProject!.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 20)!, NSForegroundColorAttributeName: UIColor.blackColor()]
+            self.tabBarButton!.addButton.hidden = true
 
             // Add for interaction
             //self.swipeInteractionController.addViewController(currentProject)
@@ -203,7 +204,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         let alertController = UIAlertController(title: "More options", message: nil, preferredStyle: .ActionSheet)
         let addAction = UIAlertAction(title: "Add to Project", style: .Default, handler: {
             (action) in
-            ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
+            ProjectViewController.importTracks([track])
         })
         var likeAction: UIAlertAction
         if track.liked {
@@ -241,7 +242,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             alertController.popoverPresentationController!.sourceRect = CGRect(x: self.view.bounds.size.width / 2.0, y: self.view.bounds.size.height / 2.0, width: 1.0, height: 1.0)
         }
         
-        self.presentViewController(alertController, animated: true, completion: nil)
+        topViewController().presentViewController(alertController, animated: true, completion: nil)
     }
     
 }

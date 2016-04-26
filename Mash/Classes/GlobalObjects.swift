@@ -25,5 +25,6 @@ var userFollowing: [User] = []
 var currentProject: UINavigationController? = nil
 var rootTabBarController: TabBarController? = nil
 var rootNavigationController: RootNavigationController? = nil
-var tracksToAdd: [Track] = []
+var mainStoryboard: UIStoryboard? = nil
 var deviceNotificationToken: String = ""
+var projectNotification: QuickActivityView = QuickActivityView.createView()

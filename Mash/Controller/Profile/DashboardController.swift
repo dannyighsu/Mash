@@ -72,7 +72,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidAppear(animated)
         let value = UIInterfaceOrientation.Portrait.rawValue
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
-        var editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(DashboardController.goToSettings(_:)))
+        var editButton = UIBarButtonItem(title: "Settings", style: .Plain, target: self, action: #selector(DashboardController.goToSettings(_:)))
         
         if self.user.userid != currentUser.userid {
             var following: Bool = false
@@ -301,7 +301,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
                 track = t
             }
         }
-        ProjectViewController.importTracks([track!], navigationController: self.navigationController, storyboard: self.storyboard)
+        ProjectViewController.importTracks([track!])
     }
 
     // Track management
@@ -520,6 +520,9 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         NSUserDefaults.standardUserDefaults().removeObjectForKey("hasLoginKey")
         NSUserDefaults.standardUserDefaults().removeObjectForKey("username")
         Debug.printl("User has successfully logged out - popping to root view controller.", sender: self)
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("hasFacebookLoginToken")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("facebookID")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("facebookLoginToken")
         self.navigationController?.popToRootViewControllerAnimated(true)
     }
     

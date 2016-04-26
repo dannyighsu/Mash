@@ -100,6 +100,14 @@ func returnProjectView(navcontroller: UINavigationController) -> ProjectViewCont
     return nil
 }
 
+func topViewController() -> UIViewController {
+    var topController: UIViewController? = rootNavigationController
+    while topController?.presentedViewController != nil {
+        topController = topController?.presentedViewController
+    }
+    
+    return topController!
+}
 
 // Cryptographic Hash function for password hashes
 func hashPassword(input: String) -> String {

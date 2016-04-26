@@ -299,7 +299,7 @@ class UploadViewController: UIViewController, UICollectionViewDelegate, UICollec
         let navController = self.navigationController
         self.navigationController?.popViewControllerAnimated(false)
         if navController is RootNavigationController {
-            ProjectViewController.importTracks([track], navigationController: self.navigationController, storyboard: self.storyboard)
+            ProjectViewController.importTracks([track])
         }
     }
     

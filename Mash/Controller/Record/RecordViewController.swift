@@ -107,26 +107,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     
     // Button methods
     func record(sender: AnyObject?) {
-        // Load AVAudioSession
-        let session = AVAudioSession.sharedInstance()
-        do {
-            try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
-        } catch let error1 as NSError {
-            Debug.printl("Error setting up session: \(error1.localizedDescription)", sender: self)
-        }
-        do {
-            try session.setActive(true)
-        } catch let error1 as NSError {
-            Debug.printl("Error setting session active: \(error1.localizedDescription)", sender: self)
-        }
-        
-        /*do {
-            try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
-        } catch let error1 as NSError {
-            Debug.printl("\(error1.localizedDescription)", sender: self)
-            raiseAlert("Error setting up audio.")
-        }*/
-        
         if !testing {
             Flurry.logEvent("User_Recording", withParameters: ["userid": currentUser.userid!])
         }
@@ -139,8 +119,6 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         } else {
             self.stopRecording()
             self.validateButtons()
-            NSThread.sleepForTimeInterval(0.3)
-            self.play(nil)
         }
     }
     

@@ -16,7 +16,13 @@ class RootNavigationController: UINavigationController {
         
         self.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "STHeitiSC-Light", size: 20)!, NSForegroundColorAttributeName: UIColor.blackColor()]
         self.edgesForExtendedLayout = UIRectEdge.None
+        self.navigationBar.translucent = false
         rootNavigationController = self
+        mainStoryboard = self.storyboard
+        
+        // Project Notification setup
+        projectNotification.center = self.view.center
+        self.view.addSubview(projectNotification)
     }
     
     override func viewDidAppear(animated: Bool) {
