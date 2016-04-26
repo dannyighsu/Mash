@@ -53,17 +53,17 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TabBarController.update(_:)), name: "UpdateUINotification", object: nil)
         rootTabBarController = self
         
+        // Load AVAudioSession
         let session = AVAudioSession.sharedInstance()
         do {
-            try session.setCategory(AVAudioSessionCategoryPlayback, withOptions: AVAudioSessionCategoryOptions.DefaultToSpeaker)
+            try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
         } catch let error1 as NSError {
-            Debug.printl("Error setting up session: \(error1)", sender: self)
+            Debug.printl("Error setting up session: \(error1.localizedDescription)", sender: self)
         }
-        
         do {
             try session.setActive(true)
         } catch let error1 as NSError {
-            Debug.printl("Error setting session active: \(error1)", sender: self)
+            Debug.printl("Error setting session active: \(error1.localizedDescription)", sender: self)
         }
         
         do {
