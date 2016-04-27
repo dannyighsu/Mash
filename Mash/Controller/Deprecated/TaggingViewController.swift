@@ -56,12 +56,10 @@ class TaggingViewController: UIViewController, UIPickerViewDataSource, UIPickerV
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBarHidden = true
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.navigationBarHidden = false
     }
     
     func finish() {

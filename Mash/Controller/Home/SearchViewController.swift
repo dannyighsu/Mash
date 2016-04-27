@@ -42,7 +42,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.activityView.center = self.view.center
         
         // Initialize completion table view
-        self.completionTableView = UITableView(frame: self.view.frame, style: UITableViewStyle.Plain)
+        self.completionTableView = UITableView(frame: self.tableView.frame, style: UITableViewStyle.Plain)
         self.completionTableView!.delegate = self
         self.completionTableView!.dataSource = self
         self.completionTableView!.scrollEnabled = true
@@ -59,7 +59,6 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .None
         
-        self.tableView.tableHeaderView = self.searchController?.searchBar
         self.definesPresentationContext = true
         let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: lightBlue()]
         UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], forState: UIControlState.Normal)
@@ -67,13 +66,14 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.searchController?.searchBar.setShowsCancelButton(true, animated: false)
         self.searchController?.searchBar.tintColor = lightBlue()
         self.searchController?.searchBar.barTintColor = offWhite()
-        self.searchController!.searchBar.becomeFirstResponder()
+        self.tableView.tableHeaderView = self.searchController?.searchBar
+
+        //self.searchController!.searchBar.becomeFirstResponder()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.setHidesBackButton(true, animated: false)
-        //self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -86,7 +86,6 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             self.audioPlayer!.stop()
         }
         self.navigationItem.title = nil
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     // Table View Delegate

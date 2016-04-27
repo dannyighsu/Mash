@@ -23,7 +23,6 @@ class ProjectPreferencesViewController: UIViewController, UITableViewDelegate, U
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBarHidden = false
         self.view.frame = self.navigationController!.view.frame
     }
     
