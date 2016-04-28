@@ -36,13 +36,14 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.searchController!.delegate = self
         self.searchController!.searchBar.delegate = self
         self.searchController!.searchBar.scopeButtonTitles = ["Recording", "User"]
+        self.searchController!.hidesNavigationBarDuringPresentation = false
         self.searchController!.dimsBackgroundDuringPresentation = false
         
         self.view.addSubview(self.activityView)
         self.activityView.center = self.view.center
         
         // Initialize completion table view
-        self.completionTableView = UITableView(frame: self.tableView.frame, style: UITableViewStyle.Plain)
+        self.completionTableView = UITableView(frame: self.view.frame, style: UITableViewStyle.Plain)
         self.completionTableView!.delegate = self
         self.completionTableView!.dataSource = self
         self.completionTableView!.scrollEnabled = true
@@ -74,6 +75,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.setHidesBackButton(true, animated: false)
+        self.navigationItem.title = "Search"
     }
     
     override func viewDidAppear(animated: Bool) {

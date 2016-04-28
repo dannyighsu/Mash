@@ -212,6 +212,13 @@ class MashResultsController: UIViewController, UITableViewDelegate, UITableViewD
     func add(sender: UIButton) {
         let track = sender.superview?.superview?.superview as! Track
         ProjectViewController.importTracks([track])
+        
+        // FIXME: Hacky
+        let activityview = QuickActivityView.createView()
+        activityview.center = self.view.center
+        self.view.addSubview(activityview)
+        activityview.show()
+        
         sendMashAnalyticsRequest([track], liked: true)
         for i in 0 ..< self.analyticsArray.count {
             if track == self.analyticsArray[i] {
