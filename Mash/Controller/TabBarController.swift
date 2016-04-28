@@ -43,7 +43,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
         profile.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
         let profileImage = UIImage(named: "dashboard")
         profile.image = profileImage?.imageWithRenderingMode(.AlwaysOriginal)
-                
+
         self.navigationController?.hidesBarsWhenKeyboardAppears = false
         self.navigationController?.hidesBarsOnSwipe = false
         self.navigationItem.setHidesBackButton(true, animated: false)
@@ -85,8 +85,6 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             self.view.addSubview(button)
             self.tabBarButton = button
         }
-        
-        self.navigationController?.navigationBarHidden = false
     }
     
     // FIXME: Some issue to do with coming in from welcome view controller causes these calls to crash.

@@ -25,7 +25,6 @@ class HandleController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
-        self.navigationController?.navigationBarHidden = false
         self.navigationItem.title = "Set a Handle"
     }
     

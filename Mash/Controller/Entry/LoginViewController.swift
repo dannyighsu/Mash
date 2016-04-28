@@ -20,7 +20,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationController?.navigationBarHidden = false
         self.handleField.delegate = self
         self.passwordField.delegate = self
         self.handleField.returnKeyType = UIReturnKeyType.Next

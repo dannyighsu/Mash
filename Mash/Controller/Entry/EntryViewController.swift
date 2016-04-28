@@ -49,7 +49,7 @@ class EntryViewController: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
-        self.navigationController?.navigationBarHidden = true
+        super.viewWillAppear(animated)
     }
     
     @IBAction func termsButtonPressed(sender: AnyObject) {

@@ -20,9 +20,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.navigationController?.navigationBarHidden = false
-        
+
         if let background = UIImage(named: "concert_faded") {
             self.view.backgroundColor = UIColor(patternImage: background)
         }

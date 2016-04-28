@@ -36,6 +36,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.searchController!.delegate = self
         self.searchController!.searchBar.delegate = self
         self.searchController!.searchBar.scopeButtonTitles = ["Recording", "User"]
+        self.searchController!.hidesNavigationBarDuringPresentation = false
         self.searchController!.dimsBackgroundDuringPresentation = false
         
         self.view.addSubview(self.activityView)
@@ -59,7 +60,6 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .None
         
-        self.tableView.tableHeaderView = self.searchController?.searchBar
         self.definesPresentationContext = true
         let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: lightBlue()]
         UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], forState: UIControlState.Normal)
@@ -67,13 +67,15 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         self.searchController?.searchBar.setShowsCancelButton(true, animated: false)
         self.searchController?.searchBar.tintColor = lightBlue()
         self.searchController?.searchBar.barTintColor = offWhite()
-        self.searchController!.searchBar.becomeFirstResponder()
+        self.tableView.tableHeaderView = self.searchController?.searchBar
+
+        //self.searchController!.searchBar.becomeFirstResponder()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.setHidesBackButton(true, animated: false)
-        //self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationItem.title = "Search"
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -86,7 +88,6 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             self.audioPlayer!.stop()
         }
         self.navigationItem.title = nil
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     // Table View Delegate
