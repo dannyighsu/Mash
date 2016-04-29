@@ -79,6 +79,7 @@ class User: UITableViewCell {
                         /*let rand = arc4random_uniform(11)
                         imageView.image = UIImage(named: "ProfileCover\(rand)")*/
                         imageView.image = UIImage(named: "no_banner")
+                        imageView.contentMode = UIViewContentMode.ScaleAspectFill
                     }
                 }
             }
