@@ -16,6 +16,7 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
     let swipeInteractionController: SwipeInteractionController = SwipeInteractionController()
     var tabBarButton: ProjectTabBar? = nil
     var currTrack: Track? = nil
+    var tabBarFrame: CGRect = CGRectZero
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,10 +82,18 @@ class TabBarController: UITabBarController, UIViewControllerTransitioningDelegat
             let button = NSBundle.mainBundle().loadNibNamed("ProjectTabBar", owner: nil, options: nil)[0] as! ProjectTabBar
             button.tapButton.addTarget(self, action: #selector(TabBarController.showProject(_:)), forControlEvents: .TouchUpInside)
             button.addButton.addTarget(self, action: #selector(TabBarController.showProject(_:)), forControlEvents: .TouchUpInside)
-            button.frame = CGRect(x: 0.0, y: self.tabBar.frame.minY - 30.0, width: UIScreen.mainScreen().bounds.width, height: 35.0)
+            self.tabBarFrame = CGRect(x: 0.0, y: self.view.frame.maxY - 145.0, width: UIScreen.mainScreen().bounds.width, height: 35.0)
+            button.frame = self.tabBarFrame
             self.view.addSubview(button)
             self.tabBarButton = button
+        } else {
+            self.tabBarButton!.frame = self.tabBarFrame
         }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tabBarButton!.frame = self.tabBarFrame
     }
     
     // FIXME: Some issue to do with coming in from welcome view controller causes these calls to crash.

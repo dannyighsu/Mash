@@ -76,8 +76,9 @@ class User: UITableViewCell {
                     }
                 } else {
                     dispatch_async(dispatch_get_main_queue()) {
-                        let rand = arc4random_uniform(11)
-                        imageView.image = UIImage(named: "ProfileCover\(rand)")
+                        /*let rand = arc4random_uniform(11)
+                        imageView.image = UIImage(named: "ProfileCover\(rand)")*/
+                        imageView.image = UIImage(named: "no_banner")
                     }
                 }
             }

@@ -50,6 +50,12 @@ class EntryViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBarHidden = true
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.navigationBarHidden = false
     }
     
     @IBAction func termsButtonPressed(sender: AnyObject) {
@@ -62,7 +68,6 @@ class EntryViewController: UIViewController {
     
     func facebookLogin(sender: AnyObject?) {
         let hasFacebookLoginToken = NSUserDefaults.standardUserDefaults().boolForKey("hasFacebookLoginToken")
-        print(hasFacebookLoginToken)
         if hasFacebookLoginToken {
             self.sendAuthRequest()
         } else {
