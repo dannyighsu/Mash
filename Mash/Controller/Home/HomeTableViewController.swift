@@ -151,7 +151,7 @@ class HomeTableViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             
             self.displayData[indexPath.row].user!.setProfilePic(cell.profileImage)
-            self.displayData[indexPath.row].user!.setBannerPic(cell.backgroundArt)
+            self.displayData[indexPath.row].user!.setHomePic(cell.backgroundArt)
             cell.artistButton.addTarget(self, action: #selector(HomeTableViewController.getUser(_:)), forControlEvents: .TouchUpInside)
     
             download(getS3WaveformKey(cell.track!), url: filePathURL(getS3WaveformKey(cell.track!)), bucket: waveform_bucket) {

@@ -22,6 +22,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     var currTrackID: Int = 0
     var user: User = currentUser
     var activityView: ActivityView = ActivityView.createView()
+    var header: Profile? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -187,6 +188,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             let header = self.tracks.dequeueReusableHeaderFooterViewWithIdentifier("Profile") as! Profile
+            self.header = header
             header.profilePic.contentMode = UIViewContentMode.ScaleAspectFill
             header.profilePic.layer.cornerRadius = header.profilePic.frame.size.width / 2
             header.profilePic.layer.borderWidth = 1.0
@@ -423,7 +425,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             (imageData, datUTI, orientation, info) in
             if let newData: NSData = imageData {
                 newData.writeToFile(path, atomically: true)
-                upload("\(currentUser.userid!)~~profile_pic.jpg", url: NSURL(fileURLWithPath: path), bucket: profile_bucket)
+                upload("\(currentUser.userid!)~~profile_pic.jpg", url: NSURL(fileURLWithPath: path), bucket: profile_bucket) {
+                    (result) in
+                    self.user.setProfilePic(self.header!.profilePic)
+                }
             }
         }
         
@@ -446,7 +451,10 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             (imageData, datUTI, orientation, info) in
             if let newData: NSData = imageData {
                 newData.writeToFile(path, atomically: true)
-                upload("\(currentUser.userid!)~~banner.jpg", url: NSURL(fileURLWithPath: path), bucket: banner_bucket)
+                upload("\(currentUser.userid!)~~banner.jpg", url: NSURL(fileURLWithPath: path), bucket: banner_bucket) {
+                    (result) in
+                    self.user.setBannerPic(self.header!.bannerImage)
+                }
             }
         }
         

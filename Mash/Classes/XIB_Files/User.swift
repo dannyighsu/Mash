@@ -61,6 +61,7 @@ class User: UITableViewCell {
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
                     imageView.image = UIImage(named: "no_profile_pic")
+                    imageView.contentMode = UIViewContentMode.ScaleAspectFill
                 }
             }
         }
@@ -80,6 +81,26 @@ class User: UITableViewCell {
                         imageView.image = UIImage(named: "ProfileCover\(rand)")*/
                         imageView.image = UIImage(named: "no_banner")
                         imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    }
+                }
+            }
+        }
+    }
+    
+    func setHomePic(imageView: UIImageView) {
+        if imageView.image == nil {
+            download("\(self.userid!)~~banner.jpg", url: filePathURL("\(self.userid!)~~banner.jpg"), bucket: banner_bucket) {
+                (result) -> Void in
+                if result != nil {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        imageView.image = UIImage(contentsOfFile: filePathString("\(self.userid!)~~banner.jpg"))!
+                    }
+                } else {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        /*let rand = arc4random_uniform(11)
+                         imageView.image = UIImage(named: "ProfileCover\(rand)")*/
+                        imageView.image = UIImage(named: "no_banner")
+                        imageView.contentMode = UIViewContentMode.ScaleAspectFit
                     }
                 }
             }
