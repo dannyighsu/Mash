@@ -460,6 +460,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             let newTrackURL = self.audioModule.timeShift(track.id, url: NSURL(fileURLWithPath: track.trackURL), newName: newName, shiftAmount: shiftAmount)
             track.trackURL = newTrackURL
             track.bpm = self.bpm
+            self.activityView.stopAnimating()
         }
     }
     
