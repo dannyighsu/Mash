@@ -731,6 +731,7 @@
 		370AC1AD1C3C9DC1002ED357 /* BufferCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BufferCell.xib; sourceTree = "<group>"; };
 		370AC1AF1C3C9FB8002ED357 /* BufferCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferCell.swift; sourceTree = "<group>"; };
 		370AC1B11C3CA3F7002ED357 /* ProjectTabBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectTabBar.swift; sourceTree = "<group>"; };
+		370F6AA11CDD4034005ACC32 /* Mash.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Mash.entitlements; sourceTree = "<group>"; };
 		3711F0A21B6FFD9D00C75F2B /* SuperpoweredAudioModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SuperpoweredAudioModule.mm; sourceTree = "<group>"; };
 		3718EF271B57071D00AA5D26 /* Objective-C.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Objective-C.h"; sourceTree = "<group>"; };
 		3718EF281B57071D00AA5D26 /* Objective-C.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Objective-C.m"; sourceTree = "<group>"; };
@@ -1469,6 +1470,7 @@
 		37A3C2C61B3CC00600F77F2A /* Mash */ = {
 			isa = PBXGroup;
 			children = (
+				370F6AA11CDD4034005ACC32 /* Mash.entitlements */,
 				37E799851B3CC12D00D2E54D /* Mash-Bridging-Header.h */,
 				37A3C2C91B3CC00600F77F2A /* AppDelegate.swift */,
 				37A3C2D01B3CC00600F77F2A /* Images.xcassets */,
@@ -1835,6 +1837,9 @@
 						DevelopmentTeam = AA375B8UFT;
 						SystemCapabilities = {
 							com.apple.Push = {
+								enabled = 1;
+							};
+							com.apple.SafariKeychain = {
 								enabled = 1;
 							};
 						};
@@ -2451,6 +2456,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Mash/Mash.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -2475,7 +2481,7 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Mash.$(PRODUCT_NAME:rfc1034identifier)WithMe";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Mash.MashWithMe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mash/Mash-Bridging-Header.h";
@@ -2491,6 +2497,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Mash/Mash.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -2515,7 +2522,7 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Mash.$(PRODUCT_NAME:rfc1034identifier)WithMe";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Mash.MashWithMe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mash/Mash-Bridging-Header.h";
