@@ -11,6 +11,7 @@ target 'Mash' do
     pod 'IQKeyboardManager'
     pod 'google-plus-ios-sdk'
     pod 'Buglife'
+    pod 'Branch'
 
     # Facebook Pods
     pod 'FBSDKCoreKit'
