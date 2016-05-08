@@ -53,6 +53,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Buglife.sharedBuglife().startWithEmail("daniel@mashwithme.com")
         Buglife.sharedBuglife().invocationOptions = LIFEInvocationOptions.Shake
         
+        // Set up Branch
+        let branch = Branch.getInstance()
+        branch.initSessionWithLaunchOptions(launchOptions) {
+            (params, error) in
+            Debug.printl("Deep link data: \(params.description)", sender: nil)
+        }
+        
         // Set up server timer
         if !localServer {
             serverTimer = NSTimer.scheduledTimerWithTimeInterval(300, target: self, selector: #selector(AppDelegate.requestNewServerAddress(_:)), userInfo: nil, repeats: true)
@@ -124,12 +131,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        Branch.getInstance().handleDeepLink(url)
         var optimizely = false
         if Optimizely.handleOpenURL(url) {
             optimizely = true
         }
         let facebook = FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
         return optimizely && facebook// && GPPURLHandler.handleURL(url, sourceApplication: sourceApplication, annotation: annotation)
+    }
+    
+    func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
+        return Branch.getInstance().continueUserActivity(userActivity)
     }
     
     func application(application: UIApplication, supportedInterfaceOrientationsForWindow window: UIWindow?) -> UIInterfaceOrientationMask {

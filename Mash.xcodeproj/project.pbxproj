@@ -426,6 +426,7 @@
 		37E799EE1B3CC1D000D2E54D /* Metronome.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D41B3CC1D000D2E54D /* Metronome.xib */; };
 		37E799F21B3CC1D000D2E54D /* Track.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37E799D81B3CC1D000D2E54D /* Track.xib */; };
 		37E799FC1B3CC1F600D2E54D /* KeychainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E799F51B3CC1F600D2E54D /* KeychainWrapper.m */; };
+		37F4A1071CDDA16F00BD17C7 /* Mash.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 370F6AA11CDD4034005ACC32 /* Mash.entitlements */; };
 		37F92D011C601CBD0087FB34 /* GlobalObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F92D001C601CBD0087FB34 /* GlobalObjects.swift */; };
 		EDBAE700D5BBFB5785DF766E /* libPods-Mash.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B37CA755709BC5D0E106BC64 /* libPods-Mash.a */; };
 /* End PBXBuildFile section */
@@ -1991,6 +1992,7 @@
 				370A38941BF6A31D00FCD060 /* functions_66.html in Resources */,
 				370A38711BF6A31D00FCD060 /* all_6c.html in Resources */,
 				370A387E1BF6A31D00FCD060 /* all_75.js in Resources */,
+				37F4A1071CDDA16F00BD17C7 /* Mash.entitlements in Resources */,
 				370A38901BF6A31D00FCD060 /* functions_64.html in Resources */,
 				37C9F4F81C029C7000C80F88 /* ProjectPlayer.xib in Resources */,
 				370A38171BF6A31D00FCD060 /* ftv2cl.png in Resources */,

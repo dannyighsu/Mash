@@ -8,6 +8,7 @@
 #import "AWSS3/AWSS3.h"
 #import "FBSDKCoreKit/FBSDKCoreKit.h"
 #import "FBSDKLoginKit/FBSDKLoginKit.h"
+#import "FBSDKShareKit/FBSDKShareKit.h"
 #import "Buglife/Buglife.h"
 #import "EZAudio/EZAudio.h"
 #import <CommonCrypto/CommonDigest.h>
@@ -19,6 +20,7 @@
 #import <Optimizely/Optimizely.h>
 #import "Flurry.h"
 #import "TPAACAudioConverter.h"
+#import "Branch.h"
 
 @interface SuperpoweredAudioModule : NSObject
 

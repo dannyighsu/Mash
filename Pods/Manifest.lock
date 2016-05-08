@@ -8,6 +8,7 @@ PODS:
   - Bolts/AppLinks (1.2.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.2.0)
+  - Branch (0.12.1)
   - Buglife (1.0.3)
   - EZAudio (1.1.4):
     - EZAudio/Full (= 1.1.4)
@@ -52,6 +53,7 @@ PODS:
 DEPENDENCIES:
   - AWSCore
   - AWSS3
+  - Branch
   - Buglife
   - EZAudio
   - FBSDKCoreKit
@@ -66,6 +68,7 @@ SPEC CHECKSUMS:
   AWSCore: 483fa0f25c8508e3364f818e9b941c6204619afa
   AWSS3: da758d5a95e65bb9e6e718245c1a86b6f63de9ae
   Bolts: d176cb1e0012175589e389a9db49b85e27787576
+  Branch: 32fb6e2048118a7ff23be984e731569517fbc5f3
   Buglife: 7f54291c1a372fc22b3f1d2558265464cf054903
   EZAudio: 8e684b2b81b0437fe45faa7e2725fe99f69c84b6
   FBSDKCoreKit: f335eaf6865e1e1597dee1debfb533045500da47
