@@ -17,10 +17,6 @@ class HandleController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if let background = UIImage(named: "concert") {
-            self.view.backgroundColor = UIColor(patternImage: background)
-        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -60,10 +56,12 @@ class HandleController: UIViewController {
                 NSUserDefaults.standardUserDefaults().setValue(self.request!.fbid, forKey: "facebookID")
                 
                 User.updateSelf(nil)
-                let controller = self.storyboard?.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
-                self.navigationController?.viewControllers.removeLast()
-                self.navigationController?.pushViewController(controller, animated: false)
-                self.performSegueWithIdentifier("welcome", sender: nil)
+                
+                let controller = self.storyboard!.instantiateViewControllerWithIdentifier("ShareViewController") as! ShareViewController
+                controller.completion = {
+                    controller.performSegueWithIdentifier("welcome", sender: nil)
+                }
+                self.navigationController?.pushViewController(controller, animated: true)
             }
         }
     }

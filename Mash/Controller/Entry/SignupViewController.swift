@@ -181,7 +181,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         let settings = UIUserNotificationSettings(forTypes: types, categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
         UIApplication.sharedApplication().registerForRemoteNotifications()
-        
+
         self.performSegueWithIdentifier("welcome", sender: nil)
     }
     

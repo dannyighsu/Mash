@@ -39,8 +39,6 @@ class EntryViewController: UIViewController {
         self.logo.contentMode = UIViewContentMode.ScaleAspectFit
 
         // Check for login key
-        let login = self.storyboard?.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
-        self.navigationController?.pushViewController(login, animated: false)
         let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController
         self.navigationController?.pushViewController(tabbarcontroller, animated: false)
         
@@ -108,8 +106,14 @@ class EntryViewController: UIViewController {
                 // FB Token outdated
                 Debug.printl(error, sender: self)
                 let login = FBSDKLoginManager()
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.startAnimating()
+                }
                 login.logInWithReadPermissions(["email", "public_profile", "user_location", "user_friends"]) {
                     (result: FBSDKLoginManagerLoginResult!, error: NSError!) -> Void in
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.activityView.stopAnimating()
+                    }
                     if error != nil {
                         Debug.printl(error, sender: self)
                         raiseAlert("Please try again.", message: "We could not log you in through Facebook.")
@@ -130,8 +134,15 @@ class EntryViewController: UIViewController {
     func sendGraphRequest(permissions: FBSDKLoginManagerLoginResult) {
         if permissions.grantedPermissions.contains("email") && permissions.grantedPermissions.contains("public_profile") && permissions.grantedPermissions.contains("user_location") && permissions.grantedPermissions.contains("user_friends") {
             
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityView.startAnimating()
+            }
+            
             FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, location, email, first_name, last_name, friends"]).startWithCompletionHandler() {
                 (connection, result, error) -> Void in
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
+                }
                 if (error != nil) {
                     Debug.printl("Error: \(error)", sender: self)
                 } else {
@@ -158,12 +169,12 @@ class EntryViewController: UIViewController {
         Debug.printl("Sending register action with request \(request)", sender: nil)
         server.fbAuthWithRequest(request) {
             (response, error) in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.activityView.stopAnimating()
-            }
             if error != nil {
                 Debug.printl("Error: \(error)", sender: self)
                 raiseAlert("Please try again.", message: "There was a problem authenticating with your Facebook credentials.")
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.activityView.stopAnimating()
+                }
             } else {
                 if response.newUser {
                     // Construct new User
@@ -184,6 +195,7 @@ class EntryViewController: UIViewController {
                             Flurry.setUserID("\(response.userid)")
                             Flurry.logEvent("User_Login", withParameters: ["userid": Int(response.userid)])
                         }
+                        self.activityView.stopAnimating()
                         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("HandleController") as! HandleController
                         controller.request = request
                         self.navigationController?.pushViewController(controller, animated: true)
@@ -228,8 +240,6 @@ class EntryViewController: UIViewController {
         UIApplication.sharedApplication().registerForRemoteNotifications()
         
         Debug.printl("Pushing tab bar controller.", sender: self)
-        let login = self.storyboard?.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
-        self.navigationController?.pushViewController(login, animated: false)
         let tabbarcontroller = self.storyboard?.instantiateViewControllerWithIdentifier("OriginController") as! TabBarController
         self.navigationController?.pushViewController(tabbarcontroller, animated: true)
     }

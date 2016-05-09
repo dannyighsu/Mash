@@ -416,6 +416,7 @@
 		37CEAB661CBCB7D300663716 /* HandleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CEAB651CBCB7D300663716 /* HandleController.swift */; };
 		37D2351F1C3B90CA0091A1D0 /* ProjectDismissAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D2351E1C3B90CA0091A1D0 /* ProjectDismissAnimationController.swift */; };
 		37D235231C3BABFE0091A1D0 /* SwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D235221C3BABFE0091A1D0 /* SwipeInteractionController.swift */; };
+		37DA54041CE11BE900C69999 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DA54031CE11BE900C69999 /* ShareViewController.swift */; };
 		37DE77251B436F4A00952987 /* User.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37DE77241B436F4A00952987 /* User.xib */; };
 		37DE77271B4370B200952987 /* FollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DE77261B4370B200952987 /* FollowingViewController.swift */; };
 		37E799AE1B3CC1C600D2E54D /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E799901B3CC1C600D2E54D /* RootNavigationController.swift */; };
@@ -856,6 +857,7 @@
 		37CEAB651CBCB7D300663716 /* HandleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandleController.swift; sourceTree = "<group>"; };
 		37D2351E1C3B90CA0091A1D0 /* ProjectDismissAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectDismissAnimationController.swift; sourceTree = "<group>"; };
 		37D235221C3BABFE0091A1D0 /* SwipeInteractionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeInteractionController.swift; sourceTree = "<group>"; };
+		37DA54031CE11BE900C69999 /* ShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		37DE77241B436F4A00952987 /* User.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = User.xib; sourceTree = "<group>"; };
 		37DE77261B4370B200952987 /* FollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowingViewController.swift; sourceTree = "<group>"; };
 		37E799851B3CC12D00D2E54D /* Mash-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mash-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -1634,6 +1636,7 @@
 			isa = PBXGroup;
 			children = (
 				37DE77261B4370B200952987 /* FollowingViewController.swift */,
+				37DA54031CE11BE900C69999 /* ShareViewController.swift */,
 				37E799901B3CC1C600D2E54D /* RootNavigationController.swift */,
 				37E799A21B3CC1C600D2E54D /* TabBarController.swift */,
 				37038FB21C617CBA0043C262 /* Deprecated */,
@@ -2249,6 +2252,7 @@
 				37C9F5121C029E2000C80F88 /* ProfileTrack.swift in Sources */,
 				37CEAB661CBCB7D300663716 /* HandleController.swift in Sources */,
 				37038FB91C617D1C0043C262 /* ExploreViewController.swift in Sources */,
+				37DA54041CE11BE900C69999 /* ShareViewController.swift in Sources */,
 				3719B8391CBB356A0056D11F /* ShareItemSource.swift in Sources */,
 				3798827D1C01314F0029E56C /* ImageViewController.swift in Sources */,
 				37E799D91B3CC1D000D2E54D /* Debug.swift in Sources */,
