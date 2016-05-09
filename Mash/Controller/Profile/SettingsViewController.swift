@@ -25,7 +25,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         if section == 0 {
             return 1
         } else if section == 1 {
-            return 3
+            return 4
         } else if section == 2 {
             return 1
         }
@@ -58,6 +58,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.textLabel!.text = "Change Banner Photo"
             } else if indexPath.row == 2 {
                 cell.textLabel!.text = "Change Display Name"
+            } else if indexPath.row == 3 {
+                cell.textLabel!.text = "Invite Friends"
             }
         } else if indexPath.section == 2 {
             if indexPath.row == 0 {
@@ -86,13 +88,23 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 self.profile!.changeBanner()
             } else if indexPath.row == 2 {
                 self.profile!.changeName()
+            } else if indexPath.row == 3 {
+                self.invite()
             }
         } else if indexPath.section == 2 {
             if indexPath.row == 0 {
                 self.profile!.deleteUser()
             }
-            self.navigationController?.popViewControllerAnimated(true)
+            self.navigationController?.popViewControllerAnimated(false)
         }
+    }
+    
+    func invite() {
+        let controller = self.storyboard!.instantiateViewControllerWithIdentifier("ShareViewController") as! ShareViewController
+        controller.completion = {
+            controller.navigationController?.popViewControllerAnimated(true)
+        }
+        self.navigationController?.pushViewController(controller, animated: true)
     }
 
     // Log out
