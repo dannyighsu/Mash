@@ -57,7 +57,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let branch = Branch.getInstance()
         branch.initSessionWithLaunchOptions(launchOptions) {
             (params, error) in
-            Debug.printl("Deep link data: \(params.description)", sender: nil)
+            if error != nil {
+                Debug.printl("Deep link error: \(error)", sender: nil)
+            } else {
+                Debug.printl("Deep link data: \(params.description)", sender: nil)
+            }
         }
         
         // Set up server timer

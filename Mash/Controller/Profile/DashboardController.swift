@@ -131,7 +131,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
         if indexPath.section == 1 {
             let track = tableView.dequeueReusableCellWithIdentifier("ProfileTrack", forIndexPath: indexPath) as! ProfileTrack
             let index = indexPath.row
-            track.backgroundColor = UIColor.clearColor()
+            track.backgroundColor = UIColor.whiteColor()
             track.instrumentImage.backgroundColor = UIColor.clearColor()
             track.title.textColor = UIColor.blackColor()
             track.title.text = self.data[index].titleText
@@ -150,6 +150,8 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
             track.addButton.addTarget(self, action: #selector(DashboardController.addTrack(_:)), forControlEvents: UIControlEvents.TouchDown)
             track.activityView.startAnimating()
             track.track = self.data[index]
+            track.likeCount.text = "\(self.data[index].likeCount)"
+            track.playCount.text = "\(self.data[index].playCount)"
             
             download(getS3WaveformKey(track), url: filePathURL(getS3WaveformKey(track)), bucket: waveform_bucket) {
                 (result) in
@@ -233,7 +235,7 @@ class DashboardController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 1 {
-            return 75.0
+            return 100.0
         } else if indexPath.section == 2 {
             return 35.0
         }

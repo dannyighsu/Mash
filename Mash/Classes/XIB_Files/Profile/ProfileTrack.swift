@@ -19,6 +19,10 @@ class ProfileTrack: UITableViewCell, EZAudioFileDelegate {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var activityView: UIActivityIndicatorView!
     @IBOutlet weak var menuButton: UIButton!
+    @IBOutlet weak var likeCount: UILabel!
+    @IBOutlet weak var likeButton: UIButton!
+    @IBOutlet weak var playCount: UILabel!
+    @IBOutlet weak var playButton: UIButton!
     
     var instruments: [String] = []
     var instrumentFamilies: [String] = []
@@ -49,6 +53,19 @@ class ProfileTrack: UITableViewCell, EZAudioFileDelegate {
     
     @IBAction func menuButtonPressed(sender: AnyObject) {
         rootTabBarController!.showMenu(self.track!)
+    }
+    
+    @IBAction func likeButtonPressed(sender: UIButton) {
+        let liked = self.track!.like(sender)
+        let likeText = self.likeCount.text!
+        let likeCount = likeText.characters.split {$0 == " "}.map(String.init)[0]
+        if liked {
+            let newCount = Int(likeCount)! + 1
+            self.likeCount.text = "\(newCount)"
+        } else {
+            let newCount = Int(likeCount)! - 1
+            self.likeCount.text = "\(newCount)"
+        }
     }
     
     // Should only be called in the completion block of a download function.
