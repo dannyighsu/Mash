@@ -25,7 +25,7 @@ class User: UITableViewCell {
     
     convenience init() {
         self.init(frame: CGRectZero)
-        self.handle = NSUserDefaults.standardUserDefaults().valueForKey("username") as? String
+        self.handle = ""
         self.username = ""
         self.followers = "0"
         self.following = "0"

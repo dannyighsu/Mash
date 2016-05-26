@@ -25,6 +25,7 @@ class ShareViewController: UIViewController, FBSDKAppInviteDialogDelegate {
         Branch.getInstance().getShortURLWithParams([:], andChannel: "facebook", andFeature: "app_invite") {
             (url, error) in
             let inviteDialog = FBSDKAppInviteDialog()
+            inviteDialog.delegate = self
             if inviteDialog.canShow() {
                 inviteDialog.content = FBSDKAppInviteContent()
                 inviteDialog.content.appLinkURL = NSURL(string: url)

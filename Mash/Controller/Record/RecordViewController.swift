@@ -40,6 +40,7 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
     var muted: Bool = false
     var activityView: ActivityView = ActivityView.createView()
     var coverView: UIView = UIView()
+    var whiteScreen: UIView = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +52,11 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         self.coverView.addSubview(self.activityView)
         self.tabBarController!.view.addSubview(self.coverView)
         self.activityView.startAnimating()
+        
+        self.whiteScreen = UIView(frame: self.view.frame)
+        self.whiteScreen.layer.opacity = 0
+        self.whiteScreen.layer.backgroundColor = UIColor.whiteColor().CGColor
+        self.view.addSubview(whiteScreen)
         
         // Set up metronome
         let metronome = Metronome.createView()
@@ -443,6 +449,8 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
                 (completed: Bool) in
                 self.countoffView?.removeFromSuperview()
             }
+        } else {
+            self.flashScreen()
         }
     }
     
@@ -457,6 +465,24 @@ class RecordViewController: UIViewController, EZMicrophoneDelegate, EZAudioPlaye
         }
     }
     
+    func flashScreen() {
+        let opacityAnimation = CAKeyframeAnimation(keyPath: "opacity")
+        let animationValues = [0.8, 0.0]
+        let animationTimes = [0.3, 1.0]
+        let timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        opacityAnimation.values = animationValues
+        opacityAnimation.keyTimes = animationTimes
+        opacityAnimation.timingFunctions = [timingFunction, timingFunction]
+        opacityAnimation.fillMode = kCAFillModeForwards
+        opacityAnimation.removedOnCompletion = true
+        opacityAnimation.duration = 0.4
+        
+        self.whiteScreen.layer.addAnimation(opacityAnimation, forKey: "animation")
+    }
+    
+    //
+    //
+    //
     // Login methods
     // Retrieve server IP
     func requestServerAddress() {
